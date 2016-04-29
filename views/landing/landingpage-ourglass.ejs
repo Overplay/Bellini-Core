@@ -28,6 +28,20 @@
             display: block;
         }
 
+        .popin {
+            animation: grow .7s cubic-bezier(0.33, 0.96, 0.41, 1.09);
+        }
+
+        @keyframes grow {
+            from {
+                transform: scale(0,0) translateY(500px);
+                opacity:0;
+            }
+            to {
+                transform: scale(1,1) translateY(0);
+                opacity: 1;
+            }
+        }
     </style>
 
     <script>
@@ -45,7 +59,7 @@
 <div class="container-fluid">
 
     <!--<div ui-view></div>-->
-    <div class="jumbotron top15" style="background: rgba(0,0,0,0.75);">
+    <div class="jumbotron top15 popin" style="background: rgba(0,0,0,0.75);">
         <img style="width: 300px;" src="/images/overplay-white.png"/>
         <div class="row">
 
