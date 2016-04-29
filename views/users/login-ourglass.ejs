@@ -126,11 +126,12 @@
                     <span class="input-group-addon"><li class="glyphicon glyphicon-lock"></li></span>
 
                     <input type="password" class="form-control" placeholder="Password"
-                           ng-model="user.password">
+                           ng-model="user.password" onkeyup="if (event.keyCode == 13)
+                                                                document.getElementById('login').click()">
                 </div>
 
 
-                <button ng-click="login()" class="btn btn-primary btn-lg top15">Go</button>
+                <button ng-click="login()" id='login' class="btn btn-primary btn-lg top15">Go</button>
                 &nbsp;
                 <button ng-click="forgot()" class="btn btn-warn btn-lg top15">I Forgot!</button>
 
