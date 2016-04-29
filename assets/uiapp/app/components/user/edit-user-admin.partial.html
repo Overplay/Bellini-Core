@@ -1,0 +1,108 @@
+<div class="row">
+    <div class="col-md-6">
+        <h2 class="n-blue-box">{{ user.email }}</h2>
+        <uib-tabset active="active">
+            <uib-tab heading="Account Info">
+                <div class="top15" style="padding: 20px; border: 2px solid #cacaca; border-radius: 5px;">
+                    <table class="table table-striped top15">
+
+                        <tbody>
+                        <tr>
+                            <td>Email</td>
+                            <td>{{ user.email }}</td>
+                        </tr>
+                        <tr>
+                            <td>Name</td>
+                            <td>{{ user.user.firstName }}&nbsp;{{ user.user.lastName }}</td>
+                        </tr>
+                        <tr>
+                            <td>Mobile #</td>
+                            <td>{{ user.user.mobilePhone }}</td>
+                        </tr>
+                        <tr>
+                            <td>Registered On</td>
+                            <td>{{ user.user.createdAt | date }}</td>
+                        </tr>
+
+
+                        </tbody>
+                    </table>
+                        <div class="panel-heading">
+                            <h3>Admin Attributes</h3>
+                        </div>
+                        <div class="panel-body">
+                            <table class="table table-striped top15">
+                                <tr>
+
+                                    <td>Blocked</td>
+                                    <td>{{ user.user.blocked ? "YES":"NO" }}</td>
+                                </tr>
+                                <tr>
+
+                                    <td>Roles</td>
+                                    <td><span ng-repeat="t in user.user.roleTypes">{{ t }}&nbsp;</span></td>
+                                </tr>
+                            </table>
+                        </div>
+
+                    </div>
+            </uib-tab>
+            <uib-tab heading="Edit Account Info">
+                <div class="top15" style="padding: 20px; border: 2px solid #cacaca; border-radius: 5px;">
+                    <form>
+                        <fieldset class="form-group">
+                            <label for="fname">First Name</label>
+                            <input type="text" class="form-control" id="fname" placeholder="First Name"
+                                   ng-model="user.user.firstName">
+                        </fieldset>
+                        <fieldset class="form-group">
+                            <label for="lname">Last Name</label>
+                            <input type="text" class="form-control" id="lname" placeholder="Last Name"
+                                   ng-model="user.user.lastName">
+                        </fieldset>
+                        <fieldset class="form-group">
+                            <label for="mob">Mobile Number</label>
+                            <input type="text" class="form-control" id="mob" placeholder="Mobile #"
+                                   ng-model="user.user.mobilePhone">
+                        </fieldset>
+                        <button class="btn btn-default" ng-click="updateUserInfo()">Update Info</button>
+                        <hr>
+                        <h3>Admin Settings</h3>
+                        <fieldset class="form-group">
+                            <label for="adminPwd">Password</label>
+                            <input type="password" class="form-control" id="adminPwd" placeholder="New Password"
+                                   ng-model="user.newPwd">
+                        </fieldset>
+                        <button class="btn btn-default" ng-click="adminPwdChange()">Change User's Password</button>
+                        <p class="top15"><strong>User Role</strong></p>
+                        <div ng-repeat="role in roles">
+                            <input type="checkbox" ng-model="role.selected"/>&nbsp;{{ role.roleKey}}
+                        </div>
+                        <button class="btn btn-default top15" ng-click="adminAuthLevelChange()">Change User Roles
+                        </button>
+                        <hr>
+                        <p class="top15"><strong>Enable/Disable Account</strong></p>
+                        <p>User us currently {{ user.user.blocked?"BLOCKED":"ENABLED" }}.</p>
+                        <button type="button" class="btn"
+                                ng-class="{ 'btn-primary' : user.user.blocked, 'btn-danger': !user.user.blocked}"
+                                ng-model="user.user.blocked" uib-btn-checkbox ng-click="updateBlockedState()">
+                            {{ user.user.blocked? "Enable User" : "Block User "}}
+                        </button>
+                        <hr>
+                        <p class="top15"><strong>Delete Account</strong></p>
+                        <button class="btn btn-danger" ng-click="deleteUser()" ng-disabled="!enableDeleteCB">
+                            DELETE
+                        </button>
+                        <input type="checkbox" ng-model="enableDeleteCB" style="margin-left: 5px;"><span>&nbsp;Confirm delete</span>
+
+
+
+                </form>
+
+                </div>
+            </uib-tab>
+        </uib-tabset>
+    </div>
+
+
+</div>

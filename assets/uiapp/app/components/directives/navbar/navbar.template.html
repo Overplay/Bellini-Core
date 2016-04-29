@@ -1,0 +1,94 @@
+<nav class="navbar navbar-inverse" role="navigation" ng-if="!ui.showAdmin">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <!-- MAK: this implements the responsive hamburger menu on smaller screens as well as places the brand at left. -->
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" ng-init="navCollapsed = true"
+                ng-click="navCollapsed = !navCollapsed">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#"><img src="/images/overplay-white.png" style="max-height: 40px; margin-top: -10px;"/></a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" ng-class="!navCollapsed && 'in'" ng-click="navCollapsed = true">
+
+
+
+        <ul class="nav navbar-nav">
+            <!-- end admin menu -->
+            <li><a href="#">Link1</a></li>
+            <li><a href="#">Link2</a></li>
+
+
+        </ul>
+
+        <ul class="nav navbar-nav navbar-right">
+
+            <li class="dropdown" >
+                <a class="dropdown-toggle" ng-click="ui.accountOpen = !ui.accountOpen">Account<b
+                        class="caret"></b></a>
+                <ul class="dropdown-menu" uib-collapse="!ui.accountOpen" ng-mouseleave="ui.accountOpen=false">
+                    <li><a ui-sref="user.editUser">Edit My Account</a></li>
+                    <li><a href="/logout">Logout</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div><!-- /.navbar-collapse -->
+</nav>
+
+<nav class="navbar navbar-inverse" role="navigation" ng-if="ui.showAdmin">
+<!-- ADMIN TOOLBAR -->
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <!-- MAK: this implements the responsive hamburger menu on smaller screens as well as places the brand at left. -->
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" ng-init="navCollapsed = true"
+                ng-click="navCollapsed = !navCollapsed">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#"><img src="/images/overplay-white.png"
+                                              style="max-height: 40px; margin-top: -10px;"/></a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" ng-class="!navCollapsed && 'in'" ng-click="navCollapsed = true">
+
+
+
+        <ul class="nav navbar-nav">
+
+            <li class="dropdown">
+                <a class="dropdown-toggle" ng-click="ui.usersOpen = !ui.usersOpen">Users<b
+                        class="caret"></b></a>
+                <ul class="dropdown-menu" uib-collapse="!ui.usersOpen" ng-mouseleave="ui.usersOpen=false">
+                    <li><a ui-sref="admin.manageUsers">Manage Users</a></li>
+                    <li><a ui-sref="admin.addUser">Add User</a></li>
+                </ul>
+            </li>
+
+
+            <li><a ui-sref="admin.manageDevices">Devices</a></li>
+
+
+
+
+        </ul>
+
+        <ul class="nav navbar-nav navbar-right">
+
+            <li class="dropdown">
+                <a class="dropdown-toggle" ng-click="ui.accountOpen = !ui.accountOpen">Account<b
+                        class="caret"></b></a>
+                <ul class="dropdown-menu" uib-collapse="!ui.accountOpen" ng-mouseleave="ui.accountOpen=false">
+                    <li><a ui-sref="user.editUser">Edit My Account</a></li>
+                    <li><a href="/logout">Logout</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div><!-- /.navbar-collapse -->
+</nav>

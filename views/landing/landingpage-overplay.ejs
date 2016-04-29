@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="uiApp">
+<head ng-controller="landingPageController">
+    <meta charset="UTF-8">
+
+    <title>Overplay</title>
+
+    <!-- Viewport mobile tag for sensible mobile support -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Grab the common JS libs -->
+    <%- partial( '../partials/jsdeps' ) %>
+
+    <!-- Grab the common CSS  -->
+    <%- partial( '../partials/cssdeps' ) %>
+
+    <!-- Import your app, controllers, etc. here. Path needs to be out of /assets/js/views/... -->
+
+    <style>
+        body {
+            color: white;
+        }
+
+        a {
+            font-size: 20px;
+            color: whitesmoke;
+            display: block;
+        }
+
+
+    </style>
+
+</head>
+<body style="background: url(/images/sportsbarblurfaded.jpg);;">
+
+<!-- MAIN CONTENT -->
+<div class="container-fluid">
+
+    <!--<div ui-view></div>-->
+    <div class="jumbotron top15" style="background: rgba(0,0,0,0.75);">
+        <img style="width: 300px;" src="/images/overplay-white.png"/>
+        <div class="row">
+
+            <div class="col-md-8">
+                <h2>Overplay redefines the out-of-home TV
+                    experience with apps and content.</h2>
+            </div>
+            <div class="col-md-4">
+                <% if (authenticated) { %>
+                <a class="btn btn-lg btn-default" href="/ui">Go to dashboard</a>
+                <% } else { %>
+                <a href="login" class="btn btn-block btn-lg btn-info"><span class="glyphicon glyphicon-user"></span>
+                    Login</a>
+                <a href="signup" class="btn btn-block btn-lg btn-success"><span
+                            class="glyphicon glyphicon-pencil"></span>
+                    Sign Up</a>
+
+                <% } %>
+
+            </div>
+        </div>
+
+
+    </div>
+
+</div>
+
+</body>
+</html>
