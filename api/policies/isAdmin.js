@@ -11,7 +11,7 @@ module.exports = function ( req, res, next ) {
 
 
     if ( sails.config.policies.wideOpen ) {
-        sails.log.debug( "In wideOpen policy mode, so skipping this policy!" );
+        //sails.log.debug( "In wideOpen policy mode, so skipping this policy!" );
         return next();
     }
   
