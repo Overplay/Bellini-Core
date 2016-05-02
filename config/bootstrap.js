@@ -45,6 +45,15 @@ module.exports.bootstrap = function ( cb ) {
                 .catch( function () { sails.log.warn( "Admin user NOT created. Probably already existed." )} );
 
         } )
+        .then( function () {
+
+            var roles = [ RoleCacheService.roleByName( "admin", '' ) ];
+
+            return AdminService.addUser( 'admin2@test.com', 'beerchugs', { roles: roles } )
+                .then( function () { sails.log.debug( "Admin user created." )} )
+                .catch( function () { sails.log.warn( "Admin user NOT created. Probably already existed." )} );
+
+        } )
 
         .then( function () {
 

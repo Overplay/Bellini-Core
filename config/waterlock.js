@@ -54,7 +54,7 @@ module.exports.waterlock = {
                 redirectOnValidateUrl: '/validated'
                 
             },
-            createOnNotFound: false // MAK: otherwise it autocreates account
+            createOnNotFound: true // MAK: otherwise it autocreates account
         }
     ],
 
