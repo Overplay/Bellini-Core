@@ -1,33 +1,33 @@
 /**
  * Created by mkahn on 4/7/16.
  * Common Admin tasks for Waterlock
- * 
+ *
  */
 
-var _ = require('lodash');
+var _ = require( 'lodash' );
 
 var _authRoleId = undefined;
 
-function getAuthRole(){
+function getAuthRole() {
 
     // If we already have it, just return it
-    if (_authRoleId){
-        return new Promise.resolve(_authRoleId);
+    if ( _authRoleId ) {
+        return new Promise.resolve( _authRoleId );
     }
 
-    return new Promise( function( resolve, reject ){
+    return new Promise( function ( resolve, reject ) {
 
-        Role.findOneByRoleName('admin')
-            .then( function(role){
+        Role.findOneByRoleName( 'admin' )
+            .then( function ( role ) {
                 _authRoleId = role.id; // remember it
-                resolve( role.id ) ;
-            })
-            .catch( function(err){
-                log.error("MAJOR problem getting auth role, is DB corrupt?");
-                reject(err);
-            })
+                resolve( role.id );
+            } )
+            .catch( function ( err ) {
+                log.error( "MAJOR problem getting auth role, is DB corrupt?" );
+                reject( err );
+            } )
 
-    })
+    } )
 }
 
 function attachAdminToAuth( authObj ) {
@@ -35,12 +35,12 @@ function attachAdminToAuth( authObj ) {
     return new Promise( function ( resolve, reject ) {
 
         getAuthRole()
-            .then( function(authRoleId) {
+            .then( function ( authRoleId ) {
 
                 User.findOneById( authObj.user )
                     .then( function ( user ) {
                         user.accountType = 'admin';
-                        user.roles = _.union( user.roles, [ authRoleId ]);
+                        user.roles = _.union( user.roles, [ authRoleId ] );
                         user.save();
                         resolve( user );
                     } )
@@ -58,7 +58,7 @@ module.exports = require( 'waterlock' ).waterlocked( {
 
 
     /**
-     * Adds admin privledge to the account pointed to by emailAddr
+     * Adds admin privilege to the account pointed to by emailAddr
      *
      * @param emailAddr
      */
@@ -92,49 +92,58 @@ module.exports = require( 'waterlock' ).waterlocked( {
      * @param password
      * @param userObj
      */
-     
-     // TODO: This should do a check before attempting create to keep the log noise level down :)
+
+    // TODO: This should do a check before attempting create to keep the log noise level down :)
     addUser: function ( emailAddr, password, userObj, requireValidation ) {
 
         return new Promise( function ( resolve, reject ) {
 
-            var auth = {
+            var authAttrib = {
                 email:    emailAddr,
                 password: password
             };
 
             requireValidation = requireValidation || sails.config.waterlock.alwaysValidate;
 
-            User.create( userObj || {} )
-                .then( function ( user ) {
+            Auth.findOne( { email: emailAddr } )
+                .then( function ( auth ) {
+                    if ( auth ) {
+                        sails.log.debug( "Email is in system, rejecting create." )
+                        reject( new Error( "Email already in system" ) );
+                    } else {
+                        sails.log.debug( "Email is not in system, adding account." )
+                        User.create( userObj || {} )
+                            .then( function ( user ) {
 
-                    waterlock.engine.attachAuthToUser( auth, user, function ( err, userWithAuth ) {
-                        if ( err ) {
-                            waterlock.logger.error( 'error making user' );
-                            sails.log.error( err );
-                            reject( err );
-                        } else {
-                            if (requireValidation){
-                                
-                                ValidateToken.create( { owner: userWithAuth.auth.id } )
-                                    .then( function ( tok ) {
-                                        sails.log.info( tok );
-                                        Auth.update( { id: tok.owner }, { validateToken: tok, blocked: true } )
-                                            .then( function ( data ) {
-                                                sails.log.debug( "Back attach of validateToken OK" );
-                                            } )
-                                    } )
-                                    .catch( function ( err ) {
+                                waterlock.engine.attachAuthToUser( authAttrib, user, function ( err, userWithAuth ) {
+                                    if ( err ) {
+                                        sails.log.error( 'AdminService.addUser: Error attaching auth to user' );
                                         sails.log.error( err );
-                                    } );
-                            
-                            
-                            }
-                            
-                            resolve( userWithAuth );
-                        }
-                    } )
-
+                                        reject( err );
+                                    } else {
+                                        if ( requireValidation ) {
+                                            sails.log.info( "dminService.addUser: adding validation token" );
+                                            ValidateToken.create( { owner: userWithAuth.auth.id } )
+                                                .then( function ( tok ) {
+                                                    sails.log.info( tok );
+                                                    Auth.update( { id: tok.owner }, {
+                                                            validateToken: tok,
+                                                            blocked:       true
+                                                        } )
+                                                        .then( function ( data ) {
+                                                            sails.log.debug( "Back attach of validateToken OK" );
+                                                            resolve( userWithAuth );
+                                                        } )
+                                                } )
+                                                .catch( reject );
+                                        } else {
+                                            resolve( userWithAuth );
+                                        }
+                                    }
+                                } );
+                            } )
+                            .catch( reject )
+                    }
                 } )
                 .catch( reject )
 
@@ -152,11 +161,11 @@ module.exports = require( 'waterlock' ).waterlocked( {
 
         return new Promise( function ( resolve, reject ) {
 
-            if (!params.password){
-                reject( new Error("Try including a password!") );
+            if ( !params.password ) {
+                reject( new Error( "Try including a password!" ) );
             }
 
-            if ( params.email ){
+            if ( params.email ) {
 
                 Auth.findOneByEmail( params.email )
                     .then( function ( authObj ) {
@@ -171,11 +180,11 @@ module.exports = require( 'waterlock' ).waterlocked( {
                     .catch( reject );
 
 
-            } else if (params.resetToken){
+            } else if ( params.resetToken ) {
 
                 // Token is stored on the Auth resetToken.token
 
-                Auth.findOne( { "resetToken.token" : params.token })
+                Auth.findOne( { "resetToken.token": params.token } )
                     .then( function ( authObj ) {
                         authObj.password = params.password;
                         authObj.save()
@@ -190,12 +199,9 @@ module.exports = require( 'waterlock' ).waterlocked( {
             }
 
 
-
         } );
 
     }
-
-
 
 
 } )
