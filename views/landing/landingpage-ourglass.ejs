@@ -19,6 +19,7 @@
     <style>
         body {
             color: white;
+            background: black;
         }
 
         a {
@@ -27,11 +28,18 @@
             display: block;
         }
 
-
     </style>
 
+    <script>
+        var setBackground = function() {
+            document.body.style.backgroundImage = "url('/images/sportsbarblurfaded.jpg')";
+            document.body.style.backgroundSize = "cover";
+            document.body.style.backgroundRepeat = "no-repeat";
+        }
+    </script>
+
 </head>
-<body style="background: url(/images/sportsbarblurfaded.jpg);;">
+<body onload="setBackground()">
 
 <!-- MAIN CONTENT -->
 <div class="container-fluid">
