@@ -29,7 +29,7 @@
             <li uib-dropdown is-open="ui.accountOpen">
                 <a id="account" uib-dropdown-toggle ng-disabled="disabled">Account<b
                         class="caret"></b></a>
-                <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="account">
+                <ul  uib-dropdown-menu role="menu" aria-labelledby="account">
                     <li><a ui-sref="user.editUser" ng-click="navCollapsed = true">Edit My Account</a></li>
                     <li><a href="/logout" ng-click="navCollapsed = true">Logout</a></li>
                 </ul>
@@ -65,7 +65,7 @@
             <li uib-dropdown is-open="ui.usersOpen">
                 <a id="users" uib-dropdown-toggle ng-disabled="disabled">Users<b
                         class="caret"></b></a>
-                <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="users">
+                <ul uib-dropdown-menu role="menu" aria-labelledby="users">
                     <li><a ui-sref="admin.manageUsers" ng-click="navCollapsed = true">Manage Users</a></li>
                     <li><a ui-sref="admin.addUser" ng-click="navCollapsed = true">Add User</a></li>
                 </ul>
@@ -82,7 +82,7 @@
             <li uib-dropdown is-open="ui.adminOpen">
                 <a id="admin" uib-dropdown-toggle ng-disabled="disabled">Account<b
                         class="caret"></b></a>
-                <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="admin">
+                <ul uib-dropdown-menu role="menu" aria-labelledby="admin">
                     <li><a ui-sref="user.editUser" ng-click="navCollapsed = true">Edit My Account</a></li>
                     <li><a href="/logout" ng-click="navCollapsed = true">Logout</a></li>
                 </ul>
