@@ -43,6 +43,8 @@
 <!-- ADMIN TOOLBAR -->
     <!-- Brand and toggle get grouped for better mobile display -->
     <!-- MAK: this implements the responsive hamburger menu on smaller screens as well as places the brand at left. -->
+    <!-- TODO cole - when redirecting, collapse menu
+        TODO also only close dropdown on mouse exit when full screen and not hamburger -->
     <div class="navbar-header">
         <button type="button" class="navbar-toggle" ng-init="navCollapsed = true"
                 ng-click="navCollapsed = !navCollapsed">
@@ -56,16 +58,16 @@
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="collapse navbar-collapse" ng-class="!navCollapsed && 'in'" ng-click="navCollapsed = true">
+    <div  class="collapse navbar-collapse navbar-responsive-collapse" ng-class="!navCollapsed && 'in'">
 
 
 
         <ul class="nav navbar-nav">
 
-            <li class="dropdown">
-                <a class="dropdown-toggle" ng-click="ui.usersOpen = !ui.usersOpen">Users<b
+            <li uib-dropdown is-open="ui.usersOpen">
+                <a id="users" uib-dropdown-toggle ng-disabled="disabled">Users<b
                         class="caret"></b></a>
-                <ul class="dropdown-menu" uib-collapse="!ui.usersOpen" ng-mouseleave="ui.usersOpen=false">
+                <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="users" ng-mouseleave="ui.usersOpen=false">
                     <li><a ui-sref="admin.manageUsers">Manage Users</a></li>
                     <li><a ui-sref="admin.addUser">Add User</a></li>
                 </ul>
@@ -76,15 +78,14 @@
 
 
 
-
         </ul>
 
         <ul class="nav navbar-nav navbar-right">
 
-            <li class="dropdown">
-                <a class="dropdown-toggle" ng-click="ui.accountOpen = !ui.accountOpen">Account<b
+            <li uib-dropdown is-open="ui.adminOpen">
+                <a id="admin" uib-dropdown-toggle ng-disabled="disabled">Account<b
                         class="caret"></b></a>
-                <ul class="dropdown-menu" uib-collapse="!ui.accountOpen" ng-mouseleave="ui.accountOpen=false">
+                <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="admin" ng-mouseleave="ui.adminOpen=false">
                     <li><a ui-sref="user.editUser">Edit My Account</a></li>
                     <li><a href="/logout">Logout</a></li>
                 </ul>
