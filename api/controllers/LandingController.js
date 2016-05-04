@@ -13,11 +13,7 @@ module.exports = {
     
     landing: function ( req, res ) {
 
-        var landingPage = "landing/landingpage";
-
-        if (sails.config.theme && sails.config.theme.themeName){
-            landingPage = landingPage + "-" + sails.config.theme.themeName;
-        }
+        var landingPage = "landing/landingpage" + ThemeService.getTheme();
 
         return res.view( landingPage, { layout: false, someinfo: "This is passed to locals too!" } );
     }
