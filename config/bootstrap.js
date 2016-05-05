@@ -38,9 +38,23 @@ module.exports.bootstrap = function ( cb ) {
         .then( RoleCacheService.sync )
         .then( function () {
 
+            var adminUser = {
+                firstName: 'Admin',
+                lastName: 'Pre-installed',
+                metadata: { preinstall: true },
+                roles: [ RoleCacheService.roleByName( "admin", '' ) ]
+            }
+
+            return AdminService.addUser( 'admin@test.com', 'beerchugs', adminUser, false )
+                .then( function () { sails.log.debug( "Admin user created." )} )
+                .catch( function () { sails.log.warn( "Admin user NOT created. Probably already existed." )} );
+
+        } )
+        .then( function () {
+
             var roles = [ RoleCacheService.roleByName( "admin", '' ) ];
 
-            return AdminService.addUser( 'admin@test.com', 'beerchugs', { roles: roles } )
+            return AdminService.addUser( 'admin2@test.com', 'beerchugs', { roles: roles } )
                 .then( function () { sails.log.debug( "Admin user created." )} )
                 .catch( function () { sails.log.warn( "Admin user NOT created. Probably already existed." )} );
 
