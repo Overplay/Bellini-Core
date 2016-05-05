@@ -14,7 +14,7 @@
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="collapse navbar-collapse" ng-class="!navCollapsed && 'in'">
+    <div class="collapse navbar-collapse" uib-collapse="navCollapsed">
 
 
         <ul class="nav navbar-nav">
@@ -57,7 +57,7 @@
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="collapse navbar-collapse" ng-class="!navCollapsed && 'in'">
+    <div class="collapse navbar-collapse" uib-collapse="navCollapsed">
 
 
         <ul class="nav navbar-nav">
@@ -72,7 +72,7 @@
             </li>
 
 
-            <li><a ui-sref="admin.manageDevices" ng-click="navCollapsed = true">Devices</a></li>
+            <li uib-dropdown is-open="ui.devicesOpen"><a ui-sref="admin.manageDevices" ng-click="navCollapsed = true">Devices</a></li>
 
 
         </ul>

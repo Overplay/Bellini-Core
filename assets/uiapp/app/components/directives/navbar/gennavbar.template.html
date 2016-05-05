@@ -1,0 +1,73 @@
+<nav class="navbar navbar-inverse" role="navigation">
+    <!-- ADMIN TOOLBAR -->
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <!-- MAK: this implements the responsive hamburger menu on smaller screens as well as places the brand at left. -->
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" ng-init="navCollapsed = true"
+                ng-click="navCollapsed = !navCollapsed">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#"><img src="/images/overplay-white.png"
+                                              style="max-height: 40px; margin-top: -10px;"/></a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" uib-collapse="navCollapsed">
+
+        <!--TODO: Cole - make less repetetive....-->
+
+        <ul class="nav navbar-nav">
+
+            <li ng-repeat="menu in menus.left" uib-dropdown is-open="ui.{{menu.label}}">
+                <a ng-if="dropdown(menu)" id="{{menu.label}}" uib-dropdown-toggle
+                   ng-disabled="disabled">{{menu.label}}<b
+                        class="caret"></b></a>
+
+                <a ng-if="!dropdown(menu) && hrefLink(menu.items[0])" href="{{menu.items[0].link.addr}}"
+                   ng-click="navCollapsed=true">{{menu.items[0].label}}</a>
+                <a ng-if="!dropdown(menu) && !hrefLink(menu.items[0])" ui-sref="{{menu.items[0].link.addr}}"
+                   ng-click="navCollapsed=true">{{menu.items[0].label}}</a>
+
+                <ul ng-if="dropdown(menu)" uib-dropdown-menu role="menu" aria-labelledby="{{menu.label}}">
+                    <li ng-repeat="option in menu.items">
+                        <a ng-if="!hrefLink(option)" ui-sref="{{option.link.addr}}" ng-click="navCollapsed=true">{{option.label}}</a>
+                        <a ng-if="hrefLink(option)" href="{{option.link.addr}}" ng-click="navCollapsed=true">{{option.label}}</a>
+
+                    </li>
+
+                </ul>
+
+            </li>
+        </ul>
+
+
+        <ul class="nav navbar-nav navbar-right">
+
+            <li ng-repeat="menu in menus.right" uib-dropdown is-open="ui.{{menu.label}}">
+                <a ng-if="dropdown(menu)" id="{{menu.label}}" uib-dropdown-toggle
+                   ng-disabled="disabled">{{menu.label}}<b
+                        class="caret"></b></a>
+
+                <a ng-if="!dropdown(menu) && hrefLink(menu.items[0])" href="{{menu.items[0].link.addr}}"
+                   ng-click="navCollapsed=true">{{menu.items[0].label}}</a>
+                <a ng-if="!dropdown(menu) && !hrefLink(menu.items[0])" ui-sref="{{menu.items[0].link.addr}}"
+                   ng-click="navCollapsed=true">{{menu.items[0].label}}</a>
+
+                <ul ng-if="dropdown(menu)" uib-dropdown-menu role="menu" aria-labelledby="{{menu.label}}">
+                    <li ng-repeat="option in menu.items">
+                        <a ng-if="!hrefLink(option)" ui-sref="{{option.link.addr}}" ng-click="navCollapsed=true">{{option.label}}</a>
+                        <a ng-if="hrefLink(option)" href="{{option.link.addr}}" ng-click="navCollapsed=true">{{option.label}}</a>
+
+                    </li>
+
+                </ul>
+
+
+            </li>
+        </ul>
+    </div><!-- /.navbar-collapse -->
+</nav>
+
