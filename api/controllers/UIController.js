@@ -12,7 +12,7 @@ module.exports = {
 
 
     uiApp: function ( req, res ) {
-        return res.view( "ui/uiapp", { someinfo: "This is passed to locals too!", layout: 'ui/uilayout' } );
+        return res.view( "ui/uiapp", { layout: 'ui/uilayout' } );
     }
 
 };

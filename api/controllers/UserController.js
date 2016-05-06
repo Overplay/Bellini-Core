@@ -29,6 +29,4 @@ module.exports = require('waterlock').actions.user({
               return res.error( err );
           } );
   }
-    
-  
 });
