@@ -26,6 +26,21 @@
         text-align: center;
     }
 
+    .popin {
+        animation: grow .5s cubic-bezier(0.33, 0.96, 0.41, 1.09);
+    }
+
+    @keyframes grow {
+        from {
+            transform: scale(0, 0);
+            opacity: 0;
+        }
+        to {
+            transform: scale(1, 1);
+            opacity: 1;
+        }
+    }
+
     /* when hiding the picture */
     .ng-hide-add {
         animation: 0.5s lightSpeedOut ease;
@@ -106,12 +121,11 @@
 
     <img style="margin: 10px auto; display: block; max-width: 50vw;" src="/images/overplay-white.png"/>
 
-    <div class="container-fluid" ng-app="loginApp" ng-controller="loginController">
+    <div class="container-fluid popin" ng-app="loginApp" ng-controller="loginController">
         <div class="row">
             <div class="col-sm-8 col-sm-offset-2" style="background: rgba(1,1,1,0.5); padding: 30px;">
                 <h1>Please Log In</h1>
-                <form ng-submit="login()">
-
+                <form ng-submit="submit()">
                     <!-- fake fields are a workaround for chrome autofill getting the wrong fields -->
                     <input style="display:none" type="text" name="fakeusernameremembered"/>
                     <input style="display:none" type="password" name="fakepasswordremembered"/>
@@ -127,17 +141,19 @@
                         <span class="input-group-addon"><li class="glyphicon glyphicon-lock"></li></span>
 
                         <input type="password" class="form-control" placeholder="Password"
-                               ng-model="user.password">
+                               ng-model="user.password" onkeyup="if (event.keyCode == 13)
+                                                                document.getElementById('login').click()">
                     </div>
 
 
-                    <button ng-click="login()" class="btn btn-primary btn-lg top15">Go</button>
+                    <button ng-click="login()" id='login' class="btn btn-primary btn-lg top15">Go</button>
                     &nbsp;
                     <button ng-click="forgot()" class="btn btn-warn btn-lg top15">I Forgot!</button>
+
+                    <div class="alertbubble" ng-show="ui.errorMessage">
+                        {{ ui.errorMessage }}
+                    </div>
                 </form>
-                <div class="alertbubble" ng-show="ui.errorMessage">
-                    {{ ui.errorMessage }}
-                </div>
             </div>
         </div>
     </div>
@@ -147,4 +163,3 @@
 
 <script src="/js/nucleusService/nucleusService.js"></script>
 <script src="/js/views/users/loginapp.js"></script>
-

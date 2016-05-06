@@ -24,8 +24,8 @@ app.controller( "resetController", function ( $scope, $log, nucleus, $location )
     var resetToken = getParameterByName('token');
     var email = getParameterByName( 'email' );
 
-    $scope.lengthOK = function() {
-        var element = document.getElementById("password-main"), i ;
+    $scope.lengthOK = function () {
+        var element = document.getElementById("password-main"), i;
 
         if (!$scope.user.password) {
             i = element.className.indexOf(" has");
@@ -39,8 +39,8 @@ app.controller( "resetController", function ( $scope, $log, nucleus, $location )
             element.className += " has-success";
         }
     }
-    
-    $scope.matchOK = function() {
+
+    $scope.matchOK = function () {
         var element = document.getElementById("password-repeat"), i;
 
         if (!$scope.user.password2) {
@@ -64,7 +64,7 @@ app.controller( "resetController", function ( $scope, $log, nucleus, $location )
         var lenOK = $scope.user.password.length > 7;
         var match = $scope.user.password == $scope.user.password2;
 
-        if ( !lenOK && $scope.user.password.length > 0)
+        if (!lenOK && $scope.user.password.length > 0)
             $scope.ui.errorMessage = "Password too short";
 
         if ( !match )

@@ -30,11 +30,11 @@ app.factory( 'uibHelper', function ( $log, $uibModal ) {
      * @param confirmValue
      * @returns {*}
      */
-    service.confirmModal = function ( title, body, confirmValue ) {
+    service.confirmModal = function (title, body, confirmValue) {
 
         var modalInstance = $uibModal.open( {
             templateUrl: '/uiapp/app/shared/uibHelperService/confirmmodal.template.html',
-            controller:  function ( $scope, $uibModalInstance, params ) {
+            controller: function ($scope, $uibModalInstance, params) {
 
                 $scope.modalUi = { title: params.title, body: params.body };
 
@@ -73,29 +73,29 @@ app.factory( 'uibHelper', function ( $log, $uibModal ) {
      * @param currentDataChoice
      * @returns {*}
      */
-    service.dateModal = function ( title, body, currentDateChoice ) {
+    service.dateModal = function (title, body, currentDateChoice) {
 
-        var modalInstance = $uibModal.open( {
+        var modalInstance = $uibModal.open({
             templateUrl: '/uiapp/app/shared/uibHelperService/datemodal.template.html',
-            controller:  function ( $scope, $uibModalInstance, params ) {
+            controller: function ($scope, $uibModalInstance, params) {
 
-                $scope.modalUi = { title: params.title, body: params.body, date: params.currentDateChoice };
+                $scope.modalUi = {title: params.title, body: params.body, date: params.currentDateChoice};
 
                 $scope.ok = function () {
-                    $uibModalInstance.close( $scope.modalUi.date );
+                    $uibModalInstance.close($scope.modalUi.date);
                 }
 
                 $scope.cancel = function () {
-                    $uibModalInstance.dismiss( 'cancel' );
+                    $uibModalInstance.dismiss('cancel');
                 }
 
             },
-            resolve:     {
+            resolve: {
                 params: function () {
-                    return { title: title, body: body, currentDateChoice: currentDateChoice };
+                    return {title: title, body: body, currentDateChoice: currentDateChoice};
                 }
             }
-        } );
+        });
 
         return modalInstance.result;
 
@@ -119,30 +119,32 @@ app.factory( 'uibHelper', function ( $log, $uibModal ) {
      * @param currentChoiceIdx
      * @returns {*}
      */
-    service.selectListModal = function ( title, body, choiceArray, currentChoiceIdx ) {
+    service.selectListModal = function (title, body, choiceArray, currentChoiceIdx) {
 
-        var modalInstance = $uibModal.open( {
+        var modalInstance = $uibModal.open({
             templateUrl: '/uiapp/app/shared/uibHelperService/selectlistmodal.template.html',
-            controller:  function ( $scope, $uibModalInstance, params ) {
+            controller: function ($scope, $uibModalInstance, params) {
 
-                $scope.modalUi = { title: params.title, body: params.body, choices: params.choices, 
-                    currentChoice: params.currentChoice };
+                $scope.modalUi = {
+                    title: params.title, body: params.body, choices: params.choices,
+                    currentChoice: params.currentChoice
+                };
 
                 $scope.ok = function () {
-                    $uibModalInstance.close( $scope.modalUi.currentChoice );
+                    $uibModalInstance.close($scope.modalUi.currentChoice);
                 }
 
                 $scope.cancel = function () {
-                    $uibModalInstance.dismiss( 'cancel' );
+                    $uibModalInstance.dismiss('cancel');
                 }
 
             },
-            resolve:     {
+            resolve: {
                 params: function () {
-                    return { title: title, body: body, choices: choiceArray, currentChoice: currentChoiceIdx };
+                    return {title: title, body: body, choices: choiceArray, currentChoice: currentChoiceIdx};
                 }
             }
-        } );
+        });
 
         return modalInstance.result;
 
@@ -164,32 +166,34 @@ app.factory( 'uibHelper', function ( $log, $uibModal ) {
      * @param placeholder
      * @returns {*}
      */
-    service.stringEditModal = function ( title, body, string2Edit, placeholder ) {
+    service.stringEditModal = function (title, body, string2Edit, placeholder) {
 
-        var modalInstance = $uibModal.open( {
+        var modalInstance = $uibModal.open({
             templateUrl: '/uiapp/app/shared/uibHelperService/stringeditmodal.template.html',
-            controller:  function ( $scope, $uibModalInstance, params ) {
+            controller: function ($scope, $uibModalInstance, params) {
 
-                $scope.modalUi = { title: params.title, 
-                            body: params.body, 
-                            editString: params.string2Edit,
-                            placeholder: params.placeholder || params.title };
+                $scope.modalUi = {
+                    title: params.title,
+                    body: params.body,
+                    editString: params.string2Edit,
+                    placeholder: params.placeholder || params.title
+                };
 
                 $scope.ok = function () {
-                    $uibModalInstance.close( $scope.modalUi.editString );
+                    $uibModalInstance.close($scope.modalUi.editString);
                 }
 
                 $scope.cancel = function () {
-                    $uibModalInstance.dismiss( 'cancel' );
+                    $uibModalInstance.dismiss('cancel');
                 }
 
             },
-            resolve:     {
+            resolve: {
                 params: function () {
-                    return { title: title, body: body, string2Edit: string2Edit, placeholder: placeholder };
+                    return {title: title, body: body, string2Edit: string2Edit, placeholder: placeholder};
                 }
             }
-        } );
+        });
 
         return modalInstance.result;
 
@@ -211,38 +215,38 @@ app.factory( 'uibHelper', function ( $log, $uibModal ) {
      * @param placeholder
      * @returns {*}
      */
-    service.inputBoxesModal = function ( title, body, fieldsArray ) {
+    service.inputBoxesModal = function (title, body, fieldsArray) {
 
-        var modalInstance = $uibModal.open( {
+        var modalInstance = $uibModal.open({
             templateUrl: '/uiapp/app/shared/uibHelperService/inputboxesmodal.template.html',
-            controller:  function ( $scope, $uibModalInstance, params ) {
+            controller: function ($scope, $uibModalInstance, params) {
 
                 $scope.modalUi = {
-                    title:       params.title,
-                    body:        params.body,
-                    fieldsArray:  params.fieldsArray
+                    title: params.title,
+                    body: params.body,
+                    fieldsArray: params.fieldsArray
                 };
 
 
                 $scope.ok = function () {
                     var rval = {};
-                    $scope.modalUi.fieldsArray.forEach( function(f){
-                        rval[f.field]=f.value;
+                    $scope.modalUi.fieldsArray.forEach(function (f) {
+                        rval[f.field] = f.value;
                     })
-                    $uibModalInstance.close( rval );
+                    $uibModalInstance.close(rval);
                 }
 
                 $scope.cancel = function () {
-                    $uibModalInstance.dismiss( 'cancel' );
+                    $uibModalInstance.dismiss('cancel');
                 }
 
             },
-            resolve:     {
+            resolve: {
                 params: function () {
-                    return { title: title, body: body, fieldsArray: fieldsArray };
+                    return {title: title, body: body, fieldsArray: fieldsArray};
                 }
             }
-        } );
+        });
 
         return modalInstance.result;
 
@@ -252,4 +256,4 @@ app.factory( 'uibHelper', function ( $log, $uibModal ) {
 
     return service;
 
-} );
+});

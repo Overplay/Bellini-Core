@@ -25,7 +25,7 @@ module.exports.policies = {
     '*': true,
 
     LandingController: {
-        landing: [ 'authDecorator', 'authRedirect' ]
+        landing: ['authDecorator', 'authRedirect']
     },
 
     // Let's tighten down a bit on blog posts

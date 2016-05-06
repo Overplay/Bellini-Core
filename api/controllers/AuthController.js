@@ -124,13 +124,13 @@ module.exports = require( 'waterlock' ).waterlocked( {
     },
 
     resetPwd: function ( req, res ) {
-        
+
         var themeExt = '';
-        if ( sails.config.theme && sails.config.theme.themeName) {
+        if (sails.config.theme && sails.config.theme.themeName) {
             themeExt = themeExt + '-' + sails.config.theme.themeName;
         }
-        
-        return res.view( 'users/resetPassword' + themeExt );
+
+        return res.view('users/resetPassword' + themeExt);
 
     },
 

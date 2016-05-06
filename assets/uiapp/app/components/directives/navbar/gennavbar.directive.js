@@ -124,6 +124,7 @@ app.directive("genNavigationBar", function ($log) {
                 }
 
                 /*
+                 //step through all the roles and append them to the nav bar 
                  _.forEach(nucleus.roles, function(val){
                  _.mergeWith(scope.menus, menuLists[val], mergeHelper);
 
@@ -155,6 +156,7 @@ app.directive("navTabs", function ($log) {
         },
         templateUrl: "/uiapp/app/components/directives/navbar/gennavbartabs.template.html",
         link: function (scope, element, attrs) {
+            
             scope.dropdown = function (menu) {
                 return menu.items.length > 1;
             };
