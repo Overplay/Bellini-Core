@@ -23,49 +23,6 @@ app.controller( "resetController", function ( $scope, $log, nucleus, $location )
 
     var resetToken = getParameterByName('token');
     var email = getParameterByName( 'email' );
-
-    $scope.lengthOK = function() {
-        var element = document.getElementById("password-main"), i ;
-        $scope.validate.length = true;
-
-        if (!$scope.user.password) {
-            i = element.className.indexOf(" has");
-            if ( i !== -1 )
-                element.className = element.className.slice(0, i);
-        }
-        else if ($scope.user.password.length <= 7) {
-            element.className += " has-error";
-            $scope.validate.length = false;
-        }
-
-        else {
-            i = element.className.indexOf(" has-error");
-            if ( i !== -1 )
-                element.className = element.className.slice(0, i);
-            element.className += " has-success";
-        }
-    }
-
-    $scope.matchOK = function() {
-        var element = document.getElementById("password-repeat"), i;
-        $scope.validate.match = true;
-
-        if (!$scope.user.password2) {
-            i = element.className.indexOf(" has");
-            if (i !== -1 )
-                element.className = element.className.slice(0, i);
-        }
-        else if ($scope.user.password != $scope.user.password2) {
-            $scope.validate.match = false;
-            element.className += " has-error";
-        }
-        else {
-            i = element.className.indexOf(" has-error");
-            if ( i !== -1 )
-                element.className = element.className.slice(0, i);
-            element.className += " has-success";
-        }
-    }
     
     $scope.passwordOK = function () {
 
