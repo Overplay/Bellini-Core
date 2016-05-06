@@ -111,19 +111,32 @@ app.directive("genNavigationBar", function ($log) {
                         }]
                     }
                 };
-                
-                scope.menus = menuLists["admin"];
+
+                //init so that it can be merged with
+                scope.menus = {};
+
+                //helper method to combine arrays within the object
+                function mergeHelper(objValue, srcValue) {
+                    if (_.isArray(objValue)) {
+                        //concat but prevent duplicate tab items (like Account)
+                        return _.unionWith(objValue, srcValue, _.isEqual);
+                    }
+                }
 
                 /*
-                nucleus.roles.forEach(function(val){
-                    _.merge(scope.menus, menuLists[val]);
+                 _.forEach(nucleus.roles, function(val){
+                 _.mergeWith(scope.menus, menuLists[val], mergeHelper);
 
-
-                });
+                 });
                  */
 
-                //scope.menus = _.merge(menuLists['user'], menuLists['admin']
 
+                scope.menus = _.mergeWith(scope.menus, menuLists['admin'], mergeHelper);
+
+                scope.menus = _.mergeWith(scope.menus, menuLists['user'], mergeHelper);
+
+
+                $log.log(scope.menus)
             }
 
         }
@@ -148,8 +161,12 @@ app.directive("navTabs", function ($log) {
 
 
             scope.hrefLink = function (option) {
-                return option.link == "href";
+                return option.link.type == "href";
             };
+
+            scope.close = function () {
+                scope.ui.navCollapsed = true;
+            }
 
         }
     }
