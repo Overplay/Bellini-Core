@@ -14,6 +14,18 @@ var Promise = require("bluebird");
 var _idToRoleMap = {};
 var _adminRole = undefined;
 
+function idToRoleString( roleId ){
+
+        var role = _idToRoleMap[ "" + roleId ];
+
+        if ( !role )
+            throw new Error( "No such role!" );
+
+        return role.roleName + (role.subRole ? "." + role.subRole : "" );
+    
+
+}
+
 module.exports = {
 
     sync: function () {
@@ -43,16 +55,7 @@ module.exports = {
 
     },
     
-    roleStringForId: function(roleId){
-
-        var role = _idToRoleMap[""+roleId];
-        
-        if (!role)
-            throw new Error("No such role!");
-            
-        return role.roleName + (role.subRole ? "." + role.subRole : "" );
-        
-    },
+    roleStringForId: idToRoleString,
 
     /**
      * Can also pass in a dotted key style as roleName: proprietor.owner
@@ -75,6 +78,17 @@ module.exports = {
             
         return -1;
         
+    },
+
+    getAllRolesAsStringArray: function(arrayOfRoleIds){
+
+        var rval = [];
+        arrayOfRoleIds.forEach( function(rid){
+            rval.push(idToRoleString(rid));
+        })
+        
+        return rval;
+
     },
     
     getRoleMap: function(){

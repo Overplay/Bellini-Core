@@ -16,8 +16,10 @@
 <script src="/bower_components/lodash/dist/lodash.min.js"></script>
 <script src="/js/nucleusService/nucleusService.js"></script>
 
-<% if ( typeof admin !== "undefined" && admin ) {%>
+<% if ( typeof roles !== "undefined" && roles ) { %>
 <script>
-    var nucleus = { proton:  true };
+    var nucleus = { roles: <%- JSON.stringify(roles) %> };
 </script>
 <% } %>
+
+

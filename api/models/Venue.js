@@ -13,6 +13,22 @@ module.exports = {
       type: 'json'
     },
 
+    // For determining where a user is and whether venue is shown on the Mobile app
+    // finder app 
+    geolocation: {
+      type: 'json'
+    },
+
+    showInMobileAppMap:{
+      type: 'boolean',
+      defaultsTo: true
+    },
+
+    publicWifiSSID: {
+      type: 'string',
+      defaultsTo: ''
+    },
+
     devices: {
       type: 'collection',
       via: 'venue'
