@@ -77,7 +77,21 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                 }
             }
         } )
-            
+
+        .state('device', {
+            url: '/device',
+            templateUrl: '/uiapp/app/components/device/device.partial.html',
+            abstract: true
+
+        })
+
+        .state('device.addDevice', {
+            url: '/device/activate',
+            data: {subTitle: "Add a Device"},
+            controller: "addDeviceController",
+            templateUrl: '/uiapp/app/components/device/add-device.partial.html',
+        })
+
 
         // =========== DASHBOARD
 

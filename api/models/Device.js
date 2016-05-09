@@ -71,8 +71,16 @@ module.exports = {
         deviceBackup: {
             type: 'json',
             defaultsTo: {}
+        },
+
+
+        toJSON: function () {
+            var obj = this.toObject();
+            if (!sails.config.policies.wideOpen) {
+                delete obj.regCode;
+            }
+            return obj;
         }
-        
 
     }
 };

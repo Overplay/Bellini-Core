@@ -17,7 +17,9 @@ app.factory('navBarService', function ($log) {
             }, {
                 label: "Devices", //might need to be modified
                 id: "devices",
-                items: [{label: "Devices", link: {type: 'ui-sref', addr: 'admin.manageDevices'}}]
+                items: [{label: "Devices", link: {type: 'ui-sref', addr: 'admin.manageDevices'}},
+                    {label: "Add Device", link: {type: 'ui-sref', addr: 'device.addDevice'}}
+                ]
             }
             ],
             right: [{
@@ -136,7 +138,6 @@ app.factory('navBarService', function ($log) {
                 return _.unionWith(objValue, srcValue, _.isEqual);
             }
         }
-
 
         //step through all the roles and append them to the nav bar
         //TODO order of tabs? 
