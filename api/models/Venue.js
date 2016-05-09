@@ -19,7 +19,7 @@ module.exports = {
       type: 'json'
     },
 
-    showInMobileAppMap:{
+    showInMobileAppMap: {
       type: 'boolean',
       defaultsTo: true
     },

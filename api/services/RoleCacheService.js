@@ -14,15 +14,15 @@ var Promise = require("bluebird");
 var _idToRoleMap = {};
 var _adminRole = undefined;
 
-function idToRoleString( roleId ){
+function idToRoleString(roleId) {
 
-        var role = _idToRoleMap[ "" + roleId ];
+    var role = _idToRoleMap["" + roleId];
 
-        if ( !role )
-            throw new Error( "No such role!" );
+    if (!role)
+        throw new Error("No such role!");
 
-        return role.roleName + (role.subRole ? "." + role.subRole : "" );
-    
+    return role.roleName + (role.subRole ? "." + role.subRole : "" );
+
 
 }
 
@@ -54,7 +54,7 @@ module.exports = {
         });
 
     },
-    
+
     roleStringForId: idToRoleString,
 
     /**
@@ -77,16 +77,16 @@ module.exports = {
             return role.id;
             
         return -1;
-        
+
     },
 
-    getAllRolesAsStringArray: function(arrayOfRoleIds){
+    getAllRolesAsStringArray: function (arrayOfRoleIds) {
 
         var rval = [];
-        arrayOfRoleIds.forEach( function(rid){
+        arrayOfRoleIds.forEach(function (rid) {
             rval.push(idToRoleString(rid));
         })
-        
+
         return rval;
 
     },
