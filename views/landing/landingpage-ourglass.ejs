@@ -1,17 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<html lang="en" ng-app="uiApp">
+<head ng-controller="landingPageController">
     <meta charset="UTF-8">
 
-    <title>Ourglass</title>
+    <title>Overplay</title>
 
     <!-- Viewport mobile tag for sensible mobile support -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-
     <!-- Grab the common JS libs -->
     <%- partial( '../partials/jsdeps' ) %>
-
 
     <!-- Grab the common CSS  -->
     <%- partial( '../partials/cssdeps' ) %>
@@ -19,9 +17,16 @@
     <!-- Import your app, controllers, etc. here. Path needs to be out of /assets/js/views/... -->
 
     <style>
+        html {
+            background: #000;
+        }
+
         body {
             color: white;
-            background: black;
+            background: url(/images/sportsbarblurfaded.jpg);
+            background-size: auto;
+            background-repeat: no-repeat;
+            height: 100vh;
         }
 
         a {
@@ -32,16 +37,8 @@
 
     </style>
 
-    <script>
-        var setBackground = function () {
-            document.body.style.backgroundImage = "url('/images/sportsbarblurfaded.jpg')";
-            document.body.style.backgroundSize = "cover";
-            document.body.style.backgroundRepeat = "no-repeat";
-        }
-    </script>
-
 </head>
-<body onload="setBackground()">
+<body>
 
 <!-- MAIN CONTENT -->
 <div class="container-fluid">

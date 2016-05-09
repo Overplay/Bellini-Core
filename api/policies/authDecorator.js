@@ -16,6 +16,8 @@ module.exports = function ( req, res, next ) {
     req.options.locals.authenticated = !!req.session.authenticated;
     req.options.locals.admin = !!( req.session.user && RoleCacheService.hasAdminRole( req.session.user.roles ));
 
+    req.options.locals.roles = req.session && req.session.user && req.session.user.roleTypes;
+    
     return next();
 
 };
