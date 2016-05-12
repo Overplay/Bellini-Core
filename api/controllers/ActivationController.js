@@ -8,24 +8,43 @@
 module.exports = {
 
     generateCode: function (req, res) {
+
+
+        var params = req.allParams();
+
+
+        //testing purposes 
+        sails.hooks.devicehook.clean(); //TODO remove this after it is set to run at intervals
+
+
         var code = Math.random().toString(36).substr(2, 6).toUpperCase();
 
         //need to make sure that the code is not already in use and maybe make sure
         //the code is clean 
 
-        //create a code for the user 
-        if (req.session && req.session.user) {
-            //store the code in relation to the user
-            return res.json({code: code});
-        }
+        var deviceObj = {};
+        deviceObj.deviceOwner = req.session.user;
+        deviceObj.regCode = code;
+        sails.log.debug(deviceObj);
 
-        return res.json({code: "No Code"});
+
+        if ((deviceObj.deviceOwner === undefined))
+            return res.badRequest();
+
+
+        Device.create(deviceObj || {})
+            .then(function (device) {
+                sails.log.debug(device);
+                return res.json({code: device.regCode});
+
+            })
+            .catch(function (err) {
+                sails.log.debug("could not create device", err);
+            })
+
+        
+        
     },
 
-    registerDevice: function (req, res) {
-        //get code
-        //find user with that activation code
-        //tie device to user
-    }
 };
 

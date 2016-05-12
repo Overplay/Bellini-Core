@@ -218,7 +218,12 @@
             }
 
 
+            //  =========== DEVICES ==========
+            service.getDevice = function (deviceId) {
 
+                var endPoint = _apiPath + '/device' + (deviceId ? '/' + deviceId : '');
+                return apiGet(endPoint);
+            }
 
             return service;
 

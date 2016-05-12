@@ -21,6 +21,9 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             resolve:     {
                 userAuths: function ( nucleus ) {
                     return nucleus.getAuth();
+                },
+                userDevices: function (nucleus) {
+                    return nucleus.getDevice();
                 }
             }
 
@@ -35,7 +38,13 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
 
 
         } )
-
+        .state('admin.manageDevices', {
+                url: '/manage-devices',
+                data: {subTitle: "Manage Devices"},
+                controller: "adminManageDevicesController",
+                templateUrl: '/uiapp/app/components/admin/admin-manage-devices.partial.html',
+            }
+        )
         .state( 'admin.addUser', {
             url:         '/add-user',
             data:        { subTitle: "Add User" },
@@ -85,11 +94,19 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
 
         })
 
+
         .state('device.addDevice', {
-            url: '/device/activate',
+            url: '/activate',
             data: {subTitle: "Add a Device"},
             controller: "addDeviceController",
             templateUrl: '/uiapp/app/components/device/add-device.partial.html',
+        })
+
+        .state('device.regDevice', {
+            url: '/register',
+            data: {subTitle: "Register a Device"},
+            controller: "registerDeviceController",
+            templateUrl: '/uiapp/app/components/device/register-device.partial.html',
         })
 
 

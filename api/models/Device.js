@@ -79,6 +79,7 @@ module.exports = {
             if (!sails.config.policies.wideOpen) {
                 delete obj.regCode;
             }
+
             return obj;
         }
 
