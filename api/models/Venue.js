@@ -14,7 +14,7 @@ module.exports = {
     },
 
     devices: {
-      type: 'collection',
+      collection: 'Device',
       via: 'venue'
     },
 
