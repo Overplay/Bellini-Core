@@ -83,10 +83,13 @@ var self = module.exports.testdata = {
 
         self.devices.forEach( function(d) {
             var ownerEmail = d.ownerEmail;
-            delete d.ownerEmail;
             var venueName = d.venueName;
+            var managers = d.managerEmails;
+            delete d.managerEmails;
+            delete d.ownerEmail;
             delete d.venueName;
-
+            var device;
+            
             chain = chain.then(function() {
                 return Auth.findOne( {email: ownerEmail} )
                     .then( function(user) {
@@ -96,10 +99,31 @@ var self = module.exports.testdata = {
                     .then( function(venue) {
                         d.venue = venue;
                         return Device.create(d)
-                            .then(function() {
+                            .then(function(newDev) {
+                                device = newDev;
                                 sails.log.debug("Device created with owner " + ownerEmail + ", location: " + d.locationWithinVenue);
                             })
                     })
+            })
+
+            managers.forEach( function(m) {
+                var user;
+                chain = chain.then(function() {
+                    return Auth.findOne({email: m})
+                        .then(function(a) {
+                            return User.findOne(a.user);
+                        })
+                        .then(function(u) {
+                            user = u;
+                            u.managedDevices.add(device.id);
+                            u.save(function(err, s) {});
+                            device.deviceManagers.add(user.id);
+                            device.save(function(err, s) {});
+                        })
+                        .then(function() {
+                            sails.log.debug("Managers added to device");
+                        })
+                })
             })
         });
         
@@ -140,7 +164,7 @@ var self = module.exports.testdata = {
             lastName: 'Conner',
             email: 'silvanus@test.com',
             password: 'pa$$word',
-            roleNames: [ { role: "user", subRole: "" } ]
+            roleNames: [ { role: "proprietor", subRole: "manager" }, { role: "user", subRole: ""} ]
         },
         {
             firstName: 'Kajetan',
@@ -154,7 +178,7 @@ var self = module.exports.testdata = {
             lastName: 'Alfredson',
             email: 'john@test.com',
             password: 'pa$$word',
-            roleNames: [ { role: "proprietor", subRole: "owner" } ]
+            roleNames: [ { role: "proprietor", subRole: "owner" }, { role: "user", subRole: ""} ]
         },
         {
             firstName: 'Antonina',
@@ -168,7 +192,7 @@ var self = module.exports.testdata = {
             lastName: 'Cvetkov',
             email: 'caterina@test.com',
             password: 'pa$$word',
-            roleNames: [ { role: "user", subRole: "" } ]
+            roleNames: [ { role: "proprietor", subRole: "manager" } ]
         },
         {
             firstName: 'Joe',
@@ -182,14 +206,14 @@ var self = module.exports.testdata = {
             lastName: 'Gardiner',
             email: 'jerref@test.com',
             password: 'pa$$word',
-            roleNames: [ { role: "user", subRole: "" } ]
+            roleNames: [ { role: "proprietor", subRole: "manager" }, { role: "user", subRole: ""} ]
         },
         {
             firstName: 'Carina',
             lastName: 'Fay',
             email: 'carina@test.com',
             password: 'pa$$word',
-            roleNames: [ { role: "proprietor", subRole: "owner" } ]
+            roleNames: [ { role: "proprietor", subRole: "owner" }, { role: "user", subRole: ""} ]
         },
         {
             firstName: 'Nereus',
@@ -217,14 +241,14 @@ var self = module.exports.testdata = {
             lastName: 'Ashley',
             email: 'unice@test.com',
             password: 'pa$$word',
-            roleNames: [ { role: "user", subRole: "" } ]
+            roleNames: [ { role: "proprietor", subRole: "manager" } ]
         },
         {
             firstName: 'Paulene',
             lastName: 'Vogel',
             email: 'vogel@test.com',
             password: 'pa$$word',
-            roleNames: [ { role: "proprietor", subRole: "owner" } ]
+            roleNames: [ { role: "proprietor", subRole: "owner" }, { role: "user", subRole: ""} ]
         },
         {
             firstName: 'Sloane',
@@ -245,7 +269,8 @@ var self = module.exports.testdata = {
             lastName: 'Henderson',
             email: 'annegret@test.com',
             password: 'pa$$word',
-            roleNames: [ { role: "user", subRole: "" } ]
+            roleNames: [ { role: "proprietor", subRole: "manager" }, { role: "user", subRole: ""} ]
+            
         },
         {
             firstName: 'Henderson',
@@ -293,52 +318,62 @@ var self = module.exports.testdata = {
         {
             locationWithinVenue: "bar",
             ownerEmail: "john@test.com",
-            venueName: "John's Burgers"
+            venueName: "John's Burgers",
+            managerEmails: ["silvanus@test.com", "annegret@test.com"]
         },
         {
             locationWithinVenue: "bar",
             ownerEmail: "vogel@test.com",
-            venueName: "Corner Pub"
+            venueName: "Corner Pub",
+            managerEmails: ["caterina@test.com", "silvanus@test.com"]
         },
         {
             locationWithinVenue: "bar",
             ownerEmail: "ryan@test.com",
-            venueName: "BBQ 'n Beer"
+            venueName: "BBQ 'n Beer",
+            managerEmails: ["jerref@test.com", "caterina@test.com"]
         },
         {
             locationWithinVenue: "bar",
             ownerEmail: "elizabeth@test.com",
-            venueName: "New Chicago"
+            venueName: "New Chicago",
+            managerEmails: ["unice@test.com", "jerref@test.com"]
         },
         {
             locationWithinVenue: "bar",
             ownerEmail: "carina@test.com",
-            venueName: "VJ's"
+            venueName: "VJ's",
+            managerEmails: ["annegret@test.com", "unice@test.com"]
         },
         {
             locationWithinVenue: "entrance",
             ownerEmail: "john@test.com",
-            venueName: "John's Burgers"
+            venueName: "John's Burgers",
+            managerEmails: ["silvanus@test.com", "annegret@test.com"]
         },
         {
             locationWithinVenue: "entrance",
             ownerEmail: "vogel@test.com",
-            venueName: "Corner Pub"
+            venueName: "Corner Pub",
+            managerEmails: ["caterina@test.com", "silvanus@test.com"]
         },
         {
             locationWithinVenue: "entrance",
             ownerEmail: "ryan@test.com",
-            venueName: "BBQ 'n Beer"
+            venueName: "BBQ 'n Beer",
+            managerEmails: ["jerref@test.com", "caterina@test.com"]
         },
         {
             locationWithinVenue: "entrance",
             ownerEmail: "elizabeth@test.com",
-            venueName: "New Chicago"
+            venueName: "New Chicago",
+            managerEmails: ["unice@test.com", "jerref@test.com"]
         },
         {
             locationWithinVenue: "entrance",
             ownerEmail: "carina@test.com",
-            venueName: "VJ's"
+            venueName: "VJ's",
+            managerEmails: ["annegret@test.com", "unice@test.com"]
         }
     ]
 };

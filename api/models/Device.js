@@ -62,6 +62,11 @@ module.exports = {
         deviceOwner: {
             model: 'User'
         },
+        
+        deviceManagers: {
+            collection: 'User',
+            via: 'managedDevices'
+        },
 
         // Located at this venue
         venue: {
