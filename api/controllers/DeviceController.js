@@ -17,10 +17,11 @@ module.exports = {
 
         sails.log.debug(params);
 
-        //TODO check timeout
-        //TODO req params?
+        //TODO req certain params? CEG
         var deviceObj = {};
-        deviceObj.deviceOwner = req.session.user.id;
+        //use this if the user is logged in on the box when registering
+        //deviceObj.deviceOwner = req.session.user.id;
+
         deviceObj.regCode = params.regCode;
 
 
@@ -31,28 +32,42 @@ module.exports = {
 
                 //check if device exists
                 if (device) {
-                    sails.log.debug(device);
-                    params.regCode = '';
-                    Device.update(device, params)
-                        .then(function (device) {
-                            sails.log.debug(device);
+                    //check if the timing is acceptable - run hook before lookup instead?
+                    var ca = device["createdAt"];
+                    if (Date.now() < Date.parse(ca) + sails.config.device.regCodeTimeout) {
+                        sails.log.debug(device, "being updated");
+                        params.regCode = ''; //clear registration code 
 
-                        });
+                        //TODO JSONWebToken into apiToken field
+                        params.apiToken = '';
+                        //TODO UUID ?
+                        //params.uniqueId = '';
+                        //TODO MAC Address
+                        //TODO Venue (base of user?) 
+
+                        Device.update(device, params) //should never find and update more than one device
+                            .then(function (devices) {
+                                if (devices.length > 1)
+                                    sails.log.debug("NOT GOOD UPDATE :(");
+                                sails.log.debug(devices, "updated/registered");
+
+                            })
+                            .catch(function (err) {
+                                sails.log.debug(devices, "NOT REGISTERED");
+                            });
 
 
-                    return res.json(device)
+                        return res.json(device);
+                    }
+                    //return not found?
                 }
-                //find the user and finalize device details
-                //wifi, ethernet, location, name, unique id, apitoken
                 return res.notFound();
             })
             .catch(function (err) {
                 return res.badRequest();
             });
-        //find user with that activation code
-        //tie device to user
     }
-    
-    
+
+
 };
 

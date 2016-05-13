@@ -225,6 +225,17 @@
                 return apiGet(endPoint);
             }
 
+            service.updateDevice = function (deviceId, newFields) {
+
+                if (!deviceId)
+                    throw new Error("Bad deviceId");
+
+
+                var endPoint = _apiPath + '/device/' + deviceId;
+                return apiPut(endPoint, newFields);
+
+            }
+
             return service;
 
         } );

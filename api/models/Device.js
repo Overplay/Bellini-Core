@@ -78,6 +78,7 @@ module.exports = {
             var obj = this.toObject();
             if (!sails.config.policies.wideOpen) {
                 delete obj.regCode;
+                //TODO other things to hide? 
             }
 
             return obj;

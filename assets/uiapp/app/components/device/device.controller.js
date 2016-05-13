@@ -12,6 +12,9 @@ app.controller("addDeviceController", function ($scope, $state, $log, toastr, nu
     $http.post('/activation/generateCode', $scope.device)
         .then(function (data) {
             $scope.data = data.data;
+        })
+        .catch(function (err) {
+            toastr.error("Device activation code not generated", "Damn!");
         });
 
 
@@ -39,5 +42,24 @@ app.controller("registerDeviceController", function ($scope, $state, $log, toast
 
 
     };
+
+});
+
+app.controller("editDeviceAdminController", function ($scope, $state, $log, device, toastr, uibHelper, nucleus) {
+
+    $scope.device = device;
+
+    $scope.update = function () {
+        //post to an update with $scope.device
+        nucleus.updateDevice($scope.device.id, $scope.device)
+            .then(function (d) {
+                toastr.success("Device info updated", "Success!");
+                $state.go('admin.manageDevices')
+            })
+            .catch(function (err) {
+                toastr.error("Something went wrong", "Damn!");
+            });
+    }
+
 
 });

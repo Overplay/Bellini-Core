@@ -14,8 +14,8 @@
     <tr ng-repeat="device in devices"> <!-- TODO only show devices that are refgistered-->
         <td>{{ device.name }}</td>
         <td>{{ device.locationWithinVenue }}</td>
-        <td>{{ device.venue }}</td>
-
+        <td> to be device.venue.name</td>
+        <td><a ui-sref="device.editDeviceAdmin({ id: device.id })" class="btn btn-sm btn-warning">EDIT</a></td>
     </tr>
     </tbody>
 </table>

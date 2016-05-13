@@ -22,10 +22,10 @@ app.controller( "adminEditUserController", function ( $scope, userAuths, $state 
 app.controller("adminManageDevicesController", function ($scope, $state, $log, userDevices) {
 
     $log.debug("adminManageDevicesController starting");
-    $scope.devices = _.filter(userDevices, function (d) { //TODO filter devices based on if they are registered 
-        return d.regCode == '';
-    });
-    //TODO get user devices based on location or whatever 
-    $log.log(userDevices)
+    $scope.devices = userDevices; //TODO only get registered devices....
+    //ideas - check by something that is only set once the device is registered (MAC?) 
+    //TODO get user devices based on location or whatever - not just by owner?
+    //order devices?
+    //$log.log(userDevices)
 
 });

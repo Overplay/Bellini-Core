@@ -109,6 +109,17 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             templateUrl: '/uiapp/app/components/device/register-device.partial.html',
         })
 
+        .state('device.editDeviceAdmin', {
+            url: '/edit-device-admin/:id',
+            data: {subTitle: "Edit Device (Admin)"},
+            controller: 'editDeviceAdminController',
+            templateUrl: '/uiapp/app/components/device/edit-device-admin.partial.html',
+            resolve: {
+                device: function (nucleus, $stateParams) {
+                    return nucleus.getDevice($stateParams.id)
+                }
+            }
+        })
 
         // =========== DASHBOARD
 

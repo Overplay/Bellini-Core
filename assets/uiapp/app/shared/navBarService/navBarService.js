@@ -17,9 +17,10 @@ app.factory('navBarService', function ($log) {
             }, {
                 label: "Devices", //might need to be modified
                 id: "devices",
-                items: [{label: "Devices", link: {type: 'ui-sref', addr: 'admin.manageDevices'}},
+                items: [{label: "Manage Devices", link: {type: 'ui-sref', addr: 'admin.manageDevices'}},
                     {label: "Add Device", link: {type: 'ui-sref', addr: 'device.addDevice'}},
                     {label: "Register Device", link: {type: 'ui-sref', addr: 'device.regDevice'}}
+                    //REGISTER DEVICE is going to be something only able to be done on the device
                 ]
             }
             ],
