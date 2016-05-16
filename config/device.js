@@ -5,6 +5,9 @@
 
 
 module.exports.device = {
-    regCodeTimeout: 1000 * 60 * 60 //1 hour , change to whatever 
+    regCodeTimeout: 1000 * 60 * 60, //1 hour , change to whatever
+
+    hookEnabled: true,
+    cleanDelay: 1000 * 60 * 60,
 
 };
