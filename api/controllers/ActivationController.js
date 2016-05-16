@@ -9,21 +9,14 @@ module.exports = {
 
     generateCode: function (req, res) {
 
-
-        var params = req.allParams();
-
-
-        //testing purposes 
         sails.hooks.devicehook.clean(); //TODO remove this after it is set to run at intervals
-
-        sails.log.debug("ugh")
 
         var code = '';
         var codeInUse = true;
-        
+
         //prevent the code from being a duplicate
         async.whilst(function () {
-                return codeInUse
+            return codeInUse;
             }, function (next) {
                 code = Math.random().toString(36).substr(2, 6).toUpperCase();
 
@@ -31,11 +24,11 @@ module.exports = {
                     .then(function (device) {
                         sails.log.debug(device);
                         if (!device)
-                            codeInUse = false;
+                            codeInUse = false; // NO device with the code found
 
                     })
                     .catch(function (err) {
-                        sails.log.debug("code in use failed...this should never happen though");
+                        sails.log.debug("this is bad...");
                         codeInUse = false;
                         res.notFound("something very wrong happened");
                     });
@@ -43,20 +36,20 @@ module.exports = {
 
             }, function (err) {
             }
-        )
+        );
 
 
         var deviceObj = {};
         deviceObj.deviceOwner = req.session.user; //link user to device being created
         deviceObj.regCode = code;
-        sails.log.debug(deviceObj);
 
+        sails.log.debug(deviceObj);
 
         if ((deviceObj.deviceOwner === undefined))
             return res.badRequest();
 
 
-        Device.create(deviceObj || {})
+        Device.create(deviceObj)
             .then(function (device) {
                 sails.log.debug(device, "created");
                 return res.json({code: device.regCode});
@@ -64,9 +57,8 @@ module.exports = {
             })
             .catch(function (err) {
                 sails.log.debug("could not create device", err);
-                return res.notFound("cannot create device"); 
+                return res.notFound("cannot create device");
             })
-
 
     }
 

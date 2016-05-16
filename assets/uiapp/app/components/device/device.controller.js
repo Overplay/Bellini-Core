@@ -20,8 +20,8 @@ app.controller("addDeviceController", function ($scope, $state, $log, toastr, nu
 
 });
 
-//THis controller will be something the device implements, i just created it for
-//testing purposes - coal 
+//THis controller will be something implemented on the device itself, i just created it for
+//testing purposes - cole
 app.controller("registerDeviceController", function ($scope, $state, $log, toastr, nucleus, $http) {
 
     $log.debug("registerDeviceController starting.");

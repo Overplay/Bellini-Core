@@ -11,19 +11,20 @@ module.exports = {
     registerDevice: function (req, res) {
         //get code
         var params = req.allParams();
-
+        //TODO req certain params? CEG
         if ((params.regCode === undefined)) //test other stuff too
             return res.badRequest();
 
         sails.log.debug(params);
 
-        //TODO req certain params? CEG
+
         var deviceObj = {};
-        //use this if the user is logged in on the box when registering
-        //deviceObj.deviceOwner = req.session.user.id;
+
+        /*use if the user is logged in on the box when registering??
+         deviceObj.deviceOwner = req.session.user.id;
+         */
 
         deviceObj.regCode = params.regCode;
-
 
         sails.log.debug(deviceObj);
 
@@ -32,7 +33,7 @@ module.exports = {
 
                 //check if device exists
                 if (device) {
-                    //check if the timing is acceptable - run hook before lookup instead?
+                    //check if the timing is acceptable - run hook before lookup? 
                     var ca = device["createdAt"];
                     if (Date.now() < Date.parse(ca) + sails.config.device.regCodeTimeout) {
                         sails.log.debug(device, "being updated");
@@ -45,26 +46,19 @@ module.exports = {
                         //TODO MAC Address
                         //TODO Venue (base of user?) 
 
-                        Device.update(device, params) //should never find and update more than one device
-                            .then(function (devices) {
-                                if (devices.length > 1)
-                                    sails.log.debug("NOT GOOD UPDATE :(");
-                                sails.log.debug(devices, "updated/registered");
-
-                            })
-                            .catch(function (err) {
-                                sails.log.debug(devices, "NOT REGISTERED");
-                            });
-
-
-                        return res.json(device);
+                        return Device.update(device, params);
                     }
-                    //return not found?
                 }
-                return res.notFound();
+
+            }).then(function (devices) {
+                if (devices.length > 1) //should never find and update more than one device
+                    sails.log.debug("NOT GOOD UPDATE :(");
+                sails.log.debug(devices, "updated/registered");
+                return res.json(devices[0]);
+
             })
             .catch(function (err) {
-                return res.badRequest();
+                return res.notFound();
             });
     }
 
