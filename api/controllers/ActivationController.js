@@ -7,9 +7,14 @@
 
 module.exports = {
 
+    //TODO check policy mapping is correct 
     generateCode: function (req, res) {
 
-        sails.hooks.devicehook.clean(); //TODO remove this after it is set to run at intervals
+        //check req session and user 
+        if (!req.session || !req.session.user) {
+            return res.badRequest("user not logged in"); //forbidden? 
+
+        }
 
         var code = '';
         var codeInUse = true;
@@ -39,15 +44,13 @@ module.exports = {
         );
 
 
-        var deviceObj = {};
+        var deviceObj = req.allParams();
+        //TODO check params 
+        //expecting name, location, venue 
+        
         deviceObj.deviceOwner = req.session.user; //link user to device being created
         deviceObj.regCode = code;
-
-        sails.log.debug(deviceObj);
-
-        if ((deviceObj.deviceOwner === undefined))
-            return res.badRequest();
-
+        
 
         Device.create(deviceObj)
             .then(function (device) {
@@ -56,8 +59,7 @@ module.exports = {
 
             })
             .catch(function (err) {
-                sails.log.debug("could not create device", err);
-                return res.notFound("cannot create device");
+                return res.serverError(err); //give out error (will only show error info if not in production) 
             })
 
     }

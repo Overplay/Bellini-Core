@@ -236,6 +236,15 @@
 
             }
 
+            service.deleteDevice = function (device) {
+                if (!device)
+                    throw new Error("Bad device object");
+
+                return apiDelete(_apiPath + '/device/' + device.id)
+
+
+            }
+
             return service;
 
         } );

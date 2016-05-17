@@ -48,6 +48,12 @@ module.exports.policies = {
      *  2 step process: get a token, do a login.
      *
      */
+
+    ActivationController: {
+        '*': true,
+        'generateCode': ['sessionAuth', 'isAdmin']
+    },
+    
     AuthController: {
         '*':       true,
         'find':    [ 'sessionAuth', 'isAdmin' ],
@@ -63,6 +69,13 @@ module.exports.policies = {
         changePwd: [ 'passwordReset' ],
     },
 
+    DeviceController: {
+        '*': true,
+        'update': ['sessionAuth', 'isAdmin', 'isDeviceOwner'],
+        'destroy': ['sessionAuth', 'isAdmin'] //TODO , 'isDeviceOwner' ],
+
+    },
+    
     UserController: {
         '*':       true,
         'find':    [ 'sessionAuth', 'isAdmin' ],
@@ -80,6 +93,7 @@ module.exports.policies = {
         'destroy': [ 'sessionAuth', 'isAdmin' ]
 
     },
+
 
     //AuthController: [ 'sessionAuth', 'meOrAdmin' ],
 

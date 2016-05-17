@@ -51,8 +51,11 @@ module.exports = function deviceHook(sails) {
                             Device.destroy({id: device["id"]})
                                 .then(function (d) {
                                     sails.log.debug(d, "deleted");
-                                });
+                                })
+                                .catch(function (err) {
+                                    sails.log.debug("big problem in device clean hook")
 
+                                })
                         }
 
 
@@ -67,14 +70,5 @@ module.exports = function deviceHook(sails) {
 
     }
 
-
-    //config file for it 
-    //configure 
-    //initialize 
-    //startup delay
-    //set timeout 
-    // call method
-    //do forever method 
-    //set timeout and call this method
 
 };

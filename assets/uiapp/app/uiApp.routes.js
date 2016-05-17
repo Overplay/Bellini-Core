@@ -100,7 +100,13 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             data: {subTitle: "Add a Device"},
             controller: "addDeviceController",
             templateUrl: '/uiapp/app/components/device/add-device.partial.html',
+            resolve: {
+                user: function (nucleus) {
+                    return nucleus.getMe()
+                }
+            }
         })
+
 
         .state('device.regDevice', {
             url: '/register',

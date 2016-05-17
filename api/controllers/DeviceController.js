@@ -11,7 +11,11 @@ module.exports = {
     registerDevice: function (req, res) {
         //get code
         var params = req.allParams();
-        //TODO req certain params? CEG
+        /*TODO req certain params? CEG
+
+         wifi mac address -tbd 
+         code 
+         */
         if ((params.regCode === undefined)) //test other stuff too
             return res.badRequest();
 
@@ -40,11 +44,9 @@ module.exports = {
                         params.regCode = ''; //clear registration code 
 
                         //TODO JSONWebToken into apiToken field
-                        params.apiToken = '';
-                        //TODO UUID ?
-                        //params.uniqueId = '';
-                        //TODO MAC Address
-                        //TODO Venue (base of user?) 
+                        //params.apiToken = '';
+                        //TODO MAC Address -- done on android device :) - will act as UUID 
+                        params.wifiMacAddress = 'FETCH FROM ANDROID';
 
                         return Device.update(device, params);
                     }
