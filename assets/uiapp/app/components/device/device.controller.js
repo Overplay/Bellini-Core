@@ -18,7 +18,7 @@ app.controller('manageDeviceController', function($scope, device, $state, $log, 
             .catch(function (err) {
                 toastr.error("Something went wrong", "Damn!");
             });
-    }
+    };
 
     // Cole's code for deleting device
     $scope.deleteDevice = function () {

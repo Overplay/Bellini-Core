@@ -16,7 +16,7 @@
 
             var service = {};
 
-            var _apiPath = '/api/v1'
+            var _apiPath = '/api/v1';
             var _authorized = false;
 
 

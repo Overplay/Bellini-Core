@@ -31,12 +31,12 @@ app.controller( "editUserController", function ( $scope, $log, user, toastr, nuc
             .catch( function ( err ) {
                 toastr.error( "Something went wrong", "Damn!" );
             } );
-    }
+    };
     
     $scope.pwdStatus = function(){
     
         return nucleus.getPasswordStatus( $scope.user.newPwd1, $scope.user.newPwd2 );
-    }
+    };
 
     $scope.changePassword = function(){
 
@@ -62,13 +62,21 @@ app.controller( "editUserAdminController", function ( $scope, $state, $log, user
     $scope.user = user;
     $scope.user.newPwd = "";
 
-    nucleus.getUserDevices(user.user.id, false).then( function(res) {
-        $scope.user.ownedDevices = res;
-    });
+    nucleus.getUserDevices(user.user.id, false)
+        .then( function(res) {
+            $scope.user.ownedDevices = res;
+        })
+        .catch( function(err) {
+            toastr.error( "Error fetching owned devices", "Error!");
+        });
 
-    nucleus.getUserDevices(user.user.id, true).then( function(res) {
-        $scope.user.managedDevices = res;
-    });
+    nucleus.getUserDevices(user.user.id, true)
+        .then( function(res) {
+            $scope.user.managedDevices = res;
+        })
+        .catch( function(err) {
+            toastr.error( "Error fetching managed devices", "Error!");
+        });
     
     
     $scope.proprietor = user.user.roleTypes.indexOf("proprietor.owner") > -1 || user.user.roleTypes.indexOf("proprietor.manager") > -1;
@@ -90,7 +98,7 @@ app.controller( "editUserAdminController", function ( $scope, $state, $log, user
         // add field selected to every item that is selected
         _.find( $scope.roles, query ).selected = true;
 
-    } )
+    } );
         
 
     function updateUser( modelChanges ) {
@@ -115,7 +123,7 @@ app.controller( "editUserAdminController", function ( $scope, $state, $log, user
                 mobilePhone: $scope.user.user.mobilePhone
             } );
 
-    }
+    };
 
     $scope.adminPwdChange = function () {
 
@@ -127,7 +135,7 @@ app.controller( "editUserAdminController", function ( $scope, $state, $log, user
                 toastr.error( "Code: " + err.status, "Problem Changing Password" );
             } )
 
-    }
+    };
 
     $scope.adminAuthLevelChange = function () {
 
@@ -145,7 +153,7 @@ app.controller( "editUserAdminController", function ( $scope, $state, $log, user
                 roles: newRoles
             } );
 
-    }
+    };
 
 
     $scope.updateBlockedState = function () {
@@ -155,7 +163,7 @@ app.controller( "editUserAdminController", function ( $scope, $state, $log, user
                 blocked: $scope.user.user.blocked
             } );
 
-    }
+    };
 
     $scope.deleteUser = function () {
         uibHelper.confirmModal( "Delete User?", "Are you sure you want to delete user " + $scope.user.email, true )
