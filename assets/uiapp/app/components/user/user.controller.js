@@ -62,6 +62,16 @@ app.controller( "editUserAdminController", function ( $scope, $state, $log, user
     $scope.user = user;
     $scope.user.newPwd = "";
 
+    nucleus.getUserDevices(user.user.id, false).then( function(res) {
+        $scope.user.ownedDevices = res;
+    });
+
+    nucleus.getUserDevices(user.user.id, true).then( function(res) {
+        $scope.user.managedDevices = res;
+    });
+    
+    
+    $scope.proprietor = user.user.roleTypes.indexOf("proprietor.owner") > -1 || user.user.roleTypes.indexOf("proprietor.manager") > -1;
 
     $scope.roles = roles;
     $scope.roles = _.map( $scope.roles, function ( element ) {

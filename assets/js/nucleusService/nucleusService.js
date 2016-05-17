@@ -146,6 +146,14 @@
 
             }
 
+            service.getUserDevices = function ( userId, managed ) {
+                if (!userId)
+                    throw new Error("No userId");
+                
+                var endPoint = _apiPath + '/user/' + userId + (managed ? '/managedDevices' : '/devices');
+                return apiGet( endPoint );
+            }
+
             service.updateUser = function ( userId, newFields ) {
 
                 if (!userId)
@@ -217,9 +225,39 @@
                 return apiGet( endPoint );
             }
 
+            // =========== VENUES =========
+            service.getVenue = function ( venueId ) {
+                
+                var endPoint = _apiPath + '/venue' + (venueId ? '/' + venueId : '');
+                return apiGet( endPoint );
+            }
+
+            // =========== DEVICES ========
+            service.getDevice = function ( deviceId ) {
+
+                var endPoint = _apiPath + '/device' + (deviceId ? '/' + deviceId : '');
+                return apiGet( endPoint );
+            } 
+            
+            service.updateDevice = function (deviceId, newFields) {
+
+                if (!deviceId)
+                    throw new Error("Bad deviceId");
 
 
+                var endPoint = _apiPath + '/device/' + deviceId;
+                return apiPut(endPoint, newFields);
 
+            }
+            
+            service.deleteDevice = function (deviceId) {
+                
+                if (!deviceId)
+                    throw new Error("Bad deviceId");
+                
+                var endPoint = _apiPath + '/device/' + deviceId;
+                return apiDelete(endPoint);
+            }
             return service;
 
         } );

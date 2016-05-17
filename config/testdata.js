@@ -316,60 +316,70 @@ var self = module.exports.testdata = {
     ],
     devices: [
         {
+            name: "Bar Box",
             locationWithinVenue: "bar",
             ownerEmail: "john@test.com",
             venueName: "John's Burgers",
             managerEmails: ["silvanus@test.com", "annegret@test.com"]
         },
         {
+            name: "Bar Box",
             locationWithinVenue: "bar",
             ownerEmail: "vogel@test.com",
             venueName: "Corner Pub",
             managerEmails: ["caterina@test.com", "silvanus@test.com"]
         },
         {
+            name: "Bar Box",
             locationWithinVenue: "bar",
             ownerEmail: "ryan@test.com",
             venueName: "BBQ 'n Beer",
             managerEmails: ["jerref@test.com", "caterina@test.com"]
         },
         {
+            name: "Bar Box",
             locationWithinVenue: "bar",
             ownerEmail: "elizabeth@test.com",
             venueName: "New Chicago",
             managerEmails: ["unice@test.com", "jerref@test.com"]
         },
         {
+            name: "Bar Box",
             locationWithinVenue: "bar",
             ownerEmail: "carina@test.com",
             venueName: "VJ's",
             managerEmails: ["annegret@test.com", "unice@test.com"]
         },
         {
+            name: "Entrance Box",
             locationWithinVenue: "entrance",
             ownerEmail: "john@test.com",
             venueName: "John's Burgers",
             managerEmails: ["silvanus@test.com", "annegret@test.com"]
         },
         {
+            name: "Entrance Box",
             locationWithinVenue: "entrance",
             ownerEmail: "vogel@test.com",
             venueName: "Corner Pub",
             managerEmails: ["caterina@test.com", "silvanus@test.com"]
         },
         {
+            name: "Entrance Box",
             locationWithinVenue: "entrance",
             ownerEmail: "ryan@test.com",
             venueName: "BBQ 'n Beer",
             managerEmails: ["jerref@test.com", "caterina@test.com"]
         },
         {
+            name: "Entrance Box",
             locationWithinVenue: "entrance",
             ownerEmail: "elizabeth@test.com",
             venueName: "New Chicago",
             managerEmails: ["unice@test.com", "jerref@test.com"]
         },
         {
+            name: "Entrance Box",
             locationWithinVenue: "entrance",
             ownerEmail: "carina@test.com",
             venueName: "VJ's",

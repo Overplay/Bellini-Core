@@ -47,6 +47,57 @@
 
                     </div>
             </uib-tab>
+            <uib-tab heading="Devices" ng-show="proprietor">
+                <div class="top15" style="padding: 20px; border: 2px solid #cacaca; border-radius: 5px;">
+                    <div class="panel-heading">
+                        <h3>Owned Devices ({{user.ownedDevices.length}})</h3>
+                    </div>
+
+                    <div class="panel-body" >
+                        <table class="table table-striped top15" ng-show="user.ownedDevices.length">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Location in Venue</td>
+                                    <td>Blocked</td>
+                                    <!--<td>Venue</td>-->
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="device in user.ownedDevices">
+                                    <td>{{device.name}}</td>
+                                    <td>{{device.locationWithinVenue}}</td>
+                                    <td>{{device.blocked ? "YES" : "NO" }}</td>
+                                    <td><a ui-sref="device({ id: device.id })" class="btn btn-sm btn-warning">More Info</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="panel-heading top15">
+                        <h3>Managed Devices ({{user.managedDevices.length}})</h3>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-striped top15">
+                            <thead>
+                            <tr>
+                                <td>Name</td>
+                                <td>Location in Venue</td>
+                                <td>Blocked</td>
+                                <!--<td>Venue</td>-->
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="device in user.managedDevices">
+                                <td>{{device.name}}</td>
+                                <td>{{device.locationWithinVenue}}</td>
+                                <td>{{device.blocked ? "YES" : "NO" }}</td>
+                                <!--<td>{{device.venue}}</td>-->
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </uib-tab>
             <uib-tab heading="Edit Account Info">
                 <div class="top15" style="padding: 20px; border: 2px solid #cacaca; border-radius: 5px;">
                     <form>
@@ -82,7 +133,7 @@
                         </button>
                         <hr>
                         <p class="top15"><strong>Enable/Disable Account</strong></p>
-                        <p>User us currently {{ user.user.blocked?"BLOCKED":"ENABLED" }}.</p>
+                        <p>User is currently {{ user.user.blocked?"BLOCKED":"ENABLED" }}.</p>
                         <button type="button" class="btn"
                                 ng-class="{ 'btn-primary' : user.user.blocked, 'btn-danger': !user.user.blocked}"
                                 ng-model="user.user.blocked" uib-btn-checkbox ng-click="updateBlockedState()">

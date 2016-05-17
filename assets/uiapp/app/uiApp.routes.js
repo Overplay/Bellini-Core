@@ -26,6 +26,10 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
 
         } )
 
+        // .state( 'admin.manageDevices', {
+        //     url:         '/manage-devices',
+        //     data:        { subTitle: "Manage Devices" }
+        // } )
 
         .state( 'admin.manageUsers', {
             url:         '/manage-users',
@@ -77,8 +81,18 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                 }
             }
         } )
-            
-
+        
+        .state( 'device', {
+            url:          '/device/:id',
+            data:         { subTitle: "Manage Device" },
+            controller:   'manageDeviceController',
+            templateUrl:  '/uiapp/app/components/device/manage-device.partial.html',
+            resolve:      {
+                device: function ( nucleus, $stateParams ) {
+                    return nucleus.getDevice( $stateParams.id )
+                }
+            }
+        } )    
         // =========== DASHBOARD
 
         .state( 'dash', {
