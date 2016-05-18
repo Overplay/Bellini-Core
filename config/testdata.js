@@ -129,9 +129,9 @@ var self = module.exports.testdata = {
         
         chain = chain.then(function() {
             return User.find()
-                .populate('devices')
+                .populate('ownedDevices')
                 .then( function() {
-                    sails.log.debug("Owners' devices populated");
+                    sails.log.debug("Users' owned devices populated");
                 })
         });
 
@@ -140,6 +140,14 @@ var self = module.exports.testdata = {
                 .populate('devices')
                 .then( function() {
                     sails.log.debug("Venues' devices populated");
+                })
+        });
+
+        chain = chain.then(function() {
+            return User.find()
+                .populate('managedDevices')
+                .then( function() {
+                    sails.log.debug("Users' managed devices populated");
                 })
         });
 

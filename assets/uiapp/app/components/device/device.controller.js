@@ -2,11 +2,11 @@
  * Created by rhartzell on 5/13/16.
  */
 
-app.controller('manageDeviceController', function($scope, device, $state, $log, nucleus, toastr, uibHelper) {
+app.controller('editDeviceController', function($scope, device, $state, $log, nucleus, toastr, uibHelper) {
     
-    $log.debug("manageDeviceController starting");
+    $log.debug("editDeviceController starting");
     $scope.device = device;
-
+    $scope.deviceName = device.name;
     
     // Cole's code for updating device
     $scope.update = function () {
@@ -14,6 +14,7 @@ app.controller('manageDeviceController', function($scope, device, $state, $log, 
         nucleus.updateDevice($scope.device.id, $scope.device)
             .then(function (d) {
                 toastr.success("Device info updated", "Success!");
+                $scope.deviceName = d.name;
             })
             .catch(function (err) {
                 toastr.error("Something went wrong", "Damn!");

@@ -149,8 +149,8 @@
             service.getUserDevices = function ( userId, managed ) {
                 if (!userId)
                     throw new Error("No userId");
-                
-                var endPoint = _apiPath + '/user/' + userId + (managed ? '/managedDevices' : '/devices');
+                // if managed === true -> get managed devices, else get owned devices
+                var endPoint = _apiPath + '/user/' + userId + (managed ? '/managed' : '/owned') + 'Devices';
                 return apiGet( endPoint );
             }
 

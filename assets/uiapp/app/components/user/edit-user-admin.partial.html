@@ -53,8 +53,8 @@
                         <h3>Owned Devices ({{user.ownedDevices.length}})</h3>
                     </div>
 
-                    <div class="panel-body" >
-                        <table class="table table-striped top15" ng-show="user.ownedDevices.length">
+                    <div class="panel-body" ng-show="user.ownedDevices.length">
+                        <table class="table table-striped">
                             <thead>
                                 <tr>
                                     <td>Name</td>
@@ -73,14 +73,15 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="panel-heading top15">
+                    <div class="panel-heading">
                         <h3>Managed Devices ({{user.managedDevices.length}})</h3>
                     </div>
-                    <div class="panel-body">
+                    <div class="panel-body" ng-show="user.managedDevices.length">
                         <table class="table table-striped top15">
                             <thead>
                             <tr>
                                 <td>Name</td>
+                                <td>Venue</td>
                                 <td>Location in Venue</td>
                                 <td>Blocked</td>
                                 <!--<td>Venue</td>-->
@@ -89,6 +90,7 @@
                             <tbody>
                             <tr ng-repeat="device in user.managedDevices">
                                 <td>{{device.name}}</td>
+                                <td>{{device.venue.address}}</td>
                                 <td>{{device.locationWithinVenue}}</td>
                                 <td>{{device.blocked ? "YES" : "NO" }}</td>
                                 <td><a ui-sref="device({ id: device.id })" class="btn btn-sm btn-warning">More Info</a></td>

@@ -44,7 +44,7 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             url:         '/add-user',
             data:        { subTitle: "Add User" },
             controller:  "addUserController",
-            templateUrl: '/uiapp/app/components/user/add-user-admin.partial.html',
+            templateUrl: '/uiapp/app/components/user/add-user-admin.partial.html'
             
         } )
 
@@ -83,10 +83,10 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
         } )
         
         .state( 'device', {
-            url:          '/device/:id',
+            url:          '/edit-device/:id',
             data:         { subTitle: "Manage Device" },
-            controller:   'manageDeviceController',
-            templateUrl:  '/uiapp/app/components/device/manage-device.partial.html',
+            controller:   'editDeviceController',
+            templateUrl:  '/uiapp/app/components/device/edit-device.partial.html',
             resolve:      {
                 device: function ( nucleus, $stateParams ) {
                     return nucleus.getDevice( $stateParams.id )

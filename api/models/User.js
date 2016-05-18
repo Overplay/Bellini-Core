@@ -82,7 +82,7 @@ module.exports = {
             defaultsTo: []
         },
 
-        devices: {
+        ownedDevices: {
             collection: 'Device',
             via: 'deviceOwner'
         },
