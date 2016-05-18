@@ -72,7 +72,7 @@ module.exports.policies = {
     DeviceController: {
         '*': true,
         'update': ['sessionAuth', 'isAdmin', 'isDeviceOwner'],
-        'destroy': ['sessionAuth', 'isAdmin'] //TODO , 'isDeviceOwner' ],
+        'destroy': ['sessionAuth', 'isAdmin', 'isDeviceOwner'],
 
     },
     

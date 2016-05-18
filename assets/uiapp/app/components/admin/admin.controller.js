@@ -16,6 +16,7 @@ app.controller( "adminEditUserController", function ( $scope, userAuths, $state 
     $scope.subTitle = $state.current.data.subTitle;
     $scope.users = userAuths;
 
+
 } );
 
 
@@ -26,6 +27,5 @@ app.controller("adminManageDevicesController", function ($scope, $state, $log, u
     //ideas - check by something that is only set once the device is registered (MAC? updated at? ) 
     //TODO get user devices based on location or whatever - not just by owner?
     //order devices?
-    //$log.log(userDevices)
 
 });

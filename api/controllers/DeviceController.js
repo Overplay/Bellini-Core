@@ -46,7 +46,7 @@ module.exports = {
                         //TODO JSONWebToken into apiToken field
                         //params.apiToken = '';
                         //TODO MAC Address -- done on android device :) - will act as UUID 
-                        params.wifiMacAddress = 'FETCH FROM ANDROID';
+                        params.wifiMacAddress = 'FETCH FROM ANDROID'; //in req? 
 
                         return Device.update(device, params);
                     }
@@ -60,6 +60,7 @@ module.exports = {
 
             })
             .catch(function (err) {
+                //TODO tighten up security around what returns
                 return res.notFound();
             });
     }

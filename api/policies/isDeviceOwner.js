@@ -13,27 +13,47 @@
  */
 
 
-//TODO decide what roles can modify a device
+
 module.exports = function (req, res, next) {
 
 
-    /* if ( sails.config.policies.wideOpen ) {
+    /*if (sails.config.policies.wideOpen) {
      sails.log.debug("In wideOpen policy mode, so skipping this policy!");
      return next();
      }*/
 
-    sails.log.debug(req, req.session.user.devices)
-
-    //TODO figure out a good way to test this, (DELETE makes is challenging with just device id)
     var device = req.allParams();
-    if (req.session.user.id === device.deviceOwner.id) {
+    //temp fix for delete
+    if (req.method == "DELETE") {
+        Device.findOne(device.id)
+            .then(function (d) {
+
+                if (d) {
+                    device = d;
+                    if (req.session.user.id === device.deviceOwner) {
+                        sails.log.debug(req.allParams(), "has access")
+                        return next();
+                    }
+                }
+                else {
+                    sails.log.debug("Device not found when it should exist")
+                    return res.badRequest('Device Not found, should exist.');
+                }
+            })
+            .catch(function (err) {
+                return res.serverError(err);
+            })
+
+    }
+    else if (req.session.user.id === device.deviceOwner.id) {
         sails.log.debug(req.allParams(), "has access")
         return next();
     }
 
     // User is not allowed
     // (default res.forbidden() behavior can be overridden in `config/403.js`)
-    return res.forbidden('You are not permitted to perform this action.');
+    else
+        return res.forbidden('You are not permitted to perform this action.');
 
 
 };

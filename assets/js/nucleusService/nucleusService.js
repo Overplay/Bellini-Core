@@ -230,7 +230,6 @@
                 if (!deviceId)
                     throw new Error("Bad deviceId");
 
-
                 var endPoint = _apiPath + '/device/' + deviceId;
                 return apiPut(endPoint, newFields);
 

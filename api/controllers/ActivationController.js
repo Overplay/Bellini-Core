@@ -7,14 +7,15 @@
 
 module.exports = {
 
-    //TODO check policy mapping is correct 
+    //TODO more policy mapping
     generateCode: function (req, res) {
 
         //check req session and user 
         if (!req.session || !req.session.user) {
-            return res.badRequest("user not logged in"); //forbidden? 
+            return res.badRequest("user not logged in");
 
         }
+        
 
         var code = '';
         var codeInUse = true;
@@ -49,6 +50,7 @@ module.exports = {
         //expecting name, location, venue 
         
         deviceObj.deviceOwner = req.session.user; //link user to device being created
+
         deviceObj.regCode = code;
         
 

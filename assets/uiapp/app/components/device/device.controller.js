@@ -61,6 +61,8 @@ app.controller("editDeviceAdminController", function ($scope, $state, $log, devi
 
     $scope.device = device;
 
+    $log.log(device)
+    
     $scope.update = function () {
         //post to an update with $scope.device
         nucleus.updateDevice($scope.device.id, $scope.device)
@@ -75,7 +77,6 @@ app.controller("editDeviceAdminController", function ($scope, $state, $log, devi
 
     $scope.deleteDevice = function () {
 
-        $log.log("Delete")
         uibHelper.confirmModal("Delete Device?", "Are you sure you want to delete device " + $scope.device.name, true)
             .then(function (confirmed) {
                 if (confirmed) { // probably not necessary since reject should be called for cancel
