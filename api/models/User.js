@@ -92,6 +92,11 @@ module.exports = {
             via: 'venueOwner'
         },
 
+        managedDevices: {
+            collection: 'Device',
+            via: 'deviceManagers'
+        },
+
 
         toJSON: function() {
 

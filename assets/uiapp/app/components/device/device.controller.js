@@ -28,38 +28,13 @@ app.controller("addDeviceController", function ($scope, $state, $log, toastr, nu
 
 });
 
-//THis controller will be something implemented on the device itself, i just created it for
-//testing purposes - cole
 
-/*
- app.controller("registerDeviceController", function ($scope, $state, $log, toastr, nucleus, $http) {
-
- $log.debug("registerDeviceController starting.");
- $scope.device = {};
-
- $scope.register = function () {
- $log.log($scope.device);
- $http.post('/device/registerDevice', $scope.device)
- .then(function (data) {
- toastr.success("Device Registered!", "Success!");
-
- $state.go('admin.manageDevices');
- })
- .catch(function (err) {
- toastr.error("Device activation code not found", "Damn!");
- $scope.device.regCode = '';
- });
-
-
- };
-
- });
-
- */
 
 app.controller("editDeviceAdminController", function ($scope, $state, $log, device, toastr, uibHelper, nucleus) {
+    $log.debug("manageDeviceController starting");
 
     $scope.device = device;
+
 
     $log.log(device)
     
@@ -75,6 +50,8 @@ app.controller("editDeviceAdminController", function ($scope, $state, $log, devi
             });
     }
 
+
+    // Cole's code for deleting device
     $scope.deleteDevice = function () {
 
         uibHelper.confirmModal("Delete Device?", "Are you sure you want to delete device " + $scope.device.name, true)

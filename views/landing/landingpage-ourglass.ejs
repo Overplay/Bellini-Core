@@ -3,7 +3,7 @@
 <head ng-controller="landingPageController">
     <meta charset="UTF-8">
 
-    <title>Overplay</title>
+    <title>OurGlass</title>
 
     <!-- Viewport mobile tag for sensible mobile support -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -17,9 +17,15 @@
     <!-- Import your app, controllers, etc. here. Path needs to be out of /assets/js/views/... -->
 
     <style>
+        html {
+            background: #000;
+        }
+
         body {
             color: white;
-            background: black;
+            background: url(/images/sportsbarblurfaded.jpg) no-repeat center fixed;
+            background-size: cover;
+            height: 100vh;
         }
 
         a {
@@ -28,26 +34,31 @@
             display: block;
         }
 
+        .fade-up {
+            animation: fadeUp 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes fadeUp {
+            0% {
+                opacity: 0;
+                transform: translateY(100px) scale(0.9);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
     </style>
 
-    <script>
-        var setBackground = function () {
-            document.body.style.backgroundImage = "url('/images/sportsbarblurfaded.jpg')";
-            document.body.style.backgroundSize = "cover";
-            document.body.style.backgroundPosition = "center";
-            document.body.style.backgroundAttachment = "fixed";
-            document.body.style.backgroundRepeat = "no-repeat";
-        }
-    </script>
-
 </head>
-<body onload="setBackground()">
+<body>
 
 <!-- MAIN CONTENT -->
 <div class="container-fluid">
 
     <!--<div ui-view></div>-->
-    <div class="jumbotron top15" style="background: rgba(0,0,0,0.75);">
+    <div class="jumbotron top15 fade-up" style="background: rgba(0,0,0,0.75);">
         <img style="width: 300px;" src="/images/overplay-white.png"/>
         <div class="row">
 

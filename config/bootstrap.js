@@ -70,8 +70,8 @@ module.exports.bootstrap = function ( cb ) {
 
         } )
 
-
         .then( function () {
+            sails.config.testdata.install();
             sails.log.debug( "Inserts done" );
             return true;
         } )

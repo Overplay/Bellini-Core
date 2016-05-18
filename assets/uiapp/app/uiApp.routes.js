@@ -44,6 +44,8 @@ app.config(function ($stateProvider, $urlRouterProvider) {
             resolve: {
 
                 userDevices: function (nucleus) {
+                    //TODO change method to what ryan wrote
+                    //return nucleus.getUserDevices(___);
                     return nucleus.getDevice();
                 }
             }
@@ -120,11 +122,11 @@ app.config(function ($stateProvider, $urlRouterProvider) {
             templateUrl: '/uiapp/app/components/device/register-device.partial.html',
         })
 
-        .state('device.editDeviceAdmin', {
-            url: '/edit-device-admin/:id',
-            data: {subTitle: "Edit Device (Admin)"},
+        .state('device.manageDevice', {
+            url: '/manage-device/:id',
+            data: {subTitle: "Manage Device"},
             controller: 'editDeviceAdminController',
-            templateUrl: '/uiapp/app/components/device/edit-device-admin.partial.html',
+            templateUrl: '/uiapp/app/components/device/manage-device.partial.html',
             resolve: {
                 device: function (nucleus, $stateParams) {
                     return nucleus.getDevice($stateParams.id)

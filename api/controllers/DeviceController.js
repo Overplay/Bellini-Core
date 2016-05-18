@@ -30,7 +30,7 @@ module.exports = {
 
         deviceObj.regCode = params.regCode;
 
-        sails.log.debug(deviceObj);
+        sails.log.debug(deviceObj, "searching ");
 
         Device.findOne(deviceObj)
             .then(function (device) {
@@ -53,7 +53,7 @@ module.exports = {
                 }
 
             }).then(function (devices) {
-                if (devices.length > 1) //should never find and update more than one device
+                if (devices.length != 1) //should never find and update more than one device
                     sails.log.debug("NOT GOOD UPDATE :(");
                 sails.log.debug(devices, "updated/registered");
                 return res.json(devices[0]);

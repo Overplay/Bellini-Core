@@ -63,6 +63,11 @@ module.exports = {
             model: 'User'
         },
 
+        deviceManagers: {
+            collection: 'User',
+            via: 'managedDevices'
+        },
+
         // Located at this venue
         venue: {
             model: 'venue'
