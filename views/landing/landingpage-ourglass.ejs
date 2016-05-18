@@ -17,16 +17,9 @@
     <!-- Import your app, controllers, etc. here. Path needs to be out of /assets/js/views/... -->
 
     <style>
-        html {
-            background: #000;
-        }
-
         body {
             color: white;
-            background: url(/images/sportsbarblurfaded.jpg);
-            background-size: auto;
-            background-repeat: no-repeat;
-            height: 100vh;
+            background: black;
         }
 
         a {
@@ -37,8 +30,18 @@
 
     </style>
 
+    <script>
+        var setBackground = function() {
+            document.body.style.backgroundImage = "url('/images/sportsbarblurfaded.jpg')";
+            document.body.style.backgroundSize = "cover";
+            document.body.style.backgroundPosition = "center";
+            document.body.style.backgroundAttachment = "fixed";
+            document.body.style.backgroundRepeat = "no-repeat";
+        }
+    </script>
+
 </head>
-<body>
+<body onload="setBackground()">
 
 <!-- MAIN CONTENT -->
 <div class="container-fluid">
