@@ -37,7 +37,6 @@ module.exports = {
 
                 //check if device exists
                 if (device) {
-                    //check if the timing is acceptable - run hook before lookup? 
                     var ca = device["createdAt"];
                     if (Date.now() < Date.parse(ca) + sails.config.device.regCodeTimeout) {
                         sails.log.debug(device, "being updated");
@@ -48,7 +47,7 @@ module.exports = {
                         //TODO MAC Address -- done on android device :) - will act as UUID 
                         params.wifiMacAddress = 'FETCH FROM ANDROID'; //in req? 
 
-                        return Device.update(device, params);
+                        return Device.update({id: device.id}, params);
                     }
                 }
 
