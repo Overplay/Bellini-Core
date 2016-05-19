@@ -33,7 +33,7 @@ module.exports = require('waterlock').actions.user({
     ownedDevices: function (req, res) {
 
         User.find(req.session.user)
-            .populate("devices")
+            .populate("ownedDevices")
 
     }
 
