@@ -68,7 +68,7 @@
                                     <td>{{device.name}}</td>
                                     <td>{{device.locationWithinVenue}}</td>
                                     <td>{{device.blocked ? "YES" : "NO" }}</td>
-                                    <td><a ui-sref="device({ id: device.id })" class="btn btn-sm btn-warning">More Info</a></td>
+                                    <td><a ui-sref="device.manageDevice({ id: device.id })" class="btn btn-sm btn-warning">More Info</a></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -93,7 +93,7 @@
                                 <td>{{device.venue.address}}</td>
                                 <td>{{device.locationWithinVenue}}</td>
                                 <td>{{device.blocked ? "YES" : "NO" }}</td>
-                                <td><a ui-sref="device({ id: device.id })" class="btn btn-sm btn-warning">More Info</a></td>
+                                <td><a ui-sref="device.manageDevice({ id: device.id })" class="btn btn-sm btn-warning">More Info</a></td>
                             </tr>
                             </tbody>
                         </table>

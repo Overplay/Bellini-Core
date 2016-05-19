@@ -34,16 +34,18 @@ app.controller("editDeviceAdminController", function ($scope, $state, $log, devi
     $log.debug("manageDeviceController starting");
 
     $scope.device = device;
+    $scope.deviceName = device.name;
 
 
-    $log.log(device)
+    // $log.log(device);
     
     $scope.update = function () {
         //post to an update with $scope.device
         nucleus.updateDevice($scope.device.id, $scope.device)
             .then(function (d) {
                 toastr.success("Device info updated", "Success!");
-                $state.go('admin.manageDevices')
+                $scope.deviceName = d.name;
+                // $state.go('admin.manageDevices')
             })
             .catch(function (err) {
                 toastr.error("Something went wrong", "Damn!");
