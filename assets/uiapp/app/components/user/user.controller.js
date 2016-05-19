@@ -61,6 +61,7 @@ app.controller( "editUserAdminController", function ( $scope, $state, $log, user
     $log.debug( "editUserAdminController starting for userauth: " + user.id );
     $scope.user = user;
     $scope.user.newPwd = "";
+    $scope.confirm = { checked: false };
 
     nucleus.getUserDevices(user.user.id, false)
         .then( function(res) {
@@ -182,7 +183,10 @@ app.controller( "editUserAdminController", function ( $scope, $state, $log, user
                     
                 }
 
-            } )
+            },
+            function ( rejected ) {
+                $scope.confirm.checked = false;
+            })
 
 
     }

@@ -35,7 +35,7 @@ app.controller("editDeviceAdminController", function ($scope, $state, $log, devi
 
     $scope.device = device;
     $scope.deviceName = device.name;
-
+    $scope.confirm = { checked: false };
 
     // $log.log(device);
     
@@ -72,6 +72,9 @@ app.controller("editDeviceAdminController", function ($scope, $state, $log, devi
 
                 }
 
+            },
+            function (reason) {
+                $scope.confirm.checked = false;
             })
 
 

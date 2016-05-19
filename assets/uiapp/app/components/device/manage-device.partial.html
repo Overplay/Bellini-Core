@@ -74,10 +74,10 @@
                         </form>
                         <br>
                         <div>
-                            <button class="btn btn-danger" ng-click="deleteDevice()" ng-disabled="!enableDelete">
+                            <button class="btn btn-danger" ng-click="deleteDevice()" ng-disabled="!confirm.checked">
                                 Delete
                             </button>
-                            <input type="checkbox" ng-model="enableDelete" style="margin-left: 5px;"><span>&nbsp;Confirm delete</span>
+                            <input type="checkbox" ng-model="confirm.checked" style="margin-left: 5px;"><span>&nbsp;Confirm delete</span>
                         </div>
                     </div>
                 </div>

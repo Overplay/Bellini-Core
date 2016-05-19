@@ -143,10 +143,10 @@
                         </button>
                         <hr>
                         <p class="top15"><strong>Delete Account</strong></p>
-                        <button class="btn btn-danger" ng-click="deleteUser()" ng-disabled="!enableDeleteCB">
+                        <button class="btn btn-danger" ng-click="deleteUser()" ng-disabled="!confirm.checked">
                             DELETE
                         </button>
-                        <input type="checkbox" ng-model="enableDeleteCB" style="margin-left: 5px;"><span>&nbsp;Confirm delete</span>
+                        <input type="checkbox" ng-model="confirm.checked" style="margin-left: 5px;"><span>&nbsp;Confirm delete</span>
 
 
 
