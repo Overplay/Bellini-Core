@@ -49,7 +49,7 @@
             </uib-tab>
             <uib-tab heading="Devices" ng-show="proprietor">
                 <div class="top15" style="padding: 20px; border: 2px solid #cacaca; border-radius: 5px;">
-                    <div class="panel-heading">
+                    <div class="panel-heading" ng-show="user.ownedDevices.length">
                         <h3>Owned Devices ({{user.ownedDevices.length}})</h3>
                     </div>
 
@@ -73,7 +73,7 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="panel-heading">
+                    <div class="panel-heading" ng-show="user.managedDevices.length">
                         <h3>Managed Devices ({{user.managedDevices.length}})</h3>
                     </div>
                     <div class="panel-body" ng-show="user.managedDevices.length">
