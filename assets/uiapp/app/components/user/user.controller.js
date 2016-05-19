@@ -67,6 +67,13 @@ app.controller( "editUserAdminController", function ( $scope, $state, $log, user
         .then( function(res) {
             $scope.user.ownedDevices = res;
         })
+        .then( function() {
+            $scope.user.ownedDevices.forEach(function(d) {
+                nucleus.getVenue(d.venue).then( function(v) {
+                    d.venue = v;
+                })
+            })
+        })
         .catch( function(err) {
             toastr.error( "Error fetching owned devices", "Error!");
         });
@@ -74,6 +81,13 @@ app.controller( "editUserAdminController", function ( $scope, $state, $log, user
     nucleus.getUserDevices(user.user.id, true)
         .then( function(res) {
             $scope.user.managedDevices = res;
+        })
+        .then( function() {
+            $scope.user.managedDevices.forEach(function(d) {
+                nucleus.getVenue(d.venue).then( function(v) {
+                    d.venue = v;
+                })
+            })
         })
         .catch( function(err) {
             toastr.error( "Error fetching managed devices", "Error!");

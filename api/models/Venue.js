@@ -9,6 +9,11 @@ module.exports = {
 
   attributes: {
 
+    name: {
+      type: 'string',
+      defaultsTo: ''
+    },
+    
     address: {
       type: 'json'
     },
