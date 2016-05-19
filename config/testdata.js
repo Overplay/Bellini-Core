@@ -387,5 +387,6 @@ var self = module.exports.testdata = {
             venueName: "VJ's",
             managerEmails: ["annegret@test.com", "unice@test.com"]
         }
+
     ]
 };

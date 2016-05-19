@@ -45,7 +45,7 @@ app.config(function ($stateProvider, $urlRouterProvider) {
 
                 userDevices: function (nucleus) {
                     //TODO change method to what ryan wrote
-                    //return nucleus.getUserDevices(___);
+                    //return nucleus.getUserDevices(MY USER ID);
                     return nucleus.getDevice();
                 }
             }

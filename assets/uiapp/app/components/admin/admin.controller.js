@@ -24,6 +24,8 @@ app.controller("adminManageDevicesController", function ($scope, $state, $log, u
 
     $log.debug("adminManageDevicesController starting");
 
+    $log.log(userDevices)
+    
     $scope.devices = userDevices; //TODO only get registered devices....(will be easier with final reg)
     //ideas - check by something that is only set once the device is registered (MAC? updated at? ) 
     //TODO get user devices based on location or whatever - not just by owner?

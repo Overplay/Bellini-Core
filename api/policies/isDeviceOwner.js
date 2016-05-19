@@ -17,13 +17,13 @@
 module.exports = function (req, res, next) {
 
 
-    /*if (sails.config.policies.wideOpen) {
-     sails.log.debug("In wideOpen policy mode, so skipping this policy!");
-     return next();
-     }*/
+    if (sails.config.policies.wideOpen) {
+        sails.log.debug("In wideOpen policy mode, so skipping this policy!");
+        return next();
+    }
 
     var device = req.allParams();
-    //temp fix for delete
+    // fix for delete
     if (req.method == "DELETE") {
         Device.findOne(device.id)
             .then(function (d) {
@@ -45,6 +45,7 @@ module.exports = function (req, res, next) {
             })
 
     }
+    //PUT for update 
     else if (req.session.user.id === device.deviceOwner.id) {
         sails.log.debug(req.allParams(), "has access")
         return next();
