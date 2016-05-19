@@ -41,11 +41,11 @@ module.exports.bootstrap = function ( cb ) {
             var adminUser = {
                 firstName: 'Admin',
                 lastName: 'Pre-installed',
-                metadata: { preinstall: true },
-                roles: [ RoleCacheService.roleByName( "admin", '' ) ]
+                metadata: {preinstall: true},
+                roles: [RoleCacheService.roleByName("admin", '')]
             }
 
-            return AdminService.addUser( 'admin@test.com', 'beerchugs', adminUser, false )
+            return AdminService.addUser('admin@test.com', 'beerchugs', adminUser, false)
                 .then( function () { sails.log.debug( "Admin user created." )} )
                 .catch( function () { sails.log.warn( "Admin user NOT created. Probably already existed." )} );
 

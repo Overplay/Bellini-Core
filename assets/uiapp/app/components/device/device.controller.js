@@ -1,25 +1,55 @@
 /**
- * Created by rhartzell on 5/13/16.
+ * Created by cgrigsby on 5/9/16.
  */
 
-app.controller('editDeviceController', function($scope, device, $state, $log, nucleus, toastr, uibHelper) {
-    
-    $log.debug("editDeviceController starting");
+
+
+app.controller("addDeviceController", function ($scope, $state, $log, toastr, nucleus, $http, user, uibHelper) {
+
+    $log.debug("addDeviceController starting.");
+    $scope.device = {};
+    $scope.user = user;
+    $scope.code = false;
+
+    //$scope.device.venue = $scope.user.venue[0];
+
+    $scope.submitForCode = function () {
+        $http.post('/activation/generateCode', $scope.device)
+            .then(function (data) {
+                $scope.code = true;
+                $scope.data = data.data;
+            })
+            .catch(function (err) {
+                toastr.error("Device activation code not generated", "Damn!");
+            });
+    }
+
+
+
+});
+
+
+
+app.controller("editDeviceAdminController", function ($scope, $state, $log, device, toastr, uibHelper, nucleus) {
+    $log.debug("manageDeviceController starting");
+
     $scope.device = device;
-    $scope.deviceName = device.name;
+
+
+    $log.log(device)
     
-    // Cole's code for updating device
     $scope.update = function () {
         //post to an update with $scope.device
         nucleus.updateDevice($scope.device.id, $scope.device)
             .then(function (d) {
                 toastr.success("Device info updated", "Success!");
-                $scope.deviceName = d.name;
+                $state.go('admin.manageDevices')
             })
             .catch(function (err) {
                 toastr.error("Something went wrong", "Damn!");
             });
-    };
+    }
+
 
     // Cole's code for deleting device
     $scope.deleteDevice = function () {
@@ -27,15 +57,23 @@ app.controller('editDeviceController', function($scope, device, $state, $log, nu
         uibHelper.confirmModal("Delete Device?", "Are you sure you want to delete device " + $scope.device.name, true)
             .then(function (confirmed) {
                 if (confirmed) { // probably not necessary since reject should be called for cancel
-                    nucleus.deleteDevice($scope.device.id)
+
+                    nucleus.deleteDevice($scope.device)
                         .then(function () {
                             toastr.success("It's gone!", "Device Deleted");
-                            $state.go('admin.manageUsers');
+                            $state.go('admin.manageDevices')
                         })
                         .catch(function (err) {
                             toastr.error(err.status, "Problem Deleting Device");
                         })
+
+
                 }
+
             })
+
+
     }
+
+
 });

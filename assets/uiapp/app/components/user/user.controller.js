@@ -98,7 +98,7 @@ app.controller( "editUserAdminController", function ( $scope, $state, $log, user
         // add field selected to every item that is selected
         _.find( $scope.roles, query ).selected = true;
 
-    } );
+    });
         
 
     function updateUser( modelChanges ) {

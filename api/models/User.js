@@ -97,6 +97,11 @@ module.exports = {
             via: 'deviceManagers'
         },
 
+        managedDevices: {
+            collection: 'Device',
+            via: 'deviceManagers'
+        },
+
 
         toJSON: function() {
 

@@ -18,8 +18,8 @@ app.controller( "resetController", function ( $scope, $log, nucleus, $location )
     }
 
 
-    $scope.user = { password2: "", password: "" };
-    $scope.validate = { length: true, match: true };
+    $scope.user = {password2: "", password: ""};
+    $scope.validate = {length: true, match: true};
 
     var resetToken = getParameterByName('token');
     var email = getParameterByName( 'email' );

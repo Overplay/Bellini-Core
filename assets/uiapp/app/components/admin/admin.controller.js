@@ -8,6 +8,7 @@ app.controller("adminManageUsersController", function($scope, userAuths, $state,
     $scope.subTitle = $state.current.data.subTitle;
     $scope.users = userAuths;
 
+
 });
 
 app.controller( "adminEditUserController", function ( $scope, userAuths, $state ) {
@@ -15,4 +16,17 @@ app.controller( "adminEditUserController", function ( $scope, userAuths, $state 
     $scope.subTitle = $state.current.data.subTitle;
     $scope.users = userAuths;
 
+
 } );
+
+
+app.controller("adminManageDevicesController", function ($scope, $state, $log, userDevices) {
+
+    $log.debug("adminManageDevicesController starting");
+
+    $scope.devices = userDevices; //TODO only get registered devices....(will be easier with final reg)
+    //ideas - check by something that is only set once the device is registered (MAC? updated at? ) 
+    //TODO get user devices based on location or whatever - not just by owner?
+    //order devices?
+
+});

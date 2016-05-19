@@ -22,7 +22,7 @@ module.exports = require( 'waterlock' ).waterlocked( {
     // Show the login page from a template
     loginPage: function ( req, res ) {
 
-        res.view( 'users/login' + ThemeService.getTheme() );
+        res.view('users/login' + ThemeService.getTheme());
 
     },
 
@@ -120,14 +120,14 @@ module.exports = require( 'waterlock' ).waterlocked( {
     },
 
     resetPwd: function ( req, res ) {
-        
-        return res.view( 'users/resetPassword' + ThemeService.getTheme() );
+
+        return res.view('users/resetPassword' + ThemeService.getTheme());
 
     },
 
     validatedOk: function ( req, res ) {
 
-        return res.view( 'users/validationOk' + ThemeService.getTheme() );
+        return res.view('users/validationOk' + ThemeService.getTheme());
     }
 
 
