@@ -146,20 +146,20 @@
 
             }
 
-            service.getUserDevices = function ( userId, managed ) {
+            service.getUserDevices = function (userId, managed) {
                 if (!userId)
                     throw new Error("Bad userId");
                 // if managed === true -> get managed devices, else get owned devices
                 var endPoint = _apiPath + '/user/' + userId + (managed ? '/managed' : '/owned') + 'Devices';
-                return apiGet( endPoint );
+                return apiGet(endPoint);
             }
-            
-            service.getUserVenues = function ( userId ) {
+
+            service.getUserVenues = function (userId) {
                 if (!userId)
                     throw new Error("Bad userId");
-                
+
                 var endPoint = _apiPath + '/user/' + userId + '/venues';
-                return apiGet( endPoint );
+                return apiGet(endPoint);
             }
 
             service.updateUser = function ( userId, newFields ) {
@@ -234,17 +234,17 @@
             }
 
             // =========== VENUES =========
-            service.getVenue = function ( venueId ) {
+            service.getVenue = function (venueId) {
                 
                 var endPoint = _apiPath + '/venue' + (venueId ? '/' + venueId : '');
-                return apiGet( endPoint );
+                return apiGet(endPoint);
             }
 
             // =========== DEVICES ========
-            service.getDevice = function ( deviceId ) {
+            service.getDevice = function (deviceId) {
 
                 var endPoint = _apiPath + '/device' + (deviceId ? '/' + deviceId : '');
-                return apiGet( endPoint );
+                return apiGet(endPoint);
             } 
             
             service.updateDevice = function (deviceId, newFields) {
@@ -257,12 +257,12 @@
                 return apiPut(endPoint, newFields);
 
             }
-            
+
             service.deleteDevice = function (deviceId) {
-                
+
                 if (!deviceId)
                     throw new Error("Bad deviceId");
-                
+
                 var endPoint = _apiPath + '/device/' + deviceId;
                 return apiDelete(endPoint);
             }

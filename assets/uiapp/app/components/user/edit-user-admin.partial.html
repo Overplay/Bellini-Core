@@ -56,25 +56,27 @@
                     <div class="panel-body" ng-show="user.ownedDevices.length">
                         <table class="table table-striped">
                             <thead>
-                                <tr>
-                                    <td>Name</td>
-                                    <td>Venue</td>
-                                    <td>Location in Venue</td>
-                                    <td>Blocked</td>
+                            <tr>
+                                <td>Name</td>
+                                <td>Venue</td>
+                                <td>Location in Venue</td>
+                                <td>Blocked</td>
 
-                                </tr>
+                            </tr>
                             </thead>
                             <tbody>
-                                <tr ng-repeat="device in user.ownedDevices">
-                                    <td>{{device.name}}</td>
-                                    <td uib-popover-template="'uiapp/app/components/admin/address-popover.template.html'"
+                            <tr ng-repeat="device in user.ownedDevices">
+                                <td>{{device.name}}</td>
+                                <td uib-popover-template="'uiapp/app/components/admin/address-popover.template.html'"
                                     popover-trigger="mouseenter"
                                     popover-append-to-body="true"
-                                    popover-placement="top-left">{{device.venue.name}}</td>
-                                    <td>{{device.locationWithinVenue}}</td>
-                                    <td>{{device.blocked ? "YES" : "NO" }}</td>
-                                    <td><a ui-sref="device.manageDevice({ id: device.id })" class="btn btn-sm btn-warning">More Info</a></td>
-                                </tr>
+                                    popover-placement="top-left">{{device.venue.name}}
+                                </td>
+                                <td>{{device.locationWithinVenue}}</td>
+                                <td>{{device.blocked ? "YES" : "NO" }}</td>
+                                <td><a ui-sref="device.manageDevice({ id: device.id })" class="btn btn-sm btn-warning">More
+                                    Info</a></td>
+                            </tr>
                             </tbody>
                         </table>
                     </div>
@@ -99,10 +101,12 @@
                                     popover-trigger="mouseenter"
                                     popover-append-to-body="true"
                                     popover-placement="top-left"
-                                    popover-title="Location">{{device.venue.name}}</td>
+                                    popover-title="Location">{{device.venue.name}}
+                                </td>
                                 <td>{{device.locationWithinVenue}}</td>
                                 <td>{{device.blocked ? "YES" : "NO" }}</td>
-                                <td><a ui-sref="device.manageDevice({ id: device.id })" class="btn btn-sm btn-warning">More Info</a></td>
+                                <td><a ui-sref="device.manageDevice({ id: device.id })" class="btn btn-sm btn-warning">More
+                                    Info</a></td>
                             </tr>
                             </tbody>
                         </table>

@@ -35,10 +35,10 @@ app.controller("editDeviceAdminController", function ($scope, $state, $log, devi
 
     $scope.device = device;
     $scope.deviceName = device.name;
-    $scope.confirm = { checked: false };
+    $scope.confirm = {checked: false};
     $scope.owner = device.deviceOwner;
 
-    nucleus.getUserVenues($scope.owner.id).then(function(venues) {
+    nucleus.getUserVenues($scope.owner.id).then(function (venues) {
         $scope.owner.venues = venues;
     });
 
@@ -77,9 +77,9 @@ app.controller("editDeviceAdminController", function ($scope, $state, $log, devi
 
                 }
 
-            },
-            function (reason) {
-                $scope.confirm.checked = false;
+                },
+                function (reason) {
+                    $scope.confirm.checked = false;
             })
     }
 

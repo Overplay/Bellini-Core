@@ -61,39 +61,39 @@ app.controller( "editUserAdminController", function ( $scope, $state, $log, user
     $log.debug( "editUserAdminController starting for userauth: " + user.id );
     $scope.user = user;
     $scope.user.newPwd = "";
-    $scope.confirm = { checked: false };
+    $scope.confirm = {checked: false};
 
     nucleus.getUserDevices(user.user.id, false)
-        .then( function(res) {
+        .then(function (res) {
             $scope.user.ownedDevices = res;
         })
-        .then( function() {
-            $scope.user.ownedDevices.forEach(function(d) {
-                nucleus.getVenue(d.venue).then( function(v) {
+        .then(function () {
+            $scope.user.ownedDevices.forEach(function (d) {
+                nucleus.getVenue(d.venue).then(function (v) {
                     d.venue = v;
                 })
             })
         })
-        .catch( function(err) {
-            toastr.error( "Couldn't fetch owned devices", "Error!");
+        .catch(function (err) {
+            toastr.error("Couldn't fetch owned devices", "Error!");
         });
 
     nucleus.getUserDevices(user.user.id, true)
-        .then( function(res) {
+        .then(function (res) {
             $scope.user.managedDevices = res;
         })
-        .then( function() {
-            $scope.user.managedDevices.forEach(function(d) {
-                nucleus.getVenue(d.venue).then( function(v) {
+        .then(function () {
+            $scope.user.managedDevices.forEach(function (d) {
+                nucleus.getVenue(d.venue).then(function (v) {
                     d.venue = v;
                 })
             })
         })
-        .catch( function(err) {
-            toastr.error( "Couldn't fetch managed devices", "Error!");
+        .catch(function (err) {
+            toastr.error("Couldn't fetch managed devices", "Error!");
         });
-    
-    
+
+
     $scope.proprietor = user.user.roleTypes.indexOf("proprietor.owner") > -1 || user.user.roleTypes.indexOf("proprietor.manager") > -1;
 
     $scope.roles = roles;
@@ -197,10 +197,10 @@ app.controller( "editUserAdminController", function ( $scope, $state, $log, user
                     
                 }
 
-            },
-            function ( rejected ) {
-                $scope.confirm.checked = false;
-            })
+                },
+                function (rejected) {
+                    $scope.confirm.checked = false;
+                })
 
 
     }
