@@ -302,6 +302,11 @@ var self = module.exports.testdata = {
             ownerEmail: "john@test.com"
         },
         {
+            name: "John's Burgers",
+            address: { street: "123 Leff St.", city: "Cupertino", state: "CA", zip: 95014 },
+            ownerEmail: "john@test.com"
+        },
+        {
             name: "Corner Pub",
             address: { street: "456 First St.", city: "Boulder", state: "CO", zip: 80305 },
             ownerEmail: "vogel@test.com"

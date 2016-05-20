@@ -7,42 +7,41 @@
 
 module.exports = {
 
-  attributes: {
+    attributes: {
 
-    name: {
-      type: 'string',
-      defaultsTo: ''
-    },
-    
-    address: {
-      type: 'json'
-    },
+        name: {
+            type: 'string',
+            defaultsTo: ''
+        },
 
-    // For determining where a user is and whether venue is shown on the Mobile app
-    // finder app 
-    geolocation: {
-      type: 'json'
-    },
+        address: {
+            type: 'json'
+        },
 
-    showInMobileAppMap: {
-      type: 'boolean',
-      defaultsTo: true
-    },
+        // For determining where a user is and whether venue is shown on the Mobile app
+        // finder app 
+        geolocation: {
+            type: 'json'
+        },
 
-    publicWifiSSID: {
-      type: 'string',
-      defaultsTo: ''
-    },
+        showInMobileAppMap: {
+            type: 'boolean',
+            defaultsTo: true
+        },
 
-    devices: {
-      collection: 'Device',
-      via: 'venue'
-    },
+        publicWifiSSID: {
+            type: 'string',
+            defaultsTo: ''
+        },
 
-    venueOwner: {
-      model: 'User'
+        devices: {
+            collection: 'Device',
+            via: 'venue'
+        },
+
+        venueOwner: {
+            model: 'User'
+        }
     }
-
-  }
 };
 

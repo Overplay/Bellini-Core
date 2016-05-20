@@ -36,6 +36,11 @@ app.controller("editDeviceAdminController", function ($scope, $state, $log, devi
     $scope.device = device;
     $scope.deviceName = device.name;
     $scope.confirm = { checked: false };
+    $scope.owner = device.deviceOwner;
+
+    nucleus.getUserVenues($scope.owner.id).then(function(venues) {
+        $scope.owner.venues = venues;
+    });
 
     // $log.log(device);
     
@@ -76,8 +81,16 @@ app.controller("editDeviceAdminController", function ($scope, $state, $log, devi
             function (reason) {
                 $scope.confirm.checked = false;
             })
+    }
 
+    $scope.listAddress = function (venue) {
 
+        var addr = venue.name + ' (';
+        addr += venue.address.street + ' ';
+        addr += venue.address.city + ', ';
+        addr += venue.address.state + ')';
+
+        return addr;
     }
 
 

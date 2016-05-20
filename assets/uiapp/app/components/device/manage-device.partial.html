@@ -28,8 +28,8 @@
                             </tr>
                             <tr>
                                 <td>Owner</td>
-                                <td><a ui-sref="user.editUserAdmin({ id: device.deviceOwner.auth })">{{device.deviceOwner.firstName}}
-                                    {{device.deviceOwner.lastName}}</a></td>
+                                <td><a ui-sref="user.editUserAdmin({ id: owner.auth })">{{owner.firstName}}
+                                    {{owner.lastName}}</a></td>
                             </tr>
                         </table>
                     </div>
@@ -54,12 +54,11 @@
                                 <input type="text" class="form-control" id="location" placeholder="Location"
                                        ng-model="device.locationWithinVenue" required/>
                             </fieldset>
-                            <div> {{user.venues}} TODO populate venues in user</div>
-                            <fieldset class="form-group" ng-if="user.venues.length > 1">
-                                <label for="venue">Location Within Venue</label>
+                            <fieldset class="form-group" ng-if="owner.venues.length > 1">
+                                <label for="venue">Venue</label>
                                 <select type="text" class="form-control" id="venue"
-                                        ng-model="device.venue" required>
-                                    <option ng-repeat="venue in user.venues">{{venue.name}}</option>
+                                        ng-model="device.venue" required
+                                        ng-options="listAddress(venue) for venue in owner.venues track by venue.id">
                                 </select>
                             </fieldset>
 
