@@ -75,7 +75,7 @@ app.controller( "editUserAdminController", function ( $scope, $state, $log, user
             })
         })
         .catch( function(err) {
-            toastr.error( "Error fetching owned devices", "Error!");
+            toastr.error( "Couldn't fetch owned devices", "Error!");
         });
 
     nucleus.getUserDevices(user.user.id, true)
@@ -90,7 +90,7 @@ app.controller( "editUserAdminController", function ( $scope, $state, $log, user
             })
         })
         .catch( function(err) {
-            toastr.error( "Error fetching managed devices", "Error!");
+            toastr.error( "Couldn't fetch managed devices", "Error!");
         });
     
     
