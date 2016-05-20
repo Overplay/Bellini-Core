@@ -17,10 +17,10 @@
 module.exports = function (req, res, next) {
 
 
-    if (sails.config.policies.wideOpen) {
-        sails.log.debug("In wideOpen policy mode, so skipping this policy!");
-        return next();
-    }
+    /*if (sails.config.policies.wideOpen) {
+     sails.log.debug("In wideOpen policy mode, so skipping this policy!");
+     return next();
+     }*/
 
     var device = req.allParams();
     // fix for delete
@@ -46,11 +46,13 @@ module.exports = function (req, res, next) {
 
     }
     //PUT for update 
-    else if (req.session.user.id === device.deviceOwner.id) {
+    else if (req.session.user.id === device.deviceOwner.id ) {
         sails.log.debug(req.allParams(), "has access")
         return next();
     }
-
+    else if (RoleCacheService.hasAdminRole( req.session.user.roles )) {
+        return next();
+    }
     // User is not allowed
     // (default res.forbidden() behavior can be overridden in `config/403.js`)
     else

@@ -20,7 +20,7 @@ app.controller( "adminEditUserController", function ( $scope, userAuths, $state 
 } );
 
 
-app.controller("adminManageDevicesController", function ($scope, $state, $log, userDevices) {
+app.controller("adminManageDevicesController", function ($scope, $state, $log, userDevices, $sce) {
 
     $log.debug("adminManageDevicesController starting");
 
@@ -31,4 +31,5 @@ app.controller("adminManageDevicesController", function ($scope, $state, $log, u
     //TODO get user devices based on location or whatever - not just by owner?
     //order devices?
 
+    $scope.address = $sce.trustAsHtml('<p>{{device.venue.address.street}}</p><p>{{device.venue.address.city}}, {{device.venue.address.state}} {{device.venue.address.zip}}</p>');
 });
