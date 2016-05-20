@@ -11,7 +11,9 @@ app.controller("addDeviceController", function ($scope, $state, $log, toastr, nu
     $scope.user = user;
     $scope.code = false;
 
-    //$scope.device.venue = $scope.user.venue[0];
+    nucleus.getUserVenues($scope.user.id).then(function (venues) {
+        $scope.user.venues = venues;
+    });
 
     $scope.submitForCode = function () {
         $http.post('/activation/generateCode', $scope.device)
@@ -24,6 +26,15 @@ app.controller("addDeviceController", function ($scope, $state, $log, toastr, nu
             });
     }
 
+    $scope.listAddress = function (venue) {
+
+        var addr = venue.name + ' (';
+        addr += venue.address.street + ' ';
+        addr += venue.address.city + ', ';
+        addr += venue.address.state + ')';
+
+        return addr;
+    }
 
 
 });

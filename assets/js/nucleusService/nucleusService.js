@@ -146,14 +146,6 @@
 
             }
 
-            service.getUserDevices = function (userId, managed) {
-                if (!userId)
-                    throw new Error("Bad userId");
-                // if managed === true -> get managed devices, else get owned devices
-                var endPoint = _apiPath + '/user/' + userId + (managed ? '/managed' : '/owned') + 'Devices';
-                return apiGet(endPoint);
-            }
-
             service.getUserVenues = function (userId) {
                 if (!userId)
                     throw new Error("Bad userId");
@@ -240,7 +232,7 @@
                 return apiGet(endPoint);
             }
 
-            // =========== DEVICES ========
+            // =========== DEVICES ======== //TODO move to controllers? 
             service.getDevice = function (deviceId) {
 
                 var endPoint = _apiPath + '/device' + (deviceId ? '/' + deviceId : '');

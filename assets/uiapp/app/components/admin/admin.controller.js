@@ -20,16 +20,27 @@ app.controller( "adminEditUserController", function ( $scope, userAuths, $state 
 } );
 
 
-app.controller("adminManageDevicesController", function ($scope, $state, $log, userDevices, $sce) {
+app.controller("adminManageDevicesController", function ($scope, $state, $log, user, $sce, nucleus, $http) {
 
     $log.debug("adminManageDevicesController starting");
 
-    $log.log(userDevices)
-    
-    $scope.devices = userDevices; //TODO only get registered devices....(will be easier with final reg)
-    //ideas - check by something that is only set once the device is registered (MAC? updated at? ) 
-    //TODO get user devices based on location or whatever - not just by owner?
-    //order devices?
+
+    //only displays registered devices and combines the two lists
+    function combineDevices(a, b) {
+        return _.union(_.filter(a, {regCode: ''}), _.filter(b, {regCode: ''}));
+    }
+
+    //returns devices.owned and devices.managed
+    $http.get('/user/getDevices')
+        .then(function (data) {
+            var devices = data.data;
+            $scope.devices = combineDevices(devices.owned, devices.managed);
+            
+        })
+        .catch(function (err) {
+            toastr.error("Device activation code not generated", "Damn!");
+        });
+
 
     $scope.address = $sce.trustAsHtml('<p>{{device.venue.address.street}}</p><p>{{device.venue.address.city}}, {{device.venue.address.state}} {{device.venue.address.zip}}</p>');
 });
