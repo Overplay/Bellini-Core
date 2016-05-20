@@ -308,7 +308,7 @@ var self = module.exports.testdata = {
         },
         {
             name: "Corner Pub",
-            address: { street: "456 First St.", city: "Boulder", state: "CO", zip: 80305 },
+            address: { street: "1165 13th St.", city: "Boulder", state: "CO", zip: 80302 },
             ownerEmail: "vogel@test.com"
         },
         {
