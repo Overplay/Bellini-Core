@@ -17,7 +17,12 @@ app.config(function ($stateProvider, $urlRouterProvider) {
         .state('admin', {
             url: '/admin',
             templateUrl: '/uiapp/app/components/admin/admin.partial.html',
-            abstract: true
+            abstract: true,
+            resolve: {
+                user: function (nucleus) {
+                    return nucleus.getMe();
+                }
+            }
 
 
         })
@@ -41,14 +46,14 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 data: {subTitle: "Manage Devices"},
                 controller: "adminManageDevicesController",
                 templateUrl: '/uiapp/app/components/admin/admin-manage-devices.partial.html',
-            resolve: {
+            /*resolve: {
 
                 userDevices: function (nucleus) {
                     //TODO change method to what ryan wrote
-                    //return nucleus.getUserDevices(___);
+                    //return nucleus.getUserDevices(MY USER ID);
                     return nucleus.getDevice();
                 }
-            }
+             }*/
 
             }
         )

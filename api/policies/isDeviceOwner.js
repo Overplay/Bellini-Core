@@ -23,7 +23,7 @@ module.exports = function (req, res, next) {
      }*/
 
     var device = req.allParams();
-    //temp fix for delete
+    // fix for delete
     if (req.method == "DELETE") {
         Device.findOne(device.id)
             .then(function (d) {
@@ -45,11 +45,12 @@ module.exports = function (req, res, next) {
             })
 
     }
-    else if (req.session.user.id === device.deviceOwner.id ) {
+    //PUT for update 
+    else if (req.session.user.id === device.deviceOwner.id) {
         sails.log.debug(req.allParams(), "has access")
         return next();
     }
-    else if (RoleCacheService.hasAdminRole( req.session.user.roles )) {
+    else if (RoleCacheService.hasAdminRole(req.session.user.roles)) {
         return next();
     }
     // User is not allowed

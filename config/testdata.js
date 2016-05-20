@@ -4,15 +4,15 @@
 
 
 
-var Promise = require( 'bluebird' );
+var Promise = require('bluebird');
 
 
 var self = module.exports.testdata = {
-    
+
     installTestData: true,
-    eraseOldData:    false,
-    
-    install: function() {
+    eraseOldData: false,
+
+    install: function () {
         
         if (!self.installTestData) {
             sails.log.debug("Skipping test data installation.");
@@ -25,63 +25,63 @@ var self = module.exports.testdata = {
             sails.log.debug("Erasing old test data installation.");
 
             var destruct = [
-                User.destroy( {} ),
-                Venue.destroy( {} ),
-                Device.destroy( {} )
+                User.destroy({}),
+                Venue.destroy({}),
+                Device.destroy({})
             ];
 
-            chain = chain.then( function() {
-                return Promise.all( destruct )
-                    .then( function() {
+            chain = chain.then(function () {
+                return Promise.all(destruct)
+                    .then(function () {
                         sails.log.debug("All test models destroyed.");
                     });
             })
         }
 
-        self.users.forEach( function(u) {
+        self.users.forEach(function (u) {
             var email = u.email;
             var password = u.password;
             delete u.email;
             delete u.password;
             // find role IDs
             u.roles = [];
-            u.roleNames.forEach(function(role) {
+            u.roleNames.forEach(function (role) {
                 u.roles.push(RoleCacheService.roleByName(role.role, role.subRole));
             });
             delete u.roleNames;
-            chain = chain.then( function() {
+            chain = chain.then(function () {
                 return AdminService.addUser(email, password, u)
-                    .then( function() {
+                    .then(function () {
                         sails.log.debug("Created user " + email)
                     })
             })
         });
 
-        self.venues.forEach( function(v) {
+        self.venues.forEach(function (v) {
             var ownerEmail = v.ownerEmail;
             delete v.ownerEmail;
-            
-            chain = chain.then(function() {
-                return Auth.findOne( {email: ownerEmail} )
-                    .then(function(user) {
+
+            chain = chain.then(function () {
+                return Auth.findOne({email: ownerEmail})
+                    .then(function (user) {
                         v.venueOwner = user.user;
                         return Venue.create(v)
-                                    .then(function () {
-                                        sails.log.debug("Venue created with owner " + ownerEmail);
-                                    })
+                            .then(function () {
+                                sails.log.debug("Venue created with owner " + ownerEmail);
+                            })
                     })
             })
         });
 
-        chain = chain.then( function() {
+        chain = chain.then(function () {
             return User.find()
                 .populate('venues')
-                .then( function() {
+                .then(function () {
                     sails.log.debug("Venues populated");
                 })
         });
 
-        self.devices.forEach( function(d) {
+        self.devices.forEach(function (d) {
             var ownerEmail = d.ownerEmail;
             var venueName = d.venueName;
             var managers = d.managerEmails;
@@ -89,64 +89,66 @@ var self = module.exports.testdata = {
             delete d.ownerEmail;
             delete d.venueName;
             var device;
-            
-            chain = chain.then(function() {
-                return Auth.findOne( {email: ownerEmail} )
-                    .then( function(user) {
+
+            chain = chain.then(function () {
+                return Auth.findOne({email: ownerEmail})
+                    .then(function (user) {
                         d.deviceOwner = user.user;
-                        return Venue.findOne( {name: venueName} )
+                        return Venue.findOne({name: venueName})
                     })
-                    .then( function(venue) {
+                    .then(function (venue) {
                         d.venue = venue;
                         return Device.create(d)
-                            .then(function(newDev) {
+                            .then(function (newDev) {
                                 device = newDev;
                                 sails.log.debug("Device created with owner " + ownerEmail + ", location: " + d.locationWithinVenue);
                             })
                     })
             })
 
-            managers.forEach( function(m) {
+            managers.forEach(function (m) {
                 var user;
-                chain = chain.then(function() {
+                chain = chain.then(function () {
                     return Auth.findOne({email: m})
-                        .then(function(a) {
+                        .then(function (a) {
                             return User.findOne(a.user);
                         })
-                        .then(function(u) {
+                        .then(function (u) {
                             user = u;
                             u.managedDevices.add(device.id);
-                            u.save(function(err, s) {});
+                            u.save(function (err, s) {
+                            });
                             device.deviceManagers.add(user.id);
-                            device.save(function(err, s) {});
+                            device.save(function (err, s) {
+                            });
                         })
-                        .then(function() {
+                        .then(function () {
                             sails.log.debug("Managers added to device");
                         })
                 })
             })
         });
-        
-        chain = chain.then(function() {
+
+        chain = chain.then(function () {
             return User.find()
                 .populate('ownedDevices')
-                .then( function() {
+                .then(function () {
                     sails.log.debug("Users' owned devices populated");
                 })
         });
 
-        chain = chain.then(function() {
+        chain = chain.then(function () {
             return Venue.find()
                 .populate('devices')
-                .then( function() {
+                .then(function () {
                     sails.log.debug("Venues' devices populated");
                 })
         });
 
-        chain = chain.then(function() {
+        chain = chain.then(function () {
             return User.find()
                 .populate('managedDevices')
-                .then( function() {
+                .then(function () {
                     sails.log.debug("Users' managed devices populated");
                 })
         });
@@ -158,126 +160,126 @@ var self = module.exports.testdata = {
             lastName: 'Smith',
             email: 'ryan@test.com',
             password: 'pa$$word',
-            roleNames: [ { role: "proprietor", subRole: "owner" } ]
+            roleNames: [{role: "proprietor", subRole: "owner"}]
         },
         {
             firstName: 'Vid',
             lastName: 'Baum',
             email: 'vid@test.com',
             password: 'pa$$word',
-            roleNames: [ { role: "user", subRole: "" } ]
+            roleNames: [{role: "user", subRole: ""}]
         },
         {
             firstName: 'Silvanus',
             lastName: 'Conner',
             email: 'silvanus@test.com',
             password: 'pa$$word',
-            roleNames: [ { role: "proprietor", subRole: "manager" }, { role: "user", subRole: ""} ]
+            roleNames: [{role: "proprietor", subRole: "manager"}, {role: "user", subRole: ""}]
         },
         {
             firstName: 'Kajetan',
             lastName: 'McNeil',
             email: 'kajetan@test.com',
             password: 'pa$$word',
-            roleNames: [ { role: "user", subRole: "" } ]
+            roleNames: [{role: "user", subRole: ""}]
         },
         {
             firstName: 'John',
             lastName: 'Alfredson',
             email: 'john@test.com',
             password: 'pa$$word',
-            roleNames: [ { role: "proprietor", subRole: "owner" }, { role: "user", subRole: ""} ]
+            roleNames: [{role: "proprietor", subRole: "owner"}, {role: "user", subRole: ""}]
         },
         {
             firstName: 'Antonina',
             lastName: 'Burton',
             email: 'antonina@test.com',
             password: 'pa$$word',
-            roleNames: [ { role: "user", subRole: "" } ]
+            roleNames: [{role: "user", subRole: ""}]
         },
         {
             firstName: 'Catarina',
             lastName: 'Cvetkov',
             email: 'caterina@test.com',
             password: 'pa$$word',
-            roleNames: [ { role: "proprietor", subRole: "manager" } ]
+            roleNames: [{role: "proprietor", subRole: "manager"}]
         },
         {
             firstName: 'Joe',
             lastName: 'Rogers',
             email: 'joe@test.com',
             password: 'pa$$word',
-            roleNames: [ { role: "user", subRole: "" } ]
+            roleNames: [{role: "user", subRole: ""}]
         },
         {
             firstName: 'Jerref',
             lastName: 'Gardiner',
             email: 'jerref@test.com',
             password: 'pa$$word',
-            roleNames: [ { role: "proprietor", subRole: "manager" }, { role: "user", subRole: ""} ]
+            roleNames: [{role: "proprietor", subRole: "manager"}, {role: "user", subRole: ""}]
         },
         {
             firstName: 'Carina',
             lastName: 'Fay',
             email: 'carina@test.com',
             password: 'pa$$word',
-            roleNames: [ { role: "proprietor", subRole: "owner" }, { role: "user", subRole: ""} ]
+            roleNames: [{role: "proprietor", subRole: "owner"}, {role: "user", subRole: ""}]
         },
         {
             firstName: 'Nereus',
             lastName: 'Macar',
             email: 'nereus@test.com',
             password: 'pa$$word',
-            roleNames: [ { role: "user", subRole: "" } ]
+            roleNames: [{role: "user", subRole: ""}]
         },
         {
             firstName: 'Abel',
             lastName: 'Filipovic',
             email: 'abel@test.com',
             password: 'pa$$word',
-            roleNames: [ { role: "user", subRole: "" } ]
+            roleNames: [{role: "user", subRole: ""}]
         },
         {
             firstName: 'Patricia',
             lastName: 'Jarrett',
             email: 'patricia@test.com',
             password: 'pa$$word',
-            roleNames: [ { role: "user", subRole: "" } ]
+            roleNames: [{role: "user", subRole: ""}]
         },
         {
             firstName: 'Unice',
             lastName: 'Ashley',
             email: 'unice@test.com',
             password: 'pa$$word',
-            roleNames: [ { role: "proprietor", subRole: "manager" } ]
+            roleNames: [{role: "proprietor", subRole: "manager"}]
         },
         {
             firstName: 'Paulene',
             lastName: 'Vogel',
             email: 'vogel@test.com',
             password: 'pa$$word',
-            roleNames: [ { role: "proprietor", subRole: "owner" }, { role: "user", subRole: ""} ]
+            roleNames: [{role: "proprietor", subRole: "owner"}, {role: "user", subRole: ""}]
         },
         {
             firstName: 'Sloane',
             lastName: 'Irwin',
             email: 'sloane@test.com',
             password: 'pa$$word',
-            roleNames: [ { role: "user", subRole: "" } ]
+            roleNames: [{role: "user", subRole: ""}]
         },
         {
             firstName: 'Lon',
             lastName: 'Plaskett',
             email: 'lon@test.com',
             password: 'pa$$word',
-            roleNames: [ { role: "user", subRole: "" } ]
+            roleNames: [{role: "user", subRole: ""}]
         },
         {
             firstName: 'Annegret',
             lastName: 'Henderson',
             email: 'annegret@test.com',
             password: 'pa$$word',
-            roleNames: [ { role: "proprietor", subRole: "manager" }, { role: "user", subRole: ""} ]
+            roleNames: [{role: "proprietor", subRole: "manager"}, {role: "user", subRole: ""}]
             
         },
         {
@@ -285,25 +287,25 @@ var self = module.exports.testdata = {
             lastName: 'Reed',
             email: 'hend@test.com',
             password: 'pa$$word',
-            roleNames: [ { role: "user", subRole: "" } ]
+            roleNames: [{role: "user", subRole: ""}]
         },
         {
             firstName: 'Elizabeth',
             lastName: 'Salas', 
             email: 'elizabeth@test.com',
             password: 'pa$$word',
-            roleNames: [ { role: "proprietor", subRole: "owner" } ]
+            roleNames: [{role: "proprietor", subRole: "owner"}]
         }
     ],
     venues: [
         {
             name: "John's Burgers",
-            address: { street: "123 Main St.", city: "Cupertino", state: "CA", zip: 95014 },
+            address: {street: "123 Main St.", city: "Cupertino", state: "CA", zip: 95014},
             ownerEmail: "john@test.com"
         },
         {
             name: "John's Burgers",
-            address: { street: "123 Leff St.", city: "Cupertino", state: "CA", zip: 95014 },
+            address: {street: "123 Leff St.", city: "Cupertino", state: "CA", zip: 95014},
             ownerEmail: "john@test.com"
         },
         {
@@ -313,17 +315,17 @@ var self = module.exports.testdata = {
         },
         {
             name: "BBQ 'n Beer",
-            address: { street: "1123 Central Ave.", city: "New York City", state: "NY", zip: 10001 },
+            address: {street: "1123 Central Ave.", city: "New York City", state: "NY", zip: 10001},
             ownerEmail: "ryan@test.com"
         },
         {
             name: "New Chicago",
-            address: { street: "404 Hidden St.", city: "San Luis Obispo", state: "CA", zip: 93405 },
+            address: {street: "404 Hidden St.", city: "San Luis Obispo", state: "CA", zip: 93405},
             ownerEmail: "elizabeth@test.com"
         },
         {
             name: "VJ's",
-            address: { street: "12 Hanover Dr.", city: "Cupertino", state: "CA", zip: 95014 },
+            address: {street: "12 Hanover Dr.", city: "Cupertino", state: "CA", zip: 95014},
             ownerEmail: "carina@test.com"
         }
     ],
@@ -398,5 +400,6 @@ var self = module.exports.testdata = {
             venueName: "VJ's",
             managerEmails: ["annegret@test.com", "unice@test.com"]
         }
+
     ]
 };
