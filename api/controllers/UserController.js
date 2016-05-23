@@ -41,15 +41,13 @@ module.exports = require('waterlock').actions.user({
     getDevices: function (req, res) {
         var devices = {};
 
-        //this query does not populate deep enough
+        //this query does not populate deep enough --
+        // currently fixed in controller with more api calls
         User.findOne(req.session.user.id)
             .populate("ownedDevices")
             .populate("managedDevices")
             .then(function (user) {
                 if (user) {
-                    //TODO does not work cant figure out the async calls within this - cole
-                    populateVenue(user.managedDevices);
-                    populateVenue(user.ownedDevices);
                     devices.owned = user.ownedDevices;
                     devices.managed = user.managedDevices;
                     return res.json(devices);
@@ -65,20 +63,3 @@ module.exports = require('waterlock').actions.user({
 
 });
 
-//looks dumb, but it actually does stuff (id-> object)
-//TODO make this work 
-var populateVenue = function (devices) {
-    return async.each(devices, function (device, callback) {
-        Venue.findOne(device.venue)
-            .then(function (venue) {
-                if (!venue)
-                    callback("venue not found")
-                device.venue = venue;
-                callback();
-            })
-    }, function (err) {
-        if (err)
-            sails.log.debug("Error in UserController populateVenue call");
-    })
-
-}
