@@ -17,6 +17,7 @@ module.exports = {
         address: {
             type: 'json'
         },
+        
 
         // For determining where a user is and whether venue is shown on the Mobile app
         // finder app 
@@ -41,6 +42,10 @@ module.exports = {
 
         venueOwner: {
             model: 'User'
+        },
+
+        organization: {
+            model: 'Organization'
         }
     }
 };

@@ -40,18 +40,32 @@ module.exports = require('waterlock').actions.user({
     //TODO document
     getDevices: function (req, res) {
         var devices = {};
+        var id;
 
+        sails.log.debug(req.allParams())
+
+        //TODO test params to see if getting user devices or current user 
+
+        if (req.allParams() && req.allParams().id) //policy check too?? make sure admin
+            id = req.allParams().id;
+        else if (req.session && req.session.user.id)
+            id = req.session.user.id;
+        else
+            return res.badRequest('Not logged in and no given id')
         //this query does not populate deep enough --
         // currently fixed in controller with more api calls
-        User.findOne(req.session.user.id)
+        User.findOne({id: id})
             .populate("ownedDevices")
             .populate("managedDevices")
             .then(function (user) {
+                sails.log.debug(user)
                 if (user) {
                     devices.owned = user.ownedDevices;
                     devices.managed = user.managedDevices;
                     return res.json(devices);
                 }
+                else
+                    return res.badRequest();
             })
             .catch(function (err) {
                 return res.serverError(err);

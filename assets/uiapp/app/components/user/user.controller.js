@@ -56,14 +56,14 @@ app.controller( "editUserController", function ( $scope, $log, user, toastr, nuc
  * Created by mkahn on 4/8/16.
  */
 
-app.controller( "editUserAdminController", function ( $scope, $state, $log, user, roles, toastr, uibHelper, nucleus ) {
+app.controller("editUserAdminController", function ($scope, $http, $state, $log, user, roles, toastr, uibHelper, nucleus) {
 
     $log.debug( "editUserAdminController starting for userauth: " + user.id );
     $scope.user = user;
     $scope.user.newPwd = "";
     $scope.confirm = {checked: false};
 
-    nucleus.getUserDevices(user.user.id, false)
+    /*nucleus.getUserDevices(user.user.id, false)
         .then(function (res) {
             $scope.user.ownedDevices = res;
         })
@@ -92,7 +92,30 @@ app.controller( "editUserAdminController", function ( $scope, $state, $log, user
         .catch(function (err) {
             toastr.error("Couldn't fetch managed devices", "Error!");
         });
+     */
 
+    //returns devices.owned and devices.managed
+    $http.get('/user/getDevices/' + $scope.user.id)
+        .then(function (data) {
+            var devices = data.data;
+            $scope.ownedDevices = _.filter(devices.owned, {regCode: ''});
+            $scope.managedDevices = _.filter(devices.managed, {regCode: ''});
+
+            _.forEach(_.union($scope.ownedDevices, $scope.managedDevices), function (dev) {
+                $http.get('api/v1/venue/' + dev.venue)
+                    .then(function (data) {
+                        dev.venue = data.data;
+                    })
+                    .catch(function (err) {
+                        toastr.error("Venue not found", "Damn!");
+                    });
+            })
+            $log.log(devices)
+
+        })
+        .catch(function (err) {
+            toastr.error("Problem getting devices", "Damn! Really not good");
+        });
 
     $scope.proprietor = user.user.roleTypes.indexOf("proprietor.owner") > -1 || user.user.roleTypes.indexOf("proprietor.manager") > -1;
 
