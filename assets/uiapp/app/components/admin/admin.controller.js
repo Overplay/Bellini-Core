@@ -35,10 +35,20 @@ app.controller("adminManageDevicesController", function ($scope, $state, $log, u
         .then(function (data) {
             var devices = data.data;
             $scope.devices = combineDevices(devices.owned, devices.managed);
-            
+
+            _.forEach($scope.devices, function (dev) {
+                $http.get('api/v1/venue/' + dev.venue)
+                    .then(function (data) {
+                        dev.venue = data.data;
+                    })
+                    .catch(function (err) {
+                        toastr.error("Venue not found", "Damn!");
+                    });
+            })
+
         })
         .catch(function (err) {
-            toastr.error("Device activation code not generated", "Damn!");
+            toastr.error("Problem getting devices", "Damn! Really not good");
         });
 
 

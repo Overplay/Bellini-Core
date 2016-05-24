@@ -97,6 +97,10 @@ module.exports = {
             via: 'deviceManagers'
         },
 
+        organization: { //only for proprietors 
+            model: 'Organization'
+        },
+
 
         toJSON: function() {
 

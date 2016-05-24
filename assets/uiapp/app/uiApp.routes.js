@@ -46,14 +46,6 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 data: {subTitle: "Manage Devices"},
                 controller: "adminManageDevicesController",
                 templateUrl: '/uiapp/app/components/admin/admin-manage-devices.partial.html',
-            /*resolve: {
-
-                userDevices: function (nucleus) {
-                    //TODO change method to what ryan wrote
-                    //return nucleus.getUserDevices(MY USER ID);
-                    return nucleus.getDevice();
-                }
-             }*/
 
             }
         )
@@ -137,6 +129,33 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                     return nucleus.getDevice($stateParams.id)
                 }
             }
+        })
+
+        .state('organization', {
+            url: '/organization',
+            templateUrl: '/uiapp/app/components/organization/organization.partial.html',
+            abstract: true,
+            resolve: {
+                user: function (nucleus) {
+                    return nucleus.getMe()
+                }
+
+            }
+
+        })
+
+        .state('organization.manageOrganization', {
+            url: '/manage-organization/',
+            data: {subTitle: "Manage Organization"},
+            controller: 'editOrganizationController',
+            templateUrl: '/uiapp/app/components/organization/manage-organization.partial.html'
+        })
+
+        .state('organization.viewOrganization', {
+            url: '/view-organization/',
+            data: {subTitle: "View Organization"},
+            controller: 'viewOrganizationController',
+            templateUrl: '/uiapp/app/components/organization/view-organization.partial.html'
         })
 
         // =========== DASHBOARD

@@ -40,20 +40,32 @@ module.exports = require('waterlock').actions.user({
     //TODO document
     getDevices: function (req, res) {
         var devices = {};
+        var id;
 
-        //this query does not populate deep enough
-        User.findOne(req.session.user.id)
+        sails.log.debug(req.allParams())
+
+        //TODO test params to see if getting user devices or current user 
+
+        if (req.allParams() && req.allParams().id) //policy check too?? make sure admin
+            id = req.allParams().id;
+        else if (req.session && req.session.user.id)
+            id = req.session.user.id;
+        else
+            return res.badRequest('Not logged in and no given id')
+        //this query does not populate deep enough --
+        // currently fixed in controller with more api calls
+        User.findOne({id: id})
             .populate("ownedDevices")
             .populate("managedDevices")
             .then(function (user) {
+                sails.log.debug(user)
                 if (user) {
-                    //TODO does not work cant figure out the async calls within this - cole
-                    populateVenue(user.managedDevices);
-                    populateVenue(user.ownedDevices);
                     devices.owned = user.ownedDevices;
                     devices.managed = user.managedDevices;
                     return res.json(devices);
                 }
+                else
+                    return res.badRequest();
             })
             .catch(function (err) {
                 return res.serverError(err);
@@ -65,20 +77,3 @@ module.exports = require('waterlock').actions.user({
 
 });
 
-//looks dumb, but it actually does stuff (id-> object)
-//TODO make this work 
-var populateVenue = function (devices) {
-    return async.each(devices, function (device, callback) {
-        Venue.findOne(device.venue)
-            .then(function (venue) {
-                if (!venue)
-                    callback("venue not found")
-                device.venue = venue;
-                callback();
-            })
-    }, function (err) {
-        if (err)
-            sails.log.debug("Error in UserController populateVenue call");
-    })
-
-}

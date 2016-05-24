@@ -20,7 +20,12 @@ app.factory('navBarService', function ($log) {
                 items: [{label: "Manage Devices", link: {type: 'ui-sref', addr: 'admin.manageDevices'}},
                     {label: "Add Device", link: {type: 'ui-sref', addr: 'device.addDevice'}},
                 ]
-            }
+            },
+                {
+                    label: "Organization",
+                    id: "organization",
+                    items: [{label: "organization", link: {type: 'ui-sref', addr: 'organization.manageOrganization'}}]
+                }
             ],
             right: [{
                 label: 'Account',
@@ -44,7 +49,12 @@ app.factory('navBarService', function ($log) {
                 items: [{label: "Manage Devices", link: {type: 'ui-sref', addr: 'admin.manageDevices'}},
                     {label: "Add Device", link: {type: 'ui-sref', addr: 'device.addDevice'}},
                 ]
-            }
+            },
+                {
+                    label: "Organization",
+                    id: "organization",
+                    items: [{label: "organization", link: {type: 'ui-sref', addr: 'organization.manageOrganization'}}]
+                }
             ],
             right: [{
                 label: 'Account',

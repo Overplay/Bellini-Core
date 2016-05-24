@@ -37,6 +37,12 @@ var self = module.exports.testdata = {
                     });
             })
         }
+        self.organizations.forEach(function (o) {
+            Organization.create(o)
+                .then(function (o) {
+                    sails.log.debug("organization created")
+                })
+        });
 
         self.users.forEach(function (u) {
             var email = u.email;
@@ -49,6 +55,16 @@ var self = module.exports.testdata = {
                 u.roles.push(RoleCacheService.roleByName(role.role, role.subRole));
             });
             delete u.roleNames;
+            if (u.organizationEmail) {
+                var organizationEmail = u.organizationEmail;
+                chain = chain.then(function () {
+                    return Organization.findOne({email: organizationEmail})
+                        .then(function (o) {
+                            u.organization = o;
+                        })
+                })
+                delete organizationEmail;
+            }
             chain = chain.then(function () {
                 return AdminService.addUser(email, password, u)
                     .then(function () {
@@ -128,6 +144,7 @@ var self = module.exports.testdata = {
                 })
             })
         });
+
 
         chain = chain.then(function () {
             return User.find()
@@ -294,7 +311,8 @@ var self = module.exports.testdata = {
             lastName: 'Salas', 
             email: 'elizabeth@test.com',
             password: 'pa$$word',
-            roleNames: [{role: "proprietor", subRole: "owner"}]
+            roleNames: [{role: "proprietor", subRole: "owner"}],
+            organizationEmail: "dr@test.com"
         }
     ],
     venues: [
@@ -401,5 +419,15 @@ var self = module.exports.testdata = {
             managerEmails: ["annegret@test.com", "unice@test.com"]
         }
 
+    ],
+    organizations: [
+        {
+            name: "Delicious Restaurants",
+            email: "dr@test.com",
+            websiteUrl: "www.dr.com",
+            address: {street: "204 California Blvd.", city: "San Luis Obispo", state: "CA", zip: 93405},
+            phone: 1234567890
+
+        }
     ]
 };
