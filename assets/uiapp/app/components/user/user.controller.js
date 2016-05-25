@@ -95,13 +95,14 @@ app.controller("editUserAdminController", function ($scope, $http, $state, $log,
      */
 
     //returns devices.owned and devices.managed
+    $log.log(user)
     $http.get('/user/getDevices/' + $scope.user.id)
         .then(function (data) {
             var devices = data.data;
-            $scope.ownedDevices = _.filter(devices.owned, {regCode: ''});
-            $scope.managedDevices = _.filter(devices.managed, {regCode: ''});
+            user.ownedDevices = _.filter(devices.owned, {regCode: ''});
+            user.managedDevices = _.filter(devices.managed, {regCode: ''});
 
-            _.forEach(_.union($scope.ownedDevices, $scope.managedDevices), function (dev) {
+            _.forEach(_.union(user.ownedDevices, user.managedDevices), function (dev) {
                 $http.get('api/v1/venue/' + dev.venue)
                     .then(function (data) {
                         dev.venue = data.data;
@@ -110,11 +111,10 @@ app.controller("editUserAdminController", function ($scope, $http, $state, $log,
                         toastr.error("Venue not found", "Damn!");
                     });
             })
-            $log.log(devices)
 
         })
         .catch(function (err) {
-            toastr.error("Problem getting devices", "Damn! Really not good");
+            toastr.error(err, "Damn! Really not good");
         });
 
     $scope.proprietor = user.user.roleTypes.indexOf("proprietor.owner") > -1 || user.user.roleTypes.indexOf("proprietor.manager") > -1;
