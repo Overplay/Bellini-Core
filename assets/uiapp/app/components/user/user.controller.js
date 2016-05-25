@@ -29,6 +29,8 @@ app.controller( "editUserController", function ( $scope, $log, user, toastr, nuc
             .then(function (u) {
                 toastr.success( "Account info updated", "Success!" );
                 $scope.user = u;
+                $scope.user.email = user.auth.email;
+
                 $scope.userUpdate = JSON.parse(JSON.stringify(u));
             } )
             .catch( function ( err ) {

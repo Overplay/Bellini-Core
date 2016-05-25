@@ -68,10 +68,10 @@ app.factory('navBarService', function ($log) {
         'user': {
             left: [
                 {
-                    label: 'Link1',
-                    id: "link1",
+                    label: 'Me',
+                    id: "user",
                     items: [{
-                        label: 'Link1', link: {type: 'href', addr: '#'}
+                        label: 'me', link: {type: 'ui-sref', addr: 'user.editUser'}
                     }
                     ]
                 },
