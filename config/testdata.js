@@ -63,7 +63,7 @@ var self = module.exports.testdata = {
                             u.organization = o;
                         })
                 })
-                delete organizationEmail;
+                delete u.organizationEmail;
             }
             chain = chain.then(function () {
                 return AdminService.addUser(email, password, u)
@@ -76,6 +76,17 @@ var self = module.exports.testdata = {
         self.venues.forEach(function (v) {
             var ownerEmail = v.ownerEmail;
             delete v.ownerEmail;
+
+            if (v.organizationEmail) {
+                var organizationEmail = v.organizationEmail;
+                chain = chain.then(function () {
+                    return Organization.findOne({email: organizationEmail})
+                        .then(function (o) {
+                            v.organization = o;
+                        })
+                })
+                delete v.organizationEmail;
+            }
 
             chain = chain.then(function () {
                 return Auth.findOne({email: ownerEmail})
@@ -339,7 +350,14 @@ var self = module.exports.testdata = {
         {
             name: "New Chicago",
             address: {street: "404 Hidden St.", city: "San Luis Obispo", state: "CA", zip: 93405},
-            ownerEmail: "elizabeth@test.com"
+            ownerEmail: "elizabeth@test.com",
+            organizationEmail: "dr@test.com"
+        },
+        {
+            name: "Old Chicago",
+            address: {street: "404 Not Found St.", city: "Acton", state: "MA", zip: 01720},
+            ownerEmail: "elizabeth@test.com",
+            organizationEmail: "dr@test.com"
         },
         {
             name: "VJ's",

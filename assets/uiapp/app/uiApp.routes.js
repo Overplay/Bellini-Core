@@ -145,10 +145,19 @@ app.config(function ($stateProvider, $urlRouterProvider) {
         })
 
         .state('organization.manageOrganization', {
-            url: '/manage-organization/',
+            url: '/manage-organization',
             data: {subTitle: "Manage Organization"},
             controller: 'editOrganizationController',
-            templateUrl: '/uiapp/app/components/organization/manage-organization.partial.html'
+            templateUrl: '/uiapp/app/components/organization/manage-organization.partial.html',
+            /*resolve: { not really necesary unless someone has control of multiple organizations?
+             organization: function($http, $stateParams){
+
+             $http.get("api/v1/organization/" + $stateParams.id)
+             .then(function (data) {
+             return data.data;
+             })
+             }
+             }*/
         })
 
         .state('organization.viewOrganization', {

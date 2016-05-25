@@ -9,6 +9,7 @@ app.controller( "editUserController", function ( $scope, $log, user, toastr, nuc
 
     $log.debug( "userController starting for userauth: " + user.id );
     $scope.user = user;
+    $scope.userUpdate = JSON.parse(JSON.stringify(user));
     $scope.user.email = user.auth.email;
     
     $scope.user.newPwd1 = '';
@@ -21,12 +22,14 @@ app.controller( "editUserController", function ( $scope, $log, user, toastr, nuc
     $scope.updateUserInfo = function () {
 
         nucleus.updateUser( user.id, {
-                lastName:    $scope.user.lastName,
-                firstName:   $scope.user.firstName,
-                mobilePhone: $scope.user.mobilePhone
+                lastName: $scope.userUpdate.lastName,
+                firstName: $scope.userUpdate.firstName,
+                mobilePhone: $scope.userUpdate.mobilePhone
             } )
-            .then( function ( res ) {
+            .then(function (u) {
                 toastr.success( "Account info updated", "Success!" );
+                $scope.user = u;
+                $scope.userUpdate = JSON.parse(JSON.stringify(u));
             } )
             .catch( function ( err ) {
                 toastr.error( "Something went wrong", "Damn!" );
@@ -60,39 +63,9 @@ app.controller("editUserAdminController", function ($scope, $http, $state, $log,
 
     $log.debug( "editUserAdminController starting for userauth: " + user.id );
     $scope.user = user;
+    $scope.userUpdate = JSON.parse(JSON.stringify(user));
     $scope.user.newPwd = "";
     $scope.confirm = {checked: false};
-
-    /*nucleus.getUserDevices(user.user.id, false)
-        .then(function (res) {
-            $scope.user.ownedDevices = res;
-        })
-        .then(function () {
-            $scope.user.ownedDevices.forEach(function (d) {
-                nucleus.getVenue(d.venue).then(function (v) {
-                    d.venue = v;
-                })
-            })
-        })
-        .catch(function (err) {
-            toastr.error("Couldn't fetch owned devices", "Error!");
-        });
-
-    nucleus.getUserDevices(user.user.id, true)
-        .then(function (res) {
-            $scope.user.managedDevices = res;
-        })
-        .then(function () {
-            $scope.user.managedDevices.forEach(function (d) {
-                nucleus.getVenue(d.venue).then(function (v) {
-                    d.venue = v;
-                })
-            })
-        })
-        .catch(function (err) {
-            toastr.error("Couldn't fetch managed devices", "Error!");
-        });
-     */
 
     //returns devices.owned and devices.managed
     $log.log(user)
@@ -145,6 +118,7 @@ app.controller("editUserAdminController", function ($scope, $http, $state, $log,
             .then( function ( u ) {
                 toastr.success( "Account info updated", "Success!" );
                 $scope.user.user = u;
+                $scope.userUpdate.user = JSON.parse(JSON.stringify(u));
             } )
             .catch( function ( err ) {
                 toastr.error( "Something went wrong", "Damn!" );
@@ -156,9 +130,9 @@ app.controller("editUserAdminController", function ($scope, $http, $state, $log,
 
         updateUser(
             {
-                lastName:    $scope.user.user.lastName,
-                firstName:   $scope.user.user.firstName,
-                mobilePhone: $scope.user.user.mobilePhone
+                lastName: $scope.userUpdate.user.lastName,
+                firstName: $scope.userUpdate.user.firstName,
+                mobilePhone: $scope.userUpdate.user.mobilePhone
             } );
 
     };
