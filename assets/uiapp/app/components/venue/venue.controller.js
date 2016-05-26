@@ -8,7 +8,7 @@ app.filter('trustAsResourceUrl', function($sce) {
     };
 });
 
-app.controller("editVenueAdminController", function($scope, $log, $sce, venue, toastr, nucleus) {
+app.controller("editVenueAdminController", function($scope, $state, $log, $sce, venue, toastr, nucleus, uibHelper) {
 
     $log.debug("editVenueAdminController starting");
 
@@ -17,6 +17,7 @@ app.controller("editVenueAdminController", function($scope, $log, $sce, venue, t
     $scope.venue = venue;
     $scope.localVenue = { address: venue.address, name: venue.name};
     $scope.showMap = true;
+    $scope.confirm = {checked: false};
 
     addressify = function(address) {
         var newAddr = address.street + ' ';
@@ -38,5 +39,45 @@ app.controller("editVenueAdminController", function($scope, $log, $sce, venue, t
             .catch(function (err) {
                 toastr.error("Something went wrong", "Damn!");
             });
+    }
+
+    $scope.deleteVenue = function () {
+
+        uibHelper.confirmModal("Delete Venue?", "Are you sure you want to delete " + $scope.venue.name, true)
+            .then(function (confirmed) {
+                    if (confirmed) {
+                        nucleus.deleteVenue($scope.venue.id)
+                            .then(function () {
+                                toastr.success("It's gone!", "Venue Deleted");
+                                $state.go('admin.manageVenues')
+                            })
+                            .catch(function (err) {
+                                toastr.error(err.status, "Problem Deleting Venue");
+                            })
+                    }
+                },
+                function (reason) {
+                    $scope.confirm.checked = false;
+                })
+    }
+})
+
+app.controller("addVenueController", function($scope, $log, nucleus, $state, $http) {
+
+    $log.debug("addVenueController starting");
+
+    $scope.regex = "\\d{5}([\\-]\\d{4})?";
+    $scope.states = ["AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA",
+                     "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD",
+                     "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ",
+                     "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC",
+                     "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"];
+
+    $scope.submit = function() {
+        $http.post('venue/addVenue', $scope.venue)
+            .then(function() {
+                $state.go('admin.manageVenues');
+            })
+
     }
 })

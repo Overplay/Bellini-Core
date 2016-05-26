@@ -104,6 +104,13 @@ app.config(function ($stateProvider, $urlRouterProvider) {
             abstract: true
         })
 
+        .state('venue.addVenue', {
+            url: '/add-venue',
+            templateUrl: '/uiapp/app/components/venue/add-venue.partial.html',
+            controller: 'addVenueController',
+            data: {subTitle: "Add Venue"}
+        })
+
         .state('venue.manageVenue', {
             url: '/manage-venue/:id',
             data: {subTitle: "Manage Venue"},

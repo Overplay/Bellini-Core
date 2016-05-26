@@ -242,6 +242,14 @@
                 return apiPut(endPoint, newFields);
 
             }
+            
+            service.deleteVenue = function (venueId) {
+                if (!venueId)
+                    throw new Error("Bad venueId");
+
+                var endPoint = _apiPath + '/venue/' + venueId;
+                return apiDelete(endPoint);
+            }
 
             // =========== DEVICES ======== //TODO move to controllers? 
             service.getDevice = function (deviceId) {
