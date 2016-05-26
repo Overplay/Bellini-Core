@@ -37,40 +37,39 @@ module.exports = require('waterlock').actions.user({
 
     },
 
-    //TODO document
+    //TODO document endpoint 
     getDevices: function (req, res) {
-        var devices = {};
         var id;
 
-        sails.log.debug(req.allParams())
-
-        //TODO test params to see if getting user devices or current user 
-
+        //if an id is supplied, gets the devices for that user auth, otherwise, it gets current user devices 
+        
         if (req.allParams() && req.allParams().id) //policy check too?? make sure admin
             id = req.allParams().id;
         else if (req.session && req.session.user.id)
-            id = req.session.user.id;
+            id = req.session.user.auth.id;
         else
             return res.badRequest('Not logged in and no given id')
         //this query does not populate deep enough --
-        // currently fixed in controller with more api calls
-        User.findOne({id: id})
-            .populate("ownedDevices")
-            .populate("managedDevices")
-            .then(function (user) {
-                sails.log.debug(user)
-                if (user) {
-                    devices.owned = user.ownedDevices;
-                    devices.managed = user.managedDevices;
-                    return res.json(devices);
-                }
-                else
-                    return res.badRequest();
+        // currently fixed in controller with  api calls
+        Auth.findOne({id: id}) //auth fix due to usercontroller in uiapp
+            .then(function (auth) {
+                User.findOne(auth.user)
+                    .populate("ownedDevices")
+                    .populate("managedDevices")
+                    .then(function (user) { //NOTE: does not populate venue in devices 
+                        if (user) {
+                            var devices = {owned: [], managed: []};
+                            devices.owned = user.ownedDevices;
+                            devices.managed = user.managedDevices;
+                            return res.json(devices);
+                        }
+                        else
+                            return res.badRequest();
+                    })
+                    .catch(function (err) {
+                        return res.serverError(err);
+                    })
             })
-            .catch(function (err) {
-                return res.serverError(err);
-            })
-
     },
 
     getVenues: function (req, res) {

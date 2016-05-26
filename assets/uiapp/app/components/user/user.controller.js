@@ -9,6 +9,7 @@ app.controller( "editUserController", function ( $scope, $log, user, toastr, nuc
 
     $log.debug( "userController starting for userauth: " + user.id );
     $scope.user = user;
+    $scope.userUpdate = JSON.parse(JSON.stringify(user));
     $scope.user.email = user.auth.email;
     
     $scope.user.newPwd1 = '';
@@ -21,12 +22,15 @@ app.controller( "editUserController", function ( $scope, $log, user, toastr, nuc
     $scope.updateUserInfo = function () {
 
         nucleus.updateUser( user.id, {
-                lastName:    $scope.user.lastName,
-                firstName:   $scope.user.firstName,
-                mobilePhone: $scope.user.mobilePhone
+                lastName: $scope.userUpdate.lastName,
+                firstName: $scope.userUpdate.firstName,
+                mobilePhone: $scope.userUpdate.mobilePhone
             } )
-            .then( function ( res ) {
+            .then(function (u) {
                 toastr.success( "Account info updated", "Success!" );
+                $scope.user = u;
+                $scope.user.email = user.auth.email;
+                $scope.userUpdate = JSON.parse(JSON.stringify(u));
             } )
             .catch( function ( err ) {
                 toastr.error( "Something went wrong", "Damn!" );
@@ -60,17 +64,19 @@ app.controller("editUserAdminController", function ($scope, $http, $state, $log,
 
     $log.debug( "editUserAdminController starting for userauth: " + user.id );
     $scope.user = user;
+    $scope.userUpdate = JSON.parse(JSON.stringify(user));
     $scope.user.newPwd = "";
     $scope.confirm = {checked: false};
 
     //returns devices.owned and devices.managed
+
     $http.get('/user/getDevices/' + $scope.user.id)
         .then(function (data) {
             var devices = data.data;
-            $scope.ownedDevices = _.filter(devices.owned, {regCode: ''});
-            $scope.managedDevices = _.filter(devices.managed, {regCode: ''});
+            user.ownedDevices = _.filter(devices.owned, {regCode: ''});
+            user.managedDevices = _.filter(devices.managed, {regCode: ''});
 
-            _.forEach(_.union($scope.ownedDevices, $scope.managedDevices), function (dev) {
+            _.forEach(_.union(user.ownedDevices, user.managedDevices), function (dev) {
                 $http.get('api/v1/venue/' + dev.venue)
                     .then(function (data) {
                         dev.venue = data.data;
@@ -79,11 +85,10 @@ app.controller("editUserAdminController", function ($scope, $http, $state, $log,
                         toastr.error("Venue not found", "Damn!");
                     });
             })
-            $log.log(devices)
 
         })
         .catch(function (err) {
-            toastr.error("Problem getting devices", "Damn! Really not good");
+            toastr.error(err, "Damn! Really not good");
         });
 
     $scope.proprietor = user.user.roleTypes.indexOf("proprietor.owner") > -1 || user.user.roleTypes.indexOf("proprietor.manager") > -1;
@@ -114,6 +119,7 @@ app.controller("editUserAdminController", function ($scope, $http, $state, $log,
             .then( function ( u ) {
                 toastr.success( "Account info updated", "Success!" );
                 $scope.user.user = u;
+                $scope.userUpdate.user = JSON.parse(JSON.stringify(u));
             } )
             .catch( function ( err ) {
                 toastr.error( "Something went wrong", "Damn!" );
@@ -125,9 +131,9 @@ app.controller("editUserAdminController", function ($scope, $http, $state, $log,
 
         updateUser(
             {
-                lastName:    $scope.user.user.lastName,
-                firstName:   $scope.user.user.firstName,
-                mobilePhone: $scope.user.user.mobilePhone
+                lastName: $scope.userUpdate.user.lastName,
+                firstName: $scope.userUpdate.user.firstName,
+                mobilePhone: $scope.userUpdate.user.mobilePhone
             } );
 
     };

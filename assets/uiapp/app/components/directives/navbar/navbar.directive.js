@@ -1,3 +1,6 @@
+//no longer in use
+
+
 app.directive('navigationBar', function ($log) {
 
     return {

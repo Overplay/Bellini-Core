@@ -92,6 +92,8 @@
 
 
             service.getPasswordStatus = function( p1, p2 ) {
+                if (!p1 || !p2) //fix js errors for undefined
+                    return {pwdOk: false};
 
                 var messages = [];
 
