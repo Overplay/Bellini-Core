@@ -63,37 +63,6 @@ app.controller("editUserAdminController", function ($scope, $http, $state, $log,
     $scope.user.newPwd = "";
     $scope.confirm = {checked: false};
 
-    /*nucleus.getUserDevices(user.user.id, false)
-        .then(function (res) {
-            $scope.user.ownedDevices = res;
-        })
-        .then(function () {
-            $scope.user.ownedDevices.forEach(function (d) {
-                nucleus.getVenue(d.venue).then(function (v) {
-                    d.venue = v;
-                })
-            })
-        })
-        .catch(function (err) {
-            toastr.error("Couldn't fetch owned devices", "Error!");
-        });
-
-    nucleus.getUserDevices(user.user.id, true)
-        .then(function (res) {
-            $scope.user.managedDevices = res;
-        })
-        .then(function () {
-            $scope.user.managedDevices.forEach(function (d) {
-                nucleus.getVenue(d.venue).then(function (v) {
-                    d.venue = v;
-                })
-            })
-        })
-        .catch(function (err) {
-            toastr.error("Couldn't fetch managed devices", "Error!");
-        });
-     */
-
     //returns devices.owned and devices.managed
     $http.get('/user/getDevices/' + $scope.user.id)
         .then(function (data) {

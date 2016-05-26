@@ -38,18 +38,27 @@ app.factory('navBarService', function ($log) {
         },
         'proprietor.owner': {
             left: [{
-                label: 'Users',
-                id: 'users',
-                items: [{label: "Manage Users", link: {type: 'ui-sref', addr: 'admin.manageUsers'}},
-                    {label: "Add User", link: {type: 'ui-sref', addr: 'admin.addUser'}}
-                ]
-            }, {
-                label: "Devices", //might need to be modified
-                id: "devices",
-                items: [{label: "Manage Devices", link: {type: 'ui-sref', addr: 'admin.manageDevices'}},
-                    {label: "Add Device", link: {type: 'ui-sref', addr: 'device.addDevice'}},
-                ]
-            },
+                    label: 'Users',
+                    id: 'users',
+                    items: [{label: "Manage Users", link: {type: 'ui-sref', addr: 'admin.manageUsers'}},
+                        {label: "Add User", link: {type: 'ui-sref', addr: 'admin.addUser'}}
+                    ]
+                },
+                {
+                    label: "Devices", //might need to be modified
+                    id: "devices",
+                    items: [{label: "Manage Devices", link: {type: 'ui-sref', addr: 'admin.manageDevices'}},
+                        {label: "Add Device", link: {type: 'ui-sref', addr: 'device.addDevice'}},
+                    ]
+                },
+                {
+                    label: "Venues",
+                    id: "venues",
+                    items: [
+                        {label: "Manage Venues", link: {type: 'ui-sref', addr: 'admin.manageVenues'}},
+                        {label: "Add Venue", link: {type: 'ui-sref', addr: 'venues.addVenue'}}
+                    ]
+                },
                 {
                     label: "Organization",
                     id: "organization",

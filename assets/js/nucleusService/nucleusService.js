@@ -232,6 +232,17 @@
                 return apiGet(endPoint);
             }
 
+            service.updateVenue = function (venueId, newFields) {
+
+                if (!venueId)
+                    throw new Error("Bad venueId");
+
+
+                var endPoint = _apiPath + '/venue/' + venueId;
+                return apiPut(endPoint, newFields);
+
+            }
+
             // =========== DEVICES ======== //TODO move to controllers? 
             service.getDevice = function (deviceId) {
 

@@ -8,7 +8,7 @@ app.controller( "loginController", function ( $scope, $log, $http, $window, $tim
 
 
     $scope.user = { email: "", password: "" }
-    $scope.ui = { errorMessage: "" }
+    $scope.ui = { errorMessage: "", error: false }
 
     $scope.login = function(){
 
@@ -21,7 +21,11 @@ app.controller( "loginController", function ( $scope, $log, $http, $window, $tim
             .catch( function ( err ) {
                 $log.error( "Could not log in" );
                 $scope.ui.errorMessage = "Login failed";
-                $timeout( function () { $scope.ui.errorMessage = ""; }, 5000 );
+                $scope.ui.error = true;
+                $timeout( function () { $scope.ui.error = false; }, 5000 )
+                    .then( function() {
+                        $timeout( function () { $scope.ui.errorMessage = ""; }, 1000 );
+                    });
             } );
 
     }

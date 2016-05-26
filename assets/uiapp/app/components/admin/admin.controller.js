@@ -20,7 +20,7 @@ app.controller( "adminEditUserController", function ( $scope, userAuths, $state 
 } );
 
 
-app.controller("adminManageDevicesController", function ($scope, $state, $log, user, $sce, nucleus, $http) {
+app.controller("adminManageDevicesController", function ($scope, $state, $log, $sce, nucleus, $http, toastr) {
 
     $log.debug("adminManageDevicesController starting");
 
@@ -28,6 +28,7 @@ app.controller("adminManageDevicesController", function ($scope, $state, $log, u
     //only displays registered devices and combines the two lists
     function combineDevices(a, b) {
         return _.union(_.filter(a, {regCode: ''}), _.filter(b, {regCode: ''}));
+        // return _.union(a, b);
     }
 
     //returns devices.owned and devices.managed
@@ -51,6 +52,25 @@ app.controller("adminManageDevicesController", function ($scope, $state, $log, u
             toastr.error("Problem getting devices", "Damn! Really not good");
         });
 
-
-    $scope.address = $sce.trustAsHtml('<p>{{device.venue.address.street}}</p><p>{{device.venue.address.city}}, {{device.venue.address.state}} {{device.venue.address.zip}}</p>');
 });
+
+app.controller('adminManageVenuesController', function ($scope, $state, $log, $sce, nucleus, $http, toastr) {
+    
+    $log.debug("adminManageVenuesController starting");
+    
+    $http.get('/user/getVenues')
+        .then(function (data) {
+            $scope.venues = data.data;
+        })
+        .catch(function (err) {
+            toastr.error("Problem getting venues", "Somethin' bad happened");
+        })
+    
+    $scope.addressify = function(address) {
+        var newAddr = address.street + ' ';
+        newAddr += address.city + ', ';
+        newAddr += address.state + ' ';
+        newAddr += address.zip;
+        return newAddr;
+    }
+})

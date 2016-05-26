@@ -45,10 +45,17 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 url: '/manage-devices',
                 data: {subTitle: "Manage Devices"},
                 controller: "adminManageDevicesController",
-                templateUrl: '/uiapp/app/components/admin/admin-manage-devices.partial.html',
-
+                templateUrl: '/uiapp/app/components/admin/admin-manage-devices.partial.html'
             }
         )
+        
+        .state('admin.manageVenues', {
+            url: '/manage-venues',
+            data: {subTitle: "Manage Venues"},
+            controller: "adminManageVenuesController",
+            templateUrl: '/uiapp/app/components/admin/admin-manage-venues.partial.html'
+        })
+        
         .state('admin.addUser', {
             url: '/add-user',
             data: {subTitle: "Add User"},
@@ -90,7 +97,25 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 }
             }
         })
+        
+        .state('venue', {
+            url: '/venue',
+            templateUrl: '/uiapp/app/components/venue/venue.partial.html',
+            abstract: true
+        })
 
+        .state('venue.manageVenue', {
+            url: '/manage-venue/:id',
+            data: {subTitle: "Manage Venue"},
+            controller: 'editVenueAdminController',
+            templateUrl: '/uiapp/app/components/venue/manage-venue.partial.html',
+            resolve: {
+                venue: function (nucleus, $stateParams) {
+                    return nucleus.getVenue($stateParams.id)
+                }
+            }
+        })
+        
         .state('device', {
             url: '/device',
             templateUrl: '/uiapp/app/components/device/device.partial.html',
