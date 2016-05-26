@@ -65,6 +65,35 @@ app.factory('navBarService', function ($log) {
             }
             ]
         },
+        'proprietor.manager': {
+            left: [{
+                label: 'Users',
+                id: 'users',
+                items: [{label: "Manage Users", link: {type: 'ui-sref', addr: 'admin.manageUsers'}},
+                    {label: "Add User", link: {type: 'ui-sref', addr: 'admin.addUser'}}
+                ]
+            }, {
+                label: "Devices", //might need to be modified
+                id: "devices",
+                items: [{label: "Manage Devices", link: {type: 'ui-sref', addr: 'admin.manageDevices'}},
+                    {label: "Add Device", link: {type: 'ui-sref', addr: 'device.addDevice'}},
+                ]
+            },
+                {
+                    label: "Organization",
+                    id: "organization",
+                    items: [{label: "organization", link: {type: 'ui-sref', addr: 'organization.manageOrganization'}}]
+                }
+            ],
+            right: [{
+                label: 'Account',
+                id: 'account',
+                items: [{label: "Edit My Account", link: {type: 'ui-sref', addr: 'user.editUser'}},
+                    {label: "Logout", link: {type: 'href', addr: '/logout'}}
+                ]
+            }
+            ]
+        },
         'user': {
             left: [
                 {
@@ -174,7 +203,7 @@ app.factory('navBarService', function ($log) {
         }
 
         //step through all the roles and append them to the nav bar
-        //TODO order of tabs? 
+        // order of tabs for multiple roles??
 
         nucleus.roles.forEach(function (val) {
             menus = _.mergeWith(menus, _navBarMenus[val], mergeHelper);

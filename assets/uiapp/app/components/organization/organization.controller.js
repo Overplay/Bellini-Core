@@ -7,10 +7,10 @@ app.controller("editOrganizationController", function ($scope, $log, user, $http
 
     $log.debug("editOrganizationController Starting")
 
-    $http.get("api/v1/organization/" + user.organization)
+    $http.get("api/v1/organization/" + user.organization) //user only has access to their own org
         .then(function (data) {
             $scope.organization = data.data;
-            $scope.organizationUpdate = JSON.parse(JSON.stringify(data.data));
+            $scope.organizationUpdate = JSON.parse(JSON.stringify(data.data)); //clone for form
         })
 
 
@@ -30,6 +30,7 @@ app.controller("editOrganizationController", function ($scope, $log, user, $http
 });
 
 
+//currently not even used 
 //only if using seperate view and edit page which may not happen as i work along this 
 app.controller("viewOrganizationController", function ($scope, $log, user, $http) {
 

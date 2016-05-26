@@ -6,12 +6,16 @@ app.controller("adminManageUsersController", function($scope, userAuths, $state,
 
     $log.debug("adminManageUsersController starting");
     $scope.subTitle = $state.current.data.subTitle;
-    $scope.users = userAuths;
-
+    $scope.users = userAuths; // TODO currently gets all users on the system. should group by org? 
+    // who has access? 
+    $log.log("All userAuths shown");
 
 });
 
+
+//not utilized 
 app.controller( "adminEditUserController", function ( $scope, userAuths, $state ) {
+    $log.debug("adminEditUserController starting");
 
     $scope.subTitle = $state.current.data.subTitle;
     $scope.users = userAuths;

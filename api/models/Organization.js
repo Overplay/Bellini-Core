@@ -50,6 +50,8 @@ module.exports = {
             via: 'organization'
         },
 
+        //organization does not currently keep track of its user's (they are not organization specific?)
+
         venues: { //one to many currently
             collection: 'Venue',
             via: 'organization'

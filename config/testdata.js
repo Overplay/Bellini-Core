@@ -244,7 +244,8 @@ var self = module.exports.testdata = {
             lastName: 'Gardiner',
             email: 'jerref@test.com',
             password: 'pa$$word',
-            roleNames: [{role: "proprietor", subRole: "manager"}, {role: "user", subRole: ""}]
+            roleNames: [{role: "proprietor", subRole: "manager"}, {role: "user", subRole: ""}],
+            organizationEmail: "dr@test.com"
         },
         {
             firstName: 'Carina',
@@ -300,15 +301,17 @@ var self = module.exports.testdata = {
             lastName: 'Plaskett',
             email: 'lon@test.com',
             password: 'pa$$word',
-            roleNames: [{role: "user", subRole: ""}]
+            roleNames: [{role: "user", subRole: ""}],
+
         },
         {
             firstName: 'Annegret',
             lastName: 'Henderson',
             email: 'annegret@test.com',
             password: 'pa$$word',
-            roleNames: [{role: "proprietor", subRole: "manager"}, {role: "user", subRole: ""}]
-            
+            roleNames: [{role: "proprietor", subRole: "manager"}, {role: "user", subRole: ""}],
+
+
         },
         {
             firstName: 'Henderson',

@@ -30,7 +30,6 @@ app.controller( "editUserController", function ( $scope, $log, user, toastr, nuc
                 toastr.success( "Account info updated", "Success!" );
                 $scope.user = u;
                 $scope.user.email = user.auth.email;
-
                 $scope.userUpdate = JSON.parse(JSON.stringify(u));
             } )
             .catch( function ( err ) {
@@ -70,7 +69,7 @@ app.controller("editUserAdminController", function ($scope, $http, $state, $log,
     $scope.confirm = {checked: false};
 
     //returns devices.owned and devices.managed
-    $log.log(user)
+
     $http.get('/user/getDevices/' + $scope.user.id)
         .then(function (data) {
             var devices = data.data;

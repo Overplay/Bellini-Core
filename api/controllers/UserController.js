@@ -37,11 +37,12 @@ module.exports = require('waterlock').actions.user({
 
     },
 
-    //TODO document
+    //TODO document endpoint 
     getDevices: function (req, res) {
         var id;
 
-
+        //if an id is supplied, gets the devices for that user auth, otherwise, it gets current user devices 
+        
         if (req.allParams() && req.allParams().id) //policy check too?? make sure admin
             id = req.allParams().id;
         else if (req.session && req.session.user.id)
@@ -52,11 +53,10 @@ module.exports = require('waterlock').actions.user({
         // currently fixed in controller with  api calls
         Auth.findOne({id: id}) //auth fix due to usercontroller in uiapp
             .then(function (auth) {
-                sails.log.debug(auth)
                 User.findOne(auth.user)
                     .populate("ownedDevices")
                     .populate("managedDevices")
-                    .then(function (user) {
+                    .then(function (user) { //NOTE: does not populate venue in devices 
                         if (user) {
                             var devices = {owned: [], managed: []};
                             devices.owned = user.ownedDevices;
