@@ -1,0 +1,1 @@
+Uploaded stuff, usually Media, goes in folders in this folder.
