@@ -7,183 +7,216 @@ app.factory('navBarService', function ($log) {
     var service = {};
     var _navBarMenus = {
 
-        'admin': {
-            left: [{
-                label: 'Users',
-                id: 'users',
-                items: [{label: "Manage Users", link: {type: 'ui-sref', addr: 'admin.manageUsers'}},
-                    {label: "Add User", link: {type: 'ui-sref', addr: 'admin.addUser'}}
-                ]
-            }, {
-                label: "Devices", //might need to be modified
-                id: "devices",
-                items: [{label: "Manage Devices", link: {type: 'ui-sref', addr: 'admin.manageDevices'}},
-                    {label: "Add Device", link: {type: 'ui-sref', addr: 'device.addDevice'}},
-                ]
-            },
-                {
-                    label: "Organization",
-                    id: "organization",
-                    items: [{label: "organization", link: {type: 'ui-sref', addr: 'organization.manageOrganization'}}]
-                }
-            ],
-            right: [{
-                label: 'Account',
-                id: 'account',
-                items: [{label: "Edit My Account", link: {type: 'ui-sref', addr: 'user.editUser'}},
-                    {label: "Logout", link: {type: 'href', addr: '/logout'}}
-                ]
-            }
-            ]
-        },
-        'proprietor.owner': {
-            left: [{
+            'admin': {
+                left: [{
                     label: 'Users',
                     id: 'users',
                     items: [{label: "Manage Users", link: {type: 'ui-sref', addr: 'admin.manageUsers'}},
                         {label: "Add User", link: {type: 'ui-sref', addr: 'admin.addUser'}}
                     ]
-                },
-                {
+                }, {
                     label: "Devices", //might need to be modified
                     id: "devices",
                     items: [{label: "Manage Devices", link: {type: 'ui-sref', addr: 'admin.manageDevices'}},
                         {label: "Add Device", link: {type: 'ui-sref', addr: 'device.addDevice'}},
                     ]
                 },
-                {
-                    label: "Venues",
-                    id: "venues",
-                    items: [
-                        {label: "Manage Venues", link: {type: 'ui-sref', addr: 'admin.manageVenues'}},
-                        {label: "Add Venue", link: {type: 'ui-sref', addr: 'venue.addVenue'}}
+                    {
+                        label: "Organization",
+                        id: "organization",
+                        items: [{label: "organization", link: {type: 'ui-sref', addr: 'organization.manageOrganization'}}]
+                    }
+                ],
+                right: [{
+                    label: 'Account',
+                    id: 'account',
+                    items: [{label: "Edit My Account", link: {type: 'ui-sref', addr: 'user.editUser'}},
+                        {label: "Logout", link: {type: 'href', addr: '/logout'}}
                     ]
-                },
-                {
-                    label: "Organization",
-                    id: "organization",
-                    items: [{label: "organization", link: {type: 'ui-sref', addr: 'organization.manageOrganization'}}]
                 }
-            ],
-            right: [{
-                label: 'Account',
-                id: 'account',
-                items: [{label: "Edit My Account", link: {type: 'ui-sref', addr: 'user.editUser'}},
-                    {label: "Logout", link: {type: 'href', addr: '/logout'}}
-                ]
-            }
-            ]
-        },
-        'proprietor.manager': {
-            left: [{
-                label: 'Users',
-                id: 'users',
-                items: [{label: "Manage Users", link: {type: 'ui-sref', addr: 'admin.manageUsers'}},
-                    {label: "Add User", link: {type: 'ui-sref', addr: 'admin.addUser'}}
-                ]
-            }, {
-                label: "Devices", //might need to be modified
-                id: "devices",
-                items: [{label: "Manage Devices", link: {type: 'ui-sref', addr: 'admin.manageDevices'}},
-                    {label: "Add Device", link: {type: 'ui-sref', addr: 'device.addDevice'}},
                 ]
             },
-                {
-                    label: "Organization",
-                    id: "organization",
-                    items: [{label: "organization", link: {type: 'ui-sref', addr: 'organization.manageOrganization'}}]
-                }
-            ],
-            right: [{
-                label: 'Account',
-                id: 'account',
-                items: [{label: "Edit My Account", link: {type: 'ui-sref', addr: 'user.editUser'}},
-                    {label: "Logout", link: {type: 'href', addr: '/logout'}}
-                ]
-            }
-            ]
-        },
-        'user': {
-            left: [
-                {
-                    label: 'Me',
-                    id: "user",
-                    items: [{
-                        label: 'me', link: {type: 'ui-sref', addr: 'user.editUser'}
-                    }
+            'proprietor.owner': {
+                left: [{
+                    label: 'Users',
+                    id: 'users',
+                    items: [{label: "Manage Users", link: {type: 'ui-sref', addr: 'admin.manageUsers'}},
+                        {label: "Add User", link: {type: 'ui-sref', addr: 'admin.addUser'}}
                     ]
-                },
-                {
-                    label: 'Link2',
-                    id: "link2",
-                    items: [{
-                        label: 'Link2', link: {type: 'href', addr: '#'}
-                    }]
-                }],
-            right: [{
-                label: 'Account',
-                id: 'account3',
-                items: [{
-                    label: "Edit My Account",
-                    link: {type: 'ui-sref', addr: 'user.editUser'}
                 },
                     {
-                        label: "Logout", link: {type: 'href', addr: '/logout'}
+                        label: "Devices", //might need to be modified
+                        id: "devices",
+                        items: [{label: "Manage Devices", link: {type: 'ui-sref', addr: 'admin.manageDevices'}},
+                            {label: "Add Device", link: {type: 'ui-sref', addr: 'device.addDevice'}},
+                        ]
+                    },
+                    {
+                        label: "Venues",
+                        id: "venues",
+                        items: [
+                            {label: "Manage Venues", link: {type: 'ui-sref', addr: 'admin.manageVenues'}},
+                            {label: "Add Venue", link: {type: 'ui-sref', addr: 'venue.addVenue'}}
+                        ]
+                    },
+                    {
+                        label: "Organization",
+                        id: "organization",
+                        items: [{label: "organization", link: {type: 'ui-sref', addr: 'organization.manageOrganization'}}]
                     }
-                ]
-            }]
-        },
-        'example': { //examples for types of tabs
-            left: [
-                {
-                    label: 'Link1', //duplicate single link
-                    id: "link1",
-                    items: [{
-                        label: 'Link1', link: {type: 'href', addr: '#'}
-                    }
+                ],
+                right: [{
+                    label: 'Account',
+                    id: 'account',
+                    items: [{label: "Edit My Account", link: {type: 'ui-sref', addr: 'user.editUser'}},
+                        {label: "Logout", link: {type: 'href', addr: '/logout'}}
                     ]
-                },
-
-                {
-                    label: 'Single Link',
-                    id: 'singleLink', //must have a one word id for bootstrap purposes
-                    items: [ //list the single item in the list
-                        {
-                            label: 'ignored key, not required', link: {type: 'href', addr: "#"}
-                        }
+                }
+                ]
+            },
+            'proprietor.manager': {
+                left: [{
+                    label: 'Users',
+                    id: 'users',
+                    items: [{label: "Manage Users", link: {type: 'ui-sref', addr: 'admin.manageUsers'}},
+                        {label: "Add User", link: {type: 'ui-sref', addr: 'admin.addUser'}}
                     ]
                 }, {
-                    label: 'Dropdown', //a dropdown with multiple links
-                    id: "dropdown",
-                    items: [
-                        {
-                            label: "Manage Users",
-                            link: {type: 'ui-sref', addr: 'admin.manageUsers'}
-                        },
-                        {
-                            label: "Add User",
-                            link: {type: 'ui-sref', addr: 'admin.addUser'}
-                        }
+                    label: "Devices", //might need to be modified
+                    id: "devices",
+                    items: [{label: "Manage Devices", link: {type: 'ui-sref', addr: 'admin.manageDevices'}},
+                        {label: "Add Device", link: {type: 'ui-sref', addr: 'device.addDevice'}},
                     ]
-                }
-            ],
-            right: [{
-                label: 'Account', //similar to above, shows no repeats and dropdown combinations
-                id: "account4", //duplicate dropdown
-                items: [{
-                    label: "Edit My Account",
-                    link: {type: 'ui-sref', addr: 'user.editUser'}
                 },
                     {
-                        label: "Logout", link: {type: 'href', addr: '/logout'}
-                    },
-                    { //for testing purposes :)
-                        label: "log me out", link: {type: 'href', addr: '/logout'}
+                        label: "Organization",
+                        id: "organization",
+                        items: [{
+                            label: "organization",
+                            link: {type: 'ui-sref', addr: 'organization.manageOrganization'}
+                        }]
                     }
+                ],
+                right: [{
+                    label: 'Account',
+                    id: 'account',
+                    items: [{label: "Edit My Account", link: {type: 'ui-sref', addr: 'user.editUser'}},
+                        {label: "Logout", link: {type: 'href', addr: '/logout'}}
+                    ]
+                }
                 ]
-            }]
+            },
+            'user': {
+                left: [
+                    {
+                        label: 'Me',
+                        id: "user",
+                        items: [{
+                            label: 'me', link: {type: 'ui-sref', addr: 'user.editUser'}
+                        }
+                        ]
+                    },
+                    {
+                        label: 'Link2',
+                        id: "link2",
+                        items: [{
+                            label: 'Link2', link: {type: 'href', addr: '#'}
+                        }]
+                    }],
+                right: [{
+                    label: 'Account',
+                    id: 'account3',
+                    items: [{
+                        label: "Edit My Account",
+                        link: {type: 'ui-sref', addr: 'user.editUser'}
+                    },
+                        {
+                            label: "Logout", link: {type: 'href', addr: '/logout'}
+                        }
+                    ]
+                }]
+            },
+            'advertiser': {
+                left: [
+                    {
+                        label: 'Advertisements',
+                        id: "ads",
+                        items: [
+                            {
+                                label: 'Manage Ads', link: {type: 'ui-sref', addr: 'advertisement.manageAdvertisements'}
+                            },
+                            {
+                                label: 'Add Ad', link: {type: 'ui-sref', addr: 'advertisement.addAdvertisement'}
+                            }
+                        ]
+                    }]
+                ,
+
+                right: [{
+                    label: 'Account',
+                    id: 'account3',
+                    items: [{
+                        label: "Edit My Account",
+                        link: {type: 'ui-sref', addr: 'user.editUser'}
+                    },
+                        {
+                            label: "Logout", link: {type: 'href', addr: '/logout'}
+                        }
+                    ]
+                }]
+            },
+            'example': { //examples for types of tabs
+                left: [
+                    {
+                        label: 'Link1', //duplicate single link
+                        id: "link1",
+                        items: [{
+                            label: 'Link1', link: {type: 'href', addr: '#'}
+                        }
+                        ]
+                    },
+
+                    {
+                        label: 'Single Link',
+                        id: 'singleLink', //must have a one word id for bootstrap purposes
+                        items: [ //list the single item in the list
+                            {
+                                label: 'ignored key, not required', link: {type: 'href', addr: "#"}
+                            }
+                        ]
+                    }, {
+                        label: 'Dropdown', //a dropdown with multiple links
+                        id: "dropdown",
+                        items: [
+                            {
+                                label: "Manage Users",
+                                link: {type: 'ui-sref', addr: 'admin.manageUsers'}
+                            },
+                            {
+                                label: "Add User",
+                                link: {type: 'ui-sref', addr: 'admin.addUser'}
+                            }
+                        ]
+                    }
+                ],
+                right: [{
+                    label: 'Account', //similar to above, shows no repeats and dropdown combinations
+                    id: "account4", //duplicate dropdown
+                    items: [{
+                        label: "Edit My Account",
+                        link: {type: 'ui-sref', addr: 'user.editUser'}
+                    },
+                        {
+                            label: "Logout", link: {type: 'href', addr: '/logout'}
+                        },
+                        { //for testing purposes :)
+                            label: "log me out", link: {type: 'href', addr: '/logout'}
+                        }
+                    ]
+                }]
+            }
         }
-    };
+        ;
 
 
     service.getMenuForRoles = function () {
@@ -224,4 +257,5 @@ app.factory('navBarService', function ($log) {
 
 
     return service;
-});
+})
+;

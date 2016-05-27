@@ -325,6 +325,13 @@ var self = module.exports.testdata = {
             password: 'pa$$word',
             roleNames: [{role: "proprietor", subRole: "owner"}],
             organizationEmail: "dr@test.com"
+        },
+        {
+            firstName: 'Advertiser',
+            lastName: 'Smith',
+            email: 'ad@test.com',
+            password: 'pa$$word',
+            roleNames: [{role: "advertiser", subRole: ""}]
         }
     ],
     venues: [

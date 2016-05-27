@@ -208,6 +208,36 @@ app.config(function ($stateProvider, $urlRouterProvider) {
             }
         })
 
+
+        .state('advertisement', {
+            url: '/advertisement',
+            templateUrl: '/uiapp/app/components/trevda/trevda.partial.html',
+            abstract: true
+        })
+
+        .state('advertisement.addAdvertisement', {
+            url: '/add-advertisement',
+            templateUrl: '/uiapp/app/components/trevda/add-trevda.partial.html',
+            data: {subTitle: "Add Advertisement"},
+            controller: 'addAdvertisementController'
+        })
+
+        .state('advertisement.manageAdvertisements', {
+            url: '/manage-advertisements',
+            templateUrl: '/uiapp/app/components/trevda/manage-trevda.partial.html',
+            data: {subTitle: "Manage Advertisements"},
+            controller: 'manageAdvertisementController'
+        })
+
+        .state('advertisement.editAdvertisement', {
+            url: '/edit-advertisement/:id',
+            templateUrl: '/uiapp/app/components/trevda/edit-trevda.partial.html',
+            data: {subTitle: "Edit Advertisement"},
+            controller: 'editAdvertisementController',
+            resolve: {
+                //TODO
+            }
+        })
         // =========== DASHBOARD
 
         .state('dash', {

@@ -24,7 +24,8 @@ module.exports = {
 
             var count = 0, now = Date.now();
 
-            //TODO can't this be done with a straight query?
+            //TODO can't this be done with a straight query? waterline queries 
+            //sails.js ex. = Model.find({ date: { '>': new Date('2/4/2014'), '<': new Date('2/7/2014') } })
             Media.find().then(function (data) {
                 data.forEach(function (media) {
                     media.createdAt = new Date(media.createdAt);
