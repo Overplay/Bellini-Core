@@ -15,7 +15,6 @@ module.exports = {
 
         }
 
-        sails.log.debug(req.allParams().address);
         var addressUsed = true;
 
         //TODO fix this and figure out how to prevent duplicates
@@ -42,7 +41,6 @@ module.exports = {
 
         Venue.create(newVenue)
             .then(function (v) {
-                sails.log.debug(v, "created");
                 return res.json(newVenue);
             })
             .catch(function (err) {

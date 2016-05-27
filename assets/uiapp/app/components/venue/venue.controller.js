@@ -12,12 +12,17 @@ app.controller("editVenueAdminController", function($scope, $state, $log, $sce, 
 
     $log.debug("editVenueAdminController starting");
 
-    mapURL = "https://www.google.com/maps/embed/v1/place?key=AIzaSyCrbE5uwJxaBdT7bXTGpes3F3VmQ5K9nXE&q=";
+    var mapURL = "https://www.google.com/maps/embed/v1/place?key=AIzaSyCrbE5uwJxaBdT7bXTGpes3F3VmQ5K9nXE&q=";
     $scope.regex = "\\d{5}([\\-]\\d{4})?";
     $scope.venue = venue;
     $scope.localVenue = { address: venue.address, name: venue.name};
     $scope.showMap = true;
     $scope.confirm = {checked: false};
+    $scope.states = ["AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA",
+                     "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD",
+                     "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ",
+                     "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC",
+                     "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"];
 
     addressify = function(address) {
         var newAddr = address.street + ' ';
@@ -66,6 +71,7 @@ app.controller("addVenueController", function($scope, $log, nucleus, $state, $ht
 
     $log.debug("addVenueController starting");
 
+    $scope.venue = {showInMobileAppMap: false};
     $scope.regex = "\\d{5}([\\-]\\d{4})?";
     $scope.states = ["AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA",
                      "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD",

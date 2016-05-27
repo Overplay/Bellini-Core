@@ -8,7 +8,7 @@
                         <h3>Venue Information</h3>
                     </div>
                     <div class="panel-body">
-                        <h4>Devices</h4>
+                        <h4 ng-show="venue.devices.length">Devices</h4>
                         <table class="table table-striped top15" ng-show="venue.devices.length">
                             <thead>
                             <tr>
@@ -69,17 +69,17 @@
                             </fieldset>
                             <!--There's probably a better way of making this inline-->
                             <fieldset class="form-group" ng-class="{'has-error' : !form.zip.$valid}">
-                                <div class="col-sm-5 col-sm-offset-2">
+                                <div class="col-sm-4 col-sm-offset-2">
                                     <input type="text" class="form-control" id="city" placeholder="City"
                                            ng-model="venue.address.city" required/>
                                 </div>
-                                <div class="col-sm-2">
-                                    <input type="text" class="form-control" placeholder="State"
-                                           ng-model="venue.address.state" required/>
+                                <div class="col-sm-3">
+                                    <select ng-options="state for state in states" class="form-control"
+                                            id="state" name="state" required ng-model="venue.address.state"></select>
                                 </div>
                                 <div class="col-sm-3">
                                     <input type="text" class="form-control" placeholder="ZIP Code" ng-required
-                                           ng-model="venue.address.zip" name="zip" ng-pattern="regex" />
+                                           ng-model="venue.address.zip" name="zip" ng-pattern="regex"/>
                                 </div>
                             </fieldset>
                             <fieldset class="form-group">

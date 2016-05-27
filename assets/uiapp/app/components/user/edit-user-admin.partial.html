@@ -70,7 +70,7 @@
                                     <td uib-popover-template="'uiapp/app/components/admin/address-popover.template.html'"
                                     popover-trigger="mouseenter"
                                     popover-append-to-body="true"
-                                    popover-placement="top-left">{{device.venue.name}}</td>
+                                    popover-placement="top-left"><a ui-sref="venue.manageVenue({id: device.venue.id})">{{device.venue.name}}</a></td>
                                     <td>{{device.locationWithinVenue}}</td>
                                     <td>{{device.blocked ? "YES" : "NO" }}</td>
                                     <td><a ui-sref="device.manageDevice({ id: device.id })" class="btn btn-sm btn-warning">More Info</a></td>
@@ -98,7 +98,9 @@
                                 <td uib-popover-template="'uiapp/app/components/admin/address-popover.template.html'"
                                     popover-trigger="mouseenter"
                                     popover-append-to-body="true"
-                                    popover-placement="top-left">{{device.venue.name}}</td>
+                                    popover-placement="top-left">
+                                    <a ui-sref="venue.manageVenue({id: device.venue.id})">{{device.venue.name}}</a>
+                                </td>
                                 <td>{{device.locationWithinVenue}}</td>
                                 <td>{{device.blocked ? "YES" : "NO" }}</td>
                                 <td>

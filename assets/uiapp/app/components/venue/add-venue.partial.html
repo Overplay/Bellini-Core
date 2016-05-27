@@ -28,9 +28,7 @@
                 <label for="address-state" class="col-sm-3 control-label">State</label>
                 <div class="col-sm-3">
                     <select ng-options="state for state in states" ng-model="venue.address.state" class="form-control"
-                            id="address-state" name="state" required>
-
-                    </select>
+                            id="address-state" name="state" required></select>
                 </div>
             </fieldset>
             <fieldset class="form-group" ng-class="{'has-error' : !form.zip.$valid && form.zip.$dirty}">
@@ -50,7 +48,7 @@
                 </div>
             </fieldset>
             <div class="form-actions">
-                <button type="submit" ng-disabled="form.$invalid" class="btn btn-primary btn-lg top15">
+                <button type="submit" ng-disabled="form.$invalid" class="pull-right btn btn-primary btn-lg top15">
                     Create Venue
                 </button>
             </div>
