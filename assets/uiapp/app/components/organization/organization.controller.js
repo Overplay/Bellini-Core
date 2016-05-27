@@ -7,6 +7,13 @@ app.controller("editOrganizationController", function ($scope, $log, user, $http
 
     $log.debug("editOrganizationController Starting")
 
+    $scope.states = ["AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA",
+        "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD",
+        "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ",
+        "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC",
+        "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"];
+    
+    
     $http.get("api/v1/organization/" + user.organization) //user only has access to their own org
         .then(function (data) {
             $scope.organization = data.data;

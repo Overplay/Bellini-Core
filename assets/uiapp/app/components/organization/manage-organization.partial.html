@@ -111,9 +111,11 @@
                                         <fieldset class="form-group col-sm-3">
 
                                             <label for="state">State</label> <!--TODO state dropdown?-->
-                                            <input type="text" class="form-control" id="state"
-                                                   ng-model="organizationUpdate.address.state"/>
+                                            <select ng-options="state for state in states" class="form-control"
+                                                    id="state" name="state" required
+                                                    ng-model="organizationUpdate.address.state"></select>
                                         </fieldset>
+
                                         <fieldset class="form-group col-sm-4">
 
                                             <label for="zip">Zip Code</label>
