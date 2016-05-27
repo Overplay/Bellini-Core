@@ -1,0 +1,90 @@
+<div class="row">
+    <div class="col-md-6">
+        <h2 class="n-blue-box">{{ deviceName || "Device" }}</h2>
+        <uib-tabset active="active">
+            <uib-tab heading="More Info">
+                <div class="top15" style="padding: 20px; border: 2px solid #cacaca; border-radius: 5px;">
+                    <div class="panel-heading">
+                        <h3>Device Information</h3>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-striped top15">
+                            <tr>
+                                <td>Name</td>
+                                <td ng-show="deviceName">{{deviceName}}</td>
+                                <td ng-hide="deviceName">(Device has no name)</td>
+                            </tr>
+                            <tr>
+                                <td>Venue</td>
+                                <td><a ui-sref="venue.manageVenue({id: device.venue.id})">{{device.venue.name}}</a></td>
+                            </tr>
+                            <tr>
+                                <td>Venue Address</td>
+                                <td>
+                                    <a ng-href="http://maps.google.com/?q={{addressString(device.venue.address)}}" target="_blank">
+                                        {{addressString(device.venue.address)}}
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Owner</td>
+                                <td><a ui-sref="user.editUserAdmin({ id: owner.auth })">{{owner.firstName}}
+                                    {{owner.lastName}}</a></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </uib-tab>
+            <uib-tab heading="Edit Device">
+                <div class="top15" style="padding: 20px; border: 2px solid #cacaca; border-radius: 5px;">
+                    <div class="panel-heading">
+                        <h3>Edit Device</h3>
+                    </div>
+                    <div class="panel-body">
+                        <!--Cole's Code for editing a device-->
+                        <form name="form" ng-submit="update()" role="form" ng-if="!code">
+                            <fieldset class="form-group">
+                                <label for="name">Device Name</label>
+                                <input type="text" class="form-control" id="name" placeholder="Device Name"
+                                       ng-model="device.name" required/>
+                            </fieldset>
+
+                            <fieldset class="form-group">
+                                <label for="location">Location Within Venue</label>
+                                <input type="text" class="form-control" id="location" placeholder="Location"
+                                       ng-model="device.locationWithinVenue" required/>
+                            </fieldset>
+                            <fieldset class="form-group" ng-if="owner.venues.length > 1">
+                                <label for="venue">Venue</label>
+                                <select type="text" class="form-control" id="venue"
+                                        ng-model="device.venue" required
+                                        ng-options="listAddress(venue) for venue in owner.venues track by venue.id">
+                                </select>
+                            </fieldset>
+
+                            <div class="form-actions">
+
+                                <button type="submit" ng-disabled="form.$invalid" class="btn btn-primary top15">
+                                    Update
+                                </button>
+
+
+                            </div>
+                        </form>
+                        <br>
+                        <div>
+                            <button class="btn btn-danger" ng-click="deleteDevice()" ng-disabled="!confirm.checked">
+                                Delete
+                            </button>
+                            <input type="checkbox" ng-model="confirm.checked" style="margin-left: 5px;"><span>&nbsp;Confirm delete</span>
+                        </div>
+                    </div>
+                </div>
+            </uib-tab>
+        </uib-tabset>
+        <br>
+        <a class="btn btn-primary" ui-sref="admin.manageDevices">Back to Devices</a>
+    </div>
+
+
+</div>

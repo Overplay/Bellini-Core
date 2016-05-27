@@ -1,4 +1,4 @@
-# ASAHI: A Basically Working Sails Web App Using Waterlock (Ryan's version)
+# ASAHI: A Basically Working Sails Web App Using Waterlock
 
 Waterlock is a nice start towards handing authentication for a Sails.js app, but it still requires the user do a lot
 of work such as: policies, login pages, password reset pages, etc.

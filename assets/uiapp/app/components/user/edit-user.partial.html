@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-6 col-sm-8">
         <h2 class="n-blue-box">{{ user.email }}</h2>
         <uib-tabset active="active">
             <uib-tab heading="Account Info">
@@ -35,17 +35,17 @@
                         <fieldset class="form-group">
                             <label for="fname">First Name</label>
                             <input type="text" class="form-control" id="fname" placeholder="First Name"
-                                   ng-model="user.firstName">
+                                   ng-model="userUpdate.firstName">
                         </fieldset>
                         <fieldset class="form-group">
                             <label for="lname">Last Name</label>
                             <input type="text" class="form-control" id="lname" placeholder="Last Name"
-                                   ng-model="user.lastName">
+                                   ng-model="userUpdate.lastName">
                         </fieldset>
                         <fieldset class="form-group">
                             <label for="mob">Mobile Number</label>
                             <input type="text" class="form-control" id="mob" placeholder="Mobile #"
-                                   ng-model="user.mobilePhone">
+                                   ng-model="userUpdate.mobilePhone">
                         </fieldset>
                         <button class="btn btn-default" ng-click="updateUserInfo()">Update Info</button>
 
@@ -69,14 +69,15 @@
                                        ng-model="user.newPwd2">
                             </fieldset>
                             <p>Status: {{ pwdStatus().message }}</p>
-                            <button class="btn btn-default" ng-click="changePassword()" ng-show="pwdStatus().pwdOk">Change Password</button>
+                            <button class="btn btn-default" ng-click="changePassword()" ng-show="pwdStatus().pwdOk">
+                                Change Password
+                            </button>
 
                         </form>
 
 
-
+                    </div>
                 </div>
-
             </uib-tab>
         </uib-tabset>
     </div>

@@ -16,7 +16,7 @@
 
             var service = {};
 
-            var _apiPath = '/api/v1'
+            var _apiPath = '/api/v1';
             var _authorized = false;
 
 
@@ -92,6 +92,8 @@
 
 
             service.getPasswordStatus = function( p1, p2 ) {
+                if (!p1 || !p2) //fix js errors for undefined
+                    return {pwdOk: false};
 
                 var messages = [];
 
@@ -144,6 +146,14 @@
                 var endPoint = _apiPath + '/user' + (userId ? '/' + userId : '');
                 return apiGet( endPoint );
 
+            }
+
+            service.getUserVenues = function (userId) {
+                if (!userId)
+                    throw new Error("Bad userId");
+
+                var endPoint = _apiPath + '/user/' + userId + '/venues';
+                return apiGet(endPoint);
             }
 
             service.updateUser = function ( userId, newFields ) {
@@ -217,9 +227,58 @@
                 return apiGet( endPoint );
             }
 
+            // =========== VENUES =========
+            service.getVenue = function (venueId) {
+                
+                var endPoint = _apiPath + '/venue' + (venueId ? '/' + venueId : '');
+                return apiGet(endPoint);
+            }
+
+            service.updateVenue = function (venueId, newFields) {
+
+                if (!venueId)
+                    throw new Error("Bad venueId");
 
 
+                var endPoint = _apiPath + '/venue/' + venueId;
+                return apiPut(endPoint, newFields);
 
+            }
+            
+            service.deleteVenue = function (venueId) {
+                if (!venueId)
+                    throw new Error("Bad venueId");
+
+                var endPoint = _apiPath + '/venue/' + venueId;
+                return apiDelete(endPoint);
+            }
+
+            // =========== DEVICES ======== //TODO move to controllers? 
+            service.getDevice = function (deviceId) {
+
+                var endPoint = _apiPath + '/device' + (deviceId ? '/' + deviceId : '');
+                return apiGet(endPoint);
+            } 
+            
+            service.updateDevice = function (deviceId, newFields) {
+
+                if (!deviceId)
+                    throw new Error("Bad deviceId");
+
+
+                var endPoint = _apiPath + '/device/' + deviceId;
+                return apiPut(endPoint, newFields);
+
+            }
+
+            service.deleteDevice = function (deviceId) {
+
+                if (!deviceId)
+                    throw new Error("Bad deviceId");
+
+                var endPoint = _apiPath + '/device/' + deviceId;
+                return apiDelete(endPoint);
+            }
             return service;
 
         } );

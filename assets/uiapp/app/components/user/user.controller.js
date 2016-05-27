@@ -9,6 +9,7 @@ app.controller( "editUserController", function ( $scope, $log, user, toastr, nuc
 
     $log.debug( "userController starting for userauth: " + user.id );
     $scope.user = user;
+    $scope.userUpdate = JSON.parse(JSON.stringify(user));
     $scope.user.email = user.auth.email;
     
     $scope.user.newPwd1 = '';
@@ -21,22 +22,25 @@ app.controller( "editUserController", function ( $scope, $log, user, toastr, nuc
     $scope.updateUserInfo = function () {
 
         nucleus.updateUser( user.id, {
-                lastName:    $scope.user.lastName,
-                firstName:   $scope.user.firstName,
-                mobilePhone: $scope.user.mobilePhone
+                lastName: $scope.userUpdate.lastName,
+                firstName: $scope.userUpdate.firstName,
+                mobilePhone: $scope.userUpdate.mobilePhone
             } )
-            .then( function ( res ) {
+            .then(function (u) {
                 toastr.success( "Account info updated", "Success!" );
+                $scope.user = u;
+                $scope.user.email = user.auth.email;
+                $scope.userUpdate = JSON.parse(JSON.stringify(u));
             } )
             .catch( function ( err ) {
                 toastr.error( "Something went wrong", "Damn!" );
             } );
-    }
+    };
     
     $scope.pwdStatus = function(){
     
         return nucleus.getPasswordStatus( $scope.user.newPwd1, $scope.user.newPwd2 );
-    }
+    };
 
     $scope.changePassword = function(){
 
@@ -56,12 +60,38 @@ app.controller( "editUserController", function ( $scope, $log, user, toastr, nuc
  * Created by mkahn on 4/8/16.
  */
 
-app.controller( "editUserAdminController", function ( $scope, $state, $log, user, roles, toastr, uibHelper, nucleus ) {
+app.controller("editUserAdminController", function ($scope, $http, $state, $log, user, roles, toastr, uibHelper, nucleus) {
 
     $log.debug( "editUserAdminController starting for userauth: " + user.id );
     $scope.user = user;
+    $scope.userUpdate = JSON.parse(JSON.stringify(user));
     $scope.user.newPwd = "";
+    $scope.confirm = {checked: false};
 
+    //returns devices.owned and devices.managed
+
+    $http.get('/user/getDevices/' + $scope.user.id)
+        .then(function (data) {
+            var devices = data.data;
+            user.ownedDevices = _.filter(devices.owned, {regCode: ''});
+            user.managedDevices = _.filter(devices.managed, {regCode: ''});
+
+            _.forEach(_.union(user.ownedDevices, user.managedDevices), function (dev) {
+                $http.get('api/v1/venue/' + dev.venue)
+                    .then(function (data) {
+                        dev.venue = data.data;
+                    })
+                    .catch(function (err) {
+                        toastr.error("Venue not found", "Damn!");
+                    });
+            })
+
+        })
+        .catch(function (err) {
+            toastr.error(err, "Damn! Really not good");
+        });
+
+    $scope.proprietor = user.user.roleTypes.indexOf("proprietor.owner") > -1 || user.user.roleTypes.indexOf("proprietor.manager") > -1;
 
     $scope.roles = roles;
     $scope.roles = _.map( $scope.roles, function ( element ) {
@@ -80,7 +110,7 @@ app.controller( "editUserAdminController", function ( $scope, $state, $log, user
         // add field selected to every item that is selected
         _.find( $scope.roles, query ).selected = true;
 
-    } )
+    });
         
 
     function updateUser( modelChanges ) {
@@ -89,6 +119,7 @@ app.controller( "editUserAdminController", function ( $scope, $state, $log, user
             .then( function ( u ) {
                 toastr.success( "Account info updated", "Success!" );
                 $scope.user.user = u;
+                $scope.userUpdate.user = JSON.parse(JSON.stringify(u));
             } )
             .catch( function ( err ) {
                 toastr.error( "Something went wrong", "Damn!" );
@@ -100,12 +131,12 @@ app.controller( "editUserAdminController", function ( $scope, $state, $log, user
 
         updateUser(
             {
-                lastName:    $scope.user.user.lastName,
-                firstName:   $scope.user.user.firstName,
-                mobilePhone: $scope.user.user.mobilePhone
+                lastName: $scope.userUpdate.user.lastName,
+                firstName: $scope.userUpdate.user.firstName,
+                mobilePhone: $scope.userUpdate.user.mobilePhone
             } );
 
-    }
+    };
 
     $scope.adminPwdChange = function () {
 
@@ -117,7 +148,7 @@ app.controller( "editUserAdminController", function ( $scope, $state, $log, user
                 toastr.error( "Code: " + err.status, "Problem Changing Password" );
             } )
 
-    }
+    };
 
     $scope.adminAuthLevelChange = function () {
 
@@ -135,7 +166,7 @@ app.controller( "editUserAdminController", function ( $scope, $state, $log, user
                 roles: newRoles
             } );
 
-    }
+    };
 
 
     $scope.updateBlockedState = function () {
@@ -145,7 +176,7 @@ app.controller( "editUserAdminController", function ( $scope, $state, $log, user
                 blocked: $scope.user.user.blocked
             } );
 
-    }
+    };
 
     $scope.deleteUser = function () {
         uibHelper.confirmModal( "Delete User?", "Are you sure you want to delete user " + $scope.user.email, true )
@@ -164,7 +195,10 @@ app.controller( "editUserAdminController", function ( $scope, $state, $log, user
                     
                 }
 
-            } )
+                },
+                function (rejected) {
+                    $scope.confirm.checked = false;
+                })
 
 
     }

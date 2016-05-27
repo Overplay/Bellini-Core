@@ -47,23 +47,90 @@
 
                     </div>
             </uib-tab>
+            <uib-tab heading="Devices" ng-show="proprietor">
+                <div class="top15" style="padding: 20px; border: 2px solid #cacaca; border-radius: 5px;">
+                    <div class="panel-heading" ng-show="user.ownedDevices.length">
+                        <h3>Owned Devices ({{user.ownedDevices.length}})</h3>
+                    </div>
+
+                    <div class="panel-body" ng-show="user.ownedDevices.length">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Venue</td>
+                                    <td>Location in Venue</td>
+                                    <td>Blocked</td>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="device in user.ownedDevices">
+                                    <td>{{device.name}}</td>
+                                    <td uib-popover-template="'uiapp/app/components/admin/address-popover.template.html'"
+                                    popover-trigger="mouseenter"
+                                    popover-append-to-body="true"
+                                    popover-placement="top-left"><a ui-sref="venue.manageVenue({id: device.venue.id})">{{device.venue.name}}</a></td>
+                                    <td>{{device.locationWithinVenue}}</td>
+                                    <td>{{device.blocked ? "YES" : "NO" }}</td>
+                                    <td><a ui-sref="device.manageDevice({ id: device.id })" class="btn btn-sm btn-warning">More Info</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="panel-heading" ng-show="user.managedDevices.length">
+                        <h3>Managed Devices ({{user.managedDevices.length}})</h3>
+                    </div>
+                    <div class="panel-body" ng-show="user.managedDevices.length">
+                        <table class="table table-striped top15">
+                            <thead>
+                            <tr>
+                                <td>Name</td>
+                                <td>Venue</td>
+                                <td>Location in Venue</td>
+                                <td>Blocked</td>
+
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="device in user.managedDevices">
+                                <td>{{device.name}}</td>
+                                <td uib-popover-template="'uiapp/app/components/admin/address-popover.template.html'"
+                                    popover-trigger="mouseenter"
+                                    popover-append-to-body="true"
+                                    popover-placement="top-left">
+                                    <a ui-sref="venue.manageVenue({id: device.venue.id})">{{device.venue.name}}</a>
+                                </td>
+                                <td>{{device.locationWithinVenue}}</td>
+                                <td>{{device.blocked ? "YES" : "NO" }}</td>
+                                <td>
+                                    <a ui-sref="device.manageDevice({ id: device.id })" class="btn btn-sm btn-warning">
+                                        More Info
+                                    </a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </uib-tab>
             <uib-tab heading="Edit Account Info">
                 <div class="top15" style="padding: 20px; border: 2px solid #cacaca; border-radius: 5px;">
                     <form>
                         <fieldset class="form-group">
                             <label for="fname">First Name</label>
                             <input type="text" class="form-control" id="fname" placeholder="First Name"
-                                   ng-model="user.user.firstName">
+                                   ng-model="userUpdate.user.firstName">
                         </fieldset>
                         <fieldset class="form-group">
                             <label for="lname">Last Name</label>
                             <input type="text" class="form-control" id="lname" placeholder="Last Name"
-                                   ng-model="user.user.lastName">
+                                   ng-model="userUpdate.user.lastName">
                         </fieldset>
                         <fieldset class="form-group">
                             <label for="mob">Mobile Number</label>
                             <input type="text" class="form-control" id="mob" placeholder="Mobile #"
-                                   ng-model="user.user.mobilePhone">
+                                   ng-model="userUpdate.user.mobilePhone">
                         </fieldset>
                         <button class="btn btn-default" ng-click="updateUserInfo()">Update Info</button>
                         <hr>
@@ -82,7 +149,7 @@
                         </button>
                         <hr>
                         <p class="top15"><strong>Enable/Disable Account</strong></p>
-                        <p>User us currently {{ user.user.blocked?"BLOCKED":"ENABLED" }}.</p>
+                        <p>User is currently {{ user.user.blocked?"BLOCKED":"ENABLED" }}.</p>
                         <button type="button" class="btn"
                                 ng-class="{ 'btn-primary' : user.user.blocked, 'btn-danger': !user.user.blocked}"
                                 ng-model="user.user.blocked" uib-btn-checkbox ng-click="updateBlockedState()">
@@ -90,10 +157,10 @@
                         </button>
                         <hr>
                         <p class="top15"><strong>Delete Account</strong></p>
-                        <button class="btn btn-danger" ng-click="deleteUser()" ng-disabled="!enableDeleteCB">
+                        <button class="btn btn-danger" ng-click="deleteUser()" ng-disabled="!confirm.checked">
                             DELETE
                         </button>
-                        <input type="checkbox" ng-model="enableDeleteCB" style="margin-left: 5px;"><span>&nbsp;Confirm delete</span>
+                        <input type="checkbox" ng-model="confirm.checked" style="margin-left: 5px;"><span>&nbsp;Confirm delete</span>
 
 
 
@@ -102,6 +169,8 @@
                 </div>
             </uib-tab>
         </uib-tabset>
+        <br>
+        <a class="btn btn-primary" ui-sref="admin.manageUsers">Back to Users</a>
     </div>
 
 

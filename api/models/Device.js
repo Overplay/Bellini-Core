@@ -55,12 +55,16 @@ module.exports = {
         regCode: {
             type: 'string',
             defaultsTo: ''
-        
         },
         
         // for now, can only be owned by one proprietor.owner
         deviceOwner: {
             model: 'User'
+        },
+
+        deviceManagers: {
+            collection: 'User',
+            via: 'managedDevices'
         },
 
         // Located at this venue
@@ -71,8 +75,18 @@ module.exports = {
         deviceBackup: {
             type: 'json',
             defaultsTo: {}
+        },
+
+
+        toJSON: function () {
+            var obj = this.toObject();
+            if (!sails.config.policies.wideOpen) {
+                delete obj.regCode;
+                //TODO other things to hide? 
+            }
+
+            return obj;
         }
-        
 
     }
 };

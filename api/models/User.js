@@ -82,7 +82,7 @@ module.exports = {
             defaultsTo: []
         },
 
-        devices: {
+        ownedDevices: {
             collection: 'Device',
             via: 'deviceOwner'
         },
@@ -90,6 +90,15 @@ module.exports = {
         venues: {
             collection: 'Venue',
             via: 'venueOwner'
+        },
+
+        managedDevices: {
+            collection: 'Device',
+            via: 'deviceManagers'
+        },
+
+        organization: { //only for proprietors 
+            model: 'Organization'
         },
 
 

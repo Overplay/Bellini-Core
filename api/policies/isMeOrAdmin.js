@@ -16,7 +16,14 @@ module.exports = function ( req, res, next ) {
 
     // This policy needs to work for  /auth/ and  /user/ but the
     // test is different depending on which.
+
     
+    if (sails.config.policies.wideOpen) {
+        sails.log.debug("In wideOpen policy mode, so skipping this policy!");
+        return next();
+    }
+
+
     if ( RoleCacheService.hasAdminRole( req.session.user.roles ) )
         return next();
 
