@@ -15,7 +15,7 @@ app.controller("editVenueAdminController", function($scope, $state, $log, $sce, 
     var mapURL = "https://www.google.com/maps/embed/v1/place?key=AIzaSyCrbE5uwJxaBdT7bXTGpes3F3VmQ5K9nXE&q=";
     $scope.regex = "\\d{5}([\\-]\\d{4})?";
     $scope.venue = venue;
-    $scope.localVenue = { address: venue.address, name: venue.name};
+    $scope.updateVenue = JSON.parse(JSON.stringify(venue));
     $scope.showMap = true;
     $scope.confirm = {checked: false};
     $scope.states = ["AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA",
@@ -34,12 +34,12 @@ app.controller("editVenueAdminController", function($scope, $state, $log, $sce, 
     $scope.mapLink = mapURL + window.encodeURIComponent(addressify(venue.address));
 
     $scope.update = function () {
-        nucleus.updateVenue($scope.venue.id, $scope.venue)
+        nucleus.updateVenue($scope.venue.id, $scope.updateVenue)
             .then(function (d) {
                 toastr.success("Venue info updated", "Success!");
-                $scope.localVenue.name = d.name;
-                $scope.localVenue.address = d.address;
-                $scope.mapLink = mapURL + window.encodeURIComponent(addressify(venue.address));
+                $scope.venue = d;
+                $scope.updateVenue = JSON.parse(JSON.stringify(d));
+                $scope.mapLink = mapURL + window.encodeURIComponent(addressify(d.address));
             })
             .catch(function (err) {
                 toastr.error("Something went wrong", "Damn!");

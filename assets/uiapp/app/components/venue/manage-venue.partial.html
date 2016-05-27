@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-lg-6 col-lg-offset-3 col-sm-10 col-sm-offset-1">
-        <h2 class="n-blue-box">{{ localVenue.name }}</h2>
+        <h2 class="n-blue-box">{{ venue.name }}</h2>
         <uib-tabset active="active">
             <uib-tab heading="More Info">
                 <div class="top15" style="padding: 20px; border: 2px solid #cacaca; border-radius: 5px;">
@@ -27,8 +27,8 @@
                         </table>
                         <h4>Address</h4>
                         <div class="col-md-4">
-                            <p>{{localVenue.address.street}}</p>
-                            <p>{{localVenue.address.city}}, {{localVenue.address.state}} {{localVenue.address.zip}}</p>
+                            <p>{{venue.address.street}}</p>
+                            <p>{{venue.address.city}}, {{venue.address.state}} {{venue.address.zip}}</p>
                         </div>
                         <div class="col-md-8">
                             <a ng-click="showMap = !showMap" class="btn btn-info btn-sm" style="margin-bottom: 15px">
@@ -57,29 +57,30 @@
                                 <label for="name" class="col-sm-2 control-label">Venue Name</label>
                                 <div class="col-sm-10">
                                     <input type="text" class="form-control" id="name" placeholder="Venue Name"
-                                           ng-model="venue.name" required/>
+                                           ng-model="updateVenue.name" required/>
                                 </div>
                             </fieldset>
                             <fieldset class="form-group">
                                 <label for="street" class="col-sm-2 control-label">Address</label>
                                 <div class="col-sm-10">
                                     <input type="text" class="form-control" id="street" placeholder="Street"
-                                           ng-model="venue.address.street" required/>
+                                           ng-model="updateVenue.address.street" required/>
                                 </div>
                             </fieldset>
                             <!--There's probably a better way of making this inline-->
                             <fieldset class="form-group" ng-class="{'has-error' : !form.zip.$valid}">
                                 <div class="col-sm-4 col-sm-offset-2">
                                     <input type="text" class="form-control" id="city" placeholder="City"
-                                           ng-model="venue.address.city" required/>
+                                           ng-model="updateVenue.address.city" required/>
                                 </div>
                                 <div class="col-sm-3">
                                     <select ng-options="state for state in states" class="form-control"
-                                            id="state" name="state" required ng-model="venue.address.state"></select>
+                                            id="state" name="state" required
+                                            ng-model="updateVenue.address.state"></select>
                                 </div>
                                 <div class="col-sm-3">
                                     <input type="text" class="form-control" placeholder="ZIP Code" ng-required
-                                           ng-model="venue.address.zip" name="zip" ng-pattern="regex"/>
+                                           ng-model="updateVenue.address.zip" name="zip" ng-pattern="regex"/>
                                 </div>
                             </fieldset>
                             <fieldset class="form-group">
