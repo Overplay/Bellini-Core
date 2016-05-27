@@ -104,5 +104,12 @@ app.controller("editDeviceAdminController", function ($scope, $state, $log, devi
         return addr;
     }
 
+    $scope.addressString = function (address) {
+        var addr = address.street + ' ';
+        addr += address.city + ', ';
+        addr += address.state + ' ';
+        addr += address.zip;
+        return addr;
+    }
 
 });

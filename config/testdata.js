@@ -301,17 +301,15 @@ var self = module.exports.testdata = {
             lastName: 'Plaskett',
             email: 'lon@test.com',
             password: 'pa$$word',
-            roleNames: [{role: "user", subRole: ""}],
-
+            roleNames: [{role: "user", subRole: ""}]
         },
         {
             firstName: 'Annegret',
             lastName: 'Henderson',
             email: 'annegret@test.com',
             password: 'pa$$word',
-            roleNames: [{role: "proprietor", subRole: "manager"}, {role: "user", subRole: ""}],
-
-
+            roleNames: [{role: "proprietor", subRole: "manager"}, {role: "user", subRole: ""}]
+            
         },
         {
             firstName: 'Henderson',
@@ -332,39 +330,39 @@ var self = module.exports.testdata = {
     venues: [
         {
             name: "John's Burgers",
-            address: {street: "123 Main St.", city: "Cupertino", state: "CA", zip: 95014},
+            address: {street: "123 Main St.", city: "Cupertino", state: "CA", zip: "95014"},
             ownerEmail: "john@test.com"
         },
         {
             name: "John's Burgers",
-            address: {street: "123 Leff St.", city: "Cupertino", state: "CA", zip: 95014},
+            address: {street: "123 Leff St.", city: "Cupertino", state: "CA", zip: "95014"},
             ownerEmail: "john@test.com"
         },
         {
             name: "Corner Pub",
-            address: {street: "456 First St.", city: "Boulder", state: "CO", zip: 80305},
+            address: { street: "1165 13th St.", city: "Boulder", state: "CO", zip: "80302" },
             ownerEmail: "vogel@test.com"
         },
         {
             name: "BBQ 'n Beer",
-            address: {street: "1123 Central Ave.", city: "New York City", state: "NY", zip: 10001},
+            address: {street: "40 E 4th St", city: "New York", state: "NY", zip: "10003"},
             ownerEmail: "ryan@test.com"
         },
         {
             name: "New Chicago",
-            address: {street: "404 Hidden St.", city: "San Luis Obispo", state: "CA", zip: 93405},
+            address: {street: "404 Hidden St.", city: "San Luis Obispo", state: "CA", zip: "93405"},
             ownerEmail: "elizabeth@test.com",
             organizationEmail: "dr@test.com"
         },
         {
             name: "Old Chicago",
-            address: {street: "404 Not Found St.", city: "Acton", state: "MA", zip: 01720},
+            address: {street: "404 Not Found St.", city: "Acton", state: "MA", zip: "01720"},
             ownerEmail: "elizabeth@test.com",
             organizationEmail: "dr@test.com"
         },
         {
             name: "VJ's",
-            address: {street: "12 Hanover Dr.", city: "Cupertino", state: "CA", zip: 95014},
+            address: {street: "12 Hanover Dr.", city: "Cupertino", state: "CA", zip: "95014"},
             ownerEmail: "carina@test.com"
         }
     ],
@@ -446,7 +444,7 @@ var self = module.exports.testdata = {
             name: "Delicious Restaurants",
             email: "dr@test.com",
             websiteUrl: "www.dr.com",
-            address: {street: "204 California Blvd.", city: "San Luis Obispo", state: "CA", zip: 93405},
+            address: {street: "204 California Blvd.", city: "San Luis Obispo", state: "CA", zip: "93405"},
             phone: 1234567890
 
         }

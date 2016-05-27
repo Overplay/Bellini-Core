@@ -55,7 +55,6 @@ module.exports = {
         regCode: {
             type: 'string',
             defaultsTo: ''
-        
         },
         
         // for now, can only be owned by one proprietor.owner

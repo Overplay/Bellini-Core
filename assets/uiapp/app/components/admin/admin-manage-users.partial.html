@@ -13,9 +13,9 @@
     </thead>
     <tbody>
     <tr ng-repeat="user in users">
-        <td>{{ user.email }}</td>
         <td>{{  user.user.firstName }}</td>
         <td>{{ user.user.lastName }}</td>
+        <td>{{ user.email }}</td>
         <td>{{ user.createdAt | date }}</td>
         <td><span ng-repeat="t in user.user.roleTypes">{{t}}<br></span></td>
         <td><a ui-sref="user.editUserAdmin({ id: user.id })" class="btn btn-sm btn-warning">EDIT</a></td>
