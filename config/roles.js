@@ -6,6 +6,7 @@ module.exports.roles = {
         { roleName: "admin", subRole: "" },
         { roleName: "user",  subRole: "" },
         { roleName: "proprietor", subRole: "owner"},
-        { roleName: "proprietor", subRole: "manager" }
+        {roleName: "proprietor", subRole: "manager"},
+        {roleName: "advertiser", subRole: ""}
         ]
 };
