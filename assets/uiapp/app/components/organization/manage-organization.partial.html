@@ -16,7 +16,7 @@
                             </tr>
                             <tr>
                                 <td>Email</td>
-                                <td>{{organization.email}}</td>
+                                <td><a href="mailto:{{organization.email}}">{{organization.email}}</a></td>
                             </tr>
                             <tr>
                                 <td>Phone</td>
@@ -24,7 +24,7 @@
                             </tr>
                             <tr>
                                 <td>Website URL</td>
-                                <td>{{organization.websiteUrl}}</td>
+                                <td><a href="http://{{organization.websiteUrl}}">{{organization.websiteUrl}}</a></td>
                             </tr>
                             <tr>
                                 <td>Address</td>
@@ -41,29 +41,29 @@
                                 <th>Venues</th>
                                 <th></th>
                             </tr>
-                            <tr ng-repeat="venue in organization.venues">
+                            <tr ng-repeat="venue in organization.venues"> <!-- TODO make scrollable-->
                                 <td></td>
-                                <td> <!--TODO venue route!!! -->
-                                    <a ui-sref="venue.editVenueAdmin({ id: venue.id })">
+                                <td>
+                                    <a ui-sref="venue.manageVenue({ id: venue.id })">
                                         {{venue.name}}</a>
                                 </td>
                             </tr>
-                            <tr>
+                            <!--<tr>
                                 <th>Proprietors</th>
                                 <th></th>
                             </tr>
-                            <tr ng-repeat="prop in organization.organizationProprietors">
+                            <!--<tr ng-repeat="prop in organization.organizationProprietors">
                                 <td></td>
                                 <td>
                                     <!--//TODO proprietor.owner etc will not be able to admin edit other users -
                                      decide who this should show for
-                                     -->
+
                                     <a ui-sref="user.editUserAdmin({ id: prop.auth })">{{prop.firstName}}
                                         {{prop.lastName}}</a>
                                 </td>
                             </tr>
                             </td>
-                            </tr>
+                            </tr>-->
 
                         </table>
                     </div>
@@ -116,12 +116,13 @@
                                                     ng-model="organizationUpdate.address.state"></select>
                                         </fieldset>
 
-                                        <fieldset class="form-group col-sm-4">
+                                        <fieldset class="form-group col-sm-4"
+                                                  ng-class="{'has-error' : !form.zip.$valid}">
 
                                             <label for="zip">Zip Code</label>
-                                            <input type="number" class="form-control" id="zip"
-                                                   ng-model="organizationUpdate.address.zip"
-                                            />
+                                            <input type="text" class="form-control" ng-required
+                                                   ng-model="organizationUpdate.address.zip" id="zip" name="zip"
+                                                   ng-pattern="regex"/>
                                         </fieldset>
                                     </div>
                                 </div>

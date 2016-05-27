@@ -48,14 +48,14 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 templateUrl: '/uiapp/app/components/admin/admin-manage-devices.partial.html'
             }
         )
-        
+
         .state('admin.manageVenues', {
             url: '/manage-venues',
             data: {subTitle: "Manage Venues"},
             controller: "adminManageVenuesController",
             templateUrl: '/uiapp/app/components/admin/admin-manage-venues.partial.html'
         })
-        
+
         .state('admin.addUser', {
             url: '/add-user',
             data: {subTitle: "Add User"},
@@ -97,7 +97,7 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 }
             }
         })
-        
+
         .state('venue', {
             url: '/venue',
             templateUrl: '/uiapp/app/components/venue/venue.partial.html',
@@ -122,7 +122,7 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 }
             }
         })
-        
+
         .state('device', {
             url: '/device',
             templateUrl: '/uiapp/app/components/device/device.partial.html',
@@ -193,10 +193,19 @@ app.config(function ($stateProvider, $urlRouterProvider) {
         })
 
         .state('organization.viewOrganization', {
-            url: '/view-organization/',
+            url: '/view-organization/:id',
             data: {subTitle: "View Organization"},
             controller: 'viewOrganizationController',
-            templateUrl: '/uiapp/app/components/organization/view-organization.partial.html'
+            templateUrl: '/uiapp/app/components/organization/view-organization.partial.html',
+            resolve: {
+                organization: function ($http, $stateParams) {
+
+                    $http.get("api/v1/organization/" + $stateParams.id)
+                        .then(function (data) {
+                            return data.data;
+                        })
+                }
+            }
         })
 
         // =========== DASHBOARD

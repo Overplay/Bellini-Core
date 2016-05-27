@@ -6,9 +6,6 @@
     <div class="col-md-6">
         <h2 class="n-blue-box">{{ organization.name || "Organization" }}</h2>
         <div class="top15" style="padding: 20px; border: 2px solid #cacaca; border-radius: 5px;">
-            <div class="panel-heading">
-                <h3>Organization Information</h3>
-            </div>
             <div class="panel-body">
                 <table class="table table-striped top15">
                     <tr>
@@ -18,7 +15,7 @@
                     </tr>
                     <tr>
                         <td>Email</td>
-                        <td>{{organization.email}}</td>
+                        <td><a href="mailto:{{organization.email}}">{{organization.email}}</a></td>
                     </tr>
                     <tr>
                         <td>Phone</td>
@@ -26,9 +23,31 @@
                     </tr>
                     <tr>
                         <td>Website URL</td>
-                        <td>{{organization.websiteUrl}}</td>
+                        <td><a href="http://{{organization.websiteUrl}}">{{organization.websiteUrl}}</a></td>
                     </tr>
-
+                    <tr>
+                        <td>Address</td>
+                        <td>{{organization.address.street}}</td>
+                    </tr>
+                    <tr>
+                        <td>City</td>
+                        <td>{{organization.address.city}}, {{organization.address.state}}
+                            {{organization.address.zip}}
+                        </td>
+                    </tr>
+                    <tr>
+                    <tr>
+                        <th>Venues</th>
+                        <th></th>
+                    </tr>
+                    <tr ng-repeat="venue in organization.venues">
+                        <td></td>
+                        <td> <!--todo view venue instead? -->
+                            <a ui-sref="venue.manageVenue({ id: venue.id })">
+                                {{venue.name}}</a>
+                        </td>
+                    </tr>
+                    <tr>
 
                 </table>
             </div>
