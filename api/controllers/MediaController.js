@@ -65,7 +65,8 @@ module.exports = {
 
     upload: function (req, res) {
 
-        var destinationFolder = require('path').resolve(sails.config.paths.media);
+        //TODO var destinationFolder = require('path').resolve(sails.config.paths.media);
+        var destinationFolder = require('path').resolve('data/uploads/media');
 
         var uploadOptions = {
             dirname: destinationFolder,
@@ -134,7 +135,7 @@ module.exports = {
                                       });
 
                         } else {
-                            //TODO are all these checks realy necessary?
+                            //TODO are all these checks really necessary?
                             if (_.isArray(newMedias) && (_.size(newMedias) === 0)) res.status(201).json({});
                             else if (_.isArray(newMedias) && (_.size(newMedias) === 1)) res.status(201).json(newMedias[0]);
                             else res.status(201).json(newMedias);

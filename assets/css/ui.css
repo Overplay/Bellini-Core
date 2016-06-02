@@ -1,0 +1,14 @@
+.dz {
+    width: 90%;
+    height: 100px;
+    border: 2px dashed #777777;
+    border-radius: 10px;
+    text-align: center;
+    line-height: 100px;
+    background-color: #d3d3d3;
+    margin: auto;
+}
+
+.navbar {
+    border-radius: 0;
+}

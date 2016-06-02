@@ -8,12 +8,19 @@
 module.exports = {
 
     attributes: {
+        name: {
+            type: 'string'
+        },
         creator: {
-            type: 'User'
+            model: 'User'
         },
-        media: {
-            type: 'Media'
+        media: { //TODO might be array at some point 
+            collection: 'Media',
+            via: 'advertisement'
         },
+        marr: {
+            type: 'array'
+        }
 
 
     }

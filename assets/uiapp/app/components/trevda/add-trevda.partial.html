@@ -1,6 +1,52 @@
-<div>
+<div class="row">
+    <div class="col-sm-6">
+        <h2>Create an Advertisement</h2>
 
-    Adding an add!!!
+        <form name="form" role="form" ng-submit="submit()">
+            <fieldset class="form-group">
+                <label for="name">Name</label>
+                <input type="text" class="form-control" id="name"
+                       ng-model="advertisement.name" required/>
+            </fieldset>
 
 
+            <div class="panel panel-default">
+                <div class="panel-heading">Add Media</div>
+                <div class="panel-body">
+                    <div class="row" ng-show="filesToUpload.length==0">
+                        <div class="dz" drag-and-drop>
+                            DROP FILES HERE (update style?)
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div ng-show="filesToUpload.length>0">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        Files to Create Media From
+                                        <i class="ionicon ion-close icon-button pull-right"
+                                           ng-click="filesToUpload.length = 0"></i>
+                                    </div>
+                                    <div class="panel-body">
+                                        <ul>
+                                            <li ng-repeat="f in filesToUpload">{{f.name}}</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-actions">
+
+                <button type="submit" ng-disabled="form.$invalid" class="btn btn-primary top15">
+                    Create
+                </button>
+
+
+            </div>
+        </form>
+    </div>
 </div>
