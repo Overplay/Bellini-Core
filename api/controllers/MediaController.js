@@ -63,6 +63,7 @@ module.exports = {
     },
 
 
+    //TODO check media type - only allow images for now
     upload: function (req, res) {
 
         //TODO var destinationFolder = require('path').resolve(sails.config.paths.media);

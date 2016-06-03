@@ -57,9 +57,9 @@ module.exports = {
             defaultsTo: {}
         },
 
-        advertisement: { //TODO remove if we switch to an array of media IDs in Ad
+        /*advertisement: { //TODO remove if we switch to an array of media IDs in Ad
             model: "Ad"
-        },
+         },*/
 
         // Associate media with a denormalized guest in case of taking headshots, etc. then experience
         // TODO: Cole, this is what I meant by denormalization. Here, we were assigning ownership of this Media

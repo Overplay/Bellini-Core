@@ -495,15 +495,18 @@ var self = module.exports.testdata = {
         {
             name: "Advertisement One!",
             creatorEmail: "ad@test.com",
+            description: "an ad"
         },
         {
             name: "Advertisement Two!",
             creatorEmail: "ad@test.com",
+            description: "anotha one"
         }
         ,
         {
             name: "Advertisement Three!",
             creatorEmail: "elizabeth@test.com",
+            description: "noooooo"
         }
     ]
 };

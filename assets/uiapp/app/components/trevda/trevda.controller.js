@@ -66,25 +66,74 @@ app.controller("editAdvertisementController", function ($scope, $log, $http, $st
             $scope.advertisement = data.data;
             $scope.advertisementUpdate = JSON.parse(JSON.stringify(data.data));
             $log.log($scope.advertisement)
-        });
+        })
+        .then(function () {
+            $http.get("ad/getMedia/" + $stateParams.id)
+                .then(function (data) {
+                    $scope.advertisement.media = data.data;
+                    $scope.advertisementUpdate.media = data.data;
 
+                    $log.log(data)
+                })
+        })
+
+    $scope.removeMedia = function (id) {
+        $log.log("remove media", id)
+        _.remove($scope.advertisementUpdate.marr, function (i) {
+            return id == i;
+        })
+        _.remove($scope.advertisementUpdate.media, function (m) {
+            return id == m.id;
+        })
+        //TODO require update click? change button?
+
+    }
+
+
+    //TODO delete and add media! 
+    $scope.filesToUpload = [];
+    //TODO remove file from files to upload method 
+
+
+    //TODO upload and create media then add it to the add before submitting
+    //TODO allow remove of media from files to upload?
+    $scope.$on('droppedFile', function (e, files) {
+        $log.log("DROPPED");
+        var l = files.length;
+        //alert(l);
+        $scope.filesToUpload = [];
+        for (var i = 0; i < l; i++) {
+            $scope.filesToUpload.push(files[i]);
+        }
+        $scope.$apply();
+    });
 
     $scope.update = function () {
-        //TODO upload media (if it changes), get id and add it to ad
-        /*$http.post("media/upload", $scope.media)
-         .then(function(media){
-         $scope.advertisement.media = media.id;
-         })*/
-        $http.put("api/v1/ad/" + $scope.advertisement.id, $scope.advertisementUpdate)
-            .then(function (data) {
-                $scope.advertisement = data.data;
-                $scope.advertisementUpdate = JSON.parse(JSON.stringify(data.data));
-                toastr.success("Advertisement info updated", "Success!");
-            })
-            .catch(function (err) {
-                toastr.error("Something went wrong", "Damn!");
-            });
-    }
-    
 
+
+        var chain = Promise.resolve();
+        $scope.filesToUpload.forEach(function (file) {
+            chain = chain.then(function () {
+                return asahiService.uploadMedia(file)
+                    .then(function (m) {
+                        $scope.advertisement.marr.push(m.data.id);
+                    })
+            })
+        })
+        chain.then(function () {
+            delete $scope.advertisement.media;
+            $http.put("api/v1/ad/" + $scope.advertisement.id, $scope.advertisementUpdate)
+                .then(function (data) {
+                    $scope.advertisement = data.data;
+                    $scope.advertisementUpdate = JSON.parse(JSON.stringify(data.data));
+                    toastr.success("Advertisement info updated", "Success!");
+                })
+                .catch(function (err) {
+                    toastr.error("Something went wrong", "Damn!");
+                })
+
+
+        })
+
+    }
 })

@@ -4,14 +4,14 @@
             <thead>
             <tr>
                 <td>Name</td>
-                <td>Media</td>
+                <td>Description</td>
                 <td></td>
             </tr>
             </thead>
             <tbody>
             <tr ng-repeat="advertisement in advertisements">
                 <td>{{advertisement.name}}</td>
-                <td>{{advertisement.media}} TODO LINK?</td>
+                <td>{{advertisement.description}}</td>
                 <td width="10%"><a ui-sref="advertisement.editAdvertisement({id: advertisement.id})"
                                    class="btn btn-sm btn-warning">More Info</a></td>
             </tr>

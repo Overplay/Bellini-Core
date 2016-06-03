@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col-sm-6">
+    <div class="col-md-6">
         <h2>Create an Advertisement</h2>
 
         <form name="form" role="form" ng-submit="submit()">
@@ -8,6 +8,11 @@
                 <input type="text" class="form-control" id="name"
                        ng-model="advertisement.name" required/>
             </fieldset>
+            <fieldset class="form-group">
+                <label for="desc">Description</label>
+                <input type="text" class="form-control" id="desc"
+                       ng-model="advertisement.description"/>
+            </fieldset>
 
 
             <div class="panel panel-default">
@@ -15,7 +20,7 @@
                 <div class="panel-body">
                     <div class="row" ng-show="filesToUpload.length==0">
                         <div class="dz" drag-and-drop>
-                            DROP FILES HERE (update style?)
+                            <p> DROP FILES HERE (update style?) </p>
                         </div>
                     </div>
                     <div class="row">

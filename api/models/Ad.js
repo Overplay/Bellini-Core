@@ -11,6 +11,9 @@ module.exports = {
         name: {
             type: 'string'
         },
+        description: {
+            type: 'string'
+        },
         creator: {
             model: 'User'
         },

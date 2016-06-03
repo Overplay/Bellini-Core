@@ -1,14 +1,20 @@
 .dz {
     width: 90%;
-    height: 100px;
+    height: 120px;
     border: 2px dashed #777777;
     border-radius: 10px;
     text-align: center;
-    line-height: 100px;
-    background-color: #d3d3d3;
+    line-height: 120px;
+    background-color: #80c369;
+
     margin: auto;
 }
 
 .navbar {
     border-radius: 0;
+}
+
+.media-prev {
+    width: 200px;
+    border: 1px solid black;
 }
