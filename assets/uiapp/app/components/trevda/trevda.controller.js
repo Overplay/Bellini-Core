@@ -1,8 +1,8 @@
 /**
  * Created by cgrigsby on 5/27/16.
+ * FILENAME DUE TO ADBLOCK
  */
 
-//FILENAME DUE TO ADBLOCK 
 
 app.controller("addAdvertisementController", function ($scope, $log, $http, $state, user, asahiService) {
     $log.debug("addAdvertisementController starting");
@@ -10,22 +10,25 @@ app.controller("addAdvertisementController", function ($scope, $log, $http, $sta
     $scope.advertisement = {creator: user};
     $scope.filesToUpload = [];
 
-    //TODO upload and create media then add it to the add before submitting
     $scope.$on('droppedFile', function (e, files) {
-        $log.log("DROPPED");
         var l = files.length;
         //alert(l);
-        $scope.filesToUpload = [];
         for (var i = 0; i < l; i++) {
             $scope.filesToUpload.push(files[i]);
         }
         $scope.$apply();
     });
 
+
+    $scope.removeUpload = function (index) {
+        $scope.filesToUpload.splice(index, 1)
+    };
+
+
+
     $scope.advertisement.marr = [];
 
     $scope.submit = function () {
-        //TODO upload media, get id and add it to ad 
 
         var chain = Promise.resolve();
         $scope.filesToUpload.forEach(function (file) {
@@ -48,6 +51,7 @@ app.controller("addAdvertisementController", function ($scope, $log, $http, $sta
 
 });
 
+//list ads for the user 
 app.controller("manageAdvertisementController", function ($scope, $log, user, $http) {
     $log.debug("manageAdvertisementController starting");
     //cant use user.advertisements because media wont be populated ?? TODO test this with media
@@ -57,72 +61,83 @@ app.controller("manageAdvertisementController", function ($scope, $log, user, $h
 
 });
 
-app.controller("editAdvertisementController", function ($scope, $log, $http, $stateParams, toastr) {
+
+app.controller("editAdvertisementController", function ($scope, $log, $http, $stateParams, toastr, asahiService) {
     $log.debug("editAdvertisementController starting");
 
+    $scope.filesToUpload = [];
 
+    //get the ad and populate media 
     $http.get("api/v1/ad/" + $stateParams.id)
         .then(function (data) {
             $scope.advertisement = data.data;
             $scope.advertisementUpdate = JSON.parse(JSON.stringify(data.data));
-            $log.log($scope.advertisement)
         })
         .then(function () {
             $http.get("ad/getMedia/" + $stateParams.id)
                 .then(function (data) {
                     $scope.advertisement.media = data.data;
                     $scope.advertisementUpdate.media = data.data;
-
-                    $log.log(data)
+                    $scope.advertisementUpdate.media.forEach(function (m) {
+                        m.remove = true;
+                    })
                 })
-        })
+        });
 
+    //toggle whether to keep or remove the media on update 
     $scope.removeMedia = function (id) {
-        $log.log("remove media", id)
         _.remove($scope.advertisementUpdate.marr, function (i) {
             return id == i;
-        })
-        _.remove($scope.advertisementUpdate.media, function (m) {
-            return id == m.id;
-        })
-        //TODO require update click? change button?
+        });
+        eval("media_" + id).classList.add("strike-media")
+        _.find($scope.advertisementUpdate.media, function (m) {
+            return m.id == id;
+        }).remove = false;
+    };
+    $scope.keepMedia = function (id) {
+        $scope.advertisementUpdate.marr.push(id);
+        eval("media_" + id).classList.remove("strike-media")
+        _.find($scope.advertisementUpdate.media, function (m) {
+            return m.id == id;
+        }).remove = true;
 
-    }
+
+    };
+
+    //remove a file that is queued to be uploaded and added to the ad 
+    $scope.removeUpload = function (index) {
+        $scope.filesToUpload.splice(index, 1)
+    };
 
 
-    //TODO delete and add media! 
-    $scope.filesToUpload = [];
-    //TODO remove file from files to upload method 
-
-
-    //TODO upload and create media then add it to the add before submitting
-    //TODO allow remove of media from files to upload?
+    //dz listener 
     $scope.$on('droppedFile', function (e, files) {
-        $log.log("DROPPED");
         var l = files.length;
         //alert(l);
-        $scope.filesToUpload = [];
         for (var i = 0; i < l; i++) {
             $scope.filesToUpload.push(files[i]);
         }
         $scope.$apply();
     });
 
+
+    //to update the advertisement 
     $scope.update = function () {
 
-
         var chain = Promise.resolve();
+        //upload necesary files
         $scope.filesToUpload.forEach(function (file) {
             chain = chain.then(function () {
                 return asahiService.uploadMedia(file)
                     .then(function (m) {
-                        $scope.advertisement.marr.push(m.data.id);
+                        $scope.advertisementUpdate.marr.push(m.data.id);
                     })
             })
-        })
-        chain.then(function () {
+        });
+        //update the ad
+        chain = chain.then(function () {
             delete $scope.advertisement.media;
-            $http.put("api/v1/ad/" + $scope.advertisement.id, $scope.advertisementUpdate)
+            return $http.put("api/v1/ad/" + $scope.advertisement.id, $scope.advertisementUpdate)
                 .then(function (data) {
                     $scope.advertisement = data.data;
                     $scope.advertisementUpdate = JSON.parse(JSON.stringify(data.data));
@@ -133,6 +148,21 @@ app.controller("editAdvertisementController", function ($scope, $log, $http, $st
                 })
 
 
+        });
+        //update the media associated with the ad
+        chain = chain.then(function () {
+            return $http.get("ad/getMedia/" + $stateParams.id)
+                .then(function (data) {
+                    $scope.advertisement.media = data.data;
+                    $scope.advertisementUpdate.media = data.data;
+                    $scope.advertisementUpdate.media.forEach(function (m) {
+                        m.remove = true;
+                    })
+                })
+        })
+        //clear the files that need to be uploaded
+        chain = chain.then(function () {
+            $scope.filesToUpload = [];
         })
 
     }

@@ -4,9 +4,6 @@
         <uib-tabset active="active">
             <uib-tab heading="More Info">
                 <div class="top15" style="padding: 20px; border: 2px solid #cacaca; border-radius: 5px;">
-                    <!--<div class="panel-heading">
-                        <h3>Organization Information</h3>
-                    </div>-->
                     <div class="panel-body">
                         <table class="table table-striped top15">
                             <tr>
@@ -23,11 +20,9 @@
                             </tr>
                             <tr ng-if="advertisement.media.length > 0" ng-repeat="media in advertisement.media">
                                 <td>{{media.updatedAt | date:'medium'}}</td>
-
-                                <!-- todo click on image and view largely with info?-->
-                                <td><img class="media-prev" ng-src="media/download/{{media.id}}"/></td>
-
-
+                                <td><a href="media/download/{{media.id}}"><img class="media-prev"
+                                                                               ng-src="media/download/{{media.id}}"/></a>
+                                </td>
                             </tr>
                         </table>
                     </div>
@@ -48,21 +43,27 @@
                                 <input type="text" class="form-control" id="desc"
                                        ng-model="advertisementUpdate.description"/>
                             </fieldset>
-                            <table class="table table-striped top15">
-                                <tr ng-if="advertisement.media.length > 0">
-                                    <td>Media</td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
+                            <table class="table  top15">
+                                <thead ng-if="advertisement.media.length > 0">
+                                <td><h3>Media</h3></td>
+                                <td></td>
+                                <td></td>
+                                </thead>
                                 <tr ng-if="advertisement.media.length > 0"
-                                    ng-repeat="media in advertisementUpdate.media">
+                                    ng-repeat="media in advertisementUpdate.media" id="media_{{media.id}}">
                                     <td>{{media.createdAt | date:'medium'}}</td>
-                                    <!-- TODO NAME MEDIA? -->
-                                    <!-- todo click on image and view largely with info?-->
-                                    <td><img class="media-prev" ng-src="media/download/{{media.id}}"/></td>
+                                    <!-- TODO ADD NAME TO MEDIA? -->
+                                    <td><a href="media/download/{{media.id}}"><img class="media-prev"
+                                                                                   ng-src="media/download/{{media.id}}"/></a>
+                                    </td>
                                     <td>
-                                        <button type="button" ng-click="removeMedia(media.id)" class="btn btn-danger">
+                                        <button type="button" ng-click="removeMedia(media.id)" class="btn btn-danger"
+                                                ng-if="media.remove">
                                             Remove
+                                        </button>
+                                        <button type="button" ng-click="keepMedia(media.id)" class="btn btn-warning"
+                                                ng-if="!media.remove">
+                                            Keep
                                         </button>
                                     </td>
 
@@ -71,24 +72,26 @@
                             <div class="panel panel-default">
                                 <div class="panel-heading">Add Media</div>
                                 <div class="panel-body">
-                                    <div class="row" ng-show="filesToUpload.length==0">
+                                    <div class="row">
                                         <div class="dz" drag-and-drop>
-                                            <p> DROP FILES HERE (update style?) </p>
+                                            <p> DROP FILES HERE </p>
                                         </div>
                                     </div>
+                                    <br>
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div ng-show="filesToUpload.length>0">
                                                 <div class="panel panel-default">
                                                     <div class="panel-heading">
                                                         Files to Create Media From
-                                                        <i class="ionicon ion-close icon-button pull-right"
-                                                           ng-click="filesToUpload.length = 0"></i>
                                                     </div>
                                                     <div class="panel-body">
                                                         <ul>
-                                                            <li ng-repeat="f in filesToUpload">{{f.name}}
-                                                                <button type="button">TODO remove X</button>
+                                                            <li ng-repeat="f in filesToUpload track by $index">
+                                                                {{f.name}}
+                                                                <button type="button" ng-click="removeUpload($index)">
+                                                                    Remove
+                                                                </button>
                                                             </li>
                                                         </ul>
                                                     </div>

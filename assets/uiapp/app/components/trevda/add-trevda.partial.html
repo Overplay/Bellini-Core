@@ -18,23 +18,24 @@
             <div class="panel panel-default">
                 <div class="panel-heading">Add Media</div>
                 <div class="panel-body">
-                    <div class="row" ng-show="filesToUpload.length==0">
+                    <div class="row">
                         <div class="dz" drag-and-drop>
-                            <p> DROP FILES HERE (update style?) </p>
+                            <p> DROP FILES HERE </p>
                         </div>
                     </div>
+                    <br>
                     <div class="row">
                         <div class="col-md-12">
                             <div ng-show="filesToUpload.length>0">
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
                                         Files to Create Media From
-                                        <i class="ionicon ion-close icon-button pull-right"
-                                           ng-click="filesToUpload.length = 0"></i>
                                     </div>
                                     <div class="panel-body">
                                         <ul>
-                                            <li ng-repeat="f in filesToUpload">{{f.name}}</li>
+                                            <li ng-repeat="f in filesToUpload track by $index">{{f.name}}
+                                                <button type="button" ng-click="removeUpload($index)">Remove</button>
+                                            </li>
                                         </ul>
                                     </div>
                                 </div>

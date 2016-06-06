@@ -17,12 +17,13 @@ module.exports = {
         creator: {
             model: 'User'
         },
-        media: { //TODO might be array at some point 
+        /* media: { //TODO might be array at some point
             collection: 'Media',
             via: 'advertisement'
-        },
+         },*/
         marr: {
-            type: 'array'
+            type: 'array',
+            defaultsTo: []
         }
 
 

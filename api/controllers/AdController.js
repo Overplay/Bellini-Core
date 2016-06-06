@@ -17,13 +17,13 @@ module.exports = {
         Ad.findOne(req.allParams().id)
             .then(function (a) {
                 var medias = [];
+
                 a.marr.forEach(function (m) {
                     chain = chain.then(function () {
                         return Media.findOne(m)
                             .then(function (media) {
                                 medias.push(media);
                             })
-
                     })
 
                 });
