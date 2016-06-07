@@ -14,6 +14,11 @@ module.exports = {
             defaultsTo: ''
         },
 
+        yelpId: {
+            type: 'string',
+            defaultsTo: ''
+        },
+
         address: {
             type: 'json'
         },

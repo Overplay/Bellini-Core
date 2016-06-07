@@ -110,5 +110,6 @@ app.controller("addVenueController", function($scope, $log, nucleus, $state, $ht
         $scope.venue.address.city = $model.location.city;
         $scope.venue.address.state = $model.location.state_code;
         $scope.venue.address.zip = $model.location.postal_code;
+        $scope.venue.yelpId = $model.id;
     }
 })
