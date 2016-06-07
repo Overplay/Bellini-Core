@@ -1,8 +1,43 @@
+<script type="text/ng-template" id="yelpSuggest.html">
+    <a>
+        <span ng-bind-html="match.label | uibTypeaheadHighlight:query"></span>
+        <span ng-bind-html="match.model.location.city"></span>
+    </a>
+</script>
+
 <div class="row">
     <div class="col-sm-6">
         <h2>Add a Venue</h2>
 
-        <form name="form" role="form" ng-submit="submit()" class="form-horizontal">
+        <div class="row">
+            <div class="col-md-2">
+                <img src="images/yelp-logo-small.png"/>
+            </div>
+            <div class="col-md-5">
+                <div class="input-group">
+                    <div class="input-group-addon">Find</div>
+                    <input type="text" ng-model="parameters.term" placeholder="Search Term" uib-typeahead="result as result.name for result in getResults($viewValue)"
+                           typeahead-loading="loadingResults" typeahead-no-results="noResults" class="form-control"
+                           typeahead-on-select="selected($item, $model, $label)"/>
+
+                </div>
+                <i ng-show="loadingResults" class="glyphicon glyphicon-refresh"></i>
+                <div ng-show="noResults">
+                    <i class="glyphicon glyphicon-remove"></i> No Results Found
+                </div>
+
+            </div>
+            <div class="col-md-5">
+                <div class="input-group">
+                    <div class="input-group-addon">Near</div>
+                    <input type="text" ng-model="parameters.location" placeholder="Location" class="form-control"/>
+                </div>
+            </div>
+        </div>
+
+        <hr/>
+
+        <form name="form" role="form" ng-submit="submit()" class="form-horizontal top15">
             <fieldset class="form-group" ng-class="{'has-error' : !form.name.$valid && form.name.$dirty}">
                 <label for="name" class="col-sm-3 control-label">Venue Name</label>
                 <div class="col-sm-9">
@@ -15,6 +50,13 @@
                 <div class="col-sm-9">
                     <input type="text" class="form-control" id="address-street" name="street" placeholder="Address"
                            ng-model="venue.address.street" required/>
+                </div>
+            </fieldset>
+            <fieldset class="form-group" ng-class="{'has-error' : !form.street2.$valid && form.street2.$dirty}">
+                <label for="address-street2" class="col-sm-3 control-label"></label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" id="address-street2" name="street2" placeholder="Address (cont)"
+                           ng-model="venue.address.street2" required/>
                 </div>
             </fieldset>
             <fieldset class="form-group" ng-class="{'has-error' : !form.city.$valid && form.city.$dirty}">

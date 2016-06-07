@@ -5,6 +5,15 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
+var Yelp = require('yelp');
+
+var yelp = new Yelp({
+    consumer_key: "BAos8_zEjNvVuptYHO8tyA",
+    consumer_secret: "lU4QHPKu7XdO-8IRIdH-1gpgWxg",
+    token: "4zCE_xN7zdbdrGgxiM-_kuFER25FWLEh",
+    token_secret: "WLHkoScUyrkJCW1WS7c_fXe_ekI"
+})
+
 module.exports = {
 	
     addVenue: function(req, res) {
@@ -45,6 +54,13 @@ module.exports = {
             })
             .catch(function (err) {
                 return res.serverError(err); //give out error (will only show error info if not in production) 
+            })
+    },
+    
+    yelpUpdate: function(req, res) {
+        yelp.search(req.allParams())
+            .then(function (data) {
+                return res.json(data);
             })
     }
 };
