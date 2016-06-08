@@ -67,7 +67,7 @@ app.controller("editVenueAdminController", function($scope, $state, $log, $sce, 
     }
 })
 
-app.controller("addVenueController", function($scope, $log, nucleus, $state, $http) {
+app.controller("addVenueController", function($scope, $log, nucleus, $state, $http, $q) {
 
     $log.debug("addVenueController starting");
 
@@ -81,12 +81,25 @@ app.controller("addVenueController", function($scope, $log, nucleus, $state, $ht
                      "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"];
 
     $scope.parameters = {
-        term: "Wings",
-        location: "San Luis Obispo",
+        term: "",
+        location: "",
         limit: 5
     };
 
     $scope.results = {};
+
+    $scope.initializeLocation = function() {
+
+        if(navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                var latLong = position.coords.latitude.toString() + "," + position.coords.longitude.toString();
+                $http.get('venue/yelpUpdate', { params: { term: "food", ll: latLong, limit: 1 }})
+                    .then( function(data) {
+                        $scope.parameters.location = data.data.businesses[0].location.city + ", " + data.data.businesses[0].location.state_code;
+                    })
+            })
+        }
+    };
 
     $scope.submit = function() {
         $http.post('venue/addVenue', $scope.venue)
