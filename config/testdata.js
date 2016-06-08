@@ -13,7 +13,7 @@ var self = module.exports.testdata = {
     eraseOldData: false,
 
     install: function () {
-        
+
         if (!self.installTestData) {
             sails.log.debug("Skipping test data installation.");
             return;
@@ -73,6 +73,39 @@ var self = module.exports.testdata = {
             })
         });
 
+        self.advertisements.forEach(function (a) {
+            var creatorEmail = a.creatorEmail;
+            delete a.creatorEmail;
+
+            chain = chain.then(function () {
+                Auth.findOne({email: creatorEmail})
+                    .then(function (u) {
+                        a.creator = u.user;
+                        return Ad.create(a)
+                            .then(function () {
+                                sails.log.debug("Ad created for " + creatorEmail);
+                            })
+                            .catch(function (err) {
+                                sails.log.debug(err)
+                            })
+                    })
+                    .catch(function (err) {
+                        sails.log.debug(err)
+                    })
+            })
+
+
+        });
+
+        chain = chain.then(function () {
+            return User.find()
+                .populate('advertisements')
+                .then(function () {
+                    sails.log.debug("Advertisements populated");
+                })
+        });
+
+
         self.venues.forEach(function (v) {
             var ownerEmail = v.ownerEmail;
             delete v.ownerEmail;
@@ -98,6 +131,7 @@ var self = module.exports.testdata = {
                             })
                     })
             })
+
         });
 
         chain = chain.then(function () {
@@ -309,7 +343,7 @@ var self = module.exports.testdata = {
             email: 'annegret@test.com',
             password: 'pa$$word',
             roleNames: [{role: "proprietor", subRole: "manager"}, {role: "user", subRole: ""}]
-            
+
         },
         {
             firstName: 'Henderson',
@@ -320,7 +354,7 @@ var self = module.exports.testdata = {
         },
         {
             firstName: 'Elizabeth',
-            lastName: 'Salas', 
+            lastName: 'Salas',
             email: 'elizabeth@test.com',
             password: 'pa$$word',
             roleNames: [{role: "proprietor", subRole: "owner"}],
@@ -347,7 +381,7 @@ var self = module.exports.testdata = {
         },
         {
             name: "Corner Pub",
-            address: { street: "1165 13th St.", city: "Boulder", state: "CO", zip: "80302" },
+            address: {street: "1165 13th St.", city: "Boulder", state: "CO", zip: "80302"},
             ownerEmail: "vogel@test.com"
         },
         {
@@ -454,6 +488,25 @@ var self = module.exports.testdata = {
             address: {street: "204 California Blvd.", city: "San Luis Obispo", state: "CA", zip: "93405"},
             phone: 1234567890
 
+        }
+    ],
+
+    advertisements: [
+        {
+            name: "Advertisement One!",
+            creatorEmail: "ad@test.com",
+            description: "an ad"
+        },
+        {
+            name: "Advertisement Two!",
+            creatorEmail: "ad@test.com",
+            description: "anotha one"
+        }
+        ,
+        {
+            name: "Advertisement Three!",
+            creatorEmail: "elizabeth@test.com",
+            description: "noooooo"
         }
     ]
 };

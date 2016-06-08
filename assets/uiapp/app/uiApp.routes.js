@@ -212,7 +212,12 @@ app.config(function ($stateProvider, $urlRouterProvider) {
         .state('advertisement', {
             url: '/advertisement',
             templateUrl: '/uiapp/app/components/trevda/trevda.partial.html',
-            abstract: true
+            abstract: true,
+            resolve: {
+                user: function (nucleus) {
+                    return nucleus.getMe();
+                }
+            }
         })
 
         .state('advertisement.addAdvertisement', {
@@ -226,7 +231,8 @@ app.config(function ($stateProvider, $urlRouterProvider) {
             url: '/manage-advertisements',
             templateUrl: '/uiapp/app/components/trevda/manage-trevda.partial.html',
             data: {subTitle: "Manage Advertisements"},
-            controller: 'manageAdvertisementController'
+            controller: 'manageAdvertisementController',
+
         })
 
         .state('advertisement.editAdvertisement', {
@@ -234,9 +240,7 @@ app.config(function ($stateProvider, $urlRouterProvider) {
             templateUrl: '/uiapp/app/components/trevda/edit-trevda.partial.html',
             data: {subTitle: "Edit Advertisement"},
             controller: 'editAdvertisementController',
-            resolve: {
-                //TODO
-            }
+
         })
         // =========== DASHBOARD
 

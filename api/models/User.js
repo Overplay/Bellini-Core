@@ -101,6 +101,10 @@ module.exports = {
             model: 'Organization'
         },
 
+        advertisements: {
+            collection: 'Ad',
+            via: 'creator'
+        },
 
         toJSON: function() {
 

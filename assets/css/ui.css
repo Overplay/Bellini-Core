@@ -1,0 +1,26 @@
+.dz {
+    width: 90%;
+    height: 100px;
+    line-height: 100px;
+    border: 2px dashed #777777;
+    border-radius: 10px;
+    text-align: center;
+
+    background-color: #80c369;
+
+    margin: auto;
+}
+
+.navbar {
+    border-radius: 0;
+}
+
+.media-prev {
+    width: 200px;
+    border: 1px solid black;
+}
+
+.strike-media {
+    text-decoration: line-through;
+    background-color: #ffb3b3;
+}

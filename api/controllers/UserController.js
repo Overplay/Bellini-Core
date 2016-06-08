@@ -94,6 +94,30 @@ module.exports = require('waterlock').actions.user({
             .catch(function (err) {
                 return res.serverError(err);
             })
+    },
+
+    getAlist: function (req, res) {
+        var id;
+
+        if (req.allParams() && req.allParams().id)
+            id = req.allParams().id;
+        else if (req.session && req.session.user.id)
+            id = req.session.user.id;
+        else
+            return res.badRequest('Not logged in and no given id')
+
+        User.findOne({id: id})
+            .populate("advertisements")
+            .then(function (user) {
+                if (user) {
+                    return res.json(user.advertisements);
+                }
+                else
+                    return res.badRequest();
+            })
+            .catch(function (err) {
+                return res.serverError(err);
+            })
     }
 
 });
