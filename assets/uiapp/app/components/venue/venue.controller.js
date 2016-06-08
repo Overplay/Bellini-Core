@@ -93,7 +93,7 @@ app.controller("addVenueController", function($scope, $log, nucleus, $state, $ht
         if(navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function (position) {
                 var latLong = position.coords.latitude.toString() + "," + position.coords.longitude.toString();
-                $http.get('venue/yelpUpdate', { params: { term: "food", ll: latLong, limit: 1 }})
+                $http.get('venue/yelpUpdate', { params: { term: "food", ll: latLong, limit: 1 }, timeout: 1500})
                     .then( function(data) {
                         $scope.parameters.location = data.data.businesses[0].location.city + ", " + data.data.businesses[0].location.state_code;
                     })
@@ -109,9 +109,8 @@ app.controller("addVenueController", function($scope, $log, nucleus, $state, $ht
     }
 
     $scope.getResults = function(val) {
-        return $http.get('venue/yelpUpdate', {params: $scope.parameters})
+        return $http.get('venue/yelpUpdate', {params: $scope.parameters, timeout: 1500})
             .then( function(data) {
-                $log.debug(data.data);
                 return data.data.businesses;
             })
     }
