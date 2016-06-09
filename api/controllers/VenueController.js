@@ -15,8 +15,8 @@ var yelp = new Yelp({
 })
 
 module.exports = {
-	
-    addVenue: function(req, res) {
+
+    addVenue: function (req, res) {
 
         //check req session and user 
         if (!req.session || !req.session.user) {
@@ -56,9 +56,16 @@ module.exports = {
                 return res.serverError(err); //give out error (will only show error info if not in production) 
             })
     },
-    
-    yelpUpdate: function(req, res) {
+
+    yelpSearch: function (req, res) {
         yelp.search(req.allParams())
+            .then(function (data) {
+                return res.json(data);
+            })
+    },
+
+    yelpBusiness: function (req, res) {
+        yelp.business(req.allParams().yelpId)
             .then(function (data) {
                 return res.json(data);
             })

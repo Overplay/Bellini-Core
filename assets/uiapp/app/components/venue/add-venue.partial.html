@@ -65,20 +65,22 @@
                 <label for="address-city" class="col-sm-3 control-label">City</label>
                 <div class="col-sm-9">
                     <input type="text" class="form-control" id="address-city" name="city" placeholder="City"
-                           ng-model="venue.address.city" required/>
+                           ng-model="venue.address.city" maxlength="2" required/>
                 </div>
             </fieldset>
             <fieldset class="form-group">
-                <label for="address-state" class="col-sm-3 control-label">State</label>
+                <label for="address-state" class="col-sm-3 control-label">State/Province</label>
                 <div class="col-sm-3">
-                    <select ng-options="state for state in states" ng-model="venue.address.state" class="form-control"
-                            id="address-state" name="state" required></select>
+                    <input type="text" class="form-control" id="address-state" name="state" placeholder="State"
+                           ng-model="venue.address.state" required/>
+                    <!--<select ng-options="state for state in states" ng-model="venue.address.state" class="form-control"-->
+                            <!--id="address-state" name="state" required></select>-->
                 </div>
             </fieldset>
             <fieldset class="form-group" ng-class="{'has-error' : !form.zip.$valid && form.zip.$dirty}">
-                <label for="address-zip" class="col-sm-3 control-label">ZIP</label>
+                <label for="address-zip" class="col-sm-3 control-label">Postal/Zip Code</label>
                 <div class="col-sm-5">
-                    <input type="text" class="form-control" id="address-zip" name="zip" placeholder="ZIP Code"
+                    <input type="text" class="form-control" id="address-zip" name="zip"
                            ng-model="venue.address.zip" ng-pattern="regex" required/>
                 </div>
             </fieldset>

@@ -2,13 +2,13 @@
  * Created by rhartzell on 5/24/16.
  */
 
-app.filter('trustAsResourceUrl', function($sce) {
-    return function(val) {
+app.filter('trustAsResourceUrl', function ($sce) {
+    return function (val) {
         return $sce.trustAsResourceUrl(val);
     };
 });
 
-app.controller("editVenueAdminController", function($scope, $state, $log, $sce, venue, toastr, nucleus, uibHelper) {
+app.controller("editVenueAdminController", function ($scope, $http, $state, $log, $sce, venue, toastr, nucleus, uibHelper) {
 
     $log.debug("editVenueAdminController starting");
 
@@ -19,12 +19,19 @@ app.controller("editVenueAdminController", function($scope, $state, $log, $sce, 
     $scope.showMap = true;
     $scope.confirm = {checked: false};
     $scope.states = ["AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA",
-                     "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD",
-                     "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ",
-                     "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC",
-                     "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"];
+        "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD",
+        "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ",
+        "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC",
+        "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"];
 
-    addressify = function(address) {
+    if ($scope.venue.yelpId) {
+        $http.get('venue/yelpBusiness', {params: {yelpId: $scope.venue.yelpId}, timeout: 1500})
+            .then(function (res) {
+                $scope.yelpProfile = res.data;
+            })
+    }
+
+    addressify = function (address) {
         var newAddr = address.street + ' ';
         newAddr += address.city + ' ';
         newAddr += address.state;
@@ -67,7 +74,7 @@ app.controller("editVenueAdminController", function($scope, $state, $log, $sce, 
     }
 })
 
-app.controller("addVenueController", function($scope, $log, nucleus, $state, $http, $q) {
+app.controller("addVenueController", function ($scope, $log, nucleus, $state, $http, $q) {
 
     $log.debug("addVenueController starting");
 
@@ -75,10 +82,10 @@ app.controller("addVenueController", function($scope, $log, nucleus, $state, $ht
     $scope.venue = {showInMobileAppMap: true, address: {}};
     $scope.regex = "\\d{5}([\\-]\\d{4})?";
     $scope.states = ["AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA",
-                     "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD",
-                     "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ",
-                     "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC",
-                     "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"];
+        "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD",
+        "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ",
+        "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC",
+        "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"];
 
     $scope.parameters = {
         term: "",
@@ -88,34 +95,34 @@ app.controller("addVenueController", function($scope, $log, nucleus, $state, $ht
 
     $scope.results = {};
 
-    $scope.initializeLocation = function() {
+    $scope.initializeLocation = function () {
 
-        if(navigator.geolocation) {
+        if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function (position) {
                 var latLong = position.coords.latitude.toString() + "," + position.coords.longitude.toString();
-                $http.get('venue/yelpUpdate', { params: { term: "food", ll: latLong, limit: 1 }, timeout: 1500})
-                    .then( function(data) {
+                $http.get('venue/yelpSearch', {params: {term: "food", ll: latLong, limit: 1}, timeout: 2000})
+                    .then(function (data) {
                         $scope.parameters.location = data.data.businesses[0].location.city + ", " + data.data.businesses[0].location.state_code;
                     })
             })
         }
     };
 
-    $scope.submit = function() {
+    $scope.submit = function () {
         $http.post('venue/addVenue', $scope.venue)
-            .then(function() {
+            .then(function () {
                 $state.go('admin.manageVenues');
             })
-    }
+    };
 
-    $scope.getResults = function(val) {
-        return $http.get('venue/yelpUpdate', {params: $scope.parameters, timeout: 1500})
-            .then( function(data) {
+    $scope.getResults = function (val) {
+        return $http.get('venue/yelpSearch', {params: $scope.parameters, timeout: 2000})
+            .then(function (data) {
                 return data.data.businesses;
             })
-    }
+    };
 
-    $scope.selected = function($item, $model, $label) {
+    $scope.selected = function ($item, $model, $label) {
         $scope.venue.name = $model.name;
         $scope.venue.address.street = $model.location.address[0];
         $scope.venue.address.street2 = "" || $model.location.address[1];
@@ -123,5 +130,5 @@ app.controller("addVenueController", function($scope, $log, nucleus, $state, $ht
         $scope.venue.address.state = $model.location.state_code;
         $scope.venue.address.zip = $model.location.postal_code;
         $scope.venue.yelpId = $model.id;
-    }
+    };
 })
