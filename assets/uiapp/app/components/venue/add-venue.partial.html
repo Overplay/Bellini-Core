@@ -9,9 +9,9 @@
 
 <div class="row">
     <div class="col-sm-6">
-        <h2>Add a Venue</h2>
+        <h2>{{ edit ? "Edit" : "Add a" }} Venue</h2>
 
-        <div class="row">
+        <div class="row" ng-if="!edit">
             <div class="col-md-2">
                 <img class="top15" src="images/yelp-logo-small.png"/>
             </div>
@@ -21,7 +21,6 @@
                     <input type="text" ng-model="parameters.term" placeholder="Search Term" uib-typeahead="result as result.name for result in getResults($viewValue)"
                            typeahead-loading="loadingResults" typeahead-no-results="noResults" class="form-control" typeahead-template-url="yelpSuggest.html"
                            typeahead-on-select="selected($item, $model, $label)" typeahead-show-hint="true"/>
-
                 </div>
                 <i ng-show="loadingResults" class="glyphicon glyphicon-refresh"></i>
                 <div ng-show="noResults">
@@ -65,14 +64,14 @@
                 <label for="address-city" class="col-sm-3 control-label">City</label>
                 <div class="col-sm-9">
                     <input type="text" class="form-control" id="address-city" name="city" placeholder="City"
-                           ng-model="venue.address.city" maxlength="2" required/>
+                           ng-model="venue.address.city" required/>
                 </div>
             </fieldset>
             <fieldset class="form-group">
                 <label for="address-state" class="col-sm-3 control-label">State/Province</label>
                 <div class="col-sm-3">
                     <input type="text" class="form-control" id="address-state" name="state" placeholder="State"
-                           ng-model="venue.address.state" required/>
+                           ng-model="venue.address.state" maxlength="2" required/>
                     <!--<select ng-options="state for state in states" ng-model="venue.address.state" class="form-control"-->
                             <!--id="address-state" name="state" required></select>-->
                 </div>
@@ -95,10 +94,18 @@
             </fieldset>
             <div class="form-actions">
                 <button type="submit" ng-disabled="form.$invalid" class="pull-right btn btn-primary btn-lg top15">
-                    Create Venue
+                    {{ edit ? "Update" : "Create" }}
                 </button>
+
             </div>
         </form>
+        <br><br><br><br><br>
+        <div class="pull-right" ng-if="edit">
+            <input type="checkbox" ng-model="confirm.checked" style="margin-left: 5px;"><span>&nbsp;Confirm delete</span>
+            <button class="btn btn-danger" ng-click="deleteVenue()" ng-disabled="!confirm.checked">
+                Delete
+            </button>
+        </div>
     </div>
 </div>
 
