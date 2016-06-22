@@ -168,8 +168,8 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             }
         } )
 
-        .state( 'venue.addvenue', {
-            url: '/addvenue',
+        .state( 'venue.new', {
+            url: '/new',
             templateUrl: '/uiapp/app/components/venue/add-venue.partial.html',
             controller: 'addVenueController'
             })

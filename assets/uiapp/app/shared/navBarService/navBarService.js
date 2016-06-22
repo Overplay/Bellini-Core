@@ -25,6 +25,18 @@ app.factory('navBarService', function ($log) {
                         label: "Organization",
                         id: "organization",
                         items: [{label: "organization", link: {type: 'ui-sref', addr: 'organization.manageOrganization'}}]
+                    },
+                    {
+                        label: "Venues",
+                        id:    "venues",
+                        items: [ {
+                            label: "List",
+                            link: { type: 'ui-sref', addr: 'venue.list' }
+                        },
+                            {
+                                label: "Add New",
+                                link:  { type: 'ui-sref', addr: 'venue.new' }
+                            } ]
                     }
                 ],
                 right: [{
