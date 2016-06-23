@@ -2,38 +2,82 @@
 
 ## Setting up a cloud server
 
+https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys--2
+
 1. `sudo apt-get update`
 
 2. `sudo apt-get upgrade`
 
 3. Make sure build-essential is installed
-    - To check use dpkg -s build-essentials
+    - To check use dpkg -s build-essential
+    - to install, use apt-get
 
-4. Make sure Node is at a proper version
+4a. Make sure Node is at a proper version
     - Node -v
-
-    Then
+        - as of 6/20, 4.4.5 is current
+4b. 'sudo npm install -g npm@latest'
+4c. Then
     - Install ‘n’ www.github.com/tj/n
-    - `sudo npm install -g n`
+    - `sudo npm istall -g n`
 
-
+(at this point, i logged off then on just to let all the apt get updates work themselves out hopefully.)
 
 5. In /opt, we will find the the MEAN app default,
 
     ##### Clone asahi into /opt
 
     `sudo git clone https://github.com/Overplay/asahi`
+        - sudo because /opt is root root 755
     - enter your github username and password
+
+    **** when sudo git clone, asahi becomes root root.
+    - i am going to change the owner to myself for now, if this works, in the future, create the asahi user here and
+        have that all set up?
+        - I am going to create asahi user / group now.
+
+    - just did npm update
+        - make: Entering directory `/opt/asahi/node_modules/sails-mongo/node_modules/mongodb/node_modules/kerberos/build'
+            CXX(target) Release/obj.target/kerberos/lib/kerberos.o
+          In file included from ../lib/kerberos.cc:1:0:
+          ../lib/kerberos.h:5:27: fatal error: gssapi/gssapi.h: No such file or directory
+           #include <gssapi/gssapi.h>
+                                     ^
+          compilation terminated.
+          make: *** [Release/obj.target/kerberos/lib/kerberos.o] Error 1
+          make: Leaving directory `/opt/asahi/node_modules/sails-mongo/node_modules/mongodb/node_modules/kerberos/build'
+          gyp ERR! build error
+          gyp ERR! stack Error: `make` failed with exit code: 2
+          gyp ERR! stack     at ChildProcess.onExit (/usr/lib/node_modules/npm/node_modules/node-gyp/lib/build.js:276:23)
+          gyp ERR! stack     at emitTwo (events.js:87:13)
+          gyp ERR! stack     at ChildProcess.emit (events.js:172:7)
+          gyp ERR! stack     at Process.ChildProcess._handle.onexit (internal/child_process.js:200:12)
+          gyp ERR! System Linux 3.13.0-85-generic
+          gyp ERR! command "/usr/bin/nodejs" "/usr/lib/node_modules/npm/node_modules/node-gyp/bin/node-gyp.js" "rebuild"
+          gyp ERR! cwd /opt/asahi/node_modules/sails-mongo/node_modules/mongodb/node_modules/kerberos
+          gyp ERR! node -v v4.4.5
+          gyp ERR! node-gyp -v v3.3.1
+          gyp ERR! not ok
+    - still did 'sudo npm install -g sails'
+
 
 6. update asahi dependencies
     - `sudo npm install -g sails`
-    - `sudo npm update`
+    //- `sudo npm update`
 
 7. add the `local.js` file to config
+    - vi and intert or whatever floats yo boat!
 
 8. run bower update in /assets for uiapp to work
-    - `sudo bower update --allow-root`
-    - TODO find the right way to do this
+    - 'bower update'
+
+
+-----------------
+at this point, the app runs properly.
+-----------------
+
+
+    // - `sudo bower update --allow-root`
+    /* - TODO find the right way to do this
         - why does
         `cgrigsby@Asahi:/opt/asahi/assets$ bower update
          /usr/lib/node_modules/bower/lib/node_modules/configstore/index.js:54
@@ -62,33 +106,136 @@
         - ls -al should show
             - username asahi for ownership now!
 
+            */
+
+
+     - BOWER IS FIXED
+
+
+
+
+~~~~~~
+next step, get asahi to be able to run everything properly
+~~~~~~~~
+        - create user, log in as them and sails lift, figure out what needs to be changed in permissions
+        - just doing this, sails runs, but npm does not update
+            - cgrigsby does though. gonna change the permissions of asahi to 775 and make the user/group asahi
+                - add cgrigsby to asahi too
+
+            ** npm had to be updated to the latest to fix some permissions stuff
+            - still some node modules were owned by cgrigsby and in cgrigsby so once they were chowned and chgrpd then
+                asahi was able to npm update
+                :)
+                - also bower update runs !
+
+
 9. Create asahi user and group
-    - `sudo useradd asahi`
+    - `sudo !!!!useradd!!!! asahi`
          - does not add a home directory
-    - havent done anthing with this yet lol
+         *EDIT* USE adduser for pm2 to run properly on asahi
+            - need the home directory
 
-10. Add your user to the asahi group
-    - sudo usermod -a -G asahi,yourusergroup username
+10. Add yourself to the asahi group
+    - sudo usermod -a -G asahi username
 
-11. chown and chgrp -R asahi /asahi
-    - didnt fix
-    -cgrigsby@Asahi:/opt/asahi$ npm update
-     npm ERR! Linux 3.13.0-85-generic
-     npm ERR! argv "/usr/bin/nodejs" "/usr/bin/npm" "update"
-     npm ERR! node v4.4.5
-     npm ERR! npm  v2.15.5
-     npm ERR! path /opt/asahi/node_modules/waterlock-facebook-auth
-     npm ERR! code EACCES
-     npm ERR! errno -13
-     npm ERR! syscall rmdir
+chmod -R 775 asahi
 
+11. chown and chgrp -R asahi asahi
+    - from now on, run npm and bower from asahi account, it will all run properly
 
-12. trying to fix npm
-   - npm config set prefix ~/npm
+12. install pm2
+    - sudo npm install -g pm2 (As your user)
+    - test run with asahi
+        - pm2 start app.js
+        works :)
 
 
-- ALSO TODO finish permisions since i have to sudo github...
+TODO finish the pull and stuff to update the app
 
+
+http://pm2.keymetrics.io/docs/tutorials/pm2-nginx-production-setup might wanna do this instead.
+13. NGINX
+    - http://devnull.guru/deployment-of-a-sane-app-part-2-adding-an-nginx-reverse-proxy/
+    -
+
+   ONCE installed
+   'server {
+       listen          80;
+       server_name     sailsjs.dev;
+
+       location / {
+           proxy_pass http://localhost:1337;
+           proxy_http_version 1.1;
+           proxy_set_header Upgrade $http_upgrade;
+           proxy_set_header Connection 'upgrade';
+           proxy_set_header Host $host;
+           proxy_cache_bypass $http_upgrade;
+       }
+   }'
+   create a file in /etc/nginx/sites-available with the above
+   sym link it to /etc/nginx/sites-enabled and remove default
+
+   add
+   '
+           upstream sails_server {
+                   server 127.0.0.1:1337;
+                   keepalive 64;
+           }
+
+
+           server {
+                   listen        80;
+                   server_name   example.com;
+
+                   location / {
+                           proxy_pass                          http://sails_server;                        proxy_http_version                  1.1;
+                           proxy_set_header  Connection        "";
+                           proxy_set_header  Host              $http_host;
+                           proxy_set_header  X-Forwarded-For   $proxy_add_x_forwarded_for;
+                           proxy_set_header  X-Real-IP         $remote_addr;
+                   }
+
+           }
+
+   '
+
+    to context in /etc/nginx/nginx.conf
+
+    test out by running
+    sudo nginx
+
+    works!
+
+
+
+
+PM2 autoreloading
+https://github.com/pm2-hive/pm2-auto-pull/blob/master/app.js
+
+http://pm2.keymetrics.io/docs/usage/deployment/
+trying to deploy remotely from my local machine
+install pm2
+
+
+
+in a directory of my choosing
+pm2 ecosystem
+set up with server ip and user and git repo
+make sure to set up ssh key for the user
+
+got the deploy setup working but
+                                Coles-MBP:deploy cole$ pm2 deploy ecosystem.json production
+                                 --> Deploying to production environment
+                                 --> on host 104.131.145.36
+                                 Not a git repository
+                                 To compare two paths outside a working tree:
+                                 usage: git diff [--no-index] <path> <path>
+
+                                   commit or stash your changes before deploying
+
+                                 Deploy failed
+
+     
 
 
 REINSTALLING NODE
@@ -227,8 +374,17 @@ REINSTALLING NODE
        npm ERR! Please include the following file with any support request:
        npm ERR!     /opt/asahi/npm-debug.log
 
-       
+
 git checkout
 fatal: Unable to create '/opt/asahi/.git/index.lock': Permission denied
 
 
+
+
+SOOO,
+
+the user asahi will be running the application, so pm2 needs to be installed on their account.
+
+Originally, i created asahi without a home directory, but pm2 relys on '/home/asahi/.pm2'
+
+soooo removed asahi and re added with home directory
