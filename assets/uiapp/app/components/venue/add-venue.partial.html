@@ -21,6 +21,7 @@
                     <input type="text" ng-model="parameters.term" placeholder="Search Term" uib-typeahead="result as result.name for result in getResults($viewValue)"
                            typeahead-loading="loadingResults" typeahead-no-results="noResults" class="form-control" typeahead-template-url="yelpSuggest.html"
                            typeahead-on-select="selected($item, $model, $label)" typeahead-show-hint="true"/>
+
                 </div>
                 <i ng-show="loadingResults" class="glyphicon glyphicon-refresh"></i>
                 <div ng-show="noResults">
@@ -96,7 +97,6 @@
                 <button type="submit" ng-disabled="form.$invalid" class="pull-right btn btn-primary btn-lg top15">
                     {{ edit ? "Update" : "Create" }}
                 </button>
-
             </div>
         </form>
         <br><br><br><br><br>

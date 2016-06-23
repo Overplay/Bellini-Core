@@ -78,6 +78,10 @@ app.controller("editVenueAdminController", function ($scope, $http, $state, $log
 app.controller("addVenueController", function ($scope, $log, nucleus, $state, $http, $q, toastr, uibHelper) {
 
     $log.debug("addVenueController starting");
+    $scope.$parent.ui.pageTitle = "Add New Venue";
+    //TODO this feels wonky...the page title and the blue bubble should be
+    //on the same object. Fix this, Ryan.
+    $scope.$parent.panelHeading.text = "";
 
     $scope.edit = false;
     $scope.yelp = {};
@@ -166,3 +170,30 @@ app.controller("addVenueController", function ($scope, $log, nucleus, $state, $h
                 })
     }
 });
+
+app.controller('listVenueController', function ( $scope, venues, $log ) {
+
+    $log.debug("loading listVenueController");
+    $scope.$parent.ui.pageTitle = "Venue List";
+    //TODO this feels wonky...the page title and the blue bubble should be
+    //on the same object. Fix this, Ryan.
+    $scope.$parent.panelHeading.text = "";
+    $scope.venues = venues;
+
+})
+
+app.controller( 'viewVenueController', function ( $scope, venue ) {
+
+    $scope.venue = venue;
+    $scope.$parent.ui.pageTitle = "Venue Overview";
+    $scope.$parent.panelHeading.text = venue.name;
+
+} )
+
+app.controller( 'editVenueController', function ( $scope, venue ) {
+
+    $scope.$parent.ui.pageTitle = "Venue Edit";
+    $scope.$parent.panelHeading.text = venue.name;
+    $scope.updateVenue = venue;
+
+} )

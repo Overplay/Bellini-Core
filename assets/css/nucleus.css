@@ -31,3 +31,34 @@
     padding: 10px;
     text-align: center;
 }
+
+.side-menu {
+    margin-top: 60px;
+    font-weight: 200;
+}
+
+.side-menu {
+    list-style-type: none;
+}
+
+.side-menu li {
+    margin-bottom: 10px;
+}
+
+.side-menu a {
+    color: #808080;
+
+
+}
+
+.side-menu a:hover {
+    color: #4f4b50;
+    text-decoration: none;
+    font-weight: 500;
+
+}
+
+.sidepad10 {
+    padding-left: 10px;
+    padding-right: 10px;
+}
