@@ -8,9 +8,7 @@
 </script>
 
 <div class="row">
-    <div class="col-sm-6">
-        <h2>{{ edit ? "Edit" : "Add a" }} Venue</h2>
-
+    <div class="col-sm-10 col-sm-offset-1">
         <div class="row" ng-if="!edit">
             <div class="col-md-2">
                 <img class="top15" src="images/yelp-logo-small.png"/>
@@ -27,7 +25,6 @@
                 <div ng-show="noResults">
                     <i class="glyphicon glyphicon-remove"></i> No Results Found
                 </div>
-
             </div>
             <div class="col-md-5">
                 <div class="input-group top15">
@@ -94,7 +91,10 @@
                 </div>
             </fieldset>
             <div class="form-actions">
-                <button type="submit" ng-disabled="form.$invalid" class="pull-right btn btn-primary btn-lg top15">
+                <button class="pull-right btn top15" style="margin-left: 10px" ui-sref="venue.list">
+                    Cancel
+                </button>
+                <button type="submit" ng-disabled="form.$invalid" class="pull-right btn btn-primary top15">
                     {{ edit ? "Update" : "Create" }}
                 </button>
             </div>

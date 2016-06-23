@@ -22,9 +22,8 @@
                        ng-model="updateVenue.address.city" required/>
             </div>
             <div class="col-sm-3">
-                <select ng-options="state for state in states" class="form-control"
-                        id="state" name="state" required
-                        ng-model="updateVenue.address.state"></select>
+                <input class="form-control" id="state" name="state" required
+                        ng-model="updateVenue.address.state">
             </div>
             <div class="col-sm-3">
                 <input type="text" class="form-control" placeholder="ZIP Code" ng-required
