@@ -171,7 +171,7 @@ app.controller("addVenueController", function ($scope, $log, nucleus, $state, $h
     }
 })
 
-app.controller('listVenueController', function ( $scope, venues, $log, $http ) {
+app.controller('listVenueController', function ( $scope, venues, $log ) {
 
     $log.debug("loading listVenueController");
     $scope.$parent.ui.pageTitle = "Venue List";
@@ -179,13 +179,8 @@ app.controller('listVenueController', function ( $scope, venues, $log, $http ) {
     //on the same object. Fix this, Ryan.
     $scope.$parent.ui.panelHeading = "";
 
-    $http.get('/user/getVenues')
-        .then(function (data) {
-            $scope.venues = data.data;
-        })
-        .catch(function (err) {
-            toastr.error("Problem getting venues", "Somethin' bad happened");
-        })
+    $scope.venues = venues;
+        
 })
 
 app.controller( 'viewVenueController', function ( $scope, venue ) {

@@ -21,6 +21,8 @@ module.exports = {
             collection: 'Media',
             via: 'advertisement'
          },*/
+         
+         //TODO, Cole: use a more descriptive name
         marr: {
             type: 'array',
             defaultsTo: []

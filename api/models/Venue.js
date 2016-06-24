@@ -23,14 +23,19 @@ module.exports = {
             type: 'json'
         },
 
-        photos: {
+        // Array of Mongo Ids of Media associated with this venue
+        imageIds: {
             type: 'array',
             defaultsTo: []
         },
-
-        logo: {
-            model: 'Media'
+        
+        // This is a denormalized way of saving the logo image. We just stash the Mongo id here instead of
+        // using relationships. We need to figure out what the right way is for this app.
+        logoId: {
+            type: 'string',
+            defaultsTo: ''
         },
+        
 
         // For determining where a user is and whether venue is shown on the Mobile app
         // finder app 
@@ -60,6 +65,12 @@ module.exports = {
         organization: {
             model: 'Organization'
         }
+    },
+
+    beforeUpdate: function( valuesToUpdate, cb ){
+        
+        sails.log.debug("In before update for venue");
+        cb();
     }
 };
 

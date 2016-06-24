@@ -163,7 +163,7 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             controller:  'listVenueController',
             templateUrl: '/uiapp/app/components/venue/venuelist.partial.html',
             resolve:     {
-                venues: function ( nucleus, $stateParams ) {
+                venues: function ( nucleus ) {
                     return nucleus.getVenue()
                 }
             }
