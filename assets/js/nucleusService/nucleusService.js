@@ -19,41 +19,36 @@
             var _apiPath = '/api/v1';
             var _authorized = false;
 
+            // Pull just the data off
+            function stripData(resp){
+                return resp.data;
+            }
 
             // This little chunk of code is used all the time, just different endpoints
             function apiGet( endPoint ) {
 
                 return $http.get( endPoint )
-                    .then( function ( resp ) {
-                        return resp.data;
-                    } );
+                    .then( stripData );
 
             }
 
             function apiPut( endPoint, params ) {
 
                 return $http.put( endPoint, params )
-                    .then( function ( resp ) {
-                        return resp.data;
-                    } );
-
+                    .then( stripData );
             }
 
             function apiPost( endPoint, params ) {
 
                 return $http.post( endPoint, params )
-                    .then( function ( resp ) {
-                        return resp.data;
-                    } );
+                    .then( stripData );
 
             }
 
             function apiDelete( endPoint ) {
 
                 return $http.delete( endPoint )
-                    .then( function ( resp ) {
-                        return resp.data;
-                    } );
+                    .then( stripData );
 
             }
 
@@ -279,6 +274,38 @@
                 var endPoint = _apiPath + '/device/' + deviceId;
                 return apiDelete(endPoint);
             }
+
+            service.mediaPath = function ( mediaId ) {
+                return '/media/download/' + mediaId;
+            }
+
+            /**
+             * Upload a media file.
+             * @param file
+             * @returns {deferred.promise|*}
+             */
+
+            service.uploadMedia = function ( file ) {
+
+                var fd = new FormData();
+                fd.append( 'file', file );
+
+                // Content-Type undefined supposedly required here, transformed elsewhere
+                return $http.post( '/media/upload', fd, {
+                    transformRequest: angular.identity,
+                    headers:          { 'Content-Type': undefined }
+                } )
+                    .then( stripData );
+
+            }
+
+            service.updateMedia = function ( mediaId, updateObject ) {
+                var endpoint = _siteOrigin + '/media/' + mediaId;
+                return $http.put( endpoint, updateObject )
+                    .then( stripData );
+            }
+
+
             return service;
 
         } );

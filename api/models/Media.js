@@ -61,13 +61,7 @@ module.exports = {
             model: "Ad"
          },*/
 
-        // Associate media with a denormalized guest in case of taking headshots, etc. then experience
-        // TODO: Cole, this is what I meant by denormalization. Here, we were assigning ownership of this Media
-        // item to a guest. We won't need to do this in Asahi, but I left it here as an example.
-        guest: {
-            type: 'json',
-            defaultsTo: {}
-        },
+        
 
 
         // Override toJSON instance method to remove path value. The path value
