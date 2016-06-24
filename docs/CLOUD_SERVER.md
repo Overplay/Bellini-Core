@@ -250,6 +250,8 @@ got the deploy setup working but
         - start or restart the server
         - change permissions and ownership on files? should be fine if just deploying with asahi user
 
+predeploy pm2 auto pull?
+
 cgrigsby@Asahi-0:/opt$ sudo chgrp -R asahi prod
 cgrigsby@Asahi-0:/opt$ sudo chmod -R 775 prod
 

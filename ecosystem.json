@@ -30,7 +30,7 @@
       ref  : "origin/master",
       repo : "git@github.com:Overplay/asahi",
       path : "/opt/prod",
-      "post-deploy" : "npm install && cd assets && bower update && cd .. && cp /home/asahi/local.js config/ && pm2 startOrRestart ecosystem.json --env production"
+      "post-deploy" : "npm install && cd assets && bower update && cd .. && cp /home/asahi/local.js config/ && pm2 startOrRestart ecosystem.json --env production && pm2 install pm2-auto-pull"
     },
     dev : {
       user : "cgrigsby",
@@ -38,7 +38,7 @@
       ref  : "origin/develop-cole",
       repo : "git@github.com:Overplay/asahi",
       path : "/opt/dev",
-      "post-deploy" : "npm install && cd assets && bower update && cd .. && cp /home/asahi/local.js config/ && pm2 startOrRestart ecosystem.json --env dev",
+      "post-deploy" : "npm install && cd assets && bower update && cd .. && cp /home/asahi/local.js config/ && pm2 startOrRestart ecosystem.json --env dev && pm2 install pm2-auto-pull",
       env  : {
         NODE_ENV: "dev"
       }
