@@ -237,7 +237,14 @@ got the deploy setup working but
 
      This deploy failed because the directory being deployed from must be a repo. This is just a bug in pm2-deploy
 
-     ** need to edit develop and production in ecosystem and change post deploy commands 
+     ** need to edit develop and production in ecosystem and change post deploy commands
+     ** depoly wants ecosystem file on branch too
+
+     post deploy
+        - npm update
+        - cd assets && bower update
+        - make sure that pm2-auto update is on
+        - start or restart the server 
 
 
 REINSTALLING NODE

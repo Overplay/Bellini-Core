@@ -37,7 +37,7 @@
       host : "104.131.145.36",
       ref  : "origin/develop-cole",
       repo : "git@github.com:Overplay/asahi",
-      path : "~/dev",
+      path : "/opt/dev",
       "post-deploy" : "npm install && pm2 startOrRestart ecosystem.json --env dev",
       env  : {
         NODE_ENV: "dev"
