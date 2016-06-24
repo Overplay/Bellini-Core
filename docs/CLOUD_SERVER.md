@@ -245,9 +245,12 @@ got the deploy setup working but
      post deploy
         - npm update
         - cd assets && bower update
-        - LOCAL JS 
+        - LOCAL JS
         - make sure that pm2-auto update is on TODO
         - start or restart the server 
+
+cgrigsby@Asahi-0:/opt$ sudo chgrp -R asahi prod
+cgrigsby@Asahi-0:/opt$ sudo chmod -R 775 prod
 
 
 REINSTALLING NODE

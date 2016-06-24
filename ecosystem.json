@@ -29,8 +29,8 @@
       host : "104.131.145.36",
       ref  : "origin/master",
       repo : "git@github.com:Overplay/asahi",
-      path : "~",
-      "post-deploy" : "npm install && pm2 startOrRestart ecosystem.json --env production"
+      path : "/opt/prod",
+      "post-deploy" : "npm install && cd assets && bower update && cd .. && cp /home/asahi/local.js config/ && pm2 startOrRestart ecosystem.json --env production"
     },
     dev : {
       user : "cgrigsby",
