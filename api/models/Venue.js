@@ -22,7 +22,15 @@ module.exports = {
         address: {
             type: 'json'
         },
-        
+
+        photos: {
+            type: 'array',
+            defaultsTo: []
+        },
+
+        logo: {
+            model: 'Media'
+        },
 
         // For determining where a user is and whether venue is shown on the Mobile app
         // finder app 

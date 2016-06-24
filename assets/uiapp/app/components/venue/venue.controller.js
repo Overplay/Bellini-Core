@@ -122,6 +122,7 @@ app.controller("addVenueController", function ($scope, $log, nucleus, $state, $h
         else {
             $http.post('venue/addVenue', $scope.venue)
                 .then(function () {
+                    toastr.success("Venue created", "Success!")
                     $state.go('venue.list');
                 })
         }
