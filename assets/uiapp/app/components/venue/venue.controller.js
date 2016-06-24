@@ -78,7 +78,7 @@ app.controller("editVenueAdminController", function ($scope, $http, $state, $log
 app.controller("addVenueController", function ($scope, $log, nucleus, $state, $http, $q, toastr, uibHelper, venue, edit) {
 
     $log.debug("addVenueController starting");
-    $scope.$parent.ui.pageTitle = "Add New Venue";
+    $scope.$parent.ui.pageTitle = edit ? "Edit Venue" : "Add New Venue";
     $scope.$parent.ui.panelHeading = venue ? venue.name : "";
 
     $scope.edit = edit;
@@ -196,13 +196,5 @@ app.controller( 'viewVenueController', function ( $scope, venue ) {
     $scope.showMap = true;
     $scope.$parent.ui.panelHeading = venue.name;
     $scope.mapLink = mapURL + window.encodeURIComponent(venue.name + " " + addressify(venue.address));
-
-} )
-
-app.controller( 'editVenueController', function ( $scope, venue ) {
-
-    $scope.$parent.ui.pageTitle = "Venue Edit";
-    $scope.$parent.ui.panelHeading = venue.name;
-    $scope.updateVenue = venue;
 
 } )

@@ -41,12 +41,13 @@ app.controller("editOrganizationController", function ($scope, $log, user, $http
 //only if using seperate view and edit page which may not happen as i work along this 
 app.controller("viewOrganizationController", function ($scope, $log, user, $http) {
 
-    $log.log("editOrganizationController Starting")
+    $log.log("viewOrganizationController Starting");
+    $scope.$parent.ui.pageTitle = "Organization Info";
 
     $http.get("api/v1/organization/" + user.organization)
         .then(function (data) {
             $scope.organization = data.data;
+            $scope.$parent.ui.panelHeading = data.data.name;
         })
-
 
 })

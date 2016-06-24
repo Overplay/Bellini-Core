@@ -3,10 +3,10 @@
 
 
 <div class="row">
-    <div class="col-md-6">
-        <h2 class="n-blue-box">{{ organization.name || "Organization" }}</h2>
-        <div class="top15" style="padding: 20px; border: 2px solid #cacaca; border-radius: 5px;">
-            <div class="panel-body">
+    <div>
+        <!--<h2 class="n-blue-box">{{ organization.name || "Organization" }}</h2>-->
+        <div class="top15 col-md-10 col-md-offset-1" style="padding: 20px; border: 2px solid #cacaca; border-radius: 2px;">
+            <div class="">
                 <table class="table table-striped top15">
                     <tr>
                         <td>Name</td>
@@ -15,7 +15,7 @@
                     </tr>
                     <tr>
                         <td>Email</td>
-                        <td><a href="mailto:{{organization.email}}">{{organization.email}}</a></td>
+                        <td><a ng-href="mailto:{{organization.email}}">{{organization.email}}</a></td>
                     </tr>
                     <tr>
                         <td>Phone</td>
@@ -23,7 +23,7 @@
                     </tr>
                     <tr>
                         <td>Website URL</td>
-                        <td><a href="http://{{organization.websiteUrl}}">{{organization.websiteUrl}}</a></td>
+                        <td><a ng-href="http://{{organization.websiteUrl}}">{{organization.websiteUrl}}</a></td>
                     </tr>
                     <tr>
                         <td>Address</td>
@@ -43,7 +43,7 @@
                     <tr ng-repeat="venue in organization.venues">
                         <td></td>
                         <td> <!--todo view venue instead? -->
-                            <a ui-sref="venue.manageVenue({ id: venue.id })">
+                            <a ui-sref="venue.view({ id: venue.id })">
                                 {{venue.name}}</a>
                         </td>
                     </tr>
