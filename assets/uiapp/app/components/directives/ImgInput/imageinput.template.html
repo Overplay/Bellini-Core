@@ -1,0 +1,45 @@
+<style>
+    /*.img-input-holder .panel-body {*/
+        /*border: 1px solid red;*/
+    /*}*/
+
+    /*.img-input-holder img {*/
+        /*border: 1px solid firebrick;*/
+        /*display: inline-block;*/
+
+    /*}*/
+
+    .img-input-holder p {
+        display: inline-block;
+        color: #505050;
+        margin-left: 20px;
+        width: 300px;
+    }
+
+    .img-input-holder button {
+        position: relative;
+        left: 0;
+    }
+
+    .warning-popup {
+        background-color: #ff777d;
+        text-align: center;
+        padding: 20px;
+    }
+
+
+</style>
+
+<div class="img-input-holder">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">{{ prompt }}</h3>
+        </div>
+        <div class="panel-body" style="position: relative;" drag-and-drop on-drop="filesDropped">
+            <img ng-src="{{ img.mediaSrc }}" ng-style="img.style" uib-tooltip="Drag and drop image here"/>
+            <p>Drag and drop a JPG or PNG file anywhere in this panel to add or replace the image. Images must be the size specified.</p>
+        </div>
+        <div class="warning-popup" ng-show="warning">{{ warning }}</div>
+
+    </div>
+</div>
