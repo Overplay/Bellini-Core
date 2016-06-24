@@ -245,7 +245,8 @@ got the deploy setup working but
      post deploy
         - npm update
         - cd assets && bower update
-        - make sure that pm2-auto update is on
+        - LOCAL JS 
+        - make sure that pm2-auto update is on TODO
         - start or restart the server 
 
 
