@@ -240,6 +240,8 @@ got the deploy setup working but
      ** need to edit develop and production in ecosystem and change post deploy commands
      ** depoly wants ecosystem file on branch too
 
+     * had to change permissions of opt to be in the asahi group and make it 775
+****** LOCAL JS FILE *********
      post deploy
         - npm update
         - cd assets && bower update
