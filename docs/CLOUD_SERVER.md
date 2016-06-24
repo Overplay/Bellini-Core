@@ -235,7 +235,9 @@ got the deploy setup working but
 
                                  Deploy failed
 
-     
+     This deploy failed because the directory being deployed from must be a repo. This is just a bug in pm2-deploy
+
+     ** need to edit develop and production in ecosystem and change post deploy commands 
 
 
 REINSTALLING NODE
