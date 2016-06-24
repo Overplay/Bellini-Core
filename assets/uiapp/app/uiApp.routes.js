@@ -109,7 +109,7 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
         //
         // .state('venuex.addVenue', {
         //     url: '/add-venue',
-        //     templateUrl: '/uiapp/app/components/venue/add-venue.partial.html',
+        //     templateUrl: '/uiapp/app/components/venue/addeditvenue.partial.html',
         //     controller: 'addVenueController',
         //     data: {subTitle: "Add Venue"}
         // })
@@ -151,10 +151,11 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             resolve:     {
                 venue: function ( nucleus, $stateParams ) {
                     return nucleus.getVenue( $stateParams.id )
-                }
+                },
+                edit: function () { return true; }
             },
-            templateUrl: '/uiapp/app/components/venue/editvenue.partial.html',
-            controller:  'editVenueController'
+            templateUrl: '/uiapp/app/components/venue/addeditvenue.partial.html',
+            controller:  'addVenueController'
         } )
 
         .state( 'venue.list', {
@@ -170,8 +171,12 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
 
         .state( 'venue.new', {
             url: '/new',
-            templateUrl: '/uiapp/app/components/venue/add-venue.partial.html',
-            controller: 'addVenueController'
+            templateUrl: '/uiapp/app/components/venue/addeditvenue.partial.html',
+            controller: 'addVenueController',
+            resolve: {
+                edit: function() { return false; },
+                venue: function() { return null; }
+            }
             })
 
         .state( 'device', {
@@ -263,8 +268,13 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
         .state( 'advertisement', {
             url:         '/advertisement',
             templateUrl: '/uiapp/app/components/trevda/trevda.partial.html',
-            abstract:    true
-        } )
+            abstract: true,
+            resolve: {
+                user: function (nucleus) {
+                    return nucleus.getMe();
+                }
+            }
+        })
 
         .state( 'advertisement.addAdvertisement', {
             url:         '/add-advertisement',

@@ -8,9 +8,8 @@
 </script>
 
 <div class="row">
-    <div class="col-sm-6">
-
-        <div class="row">
+    <div class="col-sm-10 col-sm-offset-1">
+        <div class="row" ng-if="!edit">
             <div class="col-md-2">
                 <img class="top15" src="images/yelp-logo-small.png"/>
             </div>
@@ -26,7 +25,6 @@
                 <div ng-show="noResults">
                     <i class="glyphicon glyphicon-remove"></i> No Results Found
                 </div>
-
             </div>
             <div class="col-md-5">
                 <div class="input-group top15">
@@ -68,17 +66,33 @@
                 </div>
             </fieldset>
             <fieldset class="form-group">
-                <label for="address-state" class="col-sm-3 control-label">State</label>
+                <label for="address-state" class="col-sm-3 control-label">State/Province</label>
                 <div class="col-sm-3">
-                    <select ng-options="state for state in states" ng-model="venue.address.state" class="form-control"
-                            id="address-state" name="state" required></select>
+                    <input type="text" class="form-control" id="address-state" name="state" placeholder="State"
+                           ng-model="venue.address.state" maxlength="2" required/>
+                    <!--<select ng-options="state for state in states" ng-model="venue.address.state" class="form-control"-->
+                            <!--id="address-state" name="state" required></select>-->
                 </div>
             </fieldset>
             <fieldset class="form-group" ng-class="{'has-error' : !form.zip.$valid && form.zip.$dirty}">
-                <label for="address-zip" class="col-sm-3 control-label">ZIP</label>
+                <label for="address-zip" class="col-sm-3 control-label">Postal/Zip Code</label>
                 <div class="col-sm-5">
-                    <input type="text" class="form-control" id="address-zip" name="zip" placeholder="ZIP Code"
+                    <input type="text" class="form-control" id="address-zip" name="zip" placeholder="ex: 80304"
                            ng-model="venue.address.zip" ng-pattern="regex" required/>
+                </div>
+            </fieldset>
+            <fieldset class="form-group" ng-class="{'has-error' : !form.latitude.$valid && form.latitude.$dirty}">
+                <label for="latitude" class="col-sm-3 control-label">Latitude</label>
+                <div class="col-sm-6">
+                    <input type="text" class="form-control" id="latitude" name="latitude"
+                           ng-model="venue.geolocation.latitude" placeholder="ex: 35.272491"/>
+                </div>
+            </fieldset>
+            <fieldset class="form-group" ng-class="{'has-error' : !form.longitude.$valid && form.longitude.$dirty}">
+                <label for="longitude" class="col-sm-3 control-label">Longitude</label>
+                <div class="col-sm-6">
+                    <input type="text" class="form-control" id="longitude" name="longitude"
+                           ng-model="venue.geolocation.longitude" placeholder="ex: -120.7054912"/>
                 </div>
             </fieldset>
             <fieldset class="form-group">
@@ -91,11 +105,21 @@
                 </div>
             </fieldset>
             <div class="form-actions">
-                <button type="submit" ng-disabled="form.$invalid" class="pull-right btn btn-primary btn-lg top15">
-                    Create Venue
+                <button type="button" class="pull-right btn top15" style="margin-left: 10px" ng-if="edit" ui-sref="venue.view({id: venue.id})">
+                    Cancel
+                </button>
+                <button type="submit" ng-disabled="form.$invalid" class="pull-right btn btn-primary top15">
+                    {{ edit ? "Update" : "Create" }}
                 </button>
             </div>
         </form>
+        <br><br><br><br><br>
+        <div class="pull-right" ng-if="edit">
+            <input type="checkbox" ng-model="confirm.checked" style="margin-left: 5px;"><span>&nbsp;Confirm delete</span>
+            <button class="btn btn-danger" ng-click="deleteVenue()" ng-disabled="!confirm.checked">
+                Delete
+            </button>
+        </div>
     </div>
 </div>
 

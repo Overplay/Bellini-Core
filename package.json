@@ -1,7 +1,7 @@
 {
   "name": "asahi",
   "version": "1.0.0",
-  "description": "Overplay Cloud System",
+  "description": "Ourglass Cloud System",
   "main": "app.js",
   "directories": {
     "doc": "docs"
