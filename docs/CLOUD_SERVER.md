@@ -247,7 +247,8 @@ got the deploy setup working but
         - cd assets && bower update
         - LOCAL JS
         - make sure that pm2-auto update is on TODO
-        - start or restart the server 
+        - start or restart the server
+        - change permissions and ownership on files? should be fine if just deploying with asahi user
 
 cgrigsby@Asahi-0:/opt$ sudo chgrp -R asahi prod
 cgrigsby@Asahi-0:/opt$ sudo chmod -R 775 prod
