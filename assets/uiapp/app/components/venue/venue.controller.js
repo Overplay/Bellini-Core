@@ -192,7 +192,7 @@ app.controller( 'viewVenueController', function ( $scope, venue ) {
     $scope.$parent.ui.panelHeading = venue.name;
     $scope.mapLink = mapURL + window.encodeURIComponent(venue.name + " " + addressify(venue.address));
 
-} )
+});
 
 app.controller( 'editVenueController', function ( $scope, venue ) {
 
@@ -200,4 +200,4 @@ app.controller( 'editVenueController', function ( $scope, venue ) {
     $scope.$parent.ui.panelHeading = venue.name;
     $scope.updateVenue = venue;
 
-} )
+});
