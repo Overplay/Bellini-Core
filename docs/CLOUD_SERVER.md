@@ -266,7 +266,7 @@ pm2 auto pull is throwing an exception about Common.js or something.
 trying remote start instead of local deploy now with process.json
 
 
-
+pm2 autopull might be working 
 
 
 
