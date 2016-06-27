@@ -33,92 +33,121 @@
                 </div>
             </div>
         </div>
-        <hr ng-if="!edit"/>
 
-        <form name="form" role="form" ng-submit="submit()" class="form-horizontal top15">
-            <fieldset class="form-group" ng-class="{'has-error' : !form.name.$valid && form.name.$dirty}">
-                <label for="name" class="col-sm-3 control-label">Venue Name</label>
-                <div class="col-sm-9">
-                    <input type="text" class="form-control" id="name" name="name" placeholder="Venue Name"
-                           ng-model="venue.name" required/>
-                </div>
-            </fieldset>
-            <fieldset class="form-group" ng-class="{'has-error' : !form.street.$valid && form.street.$dirty}">
-                <label for="address-street" class="col-sm-3 control-label">Street Address</label>
-                <div class="col-sm-9">
-                    <input type="text" class="form-control" id="address-street" name="street" placeholder="Address"
-                           ng-model="venue.address.street" required/>
-                </div>
-            </fieldset>
-            <fieldset class="form-group" ng-class="{'has-error' : !form.street2.$valid && form.street2.$dirty}">
-                <label for="address-street2" class="col-sm-3 control-label"></label>
-                <div class="col-sm-9">
-                    <input type="text" class="form-control" id="address-street2" name="street2" placeholder="Address (cont)"
-                           ng-model="venue.address.street2"/>
-                </div>
-            </fieldset>
-            <fieldset class="form-group" ng-class="{'has-error' : !form.city.$valid && form.city.$dirty}">
-                <label for="address-city" class="col-sm-3 control-label">City</label>
-                <div class="col-sm-9">
-                    <input type="text" class="form-control" id="address-city" name="city" placeholder="City"
-                           ng-model="venue.address.city" required/>
-                </div>
-            </fieldset>
-            <fieldset class="form-group">
-                <label for="address-state" class="col-sm-3 control-label">State/Province</label>
-                <div class="col-sm-3">
-                    <input type="text" class="form-control" id="address-state" name="state" placeholder="State"
-                           ng-model="venue.address.state" maxlength="2" required/>
-                    <!--<select ng-options="state for state in states" ng-model="venue.address.state" class="form-control"-->
-                            <!--id="address-state" name="state" required></select>-->
-                </div>
-            </fieldset>
-            <fieldset class="form-group" ng-class="{'has-error' : !form.zip.$valid && form.zip.$dirty}">
-                <label for="address-zip" class="col-sm-3 control-label">Postal/Zip Code</label>
-                <div class="col-sm-5">
-                    <input type="text" class="form-control" id="address-zip" name="zip" placeholder="ex: 80304"
-                           ng-model="venue.address.zip" ng-pattern="regex" required/>
-                </div>
-            </fieldset>
-            <fieldset class="form-group" ng-class="{'has-error' : !form.latitude.$valid && form.latitude.$dirty}">
-                <label for="latitude" class="col-sm-3 control-label">Latitude</label>
-                <div class="col-sm-6">
-                    <input type="text" class="form-control" id="latitude" name="latitude"
-                           ng-model="venue.geolocation.latitude" placeholder="ex: 35.272491"/>
-                </div>
-            </fieldset>
-            <fieldset class="form-group" ng-class="{'has-error' : !form.longitude.$valid && form.longitude.$dirty}">
-                <label for="longitude" class="col-sm-3 control-label">Longitude</label>
-                <div class="col-sm-6">
-                    <input type="text" class="form-control" id="longitude" name="longitude"
-                           ng-model="venue.geolocation.longitude" placeholder="ex: -120.7054912"/>
-                </div>
-            </fieldset>
-            <fieldset class="form-group">
-                <div class="col-sm-offset-3 col-sm-9">
-                    <div class="checkbox">
-                        <label>
-                            <input type="checkbox" ng-model="venue.showInMobileAppMap"> Show in Mobile App Map
-                        </label>
-                    </div>
-                </div>
-            </fieldset>
-            <div class="form-actions">
-                <button type="button" class="pull-right btn top15" style="margin-left: 10px" ng-if="edit" ui-sref="venue.view({id: venue.id})">
-                    Cancel
-                </button>
-                <button type="submit" ng-disabled="form.$invalid" class="pull-right btn btn-primary top15">
+        <hr/>
+        <!-- Save, Delete, Cancel buttons -->
+        <div class="row">
+            <div class="col-md-4">
+                <button ng-disabled="form.$invalid" class="btn btn-success" ng-click="submit()">
                     {{ edit ? "Update" : "Create" }}
                 </button>
+                <button class="btn btn-default" style="margin-left: 10px" ng-if="edit"
+                        ui-sref="venue.view({id: venue.id})">
+                    Cancel
+                </button>
             </div>
-        </form>
-        <br><br><br><br><br>
-        <div class="pull-right" ng-if="edit">
-            <input type="checkbox" ng-model="confirm.checked" style="margin-left: 5px;"><span>&nbsp;Confirm delete</span>
-            <button class="btn btn-danger" ng-click="deleteVenue()" ng-disabled="!confirm.checked">
-                Delete
-            </button>
+            <div class="col-md-offset-2 col-md-6">
+                <div class="pull-right" ng-if="edit">
+                    <button class="btn btn-danger" ng-click="deleteVenue()">
+                        Delete
+                    </button>
+                </div>
+            </div>
+
         </div>
+        <!-- First page of venue info -->
+        <uib-tabset class="top30">
+            <uib-tab heading="Address">
+            <div >
+                <form name="form" role="form" ng-submit="submit()" class="form-horizontal top15">
+                    <fieldset class="form-group" ng-class="{'has-error' : !form.name.$valid && form.name.$dirty}">
+                        <label for="name" class="col-sm-3 control-label">Venue Name</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="name" name="name" placeholder="Venue Name"
+                                   ng-model="venue.name" required/>
+                        </div>
+                    </fieldset>
+                    <fieldset class="form-group" ng-class="{'has-error' : !form.street.$valid && form.street.$dirty}">
+                        <label for="address-street" class="col-sm-3 control-label">Street Address</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="address-street" name="street"
+                                   placeholder="Address"
+                                   ng-model="venue.address.street" required/>
+                        </div>
+                    </fieldset>
+                    <fieldset class="form-group" ng-class="{'has-error' : !form.street2.$valid && form.street2.$dirty}">
+                        <label for="address-street2" class="col-sm-3 control-label"></label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="address-street2" name="street2"
+                                   placeholder="Address (cont)"
+                                   ng-model="venue.address.street2"/>
+                        </div>
+                    </fieldset>
+                    <fieldset class="form-group" ng-class="{'has-error' : !form.city.$valid && form.city.$dirty}">
+                        <label for="address-city" class="col-sm-3 control-label">City</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="address-city" name="city" placeholder="City"
+                                   ng-model="venue.address.city" required/>
+                        </div>
+                    </fieldset>
+                    <fieldset class="form-group">
+                        <label for="address-state" class="col-sm-3 control-label">State/Province</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control" id="address-state" name="state" placeholder="State"
+                                   ng-model="venue.address.state" maxlength="2" required/>
+                            <!--<select ng-options="state for state in states" ng-model="venue.address.state" class="form-control"-->
+                            <!--id="address-state" name="state" required></select>-->
+                        </div>
+                    </fieldset>
+                    <fieldset class="form-group" ng-class="{'has-error' : !form.zip.$valid && form.zip.$dirty}">
+                        <label for="address-zip" class="col-sm-3 control-label">Postal/Zip Code</label>
+                        <div class="col-sm-5">
+                            <input type="text" class="form-control" id="address-zip" name="zip" placeholder="ex: 80304"
+                                   ng-model="venue.address.zip" ng-pattern="regex" required/>
+                        </div>
+                    </fieldset>
+                    <fieldset class="form-group"
+                              ng-class="{'has-error' : !form.latitude.$valid && form.latitude.$dirty}">
+                        <label for="latitude" class="col-sm-3 control-label">Latitude</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="latitude" name="latitude"
+                                   ng-model="venue.geolocation.latitude" placeholder="ex: 35.272491"/>
+                        </div>
+                    </fieldset>
+                    <fieldset class="form-group"
+                              ng-class="{'has-error' : !form.longitude.$valid && form.longitude.$dirty}">
+                        <label for="longitude" class="col-sm-3 control-label">Longitude</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="longitude" name="longitude"
+                                   ng-model="venue.geolocation.longitude" placeholder="ex: -120.7054912"/>
+                        </div>
+                    </fieldset>
+                    <fieldset class="form-group">
+                        <div class="col-sm-offset-3 col-sm-9">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" ng-model="venue.showInMobileAppMap"> Show in Mobile App Map
+                                </label>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <div class="form-actions">
+                        <button type="button" class="pull-right btn top15" style="margin-left: 10px" ng-if="edit"
+                                ui-sref="venue.view({id: venue.id})">
+                            Cancel
+                        </button>
+                        <button type="submit" ng-disabled="form.$invalid" class="pull-right btn btn-primary top15">
+                            {{ edit ? "Update" : "Create" }}
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            </uib-tab>
+            <uib-tab heading="Logo and Images">
+                <h2>Add Logo and images stuff here.</h2>
+            </uib-tab>
+        </uib-tabset>
     </div>
 </div>
 
