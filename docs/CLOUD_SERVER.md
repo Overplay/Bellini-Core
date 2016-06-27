@@ -241,6 +241,8 @@ got the deploy setup working but
      ** depoly wants ecosystem file on branch too
 
      * had to change permissions of opt to be in the asahi group and make it 775
+
+
 ****** LOCAL JS FILE *********
      post deploy
         - npm update
@@ -254,6 +256,27 @@ predeploy pm2 auto pull?
 
 cgrigsby@Asahi-0:/opt$ sudo chgrp -R asahi prod
 cgrigsby@Asahi-0:/opt$ sudo chmod -R 775 prod
+
+
+
+
+pm2 auto pull is throwing an exception about Common.js or something.
+- doesn't seem linked
+
+trying remote start instead of local deploy now with process.json
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 REINSTALLING NODE
