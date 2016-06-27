@@ -278,6 +278,7 @@ also need to test post-update
 
 pm2 auto pull kills asahi process, going to try to add restart to post update
 
+pm2 update then pm2 start process.json
 
 
 
