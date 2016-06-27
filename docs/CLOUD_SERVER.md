@@ -334,6 +334,10 @@ TODO:
 
 
 
+whats happening now is pm2 is pulling successfully, stopping asahi then restarting itself instead of asahi :(
+- restarting asahi from keymetrics also restarts pm2-auto-pull for some reason
+
+
 
 
 

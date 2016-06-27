@@ -10,7 +10,9 @@
     "cwd" : "/opt/dev/source",
     "env": {
       "COMMON_VARIABLE": "true",
-      "NODE_ENV": "development"
+      "NODE_ENV": "development",
+      "PM2_SILENT": false,
+      "PM2_PROGRAMMATIC": false
 
     },
     "env_production" : {
