@@ -127,7 +127,7 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                 edit: function () { return true; }
             },
             templateUrl: '/uiapp/app/components/venue/addeditvenue.partial.html',
-            controller:  'addVenueController'
+            controller:  'addEditVenueController'
         } )
 
         .state( 'venue.list', {
@@ -135,8 +135,11 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             controller:  'listVenueController',
             templateUrl: '/uiapp/app/components/venue/venuelist.partial.html',
             resolve:     {
-                venues: function ( nucleus ) {
-                    return nucleus.getVenue()
+                venues: function ( $http ) {
+                    return $http.get( '/user/getVenues')
+                        .then(function (data) {
+                            return data.data;
+                        })
                 }
             }
         } )
@@ -144,7 +147,7 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
         .state( 'venue.new', {
             url: '/new',
             templateUrl: '/uiapp/app/components/venue/addeditvenue.partial.html',
-            controller: 'addVenueController',
+            controller: 'addEditVenueController',
             resolve: {
                 edit: function() { return false; },
                 venue: function() { return null; }

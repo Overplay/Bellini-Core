@@ -75,9 +75,9 @@ app.controller("editVenueAdminController", function ($scope, $http, $state, $log
     }
 });
 
-app.controller("addVenueController", function ($scope, $log, nucleus, $state, $http, $q, toastr, uibHelper, venue, edit) {
+app.controller("addEditVenueController", function ($scope, $log, nucleus, $state, $http, $q, toastr, uibHelper, venue, edit) {
 
-    $log.debug("addVenueController starting");
+    $log.debug("addEditVenueController starting");
     $scope.$parent.ui.pageTitle = edit ? "Edit Venue" : "Add New Venue";
     $scope.$parent.ui.panelHeading = venue ? venue.name : "";
 
@@ -102,7 +102,8 @@ app.controller("addVenueController", function ($scope, $log, nucleus, $state, $h
                 var latLong = position.coords.latitude.toString() + "," + position.coords.longitude.toString();
                 $http.get('venue/yelpSearch', {params: {term: "food", ll: latLong, limit: 1}, timeout: 2000})
                     .then(function (data) {
-                        $scope.parameters.location = data.data.businesses[0].location.city + ", " + data.data.businesses[0].location.state_code;
+                        var loc = data.data.businesses[0].location
+                        $scope.parameters.location = loc.city + ", " + loc.state_code;
                     })
             })
         }

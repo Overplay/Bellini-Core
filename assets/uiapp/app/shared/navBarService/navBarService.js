@@ -24,19 +24,12 @@ app.factory('navBarService', function ($log) {
                     {
                         label: "Organization",
                         id: "organization",
-                        items: [{label: "organization", link: {type: 'ui-sref', addr: 'organization.manageOrganization'}}]
+                        items: [{label: "organization", link: {type: 'ui-sref', addr: 'organization.view'}}]
                     },
                     {
                         label: "Venues",
-                        id:    "venues",
-                        items: [ {
-                            label: "List",
-                            link: { type: 'ui-sref', addr: 'venue.list' }
-                        },
-                            {
-                                label: "Add New",
-                                link:  { type: 'ui-sref', addr: 'venue.new' }
-                            } ]
+                        id: "venues",
+                        items: [{label: "venues", link: {type: 'ui-sref', addr: 'venue.list'}}]
                     }
                 ],
                 right: [{
@@ -71,7 +64,7 @@ app.factory('navBarService', function ($log) {
                     {
                         label: "Organization",
                         id: "organization",
-                        items: [{label: "organization", link: {type: 'ui-sref', addr: 'organization.manageOrganization'}}]
+                        items: [{label: "organization", link: {type: 'ui-sref', addr: 'organization.view'}}]
                     }
                 ],
                 right: [{
@@ -102,7 +95,7 @@ app.factory('navBarService', function ($log) {
                         id: "organization",
                         items: [{
                             label: "organization",
-                            link: {type: 'ui-sref', addr: 'organization.manageOrganization'}
+                            link: {type: 'ui-sref', addr: 'organization.view'}
                         }]
                     }
                 ],

@@ -32,12 +32,10 @@ app.directive('imgInput', function($log, $timeout){
                 fr.onload = function () {
 
                     // Must force digest since onload event is outside of angular
-                    scope.$apply( function(){
+                    scope.$apply( function() {
                         //TODO Ryan, validate correct image size and file type here.
                         scope.img.mediaSrc = fr.result;
                         scope.dirty = files[0]; // it's truthy and the file we want the Controller to upload
-
-
                     })
                 };
                 // TODO Ryan, check file mimetype here and reject anything not JPG, PNG

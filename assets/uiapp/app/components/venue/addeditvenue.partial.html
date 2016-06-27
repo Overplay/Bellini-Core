@@ -33,8 +33,7 @@
                 </div>
             </div>
         </div>
-
-        <hr/>
+        <hr ng-if="!edit"/>
 
         <form name="form" role="form" ng-submit="submit()" class="form-horizontal top15">
             <fieldset class="form-group" ng-class="{'has-error' : !form.name.$valid && form.name.$dirty}">
