@@ -16,7 +16,7 @@
     },
     "autorestart" : true,
     "vizion": true,
-    "post_update": ["npm install && cd assets && bower update && cd ..", "echo ****restarting the app*****"],
+    "post_update": ["npm install && cd assets && bower update && cd ..", "echo ****restarting the app*****", "echo PLZ"],
 
 
   }]

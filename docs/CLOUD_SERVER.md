@@ -267,10 +267,13 @@ trying remote start instead of local deploy now with process.json
 
 
 pm2 autopull might be working
-yes it is! at least when i checkout dev-cole then have pm2-autopull running
+ at least when i checkout dev-cole then have pm2-auto-pull running
 
 
+more testing is being done on pm2-auto-pull. still errors on startup with uv_cwd which means that a directory doesnt
+exist most likely
 
+also need to test post-update
 
 
 
