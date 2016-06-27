@@ -109,7 +109,7 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
         //
         // .state('venuex.addVenue', {
         //     url: '/add-venue',
-        //     templateUrl: '/uiapp/app/components/venue/add-venue.partial.html',
+        //     templateUrl: '/uiapp/app/components/venue/addeditvenue.partial.html',
         //     controller: 'addVenueController',
         //     data: {subTitle: "Add Venue"}
         // })
@@ -151,10 +151,11 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             resolve:     {
                 venue: function ( nucleus, $stateParams ) {
                     return nucleus.getVenue( $stateParams.id )
-                }
+                },
+                edit: function () { return true; }
             },
-            templateUrl: '/uiapp/app/components/venue/editvenue.partial.html',
-            controller:  'editVenueController'
+            templateUrl: '/uiapp/app/components/venue/addeditvenue.partial.html',
+            controller:  'addVenueController'
         } )
 
         .state( 'venue.list', {
@@ -162,7 +163,7 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             controller:  'listVenueController',
             templateUrl: '/uiapp/app/components/venue/venuelist.partial.html',
             resolve:     {
-                venues: function ( nucleus, $stateParams ) {
+                venues: function ( nucleus ) {
                     return nucleus.getVenue()
                 }
             }
@@ -170,8 +171,12 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
 
         .state( 'venue.new', {
             url: '/new',
-            templateUrl: '/uiapp/app/components/venue/add-venue.partial.html',
-            controller: 'addVenueController'
+            templateUrl: '/uiapp/app/components/venue/addeditvenue.partial.html',
+            controller: 'addVenueController',
+            resolve: {
+                edit: function() { return false; },
+                venue: function() { return null; }
+            }
             })
 
         .state( 'device', {
@@ -264,6 +269,9 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             url:         '/advertisement',
             templateUrl: '/uiapp/app/components/trevda/trevda.partial.html',
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> master
             abstract: true,
             resolve: {
                 user: function (nucleus) {
@@ -271,9 +279,12 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                 }
             }
         })
+<<<<<<< HEAD
 =======
             abstract:    true
         } )
+>>>>>>> master
+=======
 >>>>>>> master
 
         .state( 'advertisement.addAdvertisement', {
@@ -287,10 +298,16 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             url:         '/manage-advertisements',
             templateUrl: '/uiapp/app/components/trevda/manage-trevda.partial.html',
 <<<<<<< HEAD
+<<<<<<< HEAD
             data: {subTitle: "Manage Advertisements"},
             controller: 'manageAdvertisementController',
 
         })
+=======
+            data:        { subTitle: "Manage Advertisements" },
+            controller:  'manageAdvertisementController'
+        } )
+>>>>>>> master
 =======
             data:        { subTitle: "Manage Advertisements" },
             controller:  'manageAdvertisementController'
@@ -301,17 +318,23 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             url:         '/edit-advertisement/:id',
             templateUrl: '/uiapp/app/components/trevda/edit-trevda.partial.html',
 <<<<<<< HEAD
+<<<<<<< HEAD
             data: {subTitle: "Edit Advertisement"},
             controller: 'editAdvertisementController',
 
         })
 =======
+=======
+>>>>>>> master
             data:        { subTitle: "Edit Advertisement" },
             controller:  'editAdvertisementController',
             resolve:     {
                 //TODO
             }
         } )
+<<<<<<< HEAD
+>>>>>>> master
+=======
 >>>>>>> master
         // =========== DASHBOARD
 

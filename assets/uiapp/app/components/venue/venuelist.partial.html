@@ -1,9 +1,25 @@
 
 <div class="row">
-    <div class="col-sm-6">
-        <ul>
-            <li ng-repeat="v in venues"><a ui-sref="venue.view({id: v.id})"> {{ v.name }} </a> </li>
-        </ul>
+    <div class="col-sm-10 col-sm-offset-1">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Address</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="v in venues">
+                <td width="40%">{{v.name}}</td>
+                <td>{{ v.address.street + " " +
+                       v.address.street2 + " " +
+                       v.address.city + ", " +
+                       v.address.state}}</td>
+                <td><a ui-sref="venue.view({id: v.id})" class="btn btn-sm btn-warning">MORE INFO</a></td>
+            </tr>
+            </tbody>
+        </table>
     </div>
 </div>
 

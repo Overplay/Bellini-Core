@@ -279,6 +279,58 @@ also need to test post-update
 pm2 auto pull kills asahi process, going to try to add restart to post update
 
 pm2 update then pm2 start process.json
+when a commit is pushed, the app is killed. I am going to write my own module based on the pm2-auto-pull and try to debug
+- the app name isn't catching? idk whats going on with auto-pull right now
+
+pm2-auto-pull-0 App %s succesfully pulled
+pm2-auto-pull-0 { type: 'axm:option:configuration',
+pm2-auto-pull-0   data:
+pm2-auto-pull-0    { http: false,
+pm2-auto-pull-0      http_latency: 200,
+pm2-auto-pull-0      http_code: 500,
+pm2-auto-pull-0      ignore_routes: [],
+pm2-auto-pull-0      profiling: true,
+pm2-auto-pull-0      errors: true,
+pm2-auto-pull-0      alert_enabled: true,
+pm2-auto-pull-0      custom_probes: true,
+pm2-auto-pull-0      network: false,
+pm2-auto-pull-0      ports: false,
+pm2-auto-pull-0      module_conf: {},
+pm2-auto-pull-0      module_name: 'pm2-auto-pull',
+pm2-auto-pull-0      module_version: '1.1.3',
+pm2-auto-pull-0      pmx_version: '0.6.2' } }
+pm2-auto-pull-0 { type: 'axm:option:configuration', data: { error: true } }
+pm2-auto-pull-0 { type: 'axm:option:configuration',
+pm2-auto-pull-0   data:
+pm2-auto-pull-0    { alert_enabled: true,
+pm2-auto-pull-0      widget:
+pm2-auto-pull-0       { type: 'generic',
+pm2-auto-pull-0         logo: 'https://app.keymetrics.io/img/logo/keymetrics-300.png',
+pm2-auto-pull-0         theme: [Object] },
+pm2-auto-pull-0      isModule: true,
+pm2-auto-pull-0      module_conf: {},
+pm2-auto-pull-0      module_version: '1.16.0',
+pm2-auto-pull-0      module_name: 'pm2-auto-pull',
+pm2-auto-pull-0      description: 'PM2 module to auto pull applications when there is an update',
+pm2-auto-pull-0      pmx_version: '0.6.2' } }
+pm2-auto-pull-0 { type: 'axm:option:configuration', data: { error: true } }
+pm2-auto-pull-0 pm2-auto-pull module connected to pm2
+
+
+PM2 Starting execution sequence in -fork mode- for app name:asahi id:1
+PM2 App name:asahi id:1 online
+PM2 Process 1 in a stopped status, starting it
+PM2 Stopping app:asahi id:1
+PM2 Process with pid 21007 still not killed, retrying...
+PM2 App [asahi] with id [1] and pid [21007], exited with code [0] via signal [SIGINT]
+PM2 Starting execution sequence in -fork mode- for app name:pm2-auto-pull id:0
+PM2 App name:pm2-auto-pull id:0 online
+
+
+
+TODO:
+- change process.json to restart the app in the post update
+    - if that doesn't work, then rewrite the pm2 module and test that with some debugging
 
 
 
