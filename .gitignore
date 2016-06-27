@@ -41,8 +41,7 @@ local.js
 
 config/local.js
 
-uploads/media/**
-assets/apps
+data/**
 
 ################################################
 # Dependencies
@@ -115,3 +114,5 @@ npm-debug.log
 nbproject
 .idea
 .node_history
+
+!.gitkeep
