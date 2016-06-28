@@ -339,7 +339,9 @@ whats happening now is pm2 is pulling successfully, stopping asahi then restarti
 
 - trying to get some debugging stuff
 
--creating my own auto pull @ colegrigsby/auto-repo-reload 
+-creating my own auto pull @ colegrigsby/auto-repo-reload
+
+- forking vs clustering. trying with 2 forks of asahi for updating 
 
 
 
