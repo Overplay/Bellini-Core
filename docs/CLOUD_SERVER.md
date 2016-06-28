@@ -344,6 +344,11 @@ whats happening now is pm2 is pulling successfully, stopping asahi then restarti
 - forking vs clustering. trying with 2 forks of asahi for updating
 
 
+current state:
+    auto pull updates correctly but when restarting, it restarts itself as a process. not sure if this is from pm2 or
+    if it is being caused by autopull. might have to do with the pull and reload call in pm2 to _pull. so I may try
+    to call this directly if possible. might be a pull and restart? 
+
 
 
 REINSTALLING NODE
