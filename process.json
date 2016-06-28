@@ -5,7 +5,7 @@
   "apps" : [{
     "name"       : "asahi",
     "script"     : "app.js",
-    "instances"  : 1,
+    "instances"  : 4,
     "exec_mode"  : "fork",
     "cwd" : "/opt/dev/source",
     "env": {
