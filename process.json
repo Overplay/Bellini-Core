@@ -5,14 +5,14 @@
   "apps" : [{
     "name"       : "asahi",
     "script"     : "app.js",
-    "instances"  : 4,
+    "instances"  : 1,
     "exec_mode"  : "fork",
     "cwd" : "/opt/dev/source",
     "env": {
       "COMMON_VARIABLE": "true",
       "NODE_ENV": "development",
-      "PM2_SILENT": false,
-      "PM2_PROGRAMMATIC": false
+      "PM2_SILENT": false, //trying to get output for debugging
+      "PM2_PROGRAMMATIC": false //same
 
     },
     "env_production" : {
@@ -20,7 +20,8 @@
     },
     "autorestart" : true,
     "vizion": true,
-    "post_update": ["npm install && cd assets && bower update && cd ..", "echo ****restarting the app*****", "echo PLZ", ""]
+    "post_update": ["npm install && cd assets && bower update && cd ..", "echo ****restarting the app*****", "echo PLZ"
+    , "pm2 startOrRestart process.json"]
 
 
   }]
