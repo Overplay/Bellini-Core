@@ -37,7 +37,10 @@
         </div>
         <div class="panel-body" style="position: relative;" drag-and-drop on-drop="filesDropped">
             <img ng-src="{{ img.mediaSrc }}" ng-style="img.style" uib-tooltip="Drag and drop image here"/>
-            <p>Drag and drop a JPG or PNG file anywhere in this panel to add or replace the image. Images must be the size specified.</p>
+            <p>Drag and drop a JPG or PNG file anywhere in this panel to add or replace the image.
+                {{ exact ? "Image must be the size specified." : ""}}
+                {{ ratio ? "Image must have a " + ratio + " ratio." : ""}}
+                {{ maxSize ? "Image must be smaller than the dimensions specified." : ""}}</p>
         </div>
         <div class="warning-popup" ng-show="warning">{{ warning }}</div>
 

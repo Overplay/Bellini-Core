@@ -223,6 +223,12 @@
             }
 
             // =========== VENUES =========
+            service.addVenue = function (venue) {
+                
+                var endPoint = 'venue/addVenue';
+                return apiPost(endPoint, venue);
+            }
+            
             service.getVenue = function (venueId) {
                 
                 var endPoint = _apiPath + '/venue' + (venueId ? '/' + venueId : '');

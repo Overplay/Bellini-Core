@@ -15,66 +15,6 @@ addressify = function (address) {
     return newAddr;
 };
 
-app.controller("editVenueAdminController", function ($scope, $http, $state, $log, $sce, venue, toastr, nucleus, uibHelper) {
-
-    $log.debug("editVenueAdminController starting");
-
-    var mapURL = "https://www.google.com/maps/embed/v1/place?key=AIzaSyCrbE5uwJxaBdT7bXTGpes3F3VmQ5K9nXE&q=";
-    $scope.regex = "\\d{5}([\\-]\\d{4})?";
-    $scope.venue = venue;
-    $scope.updateVenue = JSON.parse(JSON.stringify(venue));
-    $scope.showMap = true;
-    $scope.confirm = { checked: false };
-    $scope.states =
-        ["AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA",
-         "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD",
-         "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ",
-         "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC",
-         "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"];
-
-    if ($scope.venue.yelpId) {
-        $http.get('venue/yelpBusiness', {params: {yelpId: $scope.venue.yelpId}, timeout: 1500})
-            .then(function (res) {
-                $scope.yelpProfile = res.data;
-            })
-    }
-    
-    $scope.mapLink = mapURL + window.encodeURIComponent(venue.name + " " + addressify(venue.address));
-
-    $scope.update = function () {
-        nucleus.updateVenue($scope.venue.id, $scope.updateVenue)
-            .then(function (d) {
-                toastr.success("Venue info updated", "Success!");
-                $scope.venue = d;
-                $scope.updateVenue = JSON.parse(JSON.stringify(d));
-                $scope.mapLink = mapURL + window.encodeURIComponent(addressify(d.address));
-            })
-            .catch(function (err) {
-                toastr.error("Something went wrong", "Damn!");
-            });
-    };
-
-    $scope.deleteVenue = function () {
-
-        uibHelper.confirmModal("Delete Venue?", "Are you sure you want to delete " + $scope.venue.name, true)
-            .then(function (confirmed) {
-                    if (confirmed) {
-                        nucleus.deleteVenue($scope.venue.id)
-                            .then(function () {
-                                toastr.success("It's gone!", "Venue Deleted");
-                                $state.go('admin.manageVenues')
-                            })
-                            .catch(function (err) {
-                                toastr.error(err.status, "Problem Deleting Venue");
-                            })
-                    }
-                },
-                function (reason) {
-                    $scope.confirm.checked = false;
-                })
-    }
-});
-
 app.controller("addEditVenueController", function ($scope, $log, nucleus, $state, $http, $q, toastr, uibHelper, venue, edit) {
 
     $log.debug("addEditVenueController starting");
@@ -83,17 +23,34 @@ app.controller("addEditVenueController", function ($scope, $log, nucleus, $state
 
     $scope.edit = edit;
     $scope.yelp = {};
-    $scope.venue = venue || {showInMobileAppMap: true, address: {}};
+    $scope.venue = venue || {showInMobileAppMap: true, address: {}, imageIds: []};
     $scope.regex = "\\d{5}([\\-]\\d{4})?";
     $scope.confirm = { checked: false };
+
+    $scope.imgUrls = {
+        logo: null,
+        images: [ null, null, null]
+    }
+    $scope.media = {
+        logo: null,
+        images: [ null, null, null ]
+    }
 
     $scope.parameters = {
         term: "",
         location: "",
         limit: 8
     };
-
     $scope.results = {};
+
+    var fr = new FileReader();
+
+    if (edit) {
+        $scope.imgUrls.logo = venue.logoId;
+        venue.imageIds.forEach(function (img, index, array) {
+            $scope.imgUrls.images[index] = img;
+        })
+    }
 
     $scope.initializeLocation = function () {
 
@@ -102,7 +59,7 @@ app.controller("addEditVenueController", function ($scope, $log, nucleus, $state
                 var latLong = position.coords.latitude.toString() + "," + position.coords.longitude.toString();
                 $http.get('venue/yelpSearch', {params: {term: "food", ll: latLong, limit: 1}, timeout: 2000})
                     .then(function (data) {
-                        var loc = data.data.businesses[0].location
+                        var loc = data.data.businesses[0].location;
                         $scope.parameters.location = loc.city + ", " + loc.state_code;
                     })
             })
@@ -110,22 +67,57 @@ app.controller("addEditVenueController", function ($scope, $log, nucleus, $state
     };
 
     $scope.submit = function () {
-        if ($scope.edit) {
-            nucleus.updateVenue($scope.venue.id, $scope.venue)
-                .then(function (d) {
-                    toastr.success("Venue info updated", "Success!");
-                    $state.go('venue.view', {id: d.id});
+        var promise;
+
+        if ($scope.media.logo) {
+            promise = nucleus.uploadMedia($scope.media.logo)
+                .then( function(data) {
+                    $scope.venue.logoId = data.id;
                 })
-                .catch(function (err) {
-                    toastr.error("Something went wrong", "Damn!");
-                });
         }
         else {
-            $http.post('venue/addVenue', $scope.venue)
-                .then(function () {
-                    toastr.success("Venue created", "Success!")
-                    $state.go('venue.list');
+            promise = $q(function (resolve, reject) {
+                resolve();
+            });
+        }
+        $scope.media.images.forEach( function (img, index) {
+            if (img) {
+                promise = promise.then( function() {
+                    return nucleus.uploadMedia(img)
+                        .then( function(data) {
+                            if ($scope.edit)
+                                $scope.venue.imageIds[index] = data.id;
+                            else
+                                $scope.venue.imageIds.push(data.id);
+                        })
                 })
+            }
+        })
+
+        if ($scope.edit) {
+            promise = promise.then( function() {
+                nucleus.updateVenue($scope.venue.id, $scope.venue)
+                    .then(function (d) {
+                        toastr.success("Venue info updated", "Success!");
+                        $state.go('venue.view', {id: d.id});
+                    })
+                    .catch(function (err) {
+                        toastr.error("Something went wrong", "Damn!");
+                    });
+            })
+        }
+        else {
+            promise = promise.then( function() {
+                nucleus.addVenue($scope.venue)
+                    .then(function () {
+                        toastr.success("Venue created", "Success!")
+                        $state.go('venue.list');
+                    })
+                    .catch(function (err) {
+                        toastr.error("Something went wrong", "Error")
+                    })
+            })
+
         }
        
     };
@@ -153,7 +145,7 @@ app.controller("addEditVenueController", function ($scope, $log, nucleus, $state
     
     $scope.deleteVenue = function () {
 
-        uibHelper.confirmModal("Delete Venue?", "Are you sure you want to delete " + $scope.venue.name, true)
+        uibHelper.confirmModal("Delete Venue?", "Are you sure you want to delete " + $scope.venue.name + "?", true)
         .then(function (confirmed) {
                 if (confirmed) {
                     nucleus.deleteVenue($scope.venue.id)

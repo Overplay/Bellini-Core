@@ -27,7 +27,8 @@ var self = module.exports.testdata = {
             var destruct = [
                 User.destroy({}),
                 Venue.destroy({}),
-                Device.destroy({})
+                Device.destroy({}),
+                Media.destroy({})
             ];
 
             chain = chain.then(function () {

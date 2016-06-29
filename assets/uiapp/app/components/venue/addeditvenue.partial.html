@@ -36,7 +36,7 @@
 
         <hr/>
         <!-- Save, Delete, Cancel buttons -->
-        <div class="row">
+        <div class="row top30">
             <div class="col-md-4">
                 <button ng-disabled="form.$invalid" class="btn btn-success" ng-click="submit()">
                     {{ edit ? "Update" : "Create" }}
@@ -53,12 +53,11 @@
                     </button>
                 </div>
             </div>
-
         </div>
         <!-- First page of venue info -->
         <uib-tabset class="top30">
             <uib-tab heading="Address">
-            <div >
+            <div>
                 <form name="form" role="form" ng-submit="submit()" class="form-horizontal top15">
                     <fieldset class="form-group" ng-class="{'has-error' : !form.name.$valid && form.name.$dirty}">
                         <label for="name" class="col-sm-3 control-label">Venue Name</label>
@@ -131,23 +130,20 @@
                             </div>
                         </div>
                     </fieldset>
-                    <div class="form-actions">
-                        <button type="button" class="pull-right btn top15" style="margin-left: 10px" ng-if="edit"
-                                ui-sref="venue.view({id: venue.id})">
-                            Cancel
-                        </button>
-                        <button type="submit" ng-disabled="form.$invalid" class="pull-right btn btn-primary top15">
-                            {{ edit ? "Update" : "Create" }}
-                        </button>
-                    </div>
                 </form>
             </div>
 
             </uib-tab>
             <uib-tab heading="Logo and Images">
                 <h2>Add Logo and images stuff here.</h2>
+                <img-input prompt="Logo Image Here" width="256" height="256" dirty="media.logo" src-field="imgUrls.logo" exact></img-input>
+                <img-input prompt="Venue Image 1" width="800" height="600" dirty="media.images[0]" src-field="imgUrls.images[0]" ratio="4:3" max-size></img-input>
+                <img-input prompt="Venue Image 2" width="800" height="600" dirty="media.images[1]" src-field="imgUrls.images[1]" ratio="4:3" max-size></img-input>
+                <img-input prompt="Venue Image 3" width="800" height="600" dirty="media.images[2]" src-field="imgUrls.images[2]" ratio="4:3" max-size></img-input>
             </uib-tab>
         </uib-tabset>
+
+
     </div>
 </div>
 
