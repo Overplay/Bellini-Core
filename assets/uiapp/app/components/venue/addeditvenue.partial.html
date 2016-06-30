@@ -59,14 +59,15 @@
             <uib-tab heading="Address">
             <div>
                 <form name="form" role="form" ng-submit="submit()" class="form-horizontal top15">
-                    <fieldset class="form-group" ng-class="{'has-error' : !form.name.$valid && form.name.$dirty}">
+                    <div ng-init="setForm(form);"></div>
+                    <fieldset class="form-group" ng-class="{'has-error' : !form.name.$valid && form.name.$touched}">
                         <label for="name" class="col-sm-3 control-label">Venue Name</label>
                         <div class="col-sm-9">
                             <input type="text" class="form-control" id="name" name="name" placeholder="Venue Name"
                                    ng-model="venue.name" required/>
                         </div>
                     </fieldset>
-                    <fieldset class="form-group" ng-class="{'has-error' : !form.street.$valid && form.street.$dirty}">
+                    <fieldset class="form-group" ng-class="{'has-error' : !form.street.$valid && form.street.$touched}">
                         <label for="address-street" class="col-sm-3 control-label">Street Address</label>
                         <div class="col-sm-9">
                             <input type="text" class="form-control" id="address-street" name="street"
@@ -74,7 +75,7 @@
                                    ng-model="venue.address.street" required/>
                         </div>
                     </fieldset>
-                    <fieldset class="form-group" ng-class="{'has-error' : !form.street2.$valid && form.street2.$dirty}">
+                    <fieldset class="form-group">
                         <label for="address-street2" class="col-sm-3 control-label"></label>
                         <div class="col-sm-9">
                             <input type="text" class="form-control" id="address-street2" name="street2"
@@ -82,7 +83,7 @@
                                    ng-model="venue.address.street2"/>
                         </div>
                     </fieldset>
-                    <fieldset class="form-group" ng-class="{'has-error' : !form.city.$valid && form.city.$dirty}">
+                    <fieldset class="form-group" ng-class="{'has-error' : !form.city.$valid && form.city.$touched}">
                         <label for="address-city" class="col-sm-3 control-label">City</label>
                         <div class="col-sm-9">
                             <input type="text" class="form-control" id="address-city" name="city" placeholder="City"
@@ -98,7 +99,7 @@
                             <!--id="address-state" name="state" required></select>-->
                         </div>
                     </fieldset>
-                    <fieldset class="form-group" ng-class="{'has-error' : !form.zip.$valid && form.zip.$dirty}">
+                    <fieldset class="form-group" ng-class="{'has-error' : !form.zip.$valid && form.zip.$touched}">
                         <label for="address-zip" class="col-sm-3 control-label">Postal/Zip Code</label>
                         <div class="col-sm-5">
                             <input type="text" class="form-control" id="address-zip" name="zip" placeholder="ex: 80304"
@@ -106,18 +107,18 @@
                         </div>
                     </fieldset>
                     <fieldset class="form-group"
-                              ng-class="{'has-error' : !form.latitude.$valid && form.latitude.$dirty}">
+                              ng-class="{'has-error' : !form.latitude.$valid && form.latitude.$touched}">
                         <label for="latitude" class="col-sm-3 control-label">Latitude</label>
                         <div class="col-sm-6">
-                            <input type="text" class="form-control" id="latitude" name="latitude"
+                            <input type="number" class="form-control" id="latitude" name="latitude"
                                    ng-model="venue.geolocation.latitude" placeholder="ex: 35.272491"/>
                         </div>
                     </fieldset>
                     <fieldset class="form-group"
-                              ng-class="{'has-error' : !form.longitude.$valid && form.longitude.$dirty}">
+                              ng-class="{'has-error' : !form.longitude.$valid && form.longitude.$touched}">
                         <label for="longitude" class="col-sm-3 control-label">Longitude</label>
                         <div class="col-sm-6">
-                            <input type="text" class="form-control" id="longitude" name="longitude"
+                            <input type="number" class="form-control" id="longitude" name="longitude"
                                    ng-model="venue.geolocation.longitude" placeholder="ex: -120.7054912"/>
                         </div>
                     </fieldset>
@@ -135,15 +136,13 @@
 
             </uib-tab>
             <uib-tab heading="Logo and Images">
-                <h2>Add Logo and images stuff here.</h2>
-                <img-input prompt="Logo Image Here" width="256" height="256" dirty="media.logo" src-field="imgUrls.logo" exact></img-input>
+                <br>
+                <img-input prompt="Logo" width="256" height="256" dirty="media.logo" src-field="imgUrls.logo" exact></img-input>
                 <img-input prompt="Venue Image 1" width="800" height="600" dirty="media.images[0]" src-field="imgUrls.images[0]" ratio="4:3" max-size></img-input>
                 <img-input prompt="Venue Image 2" width="800" height="600" dirty="media.images[1]" src-field="imgUrls.images[1]" ratio="4:3" max-size></img-input>
                 <img-input prompt="Venue Image 3" width="800" height="600" dirty="media.images[2]" src-field="imgUrls.images[2]" ratio="4:3" max-size></img-input>
             </uib-tab>
         </uib-tabset>
-
-
     </div>
 </div>
 

@@ -2,7 +2,7 @@
  * Created by mkahn on 4/6/16.
  */
 
-var app = angular.module('uiApp', [ 'nucleus.service', 'ngAnimate',  'ui.router', 'ui.bootstrap', 'toastr' ]);
+var app = angular.module('uiApp', [ 'nucleus.service', 'ngAnimate',  'ui.router', 'ui.bootstrap', 'toastr', 'uiGmapgoogle-maps' ]);
 
 app.config( function ( toastrConfig ) {
     angular.extend( toastrConfig, {

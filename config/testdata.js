@@ -371,40 +371,40 @@ var self = module.exports.testdata = {
     ],
     venues: [
         {
-            name: "John's Burgers",
-            address: {street: "123 Main St.", city: "Cupertino", state: "CA", zip: "95014"},
+            name: "Le Boulanger",
+            address: {street: "20488 Stevens Creek Blvd", city: "Cupertino", state: "CA", zip: "95014"},
             ownerEmail: "john@test.com"
         },
         {
-            name: "John's Burgers",
-            address: {street: "123 Leff St.", city: "Cupertino", state: "CA", zip: "95014"},
+            name: "Ajito",
+            address: {street: "7335 Bollinger Rd", city: "Cupertino", state: "CA", zip: "95014"},
             ownerEmail: "john@test.com"
         },
         {
-            name: "Corner Pub",
+            name: "The Sink",
             address: {street: "1165 13th St.", city: "Boulder", state: "CO", zip: "80302"},
             ownerEmail: "vogel@test.com"
         },
         {
-            name: "BBQ 'n Beer",
+            name: "B Bar & Grill",
             address: {street: "40 E 4th St", city: "New York", state: "NY", zip: "10003"},
             ownerEmail: "ryan@test.com"
         },
         {
-            name: "New Chicago",
-            address: {street: "404 Hidden St.", city: "San Luis Obispo", state: "CA", zip: "93405"},
+            name: "Novo",
+            address: {street: "726 Higuera St", city: "San Luis Obispo", state: "CA", zip: "93401"},
             ownerEmail: "elizabeth@test.com",
             organizationEmail: "dr@test.com"
         },
         {
-            name: "Old Chicago",
-            address: {street: "404 Not Found St.", city: "Acton", state: "MA", zip: "01720"},
+            name: "Not Your Average Joe's",
+            address: {street: "305 Main St", city: "Acton", state: "MA", zip: "01720"},
             ownerEmail: "elizabeth@test.com",
             organizationEmail: "dr@test.com"
         },
         {
-            name: "VJ's",
-            address: {street: "12 Hanover Dr.", city: "Cupertino", state: "CA", zip: "95014"},
+            name: "Islands",
+            address: {street: "20750 Stevens Creek Blvd", city: "Cupertino", state: "CA", zip: "95014"},
             ownerEmail: "carina@test.com"
         }
     ],
@@ -413,70 +413,70 @@ var self = module.exports.testdata = {
             name: "Bar Box",
             locationWithinVenue: "bar",
             ownerEmail: "john@test.com",
-            venueName: "John's Burgers",
+            venueName: "Le Boulanger",
             managerEmails: ["silvanus@test.com", "annegret@test.com"]
         },
         {
             name: "Bar Box",
             locationWithinVenue: "bar",
             ownerEmail: "vogel@test.com",
-            venueName: "Corner Pub",
+            venueName: "The Sink",
             managerEmails: ["caterina@test.com", "silvanus@test.com"]
         },
         {
             name: "Bar Box",
             locationWithinVenue: "bar",
             ownerEmail: "ryan@test.com",
-            venueName: "BBQ 'n Beer",
+            venueName: "B Bar & Grill",
             managerEmails: ["jerref@test.com", "caterina@test.com"]
         },
         {
             name: "Bar Box",
             locationWithinVenue: "bar",
             ownerEmail: "elizabeth@test.com",
-            venueName: "New Chicago",
+            venueName: "Not Your Average Joe's",
             managerEmails: ["unice@test.com", "jerref@test.com"]
         },
         {
             name: "Bar Box",
             locationWithinVenue: "bar",
             ownerEmail: "carina@test.com",
-            venueName: "VJ's",
+            venueName: "Islands",
             managerEmails: ["annegret@test.com", "unice@test.com"]
         },
         {
             name: "Entrance Box",
             locationWithinVenue: "entrance",
             ownerEmail: "john@test.com",
-            venueName: "John's Burgers",
+            venueName: "Le Boulanger",
             managerEmails: ["silvanus@test.com", "annegret@test.com"]
         },
         {
             name: "Entrance Box",
             locationWithinVenue: "entrance",
             ownerEmail: "vogel@test.com",
-            venueName: "Corner Pub",
+            venueName: "The Sink",
             managerEmails: ["caterina@test.com", "silvanus@test.com"]
         },
         {
             name: "Entrance Box",
             locationWithinVenue: "entrance",
             ownerEmail: "ryan@test.com",
-            venueName: "BBQ 'n Beer",
+            venueName: "B Bar & Grill",
             managerEmails: ["jerref@test.com", "caterina@test.com"]
         },
         {
             name: "Entrance Box",
             locationWithinVenue: "entrance",
             ownerEmail: "elizabeth@test.com",
-            venueName: "New Chicago",
+            venueName: "Not Your Average Joe's",
             managerEmails: ["unice@test.com", "jerref@test.com"]
         },
         {
             name: "Entrance Box",
             locationWithinVenue: "entrance",
             ownerEmail: "carina@test.com",
-            venueName: "VJ's",
+            venueName: "Islands",
             managerEmails: ["annegret@test.com", "unice@test.com"]
         }
 

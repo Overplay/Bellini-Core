@@ -24,14 +24,14 @@ module.exports = {
         },
 
         // Array of Mongo Ids of Media associated with this venue
-        imageIds: {
+        photos: {
             type: 'array',
             defaultsTo: []
         },
         
         // This is a denormalized way of saving the logo image. We just stash the Mongo id here instead of
         // using relationships. We need to figure out what the right way is for this app.
-        logoId: {
+        logo: {
             type: 'string',
             defaultsTo: ''
         },
@@ -73,4 +73,3 @@ module.exports = {
         cb();
     }
 };
-

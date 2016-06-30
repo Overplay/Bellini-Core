@@ -23,17 +23,20 @@ app.controller("addEditVenueController", function ($scope, $log, nucleus, $state
 
     $scope.edit = edit;
     $scope.yelp = {};
-    $scope.venue = venue || {showInMobileAppMap: true, address: {}, imageIds: []};
+    $scope.venue = venue || {showInMobileAppMap: true, address: {}, photos: []};
     $scope.regex = "\\d{5}([\\-]\\d{4})?";
     $scope.confirm = { checked: false };
+    $scope.setForm = function (form) {
+        $scope.form = form;
+    }
 
     $scope.imgUrls = {
         logo: null,
-        images: [ null, null, null]
+        photos: [ null, null, null]
     }
     $scope.media = {
         logo: null,
-        images: [ null, null, null ]
+        photos: [ null, null, null ]
     }
 
     $scope.parameters = {
@@ -43,12 +46,10 @@ app.controller("addEditVenueController", function ($scope, $log, nucleus, $state
     };
     $scope.results = {};
 
-    var fr = new FileReader();
-
     if (edit) {
         $scope.imgUrls.logo = venue.logoId;
-        venue.imageIds.forEach(function (img, index, array) {
-            $scope.imgUrls.images[index] = img;
+        venue.photos.forEach(function (img, index, array) {
+            $scope.imgUrls.photos[index] = img;
         })
     }
 
@@ -72,7 +73,7 @@ app.controller("addEditVenueController", function ($scope, $log, nucleus, $state
         if ($scope.media.logo) {
             promise = nucleus.uploadMedia($scope.media.logo)
                 .then( function(data) {
-                    $scope.venue.logoId = data.id;
+                    $scope.venue.logo = data.id;
                 })
         }
         else {
@@ -80,15 +81,15 @@ app.controller("addEditVenueController", function ($scope, $log, nucleus, $state
                 resolve();
             });
         }
-        $scope.media.images.forEach( function (img, index) {
+        $scope.media.photos.forEach( function (img, index) {
             if (img) {
                 promise = promise.then( function() {
                     return nucleus.uploadMedia(img)
                         .then( function(data) {
                             if ($scope.edit)
-                                $scope.venue.imageIds[index] = data.id;
+                                $scope.venue.photos[index] = data.id;
                             else
-                                $scope.venue.imageIds.push(data.id);
+                                $scope.venue.photos.push(data.id);
                         })
                 })
             }
@@ -168,29 +169,19 @@ app.controller('listVenueController', function ( $scope, venues, $log ) {
 
     $log.debug("loading listVenueController");
     $scope.$parent.ui.pageTitle = "Venue List";
-    //TODO this feels wonky...the page title and the blue bubble should be
-    //on the same object. Fix this, Ryan.
     $scope.$parent.ui.panelHeading = "";
 
     $scope.venues = venues;
         
 })
 
-app.controller( 'viewVenueController', function ( $scope, venue ) {
+app.controller( 'viewVenueController', function ( $scope, venue, $log) {
 
     var mapURL = "https://www.google.com/maps/embed/v1/place?key=AIzaSyCrbE5uwJxaBdT7bXTGpes3F3VmQ5K9nXE&q=";
     $scope.venue = venue;
     $scope.$parent.ui.pageTitle = "Venue Overview";
     $scope.showMap = true;
     $scope.$parent.ui.panelHeading = venue.name;
-    $scope.mapLink = mapURL + window.encodeURIComponent(venue.name + " " + addressify(venue.address));
-
-} )
-
-app.controller( 'editVenueController', function ( $scope, venue ) {
-
-    $scope.$parent.ui.pageTitle = "Venue Edit";
-    $scope.$parent.ui.panelHeading = venue.name;
-    $scope.updateVenue = venue;
-
+    $scope.mapLink = mapURL + window.encodeURIComponent(addressify(venue.address));
+    
 } )
