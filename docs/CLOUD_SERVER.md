@@ -371,7 +371,8 @@ even write it all out manually (the pull, then exec restart) -without watch will
 
     trying pm2.reload but with my file instead of name.... if this works im gonna be so mad
     could have to do with pwd!
-    trying restart 
+    trying restart
+    pm2 is messed up i think 
 
 
 
