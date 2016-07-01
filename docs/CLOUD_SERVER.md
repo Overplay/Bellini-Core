@@ -349,7 +349,16 @@ current state:
     if it is being caused by autopull. might have to do with the pull and reload call in pm2 to _pull. so I may try
     to call this directly if possible. might be a pull and restart?
 
-    - might have to start auto reload from scratch at this point.... 
+    - might have to start auto reload from scratch at this point....
+
+IDEA - promise chain in set interval and only take care of given processes, not all. might make it more specific.
+
+todo pm2.connect for pm2 and calling stuff in pm2!
+auto-reload2-0 0
+auto-reload2-0 Did you forgot to call pm2.connect(function() { }) before interacting with PM2 ?
+
+
+testing testing testing!
 
 
 
