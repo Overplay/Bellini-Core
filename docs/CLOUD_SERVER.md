@@ -367,7 +367,9 @@ even write it all out manually (the pull, then exec restart) -without watch will
     - might still run update
 
     writing with vizion!!!
-    err, meta duh 
+    err, meta duh
+
+    trying pm2.reload but with my file instead of name.... if this works im gonna be so mad 
 
 
 REINSTALLING NODE
