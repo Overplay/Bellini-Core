@@ -4,7 +4,7 @@
 {
   "apps" : [{
     "name"       : "asahi",
-    "script"     : "app.js",
+    "script"     : "/opt/dev/source/app.js",
     "instances"  : 1,
     "exec_mode"  : "cluster",
     "cwd" : "/opt/dev/source",
