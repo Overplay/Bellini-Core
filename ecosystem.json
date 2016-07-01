@@ -23,7 +23,7 @@
    * Deployment section
    * http://pm2.keymetrics.io/docs/usage/deployment/
    */
-  deploy : {
+  /*deploy : {
     production : {
       user : "cgrigsby",
       host : "104.131.145.36",
