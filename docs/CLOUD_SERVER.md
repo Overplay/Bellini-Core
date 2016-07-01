@@ -366,7 +366,8 @@ auto-reload pullAndReload seems to be starting the wrong app after pulling....
 even write it all out manually (the pull, then exec restart) -without watch will prevent errors!
     - might still run update
 
-    writing with vizion!!! 
+    writing with vizion!!!
+    err, meta duh 
 
 
 REINSTALLING NODE
