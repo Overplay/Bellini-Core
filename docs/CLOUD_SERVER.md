@@ -364,7 +364,9 @@ auto-reload pullAndReload seems to be starting the wrong app after pulling....
 
 -getting rid of ecosystem just in case it was interfering with settings. if not, then i will post a git / redo process.json or
 even write it all out manually (the pull, then exec restart) -without watch will prevent errors!
-    - might still run update 
+    - might still run update
+
+    writing with vizion!!! 
 
 
 REINSTALLING NODE
