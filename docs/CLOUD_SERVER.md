@@ -376,7 +376,9 @@ even write it all out manually (the pull, then exec restart) -without watch will
 
     - gonna have to do it with child exec probably :/
 
-    here it goes 
+    here it goes
+
+    soooo might have to write it as a sails hook 
 
 
 
