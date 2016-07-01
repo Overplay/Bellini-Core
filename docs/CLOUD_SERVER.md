@@ -374,7 +374,9 @@ even write it all out manually (the pull, then exec restart) -without watch will
     trying restart
     pm2 is messed up i think
 
-    - gonna have to do it with child exec probably :/ 
+    - gonna have to do it with child exec probably :/
+
+    here it goes 
 
 
 
