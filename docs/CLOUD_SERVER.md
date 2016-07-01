@@ -360,6 +360,8 @@ auto-reload2-0 Did you forgot to call pm2.connect(function() { }) before interac
 
 testing testing testing!
 
+auto-reload pullAndReload seems to be starting the wrong app after pulling.... 
+
 
 
 REINSTALLING NODE
