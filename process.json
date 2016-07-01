@@ -20,8 +20,7 @@
     },
     "autorestart" : true,
     "vizion": true,
-    "post_update": ["npm install && cd assets && bower update && cd ..", "echo ****restarting the app*****", "echo PLZ"
-    , "pm2 startOrRestart process.json"]
+    "post_update": ["npm install && cd assets && bower update && cd ..", "echo ****restarting the app*****", "echo PLZ"]
 
 
   }]
