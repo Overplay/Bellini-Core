@@ -6,7 +6,7 @@
     "name"       : "asahi",
     "script"     : "/opt/dev/source/app.js",
     "instances"  : 1,
-    "exec_mode"  : "cluster",
+    "exec_mode"  : "fork",
     "cwd" : "/opt/dev/source",
     "env": {
       "COMMON_VARIABLE": "true",

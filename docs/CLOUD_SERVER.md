@@ -370,7 +370,7 @@ even write it all out manually (the pull, then exec restart) -without watch will
     err, meta duh
 
     trying pm2.reload but with my file instead of name.... if this works im gonna be so mad
-    could have to do with pwd! 
+    could have to do with pwd!
 
 
 
