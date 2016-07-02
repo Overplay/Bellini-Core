@@ -156,11 +156,25 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
 
         .state( 'device', {
             url:         '/device',
-            templateUrl: '/uiapp/app/components/device/device.partial.html',
+            templateUrl: '/uiapp/app/components/device/device-sidemenu.partial.html',
+            controller:  function ( $scope ) { $scope.panelHeading = { text: "", color: "#0000FF" }},
             abstract:    true
 
         } )
 
+        .state( 'device.list', {
+            url:         '/list',
+            controller:  'listDeviceController',
+            templateUrl: '/uiapp/app/components/device/devicelist.partial.html',
+            resolve:     {
+                devices: function ( $http ) {
+                    return $http.get( '/user/getDevices')
+                        .then(function (data) {
+                            return data.data;
+                        })
+                }
+            }
+        } )
 
         .state( 'device.addDevice', {
             url:         '/activate',
@@ -174,12 +188,11 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             }
         } )
 
-
         .state( 'device.regDevice', {
             url:         '/register',
             data:        { subTitle: "Register a Device" },
-            controller:  "registerDeviceController",
-            templateUrl: '/uiapp/app/components/device/register-device.partial.html',
+            // controller:  "registerDeviceController",
+            templateUrl: '/uiapp/app/components/device/register-device.partial.html'
         } )
 
         .state( 'device.manageDevice', {

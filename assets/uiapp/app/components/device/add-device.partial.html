@@ -1,31 +1,33 @@
 <div class="row">
-    <div class="col-md-6">
-        <h2>Add a Device</h2>
-
-        <form name="form" ng-submit="submitForCode()" role="form" ng-if="!code">
+    <div class="col-md-10 col-md-offset-1">
+        <form name="form" ng-submit="submitForCode()" role="form" ng-if="!code" class="form-horizontal">
             <fieldset class="form-group">
-                <label for="name">Device Name</label>
-                <input type="text" class="form-control" id="name" placeholder="Device Name"
-                       ng-model="device.name" required/>
+                <label for="name" class="col-sm-3 control-label">Device Name</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" id="name" placeholder="ex: Bar Box 8 (BB-8)"
+                    ng-model="device.name" required/>
+                </div>
             </fieldset>
 
             <fieldset class="form-group">
-                <label for="location">Location Within Venue</label>
-                <input type="text" class="form-control" id="location" placeholder="Location"
-                       ng-model="device.locationWithinVenue" required/>
+                <label for="location" class="col-sm-3 control-label">Location Within Venue</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" id="location" placeholder="Location"
+                           ng-model="device.locationWithinVenue" required/>
+                </div>
             </fieldset>
             <fieldset class="form-group" ng-if="user.venues.length > 0">
-                <label for="venue">Venue</label>
-                <select type="text" class="form-control" id="venue"
-                        ng-model="device.venue"
-                        ng-options="listAddress(venue) for venue in user.venues track by venue.id">
-                    required>
-                </select>
+                <label for="venue" class="col-sm-3 control-label">Venue</label>
+                <div class="col-sm-8">
+                    <select type="text" class="form-control" id="venue"
+                            ng-model="device.venue"
+                            ng-options="listAddress(venue) for venue in user.venues track by venue.id" required>
+                    </select>
+                </div>
             </fieldset>
 
-            <div class="form-actions">
-
-                <button type="submit" ng-disabled="form.$invalid" class="btn btn-primary btn-lg top15">
+            <div class="form-actions col-sm-11">
+                <button type="submit" ng-disabled="form.$invalid" class="btn btn-success pull-right top15">
                     Create Activation Code
                 </button>
             </div>

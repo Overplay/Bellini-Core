@@ -10,6 +10,12 @@ app.config( function ( toastrConfig ) {
     } );
 } );
 
+app.config( function ( uiGmapGoogleMapApiProvider) {
+    uiGmapGoogleMapApiProvider.configure({
+        key: 'AIzaSyCrbE5uwJxaBdT7bXTGpes3F3VmQ5K9nXE'
+    })
+})
+
 app.run( function ( $log, $rootScope ) {
 
     $log.info( "Asahi is pouring!" );

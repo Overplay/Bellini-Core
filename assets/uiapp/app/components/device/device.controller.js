@@ -7,6 +7,8 @@
 app.controller("addDeviceController", function ($scope, $state, $log, toastr, nucleus, $http, user, uibHelper) {
 
     $log.debug("addDeviceController starting.");
+    $scope.$parent.ui.pageTitle = "Activate Device";
+    $scope.$parent.ui.panelHeading = "";
     $scope.device = {};
     $scope.user = user;
     $scope.code = false;
@@ -28,24 +30,22 @@ app.controller("addDeviceController", function ($scope, $state, $log, toastr, nu
 
     $scope.listAddress = function (venue) {
 
-        var addr = venue.name + ' (';
-        addr += venue.address.street + ' ';
-        addr += venue.address.city + ', ';
-        addr += venue.address.state + ')';
-
-        return addr;
+        return venue.name + ' ('
+        + venue.address.street + ' '
+        + venue.address.city + ', '
+        + venue.address.state + ')';
     }
 
 
 });
-
-
 
 app.controller("editDeviceAdminController", function ($scope, $state, $log, device, toastr, uibHelper, nucleus) {
     $log.debug("manageDeviceController starting");
 
     $scope.device = device;
     $scope.deviceName = device.name;
+    $scope.$parent.ui.pageTitle = "Manage Device";
+    $scope.$parent.ui.panelHeading = device.name || "Device";
     $scope.confirm = {checked: false};
     $scope.owner = device.deviceOwner;
 
@@ -60,7 +60,7 @@ app.controller("editDeviceAdminController", function ($scope, $state, $log, devi
         nucleus.updateDevice($scope.device.id, $scope.device)
             .then(function (d) {
                 toastr.success("Device info updated", "Success!");
-                $scope.deviceName = d.name;
+                $scope.$parent.ui.panelHeading = d.name;
                 // $state.go('admin.manageDevices')
             })
             .catch(function (err) {
@@ -84,32 +84,38 @@ app.controller("editDeviceAdminController", function ($scope, $state, $log, devi
                         .catch(function (err) {
                             toastr.error(err.status, "Problem Deleting Device");
                         })
-
-
                 }
-
-                },
-                function (reason) {
-                    $scope.confirm.checked = false;
             })
     }
 
     $scope.listAddress = function (venue) {
 
-        var addr = venue.name + ' (';
-        addr += venue.address.street + ' ';
-        addr += venue.address.city + ', ';
-        addr += venue.address.state + ')';
-
-        return addr;
+        return venue.name + ' ('
+        + venue.address.street + ' '
+        + venue.address.city + ', '
+        + venue.address.state + ')';
     }
 
     $scope.addressString = function (address) {
-        var addr = address.street + ' ';
-        addr += address.city + ', ';
-        addr += address.state + ' ';
-        addr += address.zip;
-        return addr;
+        return address.street + ' '
+        + address.city + ', '
+        + address.state + ' '
+        + address.zip;
     }
 
 });
+
+app.controller('listDeviceController', function ( $scope, devices, $log, uibHelper, nucleus ) {
+
+    $log.debug("loading listDeviceController");
+    $scope.$parent.ui.pageTitle = "Device List";
+    $scope.$parent.ui.panelHeading = "";
+    $scope.devices = _.union(_.filter(devices.owned, {regCode: ''}), _.filter(devices.managed, {regCode: ''}));
+
+    _.forEach($scope.devices, function (dev) {
+        nucleus.getVenue(dev.venue)
+            .then(function (data) {
+                dev.venue = data;
+            })
+    })
+})

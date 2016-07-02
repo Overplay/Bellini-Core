@@ -37,7 +37,7 @@
         <hr/>
         <!-- Save, Delete, Cancel buttons -->
         <div class="row top30">
-            <div class="col-md-4">
+            <div class="col-md-12">
                 <button ng-disabled="form.$invalid" class="btn btn-success" ng-click="submit()">
                     {{ edit ? "Update" : "Create" }}
                 </button>
@@ -45,8 +45,6 @@
                         ui-sref="venue.view({id: venue.id})">
                     Cancel
                 </button>
-            </div>
-            <div class="col-md-offset-2 col-md-6">
                 <div class="pull-right" ng-if="edit">
                     <button class="btn btn-danger" ng-click="deleteVenue()">
                         Delete
@@ -60,14 +58,14 @@
             <div>
                 <form name="form" role="form" ng-submit="submit()" class="form-horizontal top15">
                     <div ng-init="setForm(form);"></div>
-                    <fieldset class="form-group" ng-class="{'has-error' : !form.name.$valid && form.name.$touched}">
+                    <fieldset class="form-group" ng-class="{'has-error' : !form.name.$valid && form.name.$touched, 'has-success' : form.name.$valid && form.name.$touched}">
                         <label for="name" class="col-sm-3 control-label">Venue Name</label>
                         <div class="col-sm-9">
                             <input type="text" class="form-control" id="name" name="name" placeholder="Venue Name"
                                    ng-model="venue.name" required/>
                         </div>
                     </fieldset>
-                    <fieldset class="form-group" ng-class="{'has-error' : !form.street.$valid && form.street.$touched}">
+                    <fieldset class="form-group" ng-class="{'has-error' : !form.street.$valid && form.street.$touched, 'has-success' : form.street.$valid && form.street.$touched}">
                         <label for="address-street" class="col-sm-3 control-label">Street Address</label>
                         <div class="col-sm-9">
                             <input type="text" class="form-control" id="address-street" name="street"
@@ -83,14 +81,14 @@
                                    ng-model="venue.address.street2"/>
                         </div>
                     </fieldset>
-                    <fieldset class="form-group" ng-class="{'has-error' : !form.city.$valid && form.city.$touched}">
+                    <fieldset class="form-group" ng-class="{'has-error' : !form.city.$valid && form.city.$touched, 'has-success' : form.city.$valid && form.city.$touched}">
                         <label for="address-city" class="col-sm-3 control-label">City</label>
                         <div class="col-sm-9">
                             <input type="text" class="form-control" id="address-city" name="city" placeholder="City"
                                    ng-model="venue.address.city" required/>
                         </div>
                     </fieldset>
-                    <fieldset class="form-group">
+                    <fieldset class="form-group" ng-class="{'has-error' : !form.state.$valid && form.state.$touched, 'has-success' : form.state.$valid && form.state.$touched}">
                         <label for="address-state" class="col-sm-3 control-label">State/Province</label>
                         <div class="col-sm-3">
                             <input type="text" class="form-control" id="address-state" name="state" placeholder="State"
@@ -99,7 +97,7 @@
                             <!--id="address-state" name="state" required></select>-->
                         </div>
                     </fieldset>
-                    <fieldset class="form-group" ng-class="{'has-error' : !form.zip.$valid && form.zip.$touched}">
+                    <fieldset class="form-group" ng-class="{'has-error' : !form.zip.$valid && form.zip.$touched, 'has-success' : form.zip.$valid && form.zip.$touched}">
                         <label for="address-zip" class="col-sm-3 control-label">Postal/Zip Code</label>
                         <div class="col-sm-5">
                             <input type="text" class="form-control" id="address-zip" name="zip" placeholder="ex: 80304"
@@ -110,7 +108,7 @@
                               ng-class="{'has-error' : !form.latitude.$valid && form.latitude.$touched}">
                         <label for="latitude" class="col-sm-3 control-label">Latitude</label>
                         <div class="col-sm-6">
-                            <input type="number" class="form-control" id="latitude" name="latitude"
+                            <input type="number" step="any" class="form-control" id="latitude" name="latitude"
                                    ng-model="venue.geolocation.latitude" placeholder="ex: 35.272491"/>
                         </div>
                     </fieldset>
@@ -118,7 +116,7 @@
                               ng-class="{'has-error' : !form.longitude.$valid && form.longitude.$touched}">
                         <label for="longitude" class="col-sm-3 control-label">Longitude</label>
                         <div class="col-sm-6">
-                            <input type="number" class="form-control" id="longitude" name="longitude"
+                            <input type="number" step="any" class="form-control" id="longitude" name="longitude"
                                    ng-model="venue.geolocation.longitude" placeholder="ex: -120.7054912"/>
                         </div>
                     </fieldset>
@@ -131,6 +129,8 @@
                             </div>
                         </div>
                     </fieldset>
+                    <!--Hidden submit button so submission on pressing enter works-->
+                    <button type="submit" ng-show="false"></button>
                 </form>
             </div>
 

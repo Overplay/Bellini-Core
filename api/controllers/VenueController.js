@@ -50,7 +50,7 @@ module.exports = {
 
         Venue.create(newVenue)
             .then(function (v) {
-                return res.json(newVenue);
+                return res.json(v);
             })
             .catch(function (err) {
                 return res.serverError(err); //give out error (will only show error info if not in production) 

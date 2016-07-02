@@ -1,26 +1,29 @@
+<style>
+    .angular-google-map-container { height: 450px; }
+</style>
+
 <div class="top15 sidepad10">
 
-    <h3>Venue Information<a ui-sref="venue.edit({id: venue.id})" class="btn btn-primary btn-sm pull-right">Edit</a> </h3>
+    <a ui-sref="venue.edit({id: venue.id})" class="btn btn-primary pull-right">Edit</a>
 
-    <h4>Address</h4>
-
-    <p>{{venue.address.street}}</p>
-    <p>{{venue.address.city}}, {{venue.address.state}} {{venue.address.zip}}</p>
-
-    <a ng-click="showMap = !showMap" class="btn btn-info btn-sm" style="margin-bottom: 15px">
-        {{showMap ? "Show" : "Hide"}} Map
+    <a ng-click="showMap = !showMap;" class="btn btn-primary" style="margin-bottom: 15px">
+        {{!showMap ? "Show" : "Hide"}} Map
     </a>
 
-    <div uib-collapse="showMap">
-        <iframe
-                width="100%"
-                height="450"
-                frameborder="0" style="border:0"
-                ng-src="{{mapLink | trustAsResourceUrl}}">
-        </iframe>
+    <div uib-collapse="!showMap">
+        <ui-gmap-google-map center="map.center" zoom="map.zoom">
+            <ui-gmap-marker idKey="marker.id" coords="marker.coords">
+                <ui-gmap-window show="true">
+                    <div style="text-align: center">
+                        <h3>{{ venue.name }}</h3>
+                        <p style="font-size: 14px">{{ marker.address }}</p>
+                    </div>
+                </ui-gmap-window>
+            </ui-gmap-marker>
+        </ui-gmap-google-map>
     </div>
 
-    <h4 ng-show="venue.devices.length">Devices</h4>
+    <h3 ng-show="venue.devices.length">Devices</h3>
 
     <table class="table table-striped top15" ng-show="venue.devices.length">
         <thead>

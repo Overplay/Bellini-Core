@@ -9,13 +9,13 @@ app.filter('trustAsResourceUrl', function($sce) {
 });
 
 addressify = function (address) {
-    var newAddr = address.street + ' ';
-    newAddr += address.city + ' ';
-    newAddr += address.state;
-    return newAddr;
+    return address.street + ' '
+    + address.city + ', '
+    + address.state + ' '
+    + address.zip
 };
 
-app.controller("addEditVenueController", function ($scope, $log, nucleus, $state, $http, $q, toastr, uibHelper, venue, edit) {
+app.controller("addEditVenueController", function ($scope, $log, nucleus, $state, $http, $q, toastr, uibHelper, venue, edit, uiGmapGoogleMapApi) {
 
     $log.debug("addEditVenueController starting");
     $scope.$parent.ui.pageTitle = edit ? "Edit Venue" : "Add New Venue";
@@ -26,9 +26,7 @@ app.controller("addEditVenueController", function ($scope, $log, nucleus, $state
     $scope.venue = venue || {showInMobileAppMap: true, address: {}, photos: []};
     $scope.regex = "\\d{5}([\\-]\\d{4})?";
     $scope.confirm = { checked: false };
-    $scope.setForm = function (form) {
-        $scope.form = form;
-    }
+    $scope.setForm = function (form) { $scope.form = form; }
 
     $scope.imgUrls = {
         logo: null,
@@ -45,6 +43,8 @@ app.controller("addEditVenueController", function ($scope, $log, nucleus, $state
         limit: 8
     };
     $scope.results = {};
+
+    uiGmapGoogleMapApi.then( function (maps) { $scope.maps = maps; });
 
     if (edit) {
         $scope.imgUrls.logo = venue.logoId;
@@ -98,9 +98,9 @@ app.controller("addEditVenueController", function ($scope, $log, nucleus, $state
         if ($scope.edit) {
             promise = promise.then( function() {
                 nucleus.updateVenue($scope.venue.id, $scope.venue)
-                    .then(function (d) {
+                    .then(function (v) {
                         toastr.success("Venue info updated", "Success!");
-                        $state.go('venue.view', {id: d.id});
+                        $state.go('venue.view', {id: v.id});
                     })
                     .catch(function (err) {
                         toastr.error("Something went wrong", "Damn!");
@@ -110,9 +110,9 @@ app.controller("addEditVenueController", function ($scope, $log, nucleus, $state
         else {
             promise = promise.then( function() {
                 nucleus.addVenue($scope.venue)
-                    .then(function () {
+                    .then(function (v) {
                         toastr.success("Venue created", "Success!")
-                        $state.go('venue.list');
+                        $state.go('venue.view', {id: v.id});
                     })
                     .catch(function (err) {
                         toastr.error("Something went wrong", "Error")
@@ -175,7 +175,7 @@ app.controller('listVenueController', function ( $scope, venues, $log ) {
         
 })
 
-app.controller( 'viewVenueController', function ( $scope, venue, $log) {
+app.controller( 'viewVenueController', function ( $scope, venue, $log, uiGmapGoogleMapApi, nucleus ) {
 
     var mapURL = "https://www.google.com/maps/embed/v1/place?key=AIzaSyCrbE5uwJxaBdT7bXTGpes3F3VmQ5K9nXE&q=";
     $scope.venue = venue;
@@ -183,5 +183,41 @@ app.controller( 'viewVenueController', function ( $scope, venue, $log) {
     $scope.showMap = true;
     $scope.$parent.ui.panelHeading = venue.name;
     $scope.mapLink = mapURL + window.encodeURIComponent(addressify(venue.address));
-    
-} )
+    $scope.map = {
+        center: {
+            latitude: 51.5,
+            longitude: 0
+        },
+        zoom: 18
+    };
+    $scope.marker = {
+        id: 0,
+        coords: {},
+        address: addressify(venue.address)
+    }
+    uiGmapGoogleMapApi.then( function (maps) {
+        $scope.maps = maps;
+
+        if (venue.geolocation && venue.geolocation.latitude && venue.geolocation.longitude) {
+            $scope.marker.coords.latitude = $scope.map.center.latitude = venue.geolocation.latitude;
+            $scope.marker.coords.longitude = $scope.map.center.longitude = venue.geolocation.longitude;
+        }
+        else {
+            var geocode = new maps.Geocoder();
+            geocode.geocode({
+                address: addressify(venue.address)
+            }, function(res, stat) {
+                var lat = res[0].geometry.location.lat();
+                var long = res[0].geometry.location.lng();
+                $scope.venue.geolocation = {};
+                $scope.venue.geolocation.latitude = $scope.marker.coords.latitude = $scope.map.center.latitude = lat;
+                $scope.venue.geolocation.longitude = $scope.marker.coords.longitude = $scope.map.center.longitude = long;
+                nucleus.updateVenue($scope.venue.id, $scope.venue)
+                    .then( function() {
+                        $log.debug("Venue updated with lat/long");
+                    })
+            })
+        }
+    })
+
+})
