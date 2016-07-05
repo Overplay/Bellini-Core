@@ -378,7 +378,9 @@ even write it all out manually (the pull, then exec restart) -without watch will
 
     here it goes
 
-    soooo might have to write it as a sails hook 
+    soooo might have to write it as a sails hook
+
+    - auto pull retest 
 
 
 
