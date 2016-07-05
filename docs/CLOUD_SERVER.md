@@ -355,7 +355,7 @@ even write it all out manually (the pull, then exec restart) -without watch will
   auto-reload2-1     at /usr/lib/node_modules/pm2/node_modules/async/lib/async.js:44:16
 
 - problem with dev on their end
-
+https://github.com/Unitech/pm2/issues/2077
 
 - restart call
     TypeError: Cannot read property 'only' of undefined
@@ -374,5 +374,12 @@ even write it all out manually (the pull, then exec restart) -without watch will
 
 
 - reload
-    - same ^^^ 
+    - same ^^^
 - with name
+    - works
+
+    TODO
+    - publish module once fixed
+    - clean up dev area of asahi and start script??
+    - deploy y/n
+
