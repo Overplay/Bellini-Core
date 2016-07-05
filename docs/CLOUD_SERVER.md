@@ -380,7 +380,8 @@ even write it all out manually (the pull, then exec restart) -without watch will
 
     soooo might have to write it as a sails hook
 
-    - auto pull retest 
+    - auto pull retest
+    - could write my own module that also updates and restarts pm2?
 
 
 
