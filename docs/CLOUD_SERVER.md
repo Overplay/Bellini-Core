@@ -332,5 +332,27 @@ even write it all out manually (the pull, then exec restart) -without watch will
 
 - trying with a dev fix from pm2
 
-- gonna be interesting with my own reload now. going to try vizion stuff again too 
+- gonna be interesting with my own reload now. going to try vizion stuff again too
+
+
+- auto-reload2-1 Unexpected token ILLEGAL
+  auto-reload2-1 ReferenceError: EXEC_TIMEOUT is not defined
+  auto-reload2-1     at exec (/usr/lib/node_modules/pm2/lib/CLI/Version.js:247:16)
+  auto-reload2-1     at /usr/lib/node_modules/pm2/lib/CLI/Version.js:274:7
+  auto-reload2-1     at /usr/lib/node_modules/pm2/node_modules/async/lib/async.js:181:20
+  auto-reload2-1     at iterate (/usr/lib/node_modules/pm2/node_modules/async/lib/async.js:262:13)
+  auto-reload2-1     at Object.async.forEachOfSeries.async.eachOfSeries (/usr/lib/node_modules/pm2/node_modules/async/lib/async.js:281:9)
+  auto-reload2-1     at Object.async.forEachSeries.async.eachSeries (/usr/lib/node_modules/pm2/node_modules/async/lib/async.js:214:22)
+  auto-reload2-1     at execCommands (/usr/lib/node_modules/pm2/lib/CLI/Version.js:272:11)
+  auto-reload2-1     at /usr/lib/node_modules/pm2/lib/CLI/Version.js:43:13
+  auto-reload2-1     at /usr/lib/node_modules/pm2/lib/CLI/Version.js:342:31
+  auto-reload2-1     at /usr/lib/node_modules/pm2/node_modules/async/lib/async.js:52:16
+  auto-reload2-1     at /usr/lib/node_modules/pm2/node_modules/async/lib/async.js:264:21
+  auto-reload2-1     at /usr/lib/node_modules/pm2/node_modules/async/lib/async.js:44:16
+  auto-reload2-1     at /usr/lib/node_modules/pm2/lib/CLI/Version.js:327:22
+  auto-reload2-1     at /usr/lib/node_modules/pm2/node_modules/async/lib/async.js:52:16
+  auto-reload2-1     at /usr/lib/node_modules/pm2/node_modules/async/lib/async.js:264:21
+  auto-reload2-1     at /usr/lib/node_modules/pm2/node_modules/async/lib/async.js:44:16
+
+- problem with dev on their end
 
