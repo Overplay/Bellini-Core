@@ -356,3 +356,21 @@ even write it all out manually (the pull, then exec restart) -without watch will
 
 - problem with dev on their end
 
+
+- restart call
+    TypeError: Cannot read property 'only' of undefined
+    auto-reload2-1     at /usr/lib/node_modules/pm2/lib/CLI.js:523:13
+    auto-reload2-1     at Array.forEach (native)
+    auto-reload2-1     at CLI._startJson (/usr/lib/node_modules/pm2/lib/CLI.js:522:11)
+    auto-reload2-1     at CLI.restart (/usr/lib/node_modules/pm2/lib/CLI.js:1060:10)
+    auto-reload2-1     at /opt/auto-reload2/app.js:140:25
+    auto-reload2-1     at /opt/auto-reload2/node_modules/vizion/lib/git.js:214:16
+    auto-reload2-1     at /opt/auto-reload2/node_modules/vizion/lib/git.js:192:12
+    auto-reload2-1     at ChildProcess.exithandler (child_process.js:204:7)
+    auto-reload2-1     at emitTwo (events.js:87:13)
+    auto-reload2-1     at ChildProcess.emit (events.js:172:7)
+    auto-reload2-1     at maybeClose (internal/child_process.js:827:16)
+    auto-reload2-1     at Process.ChildProcess._handle.onexit (internal/child_process.js:211:5)
+
+
+- reload 
