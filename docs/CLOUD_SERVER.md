@@ -384,6 +384,8 @@ even write it all out manually (the pull, then exec restart) -without watch will
     - could write my own module that also updates and restarts pm2?
 
 
+-- pull and reload testing with call back. 
+
 
 REINSTALLING NODE
 - https://www.digitalocean.com/community/tutorials/how-to-create-an-node-js-app-using-sails-js-on-an-ubuntu-vps
