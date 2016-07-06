@@ -384,4 +384,6 @@ https://github.com/Unitech/pm2/issues/2077
     - deploy y/n
 
 
-testing 
+testing
+
+testing pm2-auto-pull with fixes 
