@@ -177,7 +177,7 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                 edit: function() { return false; },
                 venue: function() { return null; }
             }
-            })
+        })
 
         .state( 'device', {
             url:         '/device',
@@ -239,7 +239,6 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             templateUrl: '/uiapp/app/components/organization/manage-organization.partial.html',
             /*resolve: { not really necesary unless someone has control of multiple organizations?
              organization: function($http, $stateParams){
-
              $http.get("api/v1/organization/" + $stateParams.id)
              .then(function (data) {
              return data.data;
@@ -268,10 +267,6 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
         .state( 'advertisement', {
             url:         '/advertisement',
             templateUrl: '/uiapp/app/components/trevda/trevda.partial.html',
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> master
             abstract: true,
             resolve: {
                 user: function (nucleus) {
@@ -279,13 +274,6 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                 }
             }
         })
-<<<<<<< HEAD
-=======
-            abstract:    true
-        } )
->>>>>>> master
-=======
->>>>>>> master
 
         .state( 'advertisement.addAdvertisement', {
             url:         '/add-advertisement',
@@ -297,45 +285,19 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
         .state( 'advertisement.manageAdvertisements', {
             url:         '/manage-advertisements',
             templateUrl: '/uiapp/app/components/trevda/manage-trevda.partial.html',
-<<<<<<< HEAD
-<<<<<<< HEAD
-            data: {subTitle: "Manage Advertisements"},
-            controller: 'manageAdvertisementController',
-
-        })
-=======
             data:        { subTitle: "Manage Advertisements" },
             controller:  'manageAdvertisementController'
         } )
->>>>>>> master
-=======
-            data:        { subTitle: "Manage Advertisements" },
-            controller:  'manageAdvertisementController'
-        } )
->>>>>>> master
 
         .state( 'advertisement.editAdvertisement', {
             url:         '/edit-advertisement/:id',
             templateUrl: '/uiapp/app/components/trevda/edit-trevda.partial.html',
-<<<<<<< HEAD
-<<<<<<< HEAD
-            data: {subTitle: "Edit Advertisement"},
-            controller: 'editAdvertisementController',
-
-        })
-=======
-=======
->>>>>>> master
             data:        { subTitle: "Edit Advertisement" },
             controller:  'editAdvertisementController',
             resolve:     {
                 //TODO
             }
         } )
-<<<<<<< HEAD
->>>>>>> master
-=======
->>>>>>> master
         // =========== DASHBOARD
 
         .state( 'dash', {
@@ -386,5 +348,3 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
         } );
 
 } );
-
-
