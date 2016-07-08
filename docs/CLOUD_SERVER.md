@@ -381,6 +381,7 @@ https://github.com/Unitech/pm2/issues/2077
 - https://help.github.com/articles/changing-a-remote-s-url/ need to set to ssh for some reason ugh hahahah
     - TODO add to directions
 
+- auto-reload-pm2 npm module :) 
 
 - git pull not working on cgrigsby with auto-reload now. asking for pw even though ssh is setup
 
@@ -392,7 +393,7 @@ https://github.com/Unitech/pm2/issues/2077
     - deploy y/n
     - test auto-reload with pullAndReload FAILED
     #### asahi overall DO stuff
-    - user not working with ssh :/ 
+    - user not working with ssh :/
     - need to fix permissions for deployment as asahi
     - nginx documentation (multiple sails applications??) figure out whats going on haha
 
