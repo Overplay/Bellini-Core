@@ -406,6 +406,7 @@ https://github.com/Unitech/pm2/issues/2077
 
 
 retesting with exec ahhh this is no fun
+- trying to print 
 
 testing pm2-auto-pull with fixes
     - still does not work. submitted issue https://github.com/Unitech/pm2/issues/2270
