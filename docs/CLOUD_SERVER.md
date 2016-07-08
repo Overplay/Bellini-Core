@@ -384,7 +384,8 @@ https://github.com/Unitech/pm2/issues/2077
 - auto-reload-pm2 npm module :)
 - had to call connect
 - having to publish each time i update is fun
-    - the published version isn't working hahahahahha 
+    - the published version isn't working hahahahahha
+    - testing agian 
 
 - git pull not working on cgrigsby with auto-reload now. asking for pw even though ssh is setup
 
