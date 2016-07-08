@@ -411,7 +411,9 @@ retesting with exec ahhh this is no fun
     - exec_cmd using pm2s code now
     - wow owwoowowowo w
     - ugh SO CLOSE - pm2 is shitting the bed rn
-    - restarT? exec restart now 
+    - restarT? exec restart now
+
+    - ah 
 
 testing pm2-auto-pull with fixes
     - still does not work. submitted issue https://github.com/Unitech/pm2/issues/2270
