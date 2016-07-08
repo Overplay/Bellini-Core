@@ -387,7 +387,7 @@ https://github.com/Unitech/pm2/issues/2077
     - the published version isn't working hahahahahha
     - testing agian
     - works locally at least
-- wow pullAndReload might work locally now too whatttt 
+- wow pullAndReload might work locally now too whatttt
 
 - just gonna use locally now
     - easier until unitech gets back to me
