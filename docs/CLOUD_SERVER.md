@@ -27,21 +27,31 @@ https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys--2
     ##### Clone asahi into /opt
 
     `sudo git clone https://github.com/Overplay/asahi`
+        - https://help.github.com/articles/changing-a-remote-s-url/
         - sudo because /opt is root root 755
     - enter your github username and password
 
-    **** when sudo git clone, asahi becomes root root.
-    - i am going to change the owner to myself for now, if this works, in the future, create the asahi user here and
-        have that all set up?
-        - I am going to create asahi user / group now.
 
-    - just did npm update
-    - still did 'sudo npm install -g sails'
 
+9. Create asahi user and group
+    - `sudo adduser asahi`
+         *EDIT* USE adduser for pm2 to run properly on asahi
+            - need the home directory!
+
+10. Add yourself to the asahi group
+    - sudo usermod -a -G asahi username
+
+#. chmod -R 775 asahi
+
+11. chown and chgrp -R asahi asahi
+    - from now on, run npm and bower from asahi account, it will all run properly
+    - running from asahi is necesary if you wanna deploy on asahi
+
+    -----it could also be possible for this to be down in an ecosystem.js file that is deployed locally----
 
 6. update asahi dependencies
+    -`npm update`
     - `sudo npm install -g sails`
-    //- `sudo npm update`
 
 7. add the `local.js` file to config
     - vi and insert or whatever floats your boat!
@@ -55,36 +65,8 @@ at this point, the app runs properly.
 -----------------
 
 
-~~~~~~
-next step, get asahi to be able to run everything properly
-~~~~~~~~
-        - create user, log in as them and sails lift, figure out what needs to be changed in permissions
-        - just doing this, sails runs, but npm does not update
-            - cgrigsby does though. gonna change the permissions of asahi to 775 and make the user/group asahi
-                - add cgrigsby to asahi too
 
-            ** npm had to be updated to the latest to fix some permissions stuff
-            - still some node modules were owned by cgrigsby and in cgrigsby so once they were chowned and chgrpd then
-                asahi was able to npm update
-                :)
-                - also bower update runs !
-
-
-9. Create asahi user and group
-    - `sudo !!!!useradd!!!! asahi`
-         - does not add a home directory
-         *EDIT* USE adduser for pm2 to run properly on asahi
-            - need the home directory
-
-10. Add yourself to the asahi group
-    - sudo usermod -a -G asahi username
-
-chmod -R 775 asahi
-
-11. chown and chgrp -R asahi asahi
-    - from now on, run npm and bower from asahi account, it will all run properly
-
-12. install pm2
+12. install pm2 --> might have to do some of the pm2 stuff as asahi
     - sudo npm install -g pm2 (As your user)
     - test run with asahi
         - pm2 start app.js
@@ -149,6 +131,22 @@ TODO finish the pull and stuff to update the app
 
 
 
+~~~~~~
+next step, get asahi to be able to run everything properly
+~~~~~~~~
+        - create user, log in as them and sails lift, figure out what needs to be changed in permissions
+        - just doing this, sails runs, but npm does not update
+            - cgrigsby does though. gonna change the permissions of asahi to 775 and make the user/group asahi
+                - add cgrigsby to asahi too
+
+            ** npm had to be updated to the latest to fix some permissions stuff
+            - still some node modules were owned by cgrigsby and in cgrigsby so once they were chowned and chgrpd then
+                asahi was able to npm update
+                :)
+                - also bower update runs !
+
+
+PM2 keymetrics connect with asahi
 
 PM2 autoreloading
 https://github.com/pm2-hive/pm2-auto-pull/blob/master/app.js
@@ -413,7 +411,7 @@ retesting with exec ahhh this is no fun
     - ugh SO CLOSE - pm2 is shitting the bed rn
     - restarT? exec restart now
 
-    - ah 
+    - ah
 
 testing pm2-auto-pull with fixes
     - still does not work. submitted issue https://github.com/Unitech/pm2/issues/2270
