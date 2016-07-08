@@ -44,7 +44,7 @@ https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys--2
     //- `sudo npm update`
 
 7. add the `local.js` file to config
-    - vi and intert or whatever floats yo boat!
+    - vi and insert or whatever floats your boat!
 
 8. run bower update in /assets for uiapp to work
     - 'bower update'
@@ -53,9 +53,6 @@ https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys--2
 -----------------
 at this point, the app runs properly.
 -----------------
-
-
-
 
 
 ~~~~~~
@@ -379,7 +376,10 @@ https://github.com/Unitech/pm2/issues/2077
     - works
 - testing conf
 
-- auto reload cant git pull on /opt/asahi for some reason. looking into why ssh isn't working 
+- auto reload cant git pull on /opt/asahi for some reason. looking into why ssh isn't working
+- https://help.github.com/articles/changing-a-remote-s-url/ need to set to ssh for some reason ugh hahahah
+    - TODO add to directions
+
 
 - git pull not working on cgrigsby with auto-reload now. asking for pw even though ssh is setup
 
