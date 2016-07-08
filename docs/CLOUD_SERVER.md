@@ -381,7 +381,8 @@ https://github.com/Unitech/pm2/issues/2077
 - https://help.github.com/articles/changing-a-remote-s-url/ need to set to ssh for some reason ugh hahahah
     - TODO add to directions
 
-- auto-reload-pm2 npm module :) 
+- auto-reload-pm2 npm module :)
+- had to call connect 
 
 - git pull not working on cgrigsby with auto-reload now. asking for pw even though ssh is setup
 
