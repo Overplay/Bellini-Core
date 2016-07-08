@@ -10,7 +10,7 @@
     "cwd" : "/opt/dev/source", //TODO change this if deploying in a different folder!
     "env": {
       "COMMON_VARIABLE": "true",
-      "NODE_ENV": "development",
+      "NODE_ENV": "development"
       //"PM2_SILENT": false, //trying to get output for debugging
       //"PM2_PROGRAMMATIC": false //same
 
@@ -20,7 +20,7 @@
     },
     "autorestart" : true,
     "vizion": true,
-    "post_update": ["npm install && cd assets && bower update && cd .."] //for reloads
+    "post_update": ["npm install && cd assets && bower update && cd .."] //for reloads //also restart the module??
 
 
   }]
