@@ -1,9 +1,12 @@
-{
+
+//Commented out so pm2 uses process.json. Just in case anything bad happens because pm2 isn't the best rn
+{}
+//{
   /**
    * Application configuration section
    * http://pm2.keymetrics.io/docs/usage/application-declaration/
    */
-  apps : [
+  /*apps : [
 
     // First application
     {
@@ -17,7 +20,7 @@
       }
     }
 
-  ],
+  ],*/
 
   /**
    * Deployment section

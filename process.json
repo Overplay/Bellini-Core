@@ -4,15 +4,15 @@
 {
   "apps" : [{
     "name"       : "asahi",
-    "script"     : "/opt/dev/source/app.js",
+    "script"     : "/opt/dev/source/app.js", //TODO change if nec. depends on file locations
     "instances"  : 1,
     "exec_mode"  : "fork",
-    "cwd" : "/opt/dev/source",
+    "cwd" : "/opt/dev/source", //TODO change this if deploying in a different folder!
     "env": {
       "COMMON_VARIABLE": "true",
       "NODE_ENV": "development",
-      "PM2_SILENT": false, //trying to get output for debugging
-      "PM2_PROGRAMMATIC": false //same
+      //"PM2_SILENT": false, //trying to get output for debugging
+      //"PM2_PROGRAMMATIC": false //same
 
     },
     "env_production" : {
@@ -20,7 +20,7 @@
     },
     "autorestart" : true,
     "vizion": true,
-    "post_update": ["npm install && cd assets && bower update && cd ..", "echo ****restarting the app*****", "echo PLZ"]
+    "post_update": ["npm install && cd assets && bower update && cd .."] //for reloads
 
 
   }]

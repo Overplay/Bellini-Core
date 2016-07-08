@@ -379,11 +379,18 @@ https://github.com/Unitech/pm2/issues/2077
     - works
 
     TODO
+    - test with configured path......
+        - config asahi path where permissions are correct
     - publish module once fixed
     - clean up dev area of asahi and start script??
     - deploy y/n
+    - test auto-reload with pullAndReload
+    #### asahi overall DO stuff
+    - user not working with ssh :/
+    - need to fix permissions for deployment as asahi
+    - nginx documentation (multiple sails applications??) figure out whats going on haha 
 
 
 testing
 
-testing pm2-auto-pull with fixes 
+testing pm2-auto-pull with fixes
