@@ -375,7 +375,7 @@ https://github.com/Unitech/pm2/issues/2077
 - with name
     - works
 - testing conf
-    - again 
+    - again
 
 - auto reload cant git pull on /opt/asahi for some reason. looking into why ssh isn't working
 - https://help.github.com/articles/changing-a-remote-s-url/ need to set to ssh for some reason ugh hahahah
@@ -387,12 +387,12 @@ https://github.com/Unitech/pm2/issues/2077
     TODO
     - test with configured path......
         - config asahi path where permissions are correct
-    - publish module once fixed
+    - publish module once fixed DONE
     - clean up dev area of asahi and start script??
     - deploy y/n
-    - test auto-reload with pullAndReload
+    - test auto-reload with pullAndReload FAILED
     #### asahi overall DO stuff
-    - user not working with ssh :/
+    - user not working with ssh :/ 
     - need to fix permissions for deployment as asahi
     - nginx documentation (multiple sails applications??) figure out whats going on haha
 
