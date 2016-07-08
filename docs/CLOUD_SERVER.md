@@ -386,9 +386,10 @@ https://github.com/Unitech/pm2/issues/2077
 - having to publish each time i update is fun
     - the published version isn't working hahahahahha
     - testing agian
-    - works locally at least 
+    - works locally at least
 
-- git pull not working on cgrigsby with auto-reload now. asking for pw even though ssh is setup
+
+- just gonna use locally now
 
     TODO
     - test with configured path......
