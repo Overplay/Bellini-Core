@@ -12,7 +12,7 @@
       "name"      : "asahi",
       "script"    : "/opt/source/app.js",
       "env": {
-        "COMMON_VARIABLE": "true"
+        "COMMON_VARIABLE": "true",
         "NODE_ENV": "production"
 
       },
