@@ -390,7 +390,7 @@ https://github.com/Unitech/pm2/issues/2077
 
 
 - just gonna use locally now
-    - easier until unitech gets back to me 
+    - easier until unitech gets back to me
 
     TODO
     - test with configured path......
