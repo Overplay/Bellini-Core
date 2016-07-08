@@ -375,6 +375,7 @@ https://github.com/Unitech/pm2/issues/2077
 - with name
     - works
 - testing conf
+    - again 
 
 - auto reload cant git pull on /opt/asahi for some reason. looking into why ssh isn't working
 - https://help.github.com/articles/changing-a-remote-s-url/ need to set to ssh for some reason ugh hahahah
