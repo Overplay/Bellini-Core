@@ -377,7 +377,11 @@ https://github.com/Unitech/pm2/issues/2077
     - same ^^^
 - with name
     - works
-- testing conf 
+- testing conf
+
+- auto reload cant git pull on /opt/asahi for some reason. looking into why ssh isn't working 
+
+- git pull not working on cgrigsby with auto-reload now. asking for pw even though ssh is setup
 
     TODO
     - test with configured path......
