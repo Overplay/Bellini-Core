@@ -405,7 +405,7 @@ https://github.com/Unitech/pm2/issues/2077
     - nginx documentation (multiple sails applications??) figure out whats going on haha
 
 
-testing
+retesting
 
 testing pm2-auto-pull with fixes
     - still does not work. submitted issue https://github.com/Unitech/pm2/issues/2270
