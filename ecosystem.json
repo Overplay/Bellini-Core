@@ -36,7 +36,7 @@
       "host" : "104.131.145.36",
       "ref"  : "origin/master",
       "repo" : "git@github.com:Overplay/asahi",
-      "path" : "/opt",
+      "path" : "/opt/asahi",
       "post-deploy" : "npm install && cd assets && bower update && cd .. && cp /home/asahi/local.js config/ && pm2 startOrRestart ecosystem.json --env production && cd /opt/auto-reload2 && pm2 install ."
         //^^ won't work right now because master doesn't have ecosystem file
     },
@@ -45,7 +45,7 @@
       "host" : "104.131.145.36",
       "ref"  : "origin/develop-cole",
       "repo" : "git@github.com:Overplay/asahi",
-      "path" : "/opt",
+      "path" : "/opt/asahi",
       "post-deploy" : "npm install && cd assets && bower update && cd .. && cp /home/asahi/local.js config/ && pm2 startOrRestart ecosystem.json --env dev && cd /opt/auto-reload2 && pm2 install .",
       //TODO ownership!
       "env"  : {
