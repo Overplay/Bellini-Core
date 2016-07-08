@@ -388,9 +388,10 @@ https://github.com/Unitech/pm2/issues/2077
     #### asahi overall DO stuff
     - user not working with ssh :/
     - need to fix permissions for deployment as asahi
-    - nginx documentation (multiple sails applications??) figure out whats going on haha 
+    - nginx documentation (multiple sails applications??) figure out whats going on haha
 
 
 testing
 
 testing pm2-auto-pull with fixes
+    - still does not work. submitted issue https://github.com/Unitech/pm2/issues/2270 
