@@ -377,6 +377,7 @@ https://github.com/Unitech/pm2/issues/2077
     - same ^^^
 - with name
     - works
+- testing conf 
 
     TODO
     - test with configured path......
@@ -394,4 +395,4 @@ https://github.com/Unitech/pm2/issues/2077
 testing
 
 testing pm2-auto-pull with fixes
-    - still does not work. submitted issue https://github.com/Unitech/pm2/issues/2270 
+    - still does not work. submitted issue https://github.com/Unitech/pm2/issues/2270
