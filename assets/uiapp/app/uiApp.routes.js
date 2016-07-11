@@ -152,7 +152,7 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                 edit: function() { return false; },
                 venue: function() { return null; }
             }
-            })
+        })
 
         .state( 'device', {
             url:         '/device',
@@ -239,7 +239,6 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             templateUrl: '/uiapp/app/components/organization/manage-organization.partial.html',
             /*resolve: { not really necesary unless someone has control of multiple organizations?
              organization: function($http, $stateParams){
-
              $http.get("api/v1/organization/" + $stateParams.id)
              .then(function (data) {
              return data.data;
@@ -349,5 +348,3 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
         } );
 
 } );
-
-
