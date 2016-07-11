@@ -18,14 +18,9 @@
         - as of 6/20/16, 4.4.5 is current
     - 'sudo npm install -g npm@latest'
 
-5. Then
-    - Install ‘n’ www.github.com/tj/n
-        - this is for node version management
+5. Install n
+    - this is for node version management
     - `sudo npm istall -g n`
-
-    //(at this point, i logged off then on just to let all the apt get updates work themselves out hopefully.)
-
-
 
 6. Create asahi user and group
     - `sudo adduser asahi`
@@ -34,20 +29,17 @@
 7. Add yourself to the asahi group
     - `sudo usermod -a -G asahi USERNAME`
 
-8. `sudo chmod -R 775 asahi`
-
+8. Set group permissions on asahi 
+    - `sudo chmod -R 775 asahi`
 
 9. Clone asahi and auto-reload into /opt, where it will be served from.
     - `sudo git clone https://github.com/Overplay/asahi`
-    - `sudo git clone https://github.com/colegrigsby/auto-reload` *** hopefully this will be on npm soon once pm2 is fixed 
-        - sudo because /opt is root root 755
-        - testing with pm2 install from npm registry 
+
 
 10. Change permissions to allow asahi user to run everything properly
     - `sudo chown/chgrp -R asahi asahi`
-    - `sudo chown/chgrp -R asahi auto-reload`
 
-#### Everything should be run as asahi user from this point forward 
+    #### Everything should be run as asahi user from this point forward (unlesss otherwise noted) 
 
 11. Setup the git repos 
     - Add asahi's public key to your github
@@ -55,378 +47,72 @@
         - git remote -v
         - git remote set-url origin git@github.com:Overplay/asahi.git
             - (https://help.github.com/articles/changing-a-remote-s-url/)
-    - `cd asahi`
-            - git remote -v
-            - git remote set-url origin git@github.com:colegrigsby/auto-reload.git //TODO move autoreload into Overplay?
+   
 12. update asahi dependencies
-    - `sudo npm install -g sails` (as your sudo account)          
-13. Update node packages in both `asahi` and `auot-reload`
+    - `sudo npm install -g sails` (as your sudo account)    
+          
+13. Update node packages in  `asahi`
     - `cd` into directory then npm update 
-14. run bower update in /assets for uiapp to work
-    - `bower update`
-15. add the `local.js` file to /config
+    
+14. Run bower update in /assets for uiapp to work
+    - `cd /assets && bower update`
+    
+15. Add the `local.js` file to /config
     - vi and insert or whatever floats your boat!
     - also on /home/asahi/local.js on the current server
-         - cp ~/local.js .
-         
+         - `cd /config && cp ~/local.js .`
 
-16. NGINX (install as your sudo privileged user) 
+16. ### NGINX (install as your sudo privileged user) 
     - `sudo add-apt-repository ppa:nginx/stable`
     - `sudo apt-get update`
     - `sudo apt-get install nginx`
 
 
-- ONCE installed
+    - ##### ONCE installed
 
-    - create a text file `asahi` in `/etc/nginx/sites-available` with the below
-            
-        `upstream sails_server {
-                server 127.0.0.1:1337;
-                keepalive 64;
-        }
-        server {
-            listen          80;
-            server_name     asahi;
-            location / {
-                proxy_pass http://sails_server;
-                proxy_http_version 1.1;
-                proxy_set_header Upgrade $http_upgrade;
-                proxy_set_header Connection 'upgrade';
-                proxy_set_header Host $host;
-                proxy_cache_bypass $http_upgrade;
-             }
-        }`
-            
-    - sym link it (`ln -s`) into `/etc/nginx/sites-enabled and` `rm default`
-    - `sudo nginx -s reload`
+        - create a text file `asahi` in `/etc/nginx/sites-available` with the below
+                
+            `upstream sails_server {
+                    server 127.0.0.1:1337;
+                    keepalive 64;
+            }
+            server {
+                listen          80;
+                server_name     asahi;
+                location / {
+                    proxy_pass http://sails_server;
+                    proxy_http_version 1.1;
+                    proxy_set_header Upgrade $http_upgrade;
+                    proxy_set_header Connection 'upgrade';
+                    proxy_set_header Host $host;
+                    proxy_cache_bypass $http_upgrade;
+                 }
+            }`
+                
+        - sym link it (`ln -s`) into `/etc/nginx/sites-enabled and` `rm default`
+        - `sudo nginx -s reload`
 
-17. Install pm2
+17. Install PM2 and set up Keymetrics
     - currently on `sudo npm install Unitech/pm2#development -g` (as sudo priv user) 
         - `$ pm2 update`
             - once dev is pushed to pm2 master `sudo npm install -g pm2 (As your user)`
+    - set up keymetrics
+        - on your keymetrics bucket, simply link by copy pasting the command at the bottom 
+        - https://app.keymetrics.io
 
 
-
-TODO set up keymetrics
-    - on your keymetrics bucket, simply link by copy pasting the command at the bottom 
-    - https://app.keymetrics.io
-
-
-18. Start asahi application 
+18. Start `asahi` application 
     - `git checkout BRANCH` if you're running something other than master! (make sure it has process.json in it) 
     - `pm2 start process.json` in /opt/asahi
 
-
-19. start `auto-reload`  (as asahi user) 
-    - `cd /opt/auto-reload && pm2 install .`
-    - test by pushing to the branch asahi is running on 
+19. Start `auto-reload-pm2`  (as asahi user) 
+    - `pm2 install auto-reload-pm2`
+        - it is on the npm registry and will install automatically! 
 
 20. Checkout http://104.131.145.36/ and see how it looks! 
     
 
 
 -----------------
-at this point, the app runs properly.
+At this point, the app runs properly.
 -----------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-~~~~~~
-next step, get asahi to be able to run everything properly
-~~~~~~~~
-        - create user, log in as them and sails lift, figure out what needs to be changed in permissions
-        - just doing this, sails runs, but npm does not update
-            - cgrigsby does though. gonna change the permissions of asahi to 775 and make the user/group asahi
-                - add cgrigsby to asahi too
-
-            ** npm had to be updated to the latest to fix some permissions stuff
-            - still some node modules were owned by cgrigsby and in cgrigsby so once they were chowned and chgrpd then
-                asahi was able to npm update
-                :)
-                - also bower update runs !
-
-
-PM2 keymetrics connect with asahi
-
-PM2 autoreloading
-https://github.com/pm2-hive/pm2-auto-pull/blob/master/app.js
-
-http://pm2.keymetrics.io/docs/usage/deployment/
-trying to deploy remotely from my local machine
-install pm2
-
-
-
-in a directory of my choosing
-pm2 ecosystem
-set up with server ip and user and git repo
-make sure to set up ssh key for the user
-
-got the deploy setup working but
-                                Coles-MBP:deploy cole$ pm2 deploy ecosystem.json production
-                                 --> Deploying to production environment
-                                 --> on host 104.131.145.36
-                                 Not a git repository
-                                 To compare two paths outside a working tree:
-                                 usage: git diff [--no-index] <path> <path>
-
-                                   commit or stash your changes before deploying
-
-                                 Deploy failed
-
-     This deploy failed because the directory being deployed from must be a repo. This is just a bug in pm2-deploy
-
-     ** need to edit develop and production in ecosystem and change post deploy commands
-     ** depoly wants ecosystem file on branch too
-
-     * had to change permissions of opt to be in the asahi group and make it 775
-
-
-****** LOCAL JS FILE *********
-     post deploy
-        - npm update
-        - cd assets && bower update
-        - LOCAL JS
-        - make sure that pm2-auto update is on TODO
-        - start or restart the server
-        - change permissions and ownership on files? should be fine if just deploying with asahi user
-
-predeploy pm2 auto pull?
-
-cgrigsby@Asahi-0:/opt$ sudo chgrp -R asahi prod
-cgrigsby@Asahi-0:/opt$ sudo chmod -R 775 prod
-
-
-
-
-pm2 auto pull is throwing an exception about Common.js or something.
-- doesn't seem linked
-
-trying remote start instead of local deploy now with process.json
-
-
-pm2 autopull might be working
- at least when i checkout dev-cole then have pm2-auto-pull running
-
-
-more testing is being done on pm2-auto-pull. still errors on startup with uv_cwd which means that a directory doesnt
-exist most likely
-
-also need to test post-update
-
-
-pm2 auto pull kills asahi process, going to try to add restart to post update
-
-pm2 update then pm2 start process.json
-when a commit is pushed, the app is killed. I am going to write my own module based on the pm2-auto-pull and try to debug
-- the app name isn't catching? idk whats going on with auto-pull right now
-
-pm2-auto-pull-0 App %s succesfully pulled
-pm2-auto-pull-0 { type: 'axm:option:configuration',
-pm2-auto-pull-0   data:
-pm2-auto-pull-0    { http: false,
-pm2-auto-pull-0      http_latency: 200,
-pm2-auto-pull-0      http_code: 500,
-pm2-auto-pull-0      ignore_routes: [],
-pm2-auto-pull-0      profiling: true,
-pm2-auto-pull-0      errors: true,
-pm2-auto-pull-0      alert_enabled: true,
-pm2-auto-pull-0      custom_probes: true,
-pm2-auto-pull-0      network: false,
-pm2-auto-pull-0      ports: false,
-pm2-auto-pull-0      module_conf: {},
-pm2-auto-pull-0      module_name: 'pm2-auto-pull',
-pm2-auto-pull-0      module_version: '1.1.3',
-pm2-auto-pull-0      pmx_version: '0.6.2' } }
-pm2-auto-pull-0 { type: 'axm:option:configuration', data: { error: true } }
-pm2-auto-pull-0 { type: 'axm:option:configuration',
-pm2-auto-pull-0   data:
-pm2-auto-pull-0    { alert_enabled: true,
-pm2-auto-pull-0      widget:
-pm2-auto-pull-0       { type: 'generic',
-pm2-auto-pull-0         logo: 'https://app.keymetrics.io/img/logo/keymetrics-300.png',
-pm2-auto-pull-0         theme: [Object] },
-pm2-auto-pull-0      isModule: true,
-pm2-auto-pull-0      module_conf: {},
-pm2-auto-pull-0      module_version: '1.16.0',
-pm2-auto-pull-0      module_name: 'pm2-auto-pull',
-pm2-auto-pull-0      description: 'PM2 module to auto pull applications when there is an update',
-pm2-auto-pull-0      pmx_version: '0.6.2' } }
-pm2-auto-pull-0 { type: 'axm:option:configuration', data: { error: true } }
-pm2-auto-pull-0 pm2-auto-pull module connected to pm2
-
-
-PM2 Starting execution sequence in -fork mode- for app name:asahi id:1
-PM2 App name:asahi id:1 online
-PM2 Process 1 in a stopped status, starting it
-PM2 Stopping app:asahi id:1
-PM2 Process with pid 21007 still not killed, retrying...
-PM2 App [asahi] with id [1] and pid [21007], exited with code [0] via signal [SIGINT]
-PM2 Starting execution sequence in -fork mode- for app name:pm2-auto-pull id:0
-PM2 App name:pm2-auto-pull id:0 online
-
-
-
-TODO:
-- change process.json to restart the app in the post update
-    - if that doesn't work, then rewrite the pm2 module and test that with some debugging
-
-
-
-whats happening now is pm2 is pulling successfully, stopping asahi then restarting itself instead of asahi :(
-- restarting asahi from keymetrics also restarts pm2-auto-pull for some reason
-
-- trying to get some debugging stuff
-
--creating my own auto pull @ colegrigsby/auto-repo-reload
-
-- forking vs clustering. trying with 2 forks of asahi for updating
-
-
-current state:
-    auto pull updates correctly but when restarting, it restarts itself as a process. not sure if this is from pm2 or
-    if it is being caused by autopull. might have to do with the pull and reload call in pm2 to _pull. so I may try
-    to call this directly if possible. might be a pull and restart?
-
-    - might have to start auto reload from scratch at this point....
-
-IDEA - promise chain in set interval and only take care of given processes, not all. might make it more specific.
-
-todo pm2.connect for pm2 and calling stuff in pm2!
-auto-reload2-0 0
-auto-reload2-0 Did you forgot to call pm2.connect(function() { }) before interacting with PM2 ?
-
-
-testing testing testing!
-
-auto-reload pullAndReload seems to be starting the wrong app after pulling....
-
--getting rid of ecosystem just in case it was interfering with settings. if not, then i will post a git / redo process.json or
-even write it all out manually (the pull, then exec restart) -without watch will prevent errors!
-    - might still run update
-
-    writing with vizion!!!
-    err, meta duh
-
-    trying pm2.reload but with my file instead of name.... if this works im gonna be so mad
-    could have to do with pwd!
-    trying restart
-    pm2 is messed up i think
-
-    - gonna have to do it with child exec probably :/
-
-    here it goes
-
-    soooo might have to write it as a sails hook
-
-    - auto pull retest
-    - could write my own module that also updates and restarts pm2?
-
-
--- pull and reload testing with call back.
-
-- trying with a dev fix from pm2
-
-- gonna be interesting with my own reload now. going to try vizion stuff again too
-
-
-- auto-reload2-1 Unexpected token ILLEGAL
-  auto-reload2-1 ReferenceError: EXEC_TIMEOUT is not defined
-  auto-reload2-1     at exec (/usr/lib/node_modules/pm2/lib/CLI/Version.js:247:16)
-  auto-reload2-1     at /usr/lib/node_modules/pm2/lib/CLI/Version.js:274:7
-  auto-reload2-1     at /usr/lib/node_modules/pm2/node_modules/async/lib/async.js:181:20
-  auto-reload2-1     at iterate (/usr/lib/node_modules/pm2/node_modules/async/lib/async.js:262:13)
-  auto-reload2-1     at Object.async.forEachOfSeries.async.eachOfSeries (/usr/lib/node_modules/pm2/node_modules/async/lib/async.js:281:9)
-  auto-reload2-1     at Object.async.forEachSeries.async.eachSeries (/usr/lib/node_modules/pm2/node_modules/async/lib/async.js:214:22)
-  auto-reload2-1     at execCommands (/usr/lib/node_modules/pm2/lib/CLI/Version.js:272:11)
-  auto-reload2-1     at /usr/lib/node_modules/pm2/lib/CLI/Version.js:43:13
-  auto-reload2-1     at /usr/lib/node_modules/pm2/lib/CLI/Version.js:342:31
-  auto-reload2-1     at /usr/lib/node_modules/pm2/node_modules/async/lib/async.js:52:16
-  auto-reload2-1     at /usr/lib/node_modules/pm2/node_modules/async/lib/async.js:264:21
-  auto-reload2-1     at /usr/lib/node_modules/pm2/node_modules/async/lib/async.js:44:16
-  auto-reload2-1     at /usr/lib/node_modules/pm2/lib/CLI/Version.js:327:22
-  auto-reload2-1     at /usr/lib/node_modules/pm2/node_modules/async/lib/async.js:52:16
-  auto-reload2-1     at /usr/lib/node_modules/pm2/node_modules/async/lib/async.js:264:21
-  auto-reload2-1     at /usr/lib/node_modules/pm2/node_modules/async/lib/async.js:44:16
-
-- problem with dev on their end
-https://github.com/Unitech/pm2/issues/2077
-
-- restart call
-    TypeError: Cannot read property 'only' of undefined
-    auto-reload2-1     at /usr/lib/node_modules/pm2/lib/CLI.js:523:13
-    auto-reload2-1     at Array.forEach (native)
-    auto-reload2-1     at CLI._startJson (/usr/lib/node_modules/pm2/lib/CLI.js:522:11)
-    auto-reload2-1     at CLI.restart (/usr/lib/node_modules/pm2/lib/CLI.js:1060:10)
-    auto-reload2-1     at /opt/auto-reload2/app.js:140:25
-    auto-reload2-1     at /opt/auto-reload2/node_modules/vizion/lib/git.js:214:16
-    auto-reload2-1     at /opt/auto-reload2/node_modules/vizion/lib/git.js:192:12
-    auto-reload2-1     at ChildProcess.exithandler (child_process.js:204:7)
-    auto-reload2-1     at emitTwo (events.js:87:13)
-    auto-reload2-1     at ChildProcess.emit (events.js:172:7)
-    auto-reload2-1     at maybeClose (internal/child_process.js:827:16)
-    auto-reload2-1     at Process.ChildProcess._handle.onexit (internal/child_process.js:211:5)
-
-
-- reload
-    - same ^^^
-- with name
-    - works
-- testing conf
-    - again
-
-- auto reload cant git pull on /opt/asahi for some reason. looking into why ssh isn't working
-- https://help.github.com/articles/changing-a-remote-s-url/ need to set to ssh for some reason ugh hahahah
-    - TODO add to directions
-
-- auto-reload-pm2 npm module :)
-- had to call connect
-- having to publish each time i update is fun
-    - the published version isn't working hahahahahha
-    - testing agian
-    - works locally at least
-- wow pullAndReload might work locally now too whatttt
-
-- just gonna use locally now
-    - easier until unitech gets back to me
-
-    TODO
-    - test with configured path......
-        - config asahi path where permissions are correct
-    - publish module once fixed DONE
-    - clean up dev area of asahi and start script??
-    - deploy y/n
-    - test auto-reload with pullAndReload FAILED
-    #### asahi overall DO stuff
-    - user not working with ssh :/
-    - need to fix permissions for deployment as asahi
-    - nginx documentation (multiple sails applications??) figure out whats going on haha
-
-
-retesting with exec ahhh this is no fun
-- trying to print
-- weird stuff going on
-    - exec_cmd using pm2s code now
-    - wow owwoowowowo w
-    - ugh SO CLOSE - pm2 is shitting the bed rn
-    - restarT? exec restart now
-
-    - ah
-
-testing pm2-auto-pull with fixes
-    - still does not work. submitted issue https://github.com/Unitech/pm2/issues/2270
