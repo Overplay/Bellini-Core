@@ -112,7 +112,6 @@
 20. Checkout http://104.131.145.36/ and see how it looks! 
     
 
-
 -----------------
 At this point, the app runs properly.
 -----------------
