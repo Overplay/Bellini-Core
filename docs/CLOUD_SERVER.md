@@ -112,13 +112,16 @@ TODO set up keymetrics
 
 
 18. Start asahi application 
-        - `pm2 start process.json` in /opt/asahi
+    - `git checkout BRANCH` if you're running something other than master! (make sure it has process.json in it) 
+    - `pm2 start process.json` in /opt/asahi
 
 
 19. start `auto-reload`  (as asahi user) 
     - `cd /opt/auto-reload && pm2 install .`
+    - test by pushing to the branch asahi is running on 
 
 20. Checkout http://104.131.145.36/ and see how it looks! 
+    
 
 
 -----------------
