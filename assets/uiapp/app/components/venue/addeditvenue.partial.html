@@ -19,9 +19,9 @@
                     <input type="text" ng-model="parameters.term" placeholder="Search Term" uib-typeahead="result as result.name for result in getResults($viewValue)"
                            typeahead-loading="loadingResults" typeahead-no-results="noResults" class="form-control" typeahead-template-url="yelpSuggest.html"
                            typeahead-on-select="selected($item, $model, $label)" typeahead-show-hint="true"/>
+                    <div class="input-group-addon" ng-show="loadingResults"><i ng-show="loadingResults" class="fa fa-spinner fa-spin fa-pulse fa-fw"></i></div>
 
                 </div>
-                <i ng-show="loadingResults" class="glyphicon glyphicon-refresh"></i>
                 <div ng-show="noResults">
                     <i class="glyphicon glyphicon-remove"></i> No Results Found
                 </div>
@@ -30,6 +30,11 @@
                 <div class="input-group top15">
                     <span class="input-group-addon">Near</span>
                     <input type="text" ng-model="parameters.location" placeholder="Location" class="form-control"/>
+                    <span class="input-group-btn">
+                        <button class="btn-default btn" ng-click="initializeLocation()" ng-disabled="locVerify">
+                            <i class="fa fa-location-arrow fa-fw" ng-class="{ 'location-init' : locVerify }"></i>
+                        </button>
+                    </span>
                 </div>
             </div>
         </div>

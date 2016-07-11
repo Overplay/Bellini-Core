@@ -26,7 +26,7 @@ app.controller("addEditVenueController", function ($scope, $log, nucleus, $state
     $scope.media = {
         logo: null,
         photos: [ null, null, null]
-    }
+    };
 
     $scope.parameters = {
         term: "",
@@ -36,16 +36,26 @@ app.controller("addEditVenueController", function ($scope, $log, nucleus, $state
     $scope.results = {};
 
     // initialize location to prepopulate location field
-    if (!edit && navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function (position) {
-            var latLong = position.coords.latitude.toString() + "," + position.coords.longitude.toString();
-            $http.get('venue/yelpSearch', {params: {term: "food", ll: latLong, limit: 1}, timeout: 2000})
-                .then(function (data) {
-                    var loc = data.data.businesses[0].location;
-                    $scope.parameters.location = loc.city + ", " + loc.state_code;
-                })
-        })
-    }
+    $scope.initializeLocation = function() {
+        if (!edit && navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                var latLong = position.coords.latitude.toString() + "," + position.coords.longitude.toString();
+                $http.get('venue/yelpSearch', {params: {term: "food", ll: latLong, limit: 1}, timeout: 2000})
+                    .then(function (data) {
+                        var loc = data.data.businesses[0].location;
+                        $scope.parameters.location = loc.city + ", " + loc.state_code;
+                        $scope.locVerify = true;
+                    })
+                    .catch(function (error) {
+                        toastr.error("Try again later", "Location Unavailable");
+                    })
+            })
+        }
+        else {
+            toastr.error("Your browser doesn't support geolocation", "Location Unavailable");
+        }
+    };
+
 
     $scope.submit = function () {
         var promise;
