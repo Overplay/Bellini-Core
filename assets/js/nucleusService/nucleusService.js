@@ -254,6 +254,13 @@
                 return apiDelete(endPoint);
             }
 
+            service.yelpSearch = function (fields) {
+                if (!fields)
+                    throw new Error("No params");
+                
+                var endPoint = '/venue/yelpSearch';
+                return apiGet(endPoint, fields);
+            }
             // =========== DEVICES ======== //TODO move to controllers? 
             service.getDevice = function (deviceId) {
 

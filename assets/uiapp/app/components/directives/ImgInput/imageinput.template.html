@@ -100,7 +100,7 @@
             <p>Drag and drop a JPG or PNG file anywhere in this panel to add or replace the image.
                 {{ exact ? "Image must be the size specified." : ""}}
                 {{ ratio ? "Image must have a " + ratio + " ratio." : ""}}
-                {{ maxSize ? "Image must be smaller than the dimensions specified." : ""}}</p>
+                {{ maxSize ? "Image must be no larger than the dimensions specified." : ""}}</p>
         </div>
         <div class="warning-popup" ng-show="warning">{{ warning }}</div>
 

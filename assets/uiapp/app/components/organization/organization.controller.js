@@ -15,14 +15,17 @@ app.controller("editOrganizationController", function ($scope, $log, user, $http
         "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"];
     $scope.regex = "\\d{5}([\\-]\\d{4})?";
     
-    $http.get("api/v1/organization/" + user.organization) //user only has access to their own org
-        .then(function (data) {
-            $scope.organization = data.data;
-            $scope.organizationUpdate = JSON.parse(JSON.stringify(data.data)); //clone for form
-            $scope.$parent.ui.panelHeading = data.data.name;
+    if (user.organization) {
+        $http.get("api/v1/organization/" + user.organization) //user only has access to their own org
+            .then(function (data) {
+                $scope.organization = data.data;
+                $scope.organizationUpdate = JSON.parse(JSON.stringify(data.data)); //clone for form
+                $scope.$parent.ui.panelHeading = data.data.name;
 
-        })
-
+            })
+    }
+    else 
+        $scope.organizationUpdate = {};
 
     $scope.update = function () {
         $http.put("api/v1/organization/" + $scope.organization.id, $scope.organizationUpdate)
@@ -48,10 +51,11 @@ app.controller("viewOrganizationController", function ($scope, $log, user, $http
     $log.log("viewOrganizationController Starting");
     $scope.$parent.ui.pageTitle = "Organization Info";
 
-    $http.get("api/v1/organization/" + user.organization)
-        .then(function (data) {
-            $scope.organization = data.data;
-            $scope.$parent.ui.panelHeading = data.data.name;
-        })
-
+    if (user.organization) {
+        $http.get("api/v1/organization/" + user.organization)
+            .then(function (data) {
+                $scope.organization = data.data;
+                $scope.$parent.ui.panelHeading = data.data.name;
+            })
+    }
 })

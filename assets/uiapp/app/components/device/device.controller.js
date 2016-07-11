@@ -48,7 +48,8 @@ app.controller("editDeviceAdminController", function ($scope, $state, $log, devi
     $scope.$parent.ui.panelHeading = device.name || "Device";
     $scope.confirm = {checked: false};
     $scope.owner = device.deviceOwner;
-
+    $scope.setForm = function (form) { $scope.form = form; };
+    
     nucleus.getUserVenues($scope.owner.id).then(function (venues) {
         $scope.owner.venues = venues;
     });
