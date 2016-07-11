@@ -2,62 +2,121 @@
 
 ## Setting up a cloud server
 
-https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys--2
+0. https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys--2
+    - set up an ssh key for your account so its easier to log into if you wish
 
-1. `sudo apt-get update`
+1. run `sudo apt-get update`
 
-2. `sudo apt-get upgrade`
+2. run `sudo apt-get upgrade`
 
 3. Make sure build-essential is installed
     - To check use dpkg -s build-essential
     - to install, use apt-get
 
-4a. Make sure Node is at a proper version
+4. Make sure Node is at a proper version
     - Node -v
-        - as of 6/20, 4.4.5 is current
-4b. 'sudo npm install -g npm@latest'
-4c. Then
+        - as of 6/20/16, 4.4.5 is current
+    - 'sudo npm install -g npm@latest'
+
+5. Then
     - Install ‘n’ www.github.com/tj/n
+        - this is for node version management
     - `sudo npm istall -g n`
 
-(at this point, i logged off then on just to let all the apt get updates work themselves out hopefully.)
-
-5. In /opt, we will find the the MEAN app default,
-
-    ##### Clone asahi into /opt
-
-    `sudo git clone https://github.com/Overplay/asahi`
-        - https://help.github.com/articles/changing-a-remote-s-url/
-        - sudo because /opt is root root 755
-    - enter your github username and password
+    //(at this point, i logged off then on just to let all the apt get updates work themselves out hopefully.)
 
 
 
-9. Create asahi user and group
+6. Create asahi user and group
     - `sudo adduser asahi`
-         *EDIT* USE adduser for pm2 to run properly on asahi
-            - need the home directory!
+        - use adduser to ensure a home directory is created (it will be needed for pm2) 
 
-10. Add yourself to the asahi group
-    - sudo usermod -a -G asahi username
+7. Add yourself to the asahi group
+    - `sudo usermod -a -G asahi USERNAME`
 
-#. chmod -R 775 asahi
+8. `sudo chmod -R 775 asahi`
 
-11. chown and chgrp -R asahi asahi
-    - from now on, run npm and bower from asahi account, it will all run properly
-    - running from asahi is necesary if you wanna deploy on asahi
 
-    -----it could also be possible for this to be down in an ecosystem.js file that is deployed locally----
+9. Clone asahi and auto-reload into /opt, where it will be served from.
+    - `sudo git clone https://github.com/Overplay/asahi`
+    - `sudo git clone https://github.com/colegrigsby/auto-reload` *** hopefully this will be on npm soon once pm2 is fixed 
+        - sudo because /opt is root root 755
 
-6. update asahi dependencies
-    -`npm update`
-    - `sudo npm install -g sails`
+10. Change permissions to allow asahi user to run everything properly
+    - `sudo chown/chgrp -R asahi asahi`
+    - `sudo chown/chgrp -R asahi auto-reload`
 
-7. add the `local.js` file to config
+#### Everything should be run as asahi user from this point forward 
+
+11. Setup the git repos 
+    - Add asahi's public key to your github
+    - `cd asahi`
+        - git remote -v
+        - git remote set-url origin git@github.com:Overplay/asahi.git
+            - (https://help.github.com/articles/changing-a-remote-s-url/)
+    - `cd asahi`
+            - git remote -v
+            - git remote set-url origin git@github.com:colegrigsby/auto-reload.git //TODO move autoreload into Overplay?
+12. update asahi dependencies
+    - `sudo npm install -g sails` (as your sudo account)          
+13. Update node packages in both `asahi` and `auot-reload`
+    - `cd` into directory then npm update 
+14. run bower update in /assets for uiapp to work
+    - `bower update`
+15. add the `local.js` file to /config
     - vi and insert or whatever floats your boat!
+    - also on /home/asahi/local.js on the current server
+         - cp ~/local.js .
+         
 
-8. run bower update in /assets for uiapp to work
-    - 'bower update'
+16. NGINX (install as your sudo privileged user) 
+    - `sudo add-apt-repository ppa:nginx/stable`
+    - `sudo apt-get update`
+    - `sudo apt-get install nginx`
+
+
+- ONCE installed
+
+    - create a text file `asahi` in `/etc/nginx/sites-available` with the below
+            
+        `upstream sails_server {
+                server 127.0.0.1:1337;
+                keepalive 64;
+        }
+        server {
+            listen          80;
+            server_name     asahi;
+            location / {
+                proxy_pass http://sails_server;
+                proxy_http_version 1.1;
+                proxy_set_header Upgrade $http_upgrade;
+                proxy_set_header Connection 'upgrade';
+                proxy_set_header Host $host;
+                proxy_cache_bypass $http_upgrade;
+             }
+        }`
+            
+    - sym link it (`ln -s`) into `/etc/nginx/sites-enabled and` `rm default`
+    - `sudo nginx -s reload`
+
+17. Install pm2
+    - currently on `sudo npm install Unitech/pm2#development -g` (as sudo priv user) 
+        - `$ pm2 update`
+            - once dev is pushed to pm2 master `sudo npm install -g pm2 (As your user)`
+
+
+
+TODO set up keymetrics
+    - on your keymetrics bucket, simply link by copy pasting the command at the bottom 
+    - https://app.keymetrics.io
+
+18. start `auto-reload`  (as asahi user) 
+    - `cd /opt/auto-reload && pm2 install .`
+
+19. Start asahi application 
+        - `pm2 start process.json` in /opt/asahi
+        - http://104.131.145.36/
+
 
 
 -----------------
@@ -66,70 +125,20 @@ at this point, the app runs properly.
 
 
 
-12. install pm2 --> might have to do some of the pm2 stuff as asahi
-    - sudo npm install -g pm2 (As your user)
-    - test run with asahi
-        - pm2 start app.js
-        works :)
 
 
-TODO finish the pull and stuff to update the app
 
 
-//http://pm2.keymetrics.io/docs/tutorials/pm2-nginx-production-setup might wanna do this instead.
-13. NGINX
-    - http://devnull.guru/deployment-of-a-sane-app-part-2-adding-an-nginx-reverse-proxy/
-    -
-
-   ONCE installed
-   'server {
-       listen          80;
-       server_name     sailsjs.dev;
-
-       location / {
-           proxy_pass http://localhost:1337;
-           proxy_http_version 1.1;
-           proxy_set_header Upgrade $http_upgrade;
-           proxy_set_header Connection 'upgrade';
-           proxy_set_header Host $host;
-           proxy_cache_bypass $http_upgrade;
-       }
-   }'
-   create a file in /etc/nginx/sites-available with the above
-   sym link it to /etc/nginx/sites-enabled and remove default
-
-   add
-   '
-           upstream sails_server {
-                   server 127.0.0.1:1337;
-                   keepalive 64;
-           }
 
 
-           server {
-                   listen        80;
-                   server_name   example.com;
-
-                   location / {
-                           proxy_pass                          http://sails_server;                        proxy_http_version                  1.1;
-                           proxy_set_header  Connection        "";
-                           proxy_set_header  Host              $http_host;
-                           proxy_set_header  X-Forwarded-For   $proxy_add_x_forwarded_for;
-                           proxy_set_header  X-Real-IP         $remote_addr;
-                   }
-
-           }
-
-   '
-
-    to context in /etc/nginx/nginx.conf
-
-    test out by running
-    sudo nginx
-
-    works!
 
 
+
+
+
+
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 ~~~~~~
 next step, get asahi to be able to run everything properly

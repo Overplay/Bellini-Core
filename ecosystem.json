@@ -1,10 +1,10 @@
 
 //Commented out so pm2 uses process.json. Just in case anything bad happens because pm2 isn't the best rn
-{
+{}/*
   /**
    * Application configuration section
    * http://pm2.keymetrics.io/docs/usage/application-declaration/
-   */
+
   "apps" : [
 
     // First application
@@ -29,7 +29,7 @@
   /**
    * Deployment section
    * http://pm2.keymetrics.io/docs/usage/deployment/
-   */
+
   "deploy" : {
     "production" : {
       "user" : "cgrigsby", //TODO change this and get it to asahi once ssh decides to cooperate....
