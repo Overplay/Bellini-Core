@@ -113,11 +113,12 @@ TODO set up keymetrics
 
 18. Start asahi application 
         - `pm2 start process.json` in /opt/asahi
-        - http://104.131.145.36/
+
 
 19. start `auto-reload`  (as asahi user) 
     - `cd /opt/auto-reload && pm2 install .`
 
+20. Checkout http://104.131.145.36/ and see how it looks! 
 
 
 -----------------
