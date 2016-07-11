@@ -85,11 +85,11 @@
 
     @keyframes flipOutX {
         0% {
-            -webkit-transition: perspective(400px);
-            -moz-transition: perspective(400px) ;
-            -ms-transition: perspective(400px) ;
-            -o-transition: perspective(400px) ;
-            transition: perspective(400px) ;;
+            -webkit-transform: perspective(400px);
+            -moz-transform: perspective(400px);
+            -ms-transform: perspective(400px);
+            -o-transform: perspective(400px);
+            transform: perspective(400px);
         }
         20% {
             -webkit-transform: perspective(400px) rotate3d(1, 0, 0, -5deg);
@@ -155,7 +155,7 @@
                         <span class="input-group-addon"><li class="glyphicon-envelope glyphicon"></li></span>
 
                         <input type="text" class="form-control" placeholder="Email"
-                               ng-model="user.email">
+                               ng-model="user.email" autofocus>
 
                     </div>
                     <div class="input-group input-group-lg top15">

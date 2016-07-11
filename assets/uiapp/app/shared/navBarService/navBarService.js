@@ -17,26 +17,18 @@ app.factory('navBarService', function ($log) {
                 }, {
                     label: "Devices", //might need to be modified
                     id: "devices",
-                    items: [{label: "Manage Devices", link: {type: 'ui-sref', addr: 'admin.manageDevices'}},
-                        {label: "Add Device", link: {type: 'ui-sref', addr: 'device.addDevice'}},
+                    items: [{label: "Devices", link: {type: 'ui-sref', addr: 'device.list'}}
                     ]
                 },
                     {
                         label: "Organization",
                         id: "organization",
-                        items: [{label: "organization", link: {type: 'ui-sref', addr: 'organization.manageOrganization'}}]
+                        items: [{label: "organization", link: {type: 'ui-sref', addr: 'organization.view'}}]
                     },
                     {
                         label: "Venues",
-                        id:    "venues",
-                        items: [ {
-                            label: "List",
-                            link: { type: 'ui-sref', addr: 'venue.list' }
-                        },
-                            {
-                                label: "Add New",
-                                link:  { type: 'ui-sref', addr: 'venue.new' }
-                            } ]
+                        id: "venues",
+                        items: [{label: "venues", link: {type: 'ui-sref', addr: 'venue.list'}}]
                     }
                 ],
                 right: [{
@@ -59,8 +51,7 @@ app.factory('navBarService', function ($log) {
                     {
                         label: "Devices", //might need to be modified
                         id: "devices",
-                        items: [{label: "Manage Devices", link: {type: 'ui-sref', addr: 'admin.manageDevices'}},
-                            {label: "Add Device", link: {type: 'ui-sref', addr: 'device.addDevice'}},
+                        items: [{label: "Devices", link: {type: 'ui-sref', addr: 'device.list'}}
                         ]
                     },
                     {
@@ -71,7 +62,7 @@ app.factory('navBarService', function ($log) {
                     {
                         label: "Organization",
                         id: "organization",
-                        items: [{label: "organization", link: {type: 'ui-sref', addr: 'organization.manageOrganization'}}]
+                        items: [{label: "organization", link: {type: 'ui-sref', addr: 'organization.view'}}]
                     }
                 ],
                 right: [{
@@ -93,16 +84,14 @@ app.factory('navBarService', function ($log) {
                 }, {
                     label: "Devices", //might need to be modified
                     id: "devices",
-                    items: [{label: "Manage Devices", link: {type: 'ui-sref', addr: 'admin.manageDevices'}},
-                        {label: "Add Device", link: {type: 'ui-sref', addr: 'device.addDevice'}},
-                    ]
+                    items: [{label: "Devices", link: {type: 'ui-sref', addr: 'device.list'}}]
                 },
                     {
                         label: "Organization",
                         id: "organization",
                         items: [{
                             label: "organization",
-                            link: {type: 'ui-sref', addr: 'organization.manageOrganization'}
+                            link: {type: 'ui-sref', addr: 'organization.view'}
                         }]
                     }
                 ],

@@ -17,11 +17,22 @@ app.directive('imgInput', function($log, $timeout){
 
             var placeholder = "http://placehold.it/" + w + 'x' + h;
 
+            scope.exact = attrs.exact !== undefined;
+            scope.ratio = attrs.ratio;
+            scope.maxSize = attrs.maxSize !== undefined;
+
+            var ratio = w/h;
+            var reset = function(error) {
+                showWarning(error);
+                scope.img.mediaSrc = scope.srcField ? '/media/download/'+scope.srcField : placeholder;
+                scope.dirty = null;
+            };
+
             scope.warning = '';
             scope.img = {
                 widthPx: w+'px',
                 heightPx: h+'px',
-                style: { width: w + 'px', height: h + 'px' },
+                style: { "max-width": "50%" },
                 mediaSrc: scope.srcField ? '/media/download/'+scope.srcField : placeholder
             }
 
@@ -29,30 +40,50 @@ app.directive('imgInput', function($log, $timeout){
 
                 $log.debug("Files dropped!");
                 var fr = new FileReader();
+                var acceptedTypes = ["image/png", "image/jpeg"];
+                var img = new Image();
+
+                img.onload = function() {
+                    scope.$apply( function() {
+                        if (scope.exact && (img.width != w || img.height != h))
+                            reset("Image has invalid dimensions.");
+                        else if (scope.ratio && img.width / img.height != ratio)
+                            reset("Image does not match specified ratio.");
+                        else if (scope.maxSize && (img.width > w || img.height > h))
+                            reset("Image is too large.");
+                        else
+                            scope.img.mediaSrc = fr.result;
+                    })
+                };
+
                 fr.onload = function () {
 
                     // Must force digest since onload event is outside of angular
-                    scope.$apply( function(){
+                    scope.$apply( function() {
                         //TODO Ryan, validate correct image size and file type here.
-                        scope.img.mediaSrc = fr.result;
+                        img.src = window.URL.createObjectURL(files[0]);
+                        // scope.img.mediaSrc = fr.result;
                         scope.dirty = files[0]; // it's truthy and the file we want the Controller to upload
-
-
                     })
                 };
                 // TODO Ryan, check file mimetype here and reject anything not JPG, PNG
-                fr.readAsDataURL( files[0] );
 
-                // For testing only.
-                showWarning( files[ 0 ].name );
+                if (acceptedTypes.indexOf(files[0].type) <= -1) {
+                    showWarning( "Error: invalid file type" );
+                }
+                else {
+                    fr.readAsDataURL( files[0] );
 
+                    // For testing only.
+                    // showWarning( files[ 0 ].name );
+                }
 
             }
 
             // TODO Ryan, make this hide/show animated using ng-animate
 
             // This would be used to signal bad files, bad sizes.
-            function showWarning(message){
+            function showWarning(message) {
                 scope.warning = message;
                 $timeout( function(){ scope.warning="" }, 2000);
             }

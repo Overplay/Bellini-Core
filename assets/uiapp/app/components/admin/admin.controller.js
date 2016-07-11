@@ -42,13 +42,10 @@ app.controller("adminManageDevicesController", function ($scope, $state, $log, $
             $scope.devices = combineDevices(devices.owned, devices.managed);
 
             _.forEach($scope.devices, function (dev) {
-                $http.get('api/v1/venue/' + dev.venue)
+                nucleus.getVenue(dev.venue)
                     .then(function (data) {
-                        dev.venue = data.data;
+                        dev.venue = data;
                     })
-                    .catch(function (err) {
-                        toastr.error("Venue not found", "Damn!");
-                    });
             })
 
         })
