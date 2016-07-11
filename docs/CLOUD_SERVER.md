@@ -41,6 +41,7 @@
     - `sudo git clone https://github.com/Overplay/asahi`
     - `sudo git clone https://github.com/colegrigsby/auto-reload` *** hopefully this will be on npm soon once pm2 is fixed 
         - sudo because /opt is root root 755
+        - testing with pm2 install from npm registry 
 
 10. Change permissions to allow asahi user to run everything properly
     - `sudo chown/chgrp -R asahi asahi`
