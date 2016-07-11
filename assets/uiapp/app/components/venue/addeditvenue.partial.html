@@ -31,8 +31,8 @@
                     <span class="input-group-addon">Near</span>
                     <input type="text" ng-model="parameters.location" placeholder="Location" class="form-control"/>
                     <span class="input-group-btn">
-                        <button class="btn-default btn" ng-click="initializeLocation()" ng-disabled="locVerify">
-                            <i class="fa fa-location-arrow fa-fw" ng-class="{ 'location-init' : locVerify }"></i>
+                        <button class="btn-default btn" ng-click="initializeLocation()">
+                            <i class="fa fa-location-arrow fa-fw" ng-class="{ 'location-init' : geolocation && parameters.location === geolocation }"></i>
                         </button>
                     </span>
                 </div>
