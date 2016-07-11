@@ -4,6 +4,7 @@
 
 0. https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys--2
     - set up an ssh key for your account so its easier to log into if you wish
+    - if the ssh key login is not working, make sure that `~/.ssh` is set to 700 and `~/.ssh/authorized_keys` is set to 600 
 
 1. run `sudo apt-get update`
 
