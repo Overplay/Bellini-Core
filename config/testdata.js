@@ -155,7 +155,7 @@ var self = module.exports.testdata = {
                     .then(function (user) {
                         v.venueOwner = user.user;
                         //sails.log.debug(v)
-                        return Venue.findOne({name: v.name, venueOwner: v.venueOwner, organization: v.organization.id})
+                        return Venue.findOne({name: v.name, address: v.address})
                             .then(function(ven){
                                 sails.log.debug(ven);
                                 if (ven){
