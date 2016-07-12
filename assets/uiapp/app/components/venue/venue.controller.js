@@ -27,7 +27,7 @@ app.controller("addEditVenueController", function ($scope, $log, nucleus, $state
 
     $scope.media = {
         logo: null,
-        photos: [ null, null, null]
+        photos: [ null, null, null ]
     };
 
     $scope.parameters = {

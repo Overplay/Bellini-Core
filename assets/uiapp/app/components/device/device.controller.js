@@ -77,10 +77,10 @@ app.controller("editDeviceAdminController", function ($scope, $state, $log, devi
             .then(function (confirmed) {
                 if (confirmed) { // probably not necessary since reject should be called for cancel
 
-                    nucleus.deleteDevice($scope.device)
+                    nucleus.deleteDevice($scope.device.id)
                         .then(function () {
                             toastr.success("It's gone!", "Device Deleted");
-                            $state.go('admin.manageDevices')
+                            $state.go('device.list')
                         })
                         .catch(function (err) {
                             toastr.error(err.status, "Problem Deleting Device");
