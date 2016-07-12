@@ -205,7 +205,7 @@ var self = module.exports.testdata = {
                     })
                     .then(function (venue) {
                         d.venue = venue;
-                        return Device.findOne({name: d.name, locationWithinVenue: d.locationWithinVenue, venue:d.venue})
+                        return Device.findOne({name: d.name, venue:d.venue})
                             .then(function(dev){
                                 sails.log.debug(dev)
 
