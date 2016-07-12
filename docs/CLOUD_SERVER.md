@@ -116,3 +116,6 @@
 -----------------
 At this point, the app runs properly.
 -----------------
+
+
+TODO there is going to need to be a fix for when the app reloads and keeping a user signed in probably! 

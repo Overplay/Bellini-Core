@@ -53,7 +53,7 @@ module.exports = require('waterlock').actions.user({
         // currently fixed in controller with  api calls
         Auth.findOne({id: id}) //auth fix due to usercontroller in uiapp
             .then(function (auth) {
-                User.findOne(auth.user)
+                return User.findOne(auth.user)
                     .populate("ownedDevices")
                     .populate("managedDevices")
                     .then(function (user) { //NOTE: does not populate venue in devices 
