@@ -64,7 +64,7 @@ module.exports.session = {
   *                                                                          *
   * Uncomment the following lines to use your Mongo adapter as a session     *
   * store                                                                    *
-  *                                                                          *
+  *          TODO adapt this to make sure sessions are correct time          *
   ***************************************************************************/
 
   adapter: 'mongo',
