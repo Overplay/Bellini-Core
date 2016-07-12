@@ -109,7 +109,7 @@ module.exports = require( 'waterlock' ).waterlocked( {
                 .then(function (auth) {
                     if (auth) {
                         sails.log.debug("Email is in system, rejecting create.")
-                        reject(new Error("Email already in system"));
+                        throw new Error("Email already in system");
                     } else {
                         sails.log.debug("Email is not in system, adding account.")
                         return User.create(userObj || {})
