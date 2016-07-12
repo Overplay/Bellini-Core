@@ -70,6 +70,9 @@ var self = module.exports.testdata = {
                     .then(function () {
                         sails.log.debug("Created user " + email)
                     })
+                    .catch(function(err) {
+                        sails.log.debug("error caught: " + err)
+                    })
             })
         });
 

@@ -147,7 +147,7 @@ module.exports = require( 'waterlock' ).waterlocked( {
                 } )
                 .catch( reject )
 
-        } ).catch( reject )
+        } )
 
     },
 
