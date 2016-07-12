@@ -19,6 +19,9 @@ module.exports = function (req, res, next) {
         return next();
     }
 
+    if ( req.session.authenticated && !req.session.user.blocked && RoleCacheService.hasAdminRole( req.session.user.roles ) ) {
+        return next();
+    }
 
     if ((req.session.user.id === device.deviceOwner.id)
         || (_.find(device.deviceManagers, {id: req.session.user.id}))) {
