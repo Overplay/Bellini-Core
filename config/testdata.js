@@ -201,7 +201,7 @@ var self = module.exports.testdata = {
                 return Auth.findOne({email: ownerEmail})
                     .then(function (user) {
                         d.deviceOwner = user.user;
-                        return Venue.findOne({name: venueName}) //venues can have the same name! 
+                        return Venue.findOne({name: venueName}) //venues can have the same name!
                     })
                     .then(function (venue) {
                         d.venue = venue;
@@ -210,6 +210,7 @@ var self = module.exports.testdata = {
                                 sails.log.debug(dev)
 
                                 if(dev){
+                                    device = dev;
                                     return new Error("Device Exists, skipping creation")
                                 }
                                 else {
