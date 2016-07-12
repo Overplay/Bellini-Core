@@ -154,7 +154,8 @@ var self = module.exports.testdata = {
                 return Auth.findOne({email: ownerEmail})
                     .then(function (user) {
                         v.venueOwner = user.user;
-                        return Venue.findOne({address: v.address})
+                        sails.log.debug(v)
+                        return Venue.findOne({name: v.name})
                             .then(function(ven){
                                 sails.log.debug(ven);
                                 if (ven){
@@ -208,7 +209,7 @@ var self = module.exports.testdata = {
                         //sails.log.debug(d)
                         return Device.findOne({name: d.name, deviceOwner: d.deviceOwner, venue: venue.id}) //TODO use venue id and user id
                             .then(function(dev){
-                                sails.log.debug(dev)
+                                //sails.log.debug(dev)
 
                                 if(dev){
                                     device = dev;
