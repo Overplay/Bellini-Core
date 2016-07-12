@@ -190,7 +190,7 @@ var self = module.exports.testdata = {
 
         self.devices.forEach(function (d) {
             var ownerEmail = d.ownerEmail;
-            var venueName = d.venueName;
+            var venueName = d.venueName; //be careful there can be multiple venues with the same name....
             var managers = d.managerEmails;
             delete d.managerEmails;
             delete d.ownerEmail;
@@ -205,8 +205,10 @@ var self = module.exports.testdata = {
                     })
                     .then(function (venue) {
                         d.venue = venue;
-                        return Device.findOne(d)
+                        return Device.findOne({name: d.name, locationWithinVenue: d.locationWithinVenue, venue:d.venue})
                             .then(function(dev){
+                                sails.log.debug(dev)
+
                                 if(dev){
                                     return new Error("Device Exists, skipping creation")
                                 }
