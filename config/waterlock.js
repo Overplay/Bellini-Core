@@ -37,7 +37,7 @@ module.exports.waterlock = {
                         }
                     },
                     from:       'no-reply@domain.com',
-                    subject:    'You forgot how to Overplay!',
+                    subject:    'You forgot how to Ourglass!',
                     forwardUrl: 'http://localhost:1337/auth/resetPwd'
                 },
                 template: {
