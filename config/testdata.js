@@ -104,7 +104,7 @@ var self = module.exports.testdata = {
                             {
                                 if (ad){
                                     sails.log.debug("Ad exists")
-                                    reject(new Error("Ad already in system"));
+                                    return new Error("Ad already in system")
                                 }
                                 else {
                                     return Ad.create(a)
@@ -154,10 +154,10 @@ var self = module.exports.testdata = {
                 return Auth.findOne({email: ownerEmail})
                     .then(function (user) {
                         v.venueOwner = user.user;
-                        return Venue.findOne(v)
+                        return Venue.findOne({name: v.name, address: v.address})
                             .then(function(ven){
                                 if (ven){
-                                    reject(new Error("Venue Exists, skipping creation"))
+                                    return new Error("Venue Exists, skipping creation")
                                 }
                                 else {
                                     return Venue.create(v)
@@ -207,7 +207,7 @@ var self = module.exports.testdata = {
                         return Device.findOne(d)
                             .then(function(dev){
                                 if(dev){
-                                    reject(new Error("Device Exists, skipping creation"))
+                                    return new Error("Device Exists, skipping creation")
                                 }
                                 else {
                                     return Device.create(d)
