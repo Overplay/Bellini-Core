@@ -99,7 +99,7 @@ var self = module.exports.testdata = {
                 Auth.findOne({email: creatorEmail})
                     .then(function (u) {
                         a.creator = u.user;
-                        Ad.findOne(a)
+                        return Ad.findOne(a)
                             .then(function(ad)
                             {
                                 if (ad){
@@ -154,7 +154,7 @@ var self = module.exports.testdata = {
                 return Auth.findOne({email: ownerEmail})
                     .then(function (user) {
                         v.venueOwner = user.user;
-                        Venue.findOne(v)
+                        return Venue.findOne(v)
                             .then(function(ven){
                                 if (ven){
                                     reject(new Error("Venue Exists, skipping creation"))
@@ -204,7 +204,7 @@ var self = module.exports.testdata = {
                     })
                     .then(function (venue) {
                         d.venue = venue;
-                        Device.findOne(d)
+                        return Device.findOne(d)
                             .then(function(dev){
                                 if(dev){
                                     reject(new Error("Device Exists, skipping creation"))
