@@ -205,7 +205,7 @@ var self = module.exports.testdata = {
                     })
                     .then(function (venue) {
                         d.venue = venue;
-                        return Device.findOne({name: d.name})
+                        return Device.findOne({name: d.name, deviceOwner: d.deviceOwner.id, venue: venue.id}) //TODO use venue id and user id
                             .then(function(dev){
                                 sails.log.debug(dev)
 
