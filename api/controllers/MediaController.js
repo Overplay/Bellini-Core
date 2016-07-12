@@ -64,6 +64,8 @@ module.exports = {
 
     upload: function ( req, res ) {
 
+        sails.log.debug(sails.config.paths)
+
         var destinationFolder = require( 'path' ).resolve( sails.config.paths.media );
 
         var uploadOptions = {
