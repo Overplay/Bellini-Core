@@ -154,8 +154,9 @@ var self = module.exports.testdata = {
                 return Auth.findOne({email: ownerEmail})
                     .then(function (user) {
                         v.venueOwner = user.user;
-                        return Venue.findOne({name: v.name, address: v.address})
+                        return Venue.findOne({address: v.address})
                             .then(function(ven){
+                                sails.log.debug(ven);
                                 if (ven){
                                     return new Error("Venue Exists, skipping creation")
                                 }
