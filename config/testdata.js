@@ -71,7 +71,7 @@ var self = module.exports.testdata = {
                         sails.log.debug("Created user " + email)
                     })
                     .catch(function(err) {
-                        sails.log.debug("error caught: " + err)
+                        //sails.log.debug("error caught: " + err)
                     })
             })
         });
