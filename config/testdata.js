@@ -201,11 +201,11 @@ var self = module.exports.testdata = {
                 return Auth.findOne({email: ownerEmail})
                     .then(function (user) {
                         d.deviceOwner = user.user;
-                        return Venue.findOne({name: venueName})
+                        return Venue.findOne({name: venueName}) //venues can have the same name! 
                     })
                     .then(function (venue) {
                         d.venue = venue;
-                        return Device.findOne()
+                        return Device.findOne({name: d.name})
                             .then(function(dev){
                                 sails.log.debug(dev)
 
