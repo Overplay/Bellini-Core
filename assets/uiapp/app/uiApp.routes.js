@@ -252,6 +252,9 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                             return err;
                         })
                 },
+                user: function ( nucleus ) {
+                    return nucleus.getMe()
+                }
             }
         } )
 

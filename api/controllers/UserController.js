@@ -54,9 +54,9 @@ module.exports = require('waterlock').actions.user({
             .populate("ownedVenues")
             .then(function (user) {
                 if (user) {
-                    //sails.log.debug(user)
+                    sails.log.debug(user)
                     var devices = [];
-                    
+
                     var chain = Promise.resolve()
 
 

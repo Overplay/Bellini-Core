@@ -50,7 +50,7 @@ app.controller("addDeviceController", function ($scope, $state, $log, toastr, nu
 
 });
 
-app.controller("editDeviceAdminController", function ($scope, $state, $log, device, toastr, uibHelper, nucleus) {
+app.controller("editDeviceAdminController", function ($scope, $state, $log, device, toastr, uibHelper, nucleus, user, $http) {
     $log.debug("manageDeviceController starting");
 
     $scope.device = device;
@@ -63,12 +63,20 @@ app.controller("editDeviceAdminController", function ($scope, $state, $log, devi
         $scope.form = form;
     };
 
+    $http.get("api/v1/user/" + user.id)
+        .then(function(u){
+            $log.log(u)
+            $scope.user = u.data;
+        })
+    
+
     //TODO get device venue and the owners of that venues venues woah
     //TODO maybe don't move devices between venues hahahah
-    //$scope.user.venues! not owner. only the ones this person has controll of!
-    nucleus.getUserVenues($scope.owner.id).then(function (venues) {
+    //$scope.user.venues! not owner. only the ones this person has control of!
+    /*nucleus.getUserVenues($scope.owner.id).then(function (venues) {
         $scope.owner.venues = venues;
-    });
+    });*/
+
 
     // $log.log(device);
 
