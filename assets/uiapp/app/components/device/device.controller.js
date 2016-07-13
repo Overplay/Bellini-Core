@@ -110,17 +110,20 @@ app.controller("editDeviceAdminController", function ($scope, $state, $log, devi
 
 });
 
-app.controller('listDeviceController', function ( $scope, devices, $log, uibHelper, nucleus ) {
+app.controller('listDeviceController', function ( $scope, devices, $log, uibHelper, nucleus, admin ) {
 
     $log.debug("loading listDeviceController");
     $scope.$parent.ui.pageTitle = "Device List";
     $scope.$parent.ui.panelHeading = "";
-    $scope.devices = _.union(_.filter(devices.owned, {regCode: ''}), _.filter(devices.managed, {regCode: ''}));
+    $scope.devices = admin ? devices : _.union(_.filter(devices.owned, {regCode: ''}), _.filter(devices.managed, {regCode: ''}));
 
-    _.forEach($scope.devices, function (dev) {
-        nucleus.getVenue(dev.venue)
-            .then(function (data) {
-                dev.venue = data;
-            })
-    })
+    if (!admin) {
+        _.forEach($scope.devices, function (dev) {
+            nucleus.getVenue(dev.venue)
+                .then(function (data) {
+                    dev.venue = data;
+                })
+        })
+    }
+    
 })

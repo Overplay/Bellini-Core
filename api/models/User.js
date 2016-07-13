@@ -81,20 +81,15 @@ module.exports = {
             type: 'array',
             defaultsTo: []
         },
-
-        ownedDevices: {
-            collection: 'Device',
-            via: 'deviceOwner'
-        },
         
-        venues: {
+        ownedVenues: {
             collection: 'Venue',
             via: 'venueOwner'
         },
 
-        managedDevices: {
-            collection: 'Device',
-            via: 'deviceManagers'
+        managedVenues: {
+            collection: 'Venue',
+            via: 'venueManagers'
         },
 
         organization: { //only for proprietors 
