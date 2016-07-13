@@ -136,13 +136,24 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             templateUrl: '/uiapp/app/components/venue/venuelist.partial.html',
             resolve:     {
                 venues: function ( $http ) {
-                    return $http.get( '/user/getVenues')
-                        .then(function (data) {
-                            return data.data;
-                        })
+                        return $http.get( '/user/getVenues')
+                            .then( function (data) {
+                                return data.data;
+                            })
                 }
             }
-        } )
+        })
+
+        .state( 'venue.adminList', {
+            url:         '/admin-list',
+            controller:  'listVenueController',
+            templateUrl: '/uiapp/app/components/venue/venuelist.partial.html',
+            resolve:     {
+                venues: function ( nucleus ) {
+                    return nucleus.getVenue();
+                }
+            }
+        })
 
         .state( 'venue.new', {
             url: '/new',
@@ -159,7 +170,6 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             templateUrl: '/uiapp/app/components/device/device-sidemenu.partial.html',
             controller:  function ( $scope ) { $scope.panelHeading = { text: "", color: "#0000FF" }},
             abstract:    true
-
         } )
 
         .state( 'device.list', {
@@ -172,9 +182,22 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                         .then(function (data) {
                             return data.data;
                         })
-                }
+                },
+                admin: function() { return false; }
             }
-        } )
+        })
+
+        .state( 'device.adminList', {
+            url:        '/admin-list',
+            controller:  'listDeviceController',
+            templateUrl: '/uiapp/app/components/device/devicelist.partial.html',
+            resolve:     {
+                devices: function ( nucleus ) {
+                    return nucleus.getDevice();
+                },
+                admin: function () { return true; }
+            }
+        })
 
         .state( 'device.addDevice', {
             url:         '/activate',

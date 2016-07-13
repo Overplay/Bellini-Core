@@ -17,19 +17,18 @@ app.factory('navBarService', function ($log) {
                 }, {
                     label: "Devices", //might need to be modified
                     id: "devices",
-                    items: [{label: "Devices", link: {type: 'ui-sref', addr: 'device.list'}}
+                    items: [{label: "Devices", link: {type: 'ui-sref', addr: 'device.adminList'}}
                     ]
-                },
-                    {
-                        label: "Organization",
-                        id: "organization",
-                        items: [{label: "organization", link: {type: 'ui-sref', addr: 'organization.view'}}]
-                    },
-                    {
-                        label: "Venues",
-                        id: "venues",
-                        items: [{label: "venues", link: {type: 'ui-sref', addr: 'venue.list'}}]
-                    }
+                }, {
+                    label: "Venues",
+                    id: "venues",
+                    items: [{label: "venues", link: {type: 'ui-sref', addr: 'venue.adminList'}}]
+                }, {
+                    label: "Organization",
+                    id: "organization",
+                    items: [{label: "organization", link: {type: 'ui-sref', addr: 'organization.view'}}]
+                }
+
                 ],
                 right: [{
                     label: 'Account',
