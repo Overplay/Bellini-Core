@@ -145,6 +145,23 @@ app.factory('navBarService', function ($log) {
                     ]
                 }]
             },
+            'developer':{
+                left: {}
+                ,
+
+                right: [{
+                    label: 'Account',
+                    id: 'account',
+                    items: [{
+                        label: "Edit My Account",
+                        link: {type: 'ui-sref', addr: 'user.editUser'}
+                    },
+                        {
+                            label: "Logout", link: {type: 'href', addr: '/logout'}
+                        }
+                    ]
+                }]
+            },
             'advertiser': {
                 left: [
                     {

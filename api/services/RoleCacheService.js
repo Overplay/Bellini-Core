@@ -12,7 +12,7 @@
 var Promise = require("bluebird");
 
 var _idToRoleMap = {};
-var _adminRole = undefined;
+var _adminRole = undefined; //TODO
 
 function idToRoleString(roleId) {
 
@@ -97,6 +97,10 @@ module.exports = {
 
     hasAdminRole: function(roles){
         return roles.indexOf(_adminRole) > -1;
+    },
+
+    hasRole: function(roles, roleName, subName) {
+        return roles.indexOf(this.roleByName(roleName, subName)) > -1;
     }
 
 
