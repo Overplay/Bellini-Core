@@ -101,6 +101,11 @@
         - on your keymetrics bucket, simply link by copy pasting the command at the bottom 
         - https://app.keymetrics.io
 
+    SIDE NOTE: To ensure that the db and sessions are preserved during a restart, 
+        - In `config/models.js`, set migrate to `safe` for a production server or potentially `alter` for testing (could be dangerous)
+        - In `config/session.js`,  uncomment mongo settings to enable 
+        - Also, if pushing for production, do NOT leave local.js `wideOpen: true`
+
 
 18. Start `asahi` application 
     - `git checkout BRANCH` if you're running something other than master! (make sure it has process.json in it) 
