@@ -45,7 +45,7 @@ var self = module.exports.testdata = {
                         reject(new Error("Organization exists, skipping creation"))
                     }
                     else{
-                        return  Organization.create(o)
+                        return Organization.create(o)
                             .then(function (o) {
                                 sails.log.debug("organization created")
                             })
@@ -87,7 +87,7 @@ var self = module.exports.testdata = {
                         sails.log.debug("Created user " + email)
                     })
                     .catch(function(err) {
-                        //sails.log.debug("error caught: " + err)
+                        sails.log.debug("error caught: " + err)
                     })
             })
         });
@@ -138,7 +138,11 @@ var self = module.exports.testdata = {
 
         self.venues.forEach(function (v) {
             var ownerEmail = v.ownerEmail;
+            var managerEmails = v.managerEmails;
             delete v.ownerEmail;
+            delete v.managerEmails;
+            v.venueOwners = [];
+            v.venueManagers = [];
 
             if (v.organizationEmail) {
                 var organizationEmail = v.organizationEmail;
@@ -151,10 +155,19 @@ var self = module.exports.testdata = {
                 delete v.organizationEmail;
             }
 
+            managerEmails.forEach(function (manager) {
+                chain = chain.then(function () {
+                    return Auth.findOne({ email : manager })
+                        .then( function (user) {
+                            v.venueManagers.push(user.user);
+                        })
+                })
+            })
+
             chain = chain.then(function () {
                 return Auth.findOne({email: ownerEmail})
                     .then(function (user) {
-                        v.venueOwner = user.user;
+                        v.venueOwners.push(user.user);
                         //sails.log.debug(v)
                         return Venue.findOne({name: v.name}) //this will work but venues could be double named (not unique)
                             .then(function(ven){
@@ -185,31 +198,31 @@ var self = module.exports.testdata = {
 
         chain = chain.then(function () {
             return User.find()
-                .populate('venues')
+                .populate('ownedVenues')
                 .then(function () {
-                    sails.log.debug("Venues populated");
+                    sails.log.debug("Owned Venues populated");
                 })
         });
 
+        chain = chain.then(function() {
+            return User.find()
+                .populate('managedVenues')
+                .then( function () {
+                    sails.log.debug("Managed Venues populated");
+                })
+        })
+
         self.devices.forEach(function (d) {
-            var ownerEmail = d.ownerEmail;
             var venueName = d.venueName; //be careful there can be multiple venues with the same name....
-            var managers = d.managerEmails;
-            delete d.managerEmails;
-            delete d.ownerEmail;
             delete d.venueName;
             var device;
 
             chain = chain.then(function () {
-                return Auth.findOne({email: ownerEmail})
-                    .then(function (user) {
-                        d.deviceOwner = user.user;
-                        return Venue.findOne({name: venueName}) //venues can have the same name!
-                    })
+                return Venue.findOne({name: venueName}) //venues can have the same name!
                     .then(function (venue) {
                         d.venue = venue;
                         //sails.log.debug(d)
-                        return Device.findOne({name: d.name, deviceOwner: d.deviceOwner, venue: venue.id}) //TODO use venue id and user id
+                        return Device.findOne({name: d.name, venue: venue.id}) //TODO use venue id and user id
                             .then(function(dev){
                                 //sails.log.debug(dev)
 
@@ -221,7 +234,7 @@ var self = module.exports.testdata = {
                                     return Device.create(d)
                                         .then(function (newDev) {
                                             device = newDev;
-                                            sails.log.debug("Device created with owner " + ownerEmail + ", location: " + d.locationWithinVenue);
+                                            sails.log.debug("Device created at location: " + d.locationWithinVenue);
                                         })
                                         .catch(function(err){
                                             sails.log.debug(err)
@@ -235,37 +248,6 @@ var self = module.exports.testdata = {
 
                     })
             })
-
-            managers.forEach(function (m) {
-                var user;
-                chain = chain.then(function () {
-                    return Auth.findOne({email: m})
-                        .then(function (a) {
-                            return User.findOne(a.user);
-                        })
-                        .then(function (u) {
-                            user = u;
-                            u.managedDevices.add(device.id);
-                            u.save(function (err, s) {
-                            });
-                            device.deviceManagers.add(user.id);
-                            device.save(function (err, s) {
-                            });
-                        })
-                        .then(function () {
-                            sails.log.debug("Managers added to device");
-                        })
-                })
-            })
-        });
-
-
-        chain = chain.then(function () {
-            return User.find()
-                .populate('ownedDevices')
-                .then(function () {
-                    sails.log.debug("Users' owned devices populated");
-                })
         });
 
         chain = chain.then(function () {
@@ -273,14 +255,6 @@ var self = module.exports.testdata = {
                 .populate('devices')
                 .then(function () {
                     sails.log.debug("Venues' devices populated");
-                })
-        });
-
-        chain = chain.then(function () {
-            return User.find()
-                .populate('managedDevices')
-                .then(function () {
-                    sails.log.debug("Users' managed devices populated");
                 })
         });
 
@@ -441,111 +415,98 @@ var self = module.exports.testdata = {
         {
             name: "Le Boulanger",
             address: {street: "20488 Stevens Creek Blvd", city: "Cupertino", state: "CA", zip: "95014"},
-            ownerEmail: "john@test.com"
+            ownerEmail: "john@test.com",
+            managerEmails: ["silvanus@test.com", "jerref@test.com"]
         },
         {
             name: "Ajito",
             address: {street: "7335 Bollinger Rd", city: "Cupertino", state: "CA", zip: "95014"},
-            ownerEmail: "john@test.com"
+            ownerEmail: "john@test.com",
+            managerEmails: ["silvanus@test.com", "unice@test.com"]
         },
         {
             name: "The Sink",
             address: {street: "1165 13th St.", city: "Boulder", state: "CO", zip: "80302"},
-            ownerEmail: "vogel@test.com"
+            ownerEmail: "vogel@test.com",
+            managerEmails: ["annegret@test.com", "caterina@test.com"]
         },
         {
             name: "B Bar & Grill",
             address: {street: "40 E 4th St", city: "New York", state: "NY", zip: "10003"},
-            ownerEmail: "ryan@test.com"
+            ownerEmail: "ryan@test.com",
+            managerEmails: ["unice@test.com", "jerref@test.com"]
         },
         {
             name: "Novo",
             address: {street: "726 Higuera St", city: "San Luis Obispo", state: "CA", zip: "93401"},
             ownerEmail: "elizabeth@test.com",
-            organizationEmail: "dr@test.com"
+            organizationEmail: "dr@test.com",
+            managerEmails: ["caterina@test.com", "annegret@test.com"]
         },
         {
             name: "Not Your Average Joe's",
             address: {street: "305 Main St", city: "Acton", state: "MA", zip: "01720"},
             ownerEmail: "elizabeth@test.com",
-            organizationEmail: "dr@test.com"
+            organizationEmail: "dr@test.com",
+            managerEmails: ["jerref@test.com", "silvanus@test.com"]
         },
         {
             name: "Islands",
             address: {street: "20750 Stevens Creek Blvd", city: "Cupertino", state: "CA", zip: "95014"},
-            ownerEmail: "carina@test.com"
+            ownerEmail: "carina@test.com",
+            managerEmails: ["annegret@test.com", "silvanus@test.com"]
         }
     ],
     devices: [
         {
             name: "Bar Box",
             locationWithinVenue: "bar",
-            ownerEmail: "john@test.com",
-            venueName: "Le Boulanger",
-            managerEmails: ["silvanus@test.com", "annegret@test.com"]
+            venueName: "Le Boulanger"
         },
         {
             name: "Bar Box",
             locationWithinVenue: "bar",
-            ownerEmail: "vogel@test.com",
-            venueName: "The Sink",
-            managerEmails: ["caterina@test.com", "silvanus@test.com"]
+            venueName: "The Sink"
         },
         {
             name: "Bar Box",
             locationWithinVenue: "bar",
-            ownerEmail: "ryan@test.com",
-            venueName: "B Bar & Grill",
-            managerEmails: ["jerref@test.com", "caterina@test.com"]
+            venueName: "B Bar & Grill"
         },
         {
             name: "Bar Box",
             locationWithinVenue: "bar",
-            ownerEmail: "elizabeth@test.com",
-            venueName: "Not Your Average Joe's",
-            managerEmails: ["unice@test.com", "jerref@test.com"]
+            venueName: "Not Your Average Joe's"
         },
         {
             name: "Bar Box",
             locationWithinVenue: "bar",
-            ownerEmail: "carina@test.com",
-            venueName: "Islands",
-            managerEmails: ["annegret@test.com", "unice@test.com"]
+            venueName: "Islands"
         },
         {
             name: "Entrance Box",
             locationWithinVenue: "entrance",
-            ownerEmail: "john@test.com",
-            venueName: "Le Boulanger",
-            managerEmails: ["silvanus@test.com", "annegret@test.com"]
+            venueName: "Le Boulanger"
         },
         {
             name: "Entrance Box",
             locationWithinVenue: "entrance",
-            ownerEmail: "vogel@test.com",
-            venueName: "The Sink",
-            managerEmails: ["caterina@test.com", "silvanus@test.com"]
+            venueName: "The Sink"
         },
         {
             name: "Entrance Box",
             locationWithinVenue: "entrance",
-            ownerEmail: "ryan@test.com",
-            venueName: "B Bar & Grill",
-            managerEmails: ["jerref@test.com", "caterina@test.com"]
+            venueName: "B Bar & Grill"
         },
         {
             name: "Entrance Box",
             locationWithinVenue: "entrance",
-            ownerEmail: "elizabeth@test.com",
-            venueName: "Not Your Average Joe's",
-            managerEmails: ["unice@test.com", "jerref@test.com"]
+            venueName: "Not Your Average Joe's"
         },
         {
             name: "Entrance Box",
             locationWithinVenue: "entrance",
-            ownerEmail: "carina@test.com",
-            venueName: "Islands",
-            managerEmails: ["annegret@test.com", "unice@test.com"]
+            venueName: "Islands"
         }
 
     ],
