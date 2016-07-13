@@ -39,7 +39,38 @@ module.exports = require('waterlock').actions.user({
 
     //TODO document endpoint 
     getDevices: function (req, res) {
+
         var id;
+
+        if (req.allParams() && req.allParams().id)
+            id = req.allParams().id;
+        else if (req.session && req.session.user.id)
+            id = req.session.user.id;
+        else
+            return res.badRequest('Not logged in and no given id')
+
+        User.findOne({id: id})
+            .populate("ownedVenues")
+            .populate("managedVenues")
+            .then(function (user) {
+                if (user) {
+                    //there should be ZERO overlap in these two arrays
+                    var devices = [];
+                    (_.union(user.managedVenues, user.ownedVenues)).forEach(function(venue){
+                        devices.push(venue.devices)
+                    })
+                    sails.log.debug(devices)
+                    //TODO might have to populate devices for the venues hahahaha wooohooo
+                    return res.json(devices); //TODO refactor all places this is called
+                }
+                else
+                    return res.badRequest();
+            })
+            .catch(function (err) {
+                return res.serverError(err);
+            })
+
+        /*var id;
 
         //if an id is supplied, gets the devices for that user auth, otherwise, it gets current user devices 
         
@@ -54,14 +85,15 @@ module.exports = require('waterlock').actions.user({
         Auth.findOne({id: id}) //auth fix due to usercontroller in uiapp
             .then(function (auth) {
                 return User.findOne(auth.user)
-                    .populate("ownedDevices")
-                    .populate("managedDevices")
+                    //.populate("ownedDevices")
+                    //.populate("managedDevices")
                     .then(function (user) { //NOTE: does not populate venue in devices 
                         if (user) {
-                            var devices = {owned: [], managed: []};
-                            devices.owned = user.ownedDevices;
-                            devices.managed = user.managedDevices;
-                            return res.json(devices);
+                            return this.getVenues()
+                                .then(function(venues){
+                                    sails.log.debug(venues);
+                                })
+                            //TODO get devices based on users owned and managed venues! wooooohooo :)
                         }
                         else
                             return res.badRequest();
@@ -69,7 +101,7 @@ module.exports = require('waterlock').actions.user({
                     .catch(function (err) {
                         return res.serverError(err);
                     })
-            })
+            })*/
     },
 
     getVenues: function (req, res) {
@@ -83,10 +115,15 @@ module.exports = require('waterlock').actions.user({
             return res.badRequest('Not logged in and no given id')
         
         User.findOne({id: id})
-            .populate("venues")
+            .populate("ownedVenues")
+            .populate("managedVenues")
             .then(function (user) {
                 if (user) {
-                    return res.json(user.venues);
+                    /*var venues = {owned: [], managed: []};
+                    venues.owned = user.ownedVenues;
+                    venues.managed = user.managedVenues;*/
+                    //there should be ZERO overlap in these two arrays
+                    return res.json(user.ownedVenues); //TODO refactor all places this is called
                 }
                 else
                     return res.badRequest();
@@ -121,4 +158,6 @@ module.exports = require('waterlock').actions.user({
     }
 
 });
+
+
 

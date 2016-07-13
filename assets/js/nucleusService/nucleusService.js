@@ -228,13 +228,7 @@
                 var endPoint = 'venue/addVenue';
                 return apiPost(endPoint, venue);
             }
-            
-            service.getVenue = function (venueId) {
-                
-                var endPoint = _apiPath + '/venue' + (venueId ? '/' + venueId : '');
-                return apiGet(endPoint);
-            }
-
+           
             service.updateVenue = function (venueId, newFields) {
 
                 if (!venueId)
@@ -262,11 +256,7 @@
                 return apiGet(endPoint, fields);
             }
             // =========== DEVICES ======== //TODO move to controllers? 
-            service.getDevice = function (deviceId) {
 
-                var endPoint = _apiPath + '/device' + (deviceId ? '/' + deviceId : '');
-                return apiGet(endPoint);
-            } 
             
             service.updateDevice = function (deviceId, newFields) {
 

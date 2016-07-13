@@ -54,7 +54,7 @@ module.exports = {
         //TODO check params 
         //expecting name, location, venue 
         
-        deviceObj.deviceOwner = req.session.user; //link user to device being created
+        //deviceObj.deviceOwner = req.session.user; //link user to device being created
 
         deviceObj.regCode = code;
         

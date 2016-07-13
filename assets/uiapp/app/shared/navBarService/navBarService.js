@@ -17,18 +17,19 @@ app.factory('navBarService', function ($log) {
                 }, {
                     label: "Devices", //might need to be modified
                     id: "devices",
-                    items: [{label: "Devices", link: {type: 'ui-sref', addr: 'device.adminList'}}
+                    items: [{label: "Devices", link: {type: 'ui-sref', addr: 'device.list'}}
                     ]
-                }, {
-                    label: "Venues",
-                    id: "venues",
-                    items: [{label: "venues", link: {type: 'ui-sref', addr: 'venue.adminList'}}]
-                }, {
-                    label: "Organization",
-                    id: "organization",
-                    items: [{label: "organization", link: {type: 'ui-sref', addr: 'organization.view'}}]
-                }
-
+                },
+                    /*{
+                        label: "Organization",
+                        id: "organization",
+                        items: [{label: "organization", link: {type: 'ui-sref', addr: 'organization.view'}}]
+                    },*/
+                    {
+                        label: "Venues",
+                        id: "venues",
+                        items: [{label: "venues", link: {type: 'ui-sref', addr: 'venue.list'}}]
+                    }
                 ],
                 right: [{
                     label: 'Account',
@@ -58,11 +59,11 @@ app.factory('navBarService', function ($log) {
                         id: "venues",
                         items: [{label: "venues", link: {type: 'ui-sref', addr: 'venue.list'}}]
                     },
-                    {
+                   /* {
                         label: "Organization",
                         id: "organization",
                         items: [{label: "organization", link: {type: 'ui-sref', addr: 'organization.view'}}]
-                    }
+                    }*/
                 ],
                 right: [{
                     label: 'Account',
@@ -85,14 +86,14 @@ app.factory('navBarService', function ($log) {
                     id: "devices",
                     items: [{label: "Devices", link: {type: 'ui-sref', addr: 'device.list'}}]
                 },
-                    {
+                    /*{
                         label: "Organization",
                         id: "organization",
                         items: [{
                             label: "organization",
                             link: {type: 'ui-sref', addr: 'organization.view'}
                         }]
-                    }
+                    }*/
                 ],
                 right: [{
                     label: 'Account',

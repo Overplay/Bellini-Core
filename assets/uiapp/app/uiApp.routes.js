@@ -110,9 +110,15 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
         .state( 'venue.view', {
             url:         '/view/:id',
             resolve:     {
-                venue: function ( nucleus, $stateParams ) {
-                    return nucleus.getVenue( $stateParams.id )
-                }
+                venue: function ( $http, $stateParams) {
+                    return $http.get( apiPath+"/venue/" +$stateParams.id)
+                        .then( function (data) {
+                            return data.data;
+                        })
+                        .catch(function(err){
+                            return err;
+                        })
+                },
             },
             templateUrl: '/uiapp/app/components/venue/viewvenue.partial.html',
             controller:  'viewVenueController'
@@ -121,8 +127,15 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
         .state( 'venue.edit', {
             url:         '/edit/:id',
             resolve:     {
-                venue: function ( nucleus, $stateParams ) {
-                    return nucleus.getVenue( $stateParams.id )
+
+                venue: function ( $http, $stateParams) {
+                    return $http.get( apiPath+"/venue/" +$stateParams.id)
+                        .then( function (data) {
+                            return data.data;
+                        })
+                        .catch(function(err){
+                            return err;
+                        })
                 },
                 edit: function () { return true; }
             },
@@ -149,8 +162,11 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             controller:  'listVenueController',
             templateUrl: '/uiapp/app/components/venue/venuelist.partial.html',
             resolve:     {
-                venues: function ( nucleus ) {
-                    return nucleus.getVenue();
+                venues: function ( $http ) {
+                    return $http.get( apiPath+'/venue')
+                        .then( function (data) {
+                            return data.data;
+                        })
                 }
             }
         })
@@ -192,8 +208,11 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             controller:  'listDeviceController',
             templateUrl: '/uiapp/app/components/device/devicelist.partial.html',
             resolve:     {
-                devices: function ( nucleus ) {
-                    return nucleus.getDevice();
+                devices: function ( $http ) {
+                    return $http.get( apiPath+ '/device')
+                        .then(function (data) {
+                            return data.data;
+                        })
                 },
                 admin: function () { return true; }
             }
@@ -224,9 +243,15 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             controller:  'editDeviceAdminController',
             templateUrl: '/uiapp/app/components/device/manage-device.partial.html',
             resolve:     {
-                device: function ( nucleus, $stateParams ) {
-                    return nucleus.getDevice( $stateParams.id )
-                }
+                device: function ( $http, $stateParams) {
+                    return $http.get( apiPath+"/device/" +$stateParams.id)
+                        .then( function (data) {
+                            return data.data;
+                        })
+                        .catch(function(err){
+                            return err;
+                        })
+                },
             }
         } )
 

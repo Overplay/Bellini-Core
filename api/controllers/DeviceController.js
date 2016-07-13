@@ -62,6 +62,19 @@ module.exports = {
                 //TODO tighten up security around what returns
                 return res.notFound();
             });
+    },
+
+    //TODO remove once production
+    testDevice: function(req, res) {
+        sails.log.debug(params);
+        Device.create(req.allParams())
+            .then(function(dev){
+                sails.log.debug(dev)
+                return res.json(dev)
+            })
+            .catch(function(err){
+                sails.log.debug(err)
+            })
     }
 
 
