@@ -20,11 +20,11 @@ app.factory('navBarService', function ($log) {
                     items: [{label: "Devices", link: {type: 'ui-sref', addr: 'device.list'}}
                     ]
                 },
-                    {
+                    /*{
                         label: "Organization",
                         id: "organization",
                         items: [{label: "organization", link: {type: 'ui-sref', addr: 'organization.view'}}]
-                    },
+                    },*/
                     {
                         label: "Venues",
                         id: "venues",
@@ -59,11 +59,11 @@ app.factory('navBarService', function ($log) {
                         id: "venues",
                         items: [{label: "venues", link: {type: 'ui-sref', addr: 'venue.list'}}]
                     },
-                    {
+                   /* {
                         label: "Organization",
                         id: "organization",
                         items: [{label: "organization", link: {type: 'ui-sref', addr: 'organization.view'}}]
-                    }
+                    }*/
                 ],
                 right: [{
                     label: 'Account',
@@ -86,14 +86,14 @@ app.factory('navBarService', function ($log) {
                     id: "devices",
                     items: [{label: "Devices", link: {type: 'ui-sref', addr: 'device.list'}}]
                 },
-                    {
+                    /*{
                         label: "Organization",
                         id: "organization",
                         items: [{
                             label: "organization",
                             link: {type: 'ui-sref', addr: 'organization.view'}
                         }]
-                    }
+                    }*/
                 ],
                 right: [{
                     label: 'Account',
