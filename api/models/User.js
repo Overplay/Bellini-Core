@@ -84,7 +84,7 @@ module.exports = {
         
         ownedVenues: {
             collection: 'Venue',
-            via: 'venueOwner'
+            via: 'venueOwners'
         },
 
         managedVenues: {

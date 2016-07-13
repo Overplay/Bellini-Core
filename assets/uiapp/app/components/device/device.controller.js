@@ -19,6 +19,13 @@ app.controller("addDeviceController", function ($scope, $state, $log, toastr, nu
 
     $scope.testDevice = function() {
         //create a device for testing purposes! 
+        $http.post('/device/testDevice', $scope.device)
+            .then(function(dev){
+                toastr.success("test device: " + dev.name + " created successfully", "Yay!")
+            })
+            .catch(function (err) {
+                toastr.error("Test Device not created: " + err, "Damn!");
+            });
     };
 
     $scope.submitForCode = function () {
@@ -51,9 +58,12 @@ app.controller("editDeviceAdminController", function ($scope, $state, $log, devi
     $scope.$parent.ui.pageTitle = "Manage Device";
     $scope.$parent.ui.panelHeading = device.name || "Device";
     $scope.confirm = {checked: false};
-    $scope.owner = device.deviceOwner;
+    //$scope.owner = device.deviceOwner;
     $scope.setForm = function (form) { $scope.form = form; };
-    
+
+    //TODO get device venue and the owners of that venues venues woah
+    //TODO maybe don't move devices between venues hahahah
+    //$scope.user.venues! not owner. only the ones this person has controll of! 
     nucleus.getUserVenues($scope.owner.id).then(function (venues) {
         $scope.owner.venues = venues;
     });
@@ -75,6 +85,7 @@ app.controller("editDeviceAdminController", function ($scope, $state, $log, devi
 
 
     // Cole's code for deleting device
+    //TODO test
     $scope.deleteDevice = function () {
 
         uibHelper.confirmModal("Delete Device?", "Are you sure you want to delete device " + $scope.device.name, true)
@@ -115,6 +126,7 @@ app.controller('listDeviceController', function ( $scope, devices, $log, uibHelp
     $log.debug("loading listDeviceController");
     $scope.$parent.ui.pageTitle = "Device List";
     $scope.$parent.ui.panelHeading = "";
+    //TODO uh oh
     $scope.devices = admin ? devices : _.union(_.filter(devices.owned, {regCode: ''}), _.filter(devices.managed, {regCode: ''}));
 
     if (!admin) {
