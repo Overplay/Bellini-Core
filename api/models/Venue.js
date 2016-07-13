@@ -35,7 +35,7 @@ module.exports = {
             type: 'string',
             defaultsTo: ''
         },
-        
+
 
         // For determining where a user is and whether venue is shown on the Mobile app
         // finder app 
@@ -58,8 +58,14 @@ module.exports = {
             via: 'venue'
         },
 
-        venueOwner: {
-            model: 'User'
+        venueOwners: {
+            model: 'User',
+            via: 'ownedVenues'
+        },
+
+        venueManagers: {
+            model: 'User',
+            via: 'managedVenues'
         },
 
         organization: {
