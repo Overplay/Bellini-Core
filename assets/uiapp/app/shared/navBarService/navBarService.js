@@ -126,15 +126,15 @@ app.factory('navBarService', function ($log) {
                         ]
                     },
                     {
-                        label: 'Link2',
-                        id: "link2",
+                        label: 'Check Ins',
+                        id: "checkins",
                         items: [{
-                            label: 'Link2', link: {type: 'href', addr: '#'}
+                            label: 'Check Ins', link: {type: 'href', addr: '#'}
                         }]
                     }],
                 right: [{
                     label: 'Account',
-                    id: 'account3',
+                    id: 'account',
                     items: [{
                         label: "Edit My Account",
                         link: {type: 'ui-sref', addr: 'user.editUser'}
@@ -163,7 +163,7 @@ app.factory('navBarService', function ($log) {
 
                 right: [{
                     label: 'Account',
-                    id: 'account3',
+                    id: 'account',
                     items: [{
                         label: "Edit My Account",
                         link: {type: 'ui-sref', addr: 'user.editUser'}
@@ -210,7 +210,7 @@ app.factory('navBarService', function ($log) {
                 ],
                 right: [{
                     label: 'Account', //similar to above, shows no repeats and dropdown combinations
-                    id: "account4", //duplicate dropdown
+                    id: "account", //duplicate dropdown
                     items: [{
                         label: "Edit My Account",
                         link: {type: 'ui-sref', addr: 'user.editUser'}
