@@ -115,6 +115,7 @@ app.controller("editUserAdminController", function ($scope, $http, $state, $log,
 
     function updateUser( modelChanges ) {
 
+        //TODO sync roles for cache 
         nucleus.updateUser( user.user.id, modelChanges )
             .then( function ( u ) {
                 toastr.success( "Account info updated", "Success!" );

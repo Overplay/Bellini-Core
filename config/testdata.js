@@ -39,10 +39,25 @@ var self = module.exports.testdata = {
             })
         }
         self.organizations.forEach(function (o) {
-            Organization.create(o)
-                .then(function (o) {
-                    sails.log.debug("organization created")
+            Organization.findOne(o)
+                .then(function(org){
+                    if (org){
+                        reject(new Error("Organization exists, skipping creation"))
+                    }
+                    else{
+                        return  Organization.create(o)
+                            .then(function (o) {
+                                sails.log.debug("organization created")
+                            })
+                            .catch(function(err) {
+                                sails.log.debug("Organization Error Caught" + err)
+                            })
+                    }
                 })
+                .catch(function(err){
+                    sails.log.debug(err);
+                })
+
         });
 
         self.users.forEach(function (u) {
@@ -71,6 +86,9 @@ var self = module.exports.testdata = {
                     .then(function () {
                         sails.log.debug("Created user " + email)
                     })
+                    .catch(function(err) {
+                        //sails.log.debug("error caught: " + err)
+                    })
             })
         });
 
@@ -82,13 +100,24 @@ var self = module.exports.testdata = {
                 Auth.findOne({email: creatorEmail})
                     .then(function (u) {
                         a.creator = u.user;
-                        return Ad.create(a)
-                            .then(function () {
-                                sails.log.debug("Ad created for " + creatorEmail);
+                        return Ad.findOne(a)
+                            .then(function(ad)
+                            {
+                                if (ad){
+                                    sails.log.debug("Ad exists")
+                                    return new Error("Ad already in system")
+                                }
+                                else {
+                                    return Ad.create(a)
+                                        .then(function () {
+                                            sails.log.debug("Ad created for " + creatorEmail);
+                                        })
+                                        .catch(function (err) {
+                                            sails.log.debug(err)
+                                        })
+                                }
                             })
-                            .catch(function (err) {
-                                sails.log.debug(err)
-                            })
+
                     })
                     .catch(function (err) {
                         sails.log.debug(err)
@@ -126,10 +155,29 @@ var self = module.exports.testdata = {
                 return Auth.findOne({email: ownerEmail})
                     .then(function (user) {
                         v.venueOwner = user.user;
-                        return Venue.create(v)
-                            .then(function () {
-                                sails.log.debug("Venue created with owner " + ownerEmail);
+                        //sails.log.debug(v)
+                        return Venue.findOne({name: v.name}) //this will work but venues could be double named (not unique)
+                            .then(function(ven){
+                                //sails.log.debug(ven);
+                                if (ven){
+                                    sails.log.debug("Venue exists")
+                                    return new Error("Venue Exists, skipping creation")
+                                }
+                                else {
+                                    return Venue.create(v)
+                                        .then(function () {
+                                            sails.log.debug("Venue created with owner " + ownerEmail);
+                                        })
+                                        .catch(function(err){
+                                            sails.log.debug(err)
+                                        })
+                                }
+
                             })
+                            .catch(function(err){
+                                sails.log.debug(err)
+                            })
+
                     })
             })
 
@@ -145,7 +193,7 @@ var self = module.exports.testdata = {
 
         self.devices.forEach(function (d) {
             var ownerEmail = d.ownerEmail;
-            var venueName = d.venueName;
+            var venueName = d.venueName; //be careful there can be multiple venues with the same name....
             var managers = d.managerEmails;
             delete d.managerEmails;
             delete d.ownerEmail;
@@ -156,15 +204,35 @@ var self = module.exports.testdata = {
                 return Auth.findOne({email: ownerEmail})
                     .then(function (user) {
                         d.deviceOwner = user.user;
-                        return Venue.findOne({name: venueName})
+                        return Venue.findOne({name: venueName}) //venues can have the same name!
                     })
                     .then(function (venue) {
                         d.venue = venue;
-                        return Device.create(d)
-                            .then(function (newDev) {
-                                device = newDev;
-                                sails.log.debug("Device created with owner " + ownerEmail + ", location: " + d.locationWithinVenue);
+                        //sails.log.debug(d)
+                        return Device.findOne({name: d.name, deviceOwner: d.deviceOwner, venue: venue.id}) //TODO use venue id and user id
+                            .then(function(dev){
+                                //sails.log.debug(dev)
+
+                                if(dev){
+                                    device = dev;
+                                    return new Error("Device Exists, skipping creation")
+                                }
+                                else {
+                                    return Device.create(d)
+                                        .then(function (newDev) {
+                                            device = newDev;
+                                            sails.log.debug("Device created with owner " + ownerEmail + ", location: " + d.locationWithinVenue);
+                                        })
+                                        .catch(function(err){
+                                            sails.log.debug(err)
+                                        })
+                                }
+
                             })
+                            .catch(function(err){
+                                sails.log.debug(err)
+                            })
+
                     })
             })
 

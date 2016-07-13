@@ -64,14 +64,14 @@ module.exports.session = {
   *                                                                          *
   * Uncomment the following lines to use your Mongo adapter as a session     *
   * store                                                                    *
-  *                                                                          *
+  *          TODO adapt this to make sure sessions are correct time          *
   ***************************************************************************/
 
-  // adapter: 'mongo',
-  // host: 'localhost',
-  // port: 27017,
-  // db: 'sails',
-  // collection: 'sessions',
+  adapter: 'mongo',
+  host: 'localhost',
+  port: 27017,
+  db: 'asahi',
+  collection: 'sessions',
 
   /***************************************************************************
   *                                                                          *

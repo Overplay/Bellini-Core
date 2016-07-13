@@ -35,12 +35,14 @@ app.controller("adminManageDevicesController", function ($scope, $state, $log, $
         // return _.union(a, b);
     }
 
-    //returns devices.owned and devices.managed
+    //returns devices.owned and devices.managed TODO if admin, should return all devices
     $http.get('/user/getDevices')
         .then(function (data) {
             var devices = data.data;
             $scope.devices = combineDevices(devices.owned, devices.managed);
 
+            //populate the devices venues since they are a level too deep under user to be prepopulated
+            //async this??
             _.forEach($scope.devices, function (dev) {
                 nucleus.getVenue(dev.venue)
                     .then(function (data) {

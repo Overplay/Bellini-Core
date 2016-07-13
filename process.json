@@ -1,0 +1,27 @@
+//additional test file for config. for on server not just
+
+
+{
+  "apps" : [{
+    "name"       : "asahi",
+    "script"     : "app.js", //TODO change if nec. depends on file locations
+    "instances"  : 1,
+    "exec_mode"  : "fork",
+    "cwd" : "/opt/asahi", //TODO change this if deploying in a different folder!
+    "env": {
+      "COMMON_VARIABLE": "true",
+      "NODE_ENV": "development"
+      //"PM2_SILENT": false, //trying to get output for debugging
+      //"PM2_PROGRAMMATIC": false //same
+
+    },
+    "env_production" : {
+      "NODE_ENV": "production"
+    },
+    "autorestart" : true,
+    "vizion": true,
+    "post_update": ["npm install && cd assets && bower update && cd .."] //for reloads //also restart the module??
+
+
+  }]
+}
