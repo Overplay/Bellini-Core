@@ -12,7 +12,7 @@
 var Promise = require("bluebird");
 
 var _idToRoleMap = {};
-var _adminRole = undefined; //TODO
+var _adminRole = undefined; 
 
 function idToRoleString(roleId) {
 
