@@ -17,6 +17,10 @@ app.controller("addDeviceController", function ($scope, $state, $log, toastr, nu
         $scope.user.venues = venues;
     });
 
+    $scope.testDevice = function() {
+        //create a device for testing purposes! 
+    };
+
     $scope.submitForCode = function () {
         $http.post('/activation/generateCode', $scope.device)
             .then(function (data) {
