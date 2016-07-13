@@ -19,9 +19,9 @@
                     <input type="text" ng-model="parameters.term" placeholder="Search Term" uib-typeahead="result as result.name for result in getResults($viewValue)"
                            typeahead-loading="loadingResults" typeahead-no-results="noResults" class="form-control" typeahead-template-url="yelpSuggest.html"
                            typeahead-on-select="selected($item, $model, $label)" typeahead-show-hint="true"/>
+                    <div class="input-group-addon" ng-show="loadingResults"><i ng-show="loadingResults" class="fa fa-spinner fa-spin fa-pulse fa-fw"></i></div>
 
                 </div>
-                <i ng-show="loadingResults" class="glyphicon glyphicon-refresh"></i>
                 <div ng-show="noResults">
                     <i class="glyphicon glyphicon-remove"></i> No Results Found
                 </div>
@@ -29,15 +29,20 @@
             <div class="col-md-5">
                 <div class="input-group top15">
                     <span class="input-group-addon">Near</span>
-                    <input type="text" ng-model="parameters.location" placeholder="Location" class="form-control" ng-init="initializeLocation()"/>
+                    <input type="text" ng-model="parameters.location" placeholder="Location" class="form-control"/>
+                    <span class="input-group-btn">
+                        <button class="btn-default btn" ng-click="initializeLocation()">
+                            <i class="fa fa-location-arrow fa-fw" ng-class="{ 'location-init' : geolocation && parameters.location === geolocation }"></i>
+                        </button>
+                    </span>
                 </div>
             </div>
         </div>
 
         <hr/>
         <!-- Save, Delete, Cancel buttons -->
-        <div class="row">
-            <div class="col-md-4">
+        <div class="row top30">
+            <div class="col-md-12">
                 <button ng-disabled="form.$invalid" class="btn btn-success" ng-click="submit()">
                     {{ edit ? "Update" : "Create" }}
                 </button>
@@ -45,29 +50,27 @@
                         ui-sref="venue.view({id: venue.id})">
                     Cancel
                 </button>
-            </div>
-            <div class="col-md-offset-2 col-md-6">
                 <div class="pull-right" ng-if="edit">
                     <button class="btn btn-danger" ng-click="deleteVenue()">
                         Delete
                     </button>
                 </div>
             </div>
-
         </div>
         <!-- First page of venue info -->
         <uib-tabset class="top30">
             <uib-tab heading="Address">
-            <div >
+            <div>
                 <form name="form" role="form" ng-submit="submit()" class="form-horizontal top15">
-                    <fieldset class="form-group" ng-class="{'has-error' : !form.name.$valid && form.name.$dirty}">
+                    <div ng-init="setForm(form)"></div>
+                    <fieldset class="form-group" ng-class="{'has-error' : !form.name.$valid && form.name.$touched, 'has-success' : form.name.$valid && form.name.$touched}">
                         <label for="name" class="col-sm-3 control-label">Venue Name</label>
                         <div class="col-sm-9">
                             <input type="text" class="form-control" id="name" name="name" placeholder="Venue Name"
                                    ng-model="venue.name" required/>
                         </div>
                     </fieldset>
-                    <fieldset class="form-group" ng-class="{'has-error' : !form.street.$valid && form.street.$dirty}">
+                    <fieldset class="form-group" ng-class="{'has-error' : !form.street.$valid && form.street.$touched, 'has-success' : form.street.$valid && form.street.$touched}">
                         <label for="address-street" class="col-sm-3 control-label">Street Address</label>
                         <div class="col-sm-9">
                             <input type="text" class="form-control" id="address-street" name="street"
@@ -75,7 +78,7 @@
                                    ng-model="venue.address.street" required/>
                         </div>
                     </fieldset>
-                    <fieldset class="form-group" ng-class="{'has-error' : !form.street2.$valid && form.street2.$dirty}">
+                    <fieldset class="form-group">
                         <label for="address-street2" class="col-sm-3 control-label"></label>
                         <div class="col-sm-9">
                             <input type="text" class="form-control" id="address-street2" name="street2"
@@ -83,14 +86,14 @@
                                    ng-model="venue.address.street2"/>
                         </div>
                     </fieldset>
-                    <fieldset class="form-group" ng-class="{'has-error' : !form.city.$valid && form.city.$dirty}">
+                    <fieldset class="form-group" ng-class="{'has-error' : !form.city.$valid && form.city.$touched, 'has-success' : form.city.$valid && form.city.$touched}">
                         <label for="address-city" class="col-sm-3 control-label">City</label>
                         <div class="col-sm-9">
                             <input type="text" class="form-control" id="address-city" name="city" placeholder="City"
                                    ng-model="venue.address.city" required/>
                         </div>
                     </fieldset>
-                    <fieldset class="form-group">
+                    <fieldset class="form-group" ng-class="{'has-error' : !form.state.$valid && form.state.$touched, 'has-success' : form.state.$valid && form.state.$touched}">
                         <label for="address-state" class="col-sm-3 control-label">State/Province</label>
                         <div class="col-sm-3">
                             <input type="text" class="form-control" id="address-state" name="state" placeholder="State"
@@ -99,26 +102,24 @@
                             <!--id="address-state" name="state" required></select>-->
                         </div>
                     </fieldset>
-                    <fieldset class="form-group" ng-class="{'has-error' : !form.zip.$valid && form.zip.$dirty}">
+                    <fieldset class="form-group" ng-class="{'has-error' : !form.zip.$valid && form.zip.$touched, 'has-success' : form.zip.$valid && form.zip.$touched}">
                         <label for="address-zip" class="col-sm-3 control-label">Postal/Zip Code</label>
                         <div class="col-sm-5">
                             <input type="text" class="form-control" id="address-zip" name="zip" placeholder="ex: 80304"
                                    ng-model="venue.address.zip" ng-pattern="regex" required/>
                         </div>
                     </fieldset>
-                    <fieldset class="form-group"
-                              ng-class="{'has-error' : !form.latitude.$valid && form.latitude.$dirty}">
+                    <fieldset class="form-group" ng-class="{'has-error' : !form.latitude.$valid && form.latitude.$touched}">
                         <label for="latitude" class="col-sm-3 control-label">Latitude</label>
                         <div class="col-sm-6">
-                            <input type="text" class="form-control" id="latitude" name="latitude"
+                            <input type="number" step="any" class="form-control" id="latitude" name="latitude"
                                    ng-model="venue.geolocation.latitude" placeholder="ex: 35.272491"/>
                         </div>
                     </fieldset>
-                    <fieldset class="form-group"
-                              ng-class="{'has-error' : !form.longitude.$valid && form.longitude.$dirty}">
+                    <fieldset class="form-group" ng-class="{'has-error' : !form.longitude.$valid && form.longitude.$touched}">
                         <label for="longitude" class="col-sm-3 control-label">Longitude</label>
                         <div class="col-sm-6">
-                            <input type="text" class="form-control" id="longitude" name="longitude"
+                            <input type="number" step="any" class="form-control" id="longitude" name="longitude"
                                    ng-model="venue.geolocation.longitude" placeholder="ex: -120.7054912"/>
                         </div>
                     </fieldset>
@@ -131,21 +132,18 @@
                             </div>
                         </div>
                     </fieldset>
-                    <div class="form-actions">
-                        <button type="button" class="pull-right btn top15" style="margin-left: 10px" ng-if="edit"
-                                ui-sref="venue.view({id: venue.id})">
-                            Cancel
-                        </button>
-                        <button type="submit" ng-disabled="form.$invalid" class="pull-right btn btn-primary top15">
-                            {{ edit ? "Update" : "Create" }}
-                        </button>
-                    </div>
+                    <!--Hidden submit button so submission on pressing enter works-->
+                    <button type="submit" ng-show="false"></button>
                 </form>
             </div>
 
             </uib-tab>
             <uib-tab heading="Logo and Images">
-                <h2>Add Logo and images stuff here.</h2>
+                <br>
+                <img-input prompt="Logo" width="256" height="256" dirty="media.logo" src-field="venue.logo" exact></img-input>
+                <img-input prompt="Venue Image 1" width="800" height="600" dirty="media.photos[0]" src-field="venue.photos[0]" ratio="4:3" max-size></img-input>
+                <img-input prompt="Venue Image 2" width="800" height="600" dirty="media.photos[1]" src-field="venue.photos[1]" ratio="4:3" max-size></img-input>
+                <img-input prompt="Venue Image 3" width="800" height="600" dirty="media.photos[2]" src-field="venue.photos[2]" ratio="4:3" max-size></img-input>
             </uib-tab>
         </uib-tabset>
     </div>

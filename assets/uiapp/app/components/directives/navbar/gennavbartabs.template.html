@@ -10,17 +10,16 @@
 
     <!-- dropdown tab-->
     <a ng-if="dropdown(menu)" id="{{menu.id}}" uib-dropdown-toggle
-       ng-disabled="disabled">{{menu.label}}<b
-            class="caret"></b></a>
+       ng-disabled="disabled" href>{{menu.label}}<b class="caret"></b>
+    </a>
     <ul ng-if="dropdown(menu)" uib-dropdown-menu role="menu" aria-labelledby="{{menu.id}}">
         <li ng-repeat="option in menu.items">
             <a ng-if="!hrefLink(option)" ui-sref="{{option.link.addr}}"
                ng-click="close()">{{option.label}}</a>
-            <a ng-if="hrefLink(option)" href="{{option.link.addr}}"
+            <a ng-if="hrefLink(option)" ng-href="{{option.link.addr}}"
                ng-click="close()">{{option.label}}</a>
 
         </li>
     </ul>
 
 </li>
-

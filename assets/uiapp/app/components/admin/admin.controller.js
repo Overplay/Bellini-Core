@@ -44,13 +44,10 @@ app.controller("adminManageDevicesController", function ($scope, $state, $log, $
             //populate the devices venues since they are a level too deep under user to be prepopulated
             //async this??
             _.forEach($scope.devices, function (dev) {
-                $http.get('api/v1/venue/' + dev.venue)
+                nucleus.getVenue(dev.venue)
                     .then(function (data) {
-                        dev.venue = data.data;
+                        dev.venue = data;
                     })
-                    .catch(function (err) {
-                        toastr.error("Venue not found", "Damn!");
-                    });
             })
 
         })

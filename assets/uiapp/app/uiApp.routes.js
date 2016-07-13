@@ -98,34 +98,6 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             }
         } )
 
-        // // Original Venue Routesd
-        // // TODO: Whack these once sidemenu done
-        //
-        // .state('venuex', {
-        //     url: '/venuex',
-        //     templateUrl: '/uiapp/app/components/venue/venue.partial.html',
-        //     abstract: true
-        // })
-        //
-        // .state('venuex.addVenue', {
-        //     url: '/add-venue',
-        //     templateUrl: '/uiapp/app/components/venue/addeditvenue.partial.html',
-        //     controller: 'addVenueController',
-        //     data: {subTitle: "Add Venue"}
-        // })
-        //
-        // .state('venuex.manageVenue', {
-        //     url: '/manage-venue/:id',
-        //     data: {subTitle: "Manage Venue"},
-        //     controller: 'editVenueAdminController',
-        //     templateUrl: '/uiapp/app/components/venue/manage-venue.partial.html',
-        //     resolve: {
-        //         venue: function (nucleus, $stateParams) {
-        //             return nucleus.getVenue($stateParams.id)
-        //         }
-        //     }
-        // })
-
         // New Venue Routes
 
         .state( 'venue', {
@@ -155,7 +127,7 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                 edit: function () { return true; }
             },
             templateUrl: '/uiapp/app/components/venue/addeditvenue.partial.html',
-            controller:  'addVenueController'
+            controller:  'addEditVenueController'
         } )
 
         .state( 'venue.list', {
@@ -163,8 +135,11 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             controller:  'listVenueController',
             templateUrl: '/uiapp/app/components/venue/venuelist.partial.html',
             resolve:     {
-                venues: function ( nucleus ) {
-                    return nucleus.getVenue()
+                venues: function ( $http ) {
+                    return $http.get( '/user/getVenues')
+                        .then(function (data) {
+                            return data.data;
+                        })
                 }
             }
         } )
@@ -172,7 +147,7 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
         .state( 'venue.new', {
             url: '/new',
             templateUrl: '/uiapp/app/components/venue/addeditvenue.partial.html',
-            controller: 'addVenueController',
+            controller: 'addEditVenueController',
             resolve: {
                 edit: function() { return false; },
                 venue: function() { return null; }
@@ -181,11 +156,25 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
 
         .state( 'device', {
             url:         '/device',
-            templateUrl: '/uiapp/app/components/device/device.partial.html',
+            templateUrl: '/uiapp/app/components/device/device-sidemenu.partial.html',
+            controller:  function ( $scope ) { $scope.panelHeading = { text: "", color: "#0000FF" }},
             abstract:    true
 
         } )
 
+        .state( 'device.list', {
+            url:         '/list',
+            controller:  'listDeviceController',
+            templateUrl: '/uiapp/app/components/device/devicelist.partial.html',
+            resolve:     {
+                devices: function ( $http ) {
+                    return $http.get( '/user/getDevices')
+                        .then(function (data) {
+                            return data.data;
+                        })
+                }
+            }
+        } )
 
         .state( 'device.addDevice', {
             url:         '/activate',
@@ -199,12 +188,11 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             }
         } )
 
-
         .state( 'device.regDevice', {
             url:         '/register',
             data:        { subTitle: "Register a Device" },
-            controller:  "registerDeviceController",
-            templateUrl: '/uiapp/app/components/device/register-device.partial.html',
+            // controller:  "registerDeviceController",
+            templateUrl: '/uiapp/app/components/device/register-device.partial.html'
         } )
 
         .state( 'device.manageDevice', {
@@ -221,15 +209,27 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
 
         .state( 'organization', {
             url:         '/organization',
-            templateUrl: '/uiapp/app/components/organization/organization.partial.html',
+            templateUrl: '/uiapp/app/components/organization/organization-sidemenu.partial.html',
             abstract:    true,
             resolve:     {
                 user: function ( nucleus ) {
                     return nucleus.getMe()
                 }
-
             }
+        } )
 
+        .state( 'organization.view', {
+            url:         '/view',
+            resolve:     {},
+            templateUrl: '/uiapp/app/components/organization/view-organization.partial.html',
+            controller:  'viewOrganizationController'
+        } )
+
+        .state( 'organization.edit', {
+            url:         '/edit',
+            resolve:     {},
+            templateUrl: '/uiapp/app/components/organization/edit-organization.partial.html',
+            controller:  'editOrganizationController'
         } )
 
         .state( 'organization.manageOrganization', {
@@ -248,7 +248,7 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
         } )
 
         .state( 'organization.viewOrganization', {
-            url:         '/view-organization/:id',
+            url:         '/view-organization',
             data:        { subTitle: "View Organization" },
             controller:  'viewOrganizationController',
             templateUrl: '/uiapp/app/components/organization/view-organization.partial.html',
