@@ -46,10 +46,13 @@ module.exports = {
 
         var newVenue = req.allParams();
 
-        newVenue.venueOwner = req.session.user; //link user to venue being created
 
         Venue.create(newVenue)
             .then(function (v) {
+                //TODO test venue owners
+                v.venueOwners.add(req.session.user);
+                v.save();
+                sails.log.debug("venue ownership", v)
                 return res.json(v);
             })
             .catch(function (err) {

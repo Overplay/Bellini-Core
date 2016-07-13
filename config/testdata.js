@@ -167,7 +167,7 @@ var self = module.exports.testdata = {
             chain = chain.then(function () {
                 return Auth.findOne({email: ownerEmail})
                     .then(function (user) {
-                        v.venueOwners.push(user.user);
+                        //v.venueOwners.push(user.user);
                         //sails.log.debug(v)
                         return Venue.findOne({name: v.name}) //this will work but venues could be double named (not unique)
                             .then(function(ven){
@@ -178,7 +178,14 @@ var self = module.exports.testdata = {
                                 }
                                 else {
                                     return Venue.create(v)
-                                        .then(function () {
+                                        .then(function (veee) {
+                                            User.findOne({id: user.user})
+                                                .then(function(u){
+                                                    u.ownedVenues.add(veee)
+                                                    u.save(function(err){}); //WOW sick 
+
+                                                }
+                                            )
                                             sails.log.debug("Venue created with owner " + ownerEmail);
                                         })
                                         .catch(function(err){

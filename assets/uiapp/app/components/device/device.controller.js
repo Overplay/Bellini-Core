@@ -17,10 +17,10 @@ app.controller("addDeviceController", function ($scope, $state, $log, toastr, nu
         $scope.user.venues = venues;
     });
 
-    $scope.testDevice = function() {
+    $scope.testDevice = function () {
         //create a device for testing purposes! 
         $http.post('/device/testDevice', $scope.device)
-            .then(function(dev){
+            .then(function (dev) {
                 toastr.success("test device: " + dev.name + " created successfully", "Yay!")
             })
             .catch(function (err) {
@@ -42,15 +42,15 @@ app.controller("addDeviceController", function ($scope, $state, $log, toastr, nu
     $scope.listAddress = function (venue) {
 
         return venue.name + ' ('
-        + venue.address.street + ' '
-        + venue.address.city + ', '
-        + venue.address.state + ')';
+            + venue.address.street + ' '
+            + venue.address.city + ', '
+            + venue.address.state + ')';
     }
 
 
 });
 
-app.controller("editDeviceAdminController", function ($scope, $state, $log, device, toastr, uibHelper, nucleus) {
+app.controller("editDeviceAdminController", function ($scope, $state, $log, device, toastr, uibHelper, nucleus, user, $http) {
     $log.debug("manageDeviceController starting");
 
     $scope.device = device;
@@ -59,17 +59,27 @@ app.controller("editDeviceAdminController", function ($scope, $state, $log, devi
     $scope.$parent.ui.panelHeading = device.name || "Device";
     $scope.confirm = {checked: false};
     //$scope.owner = device.deviceOwner;
-    $scope.setForm = function (form) { $scope.form = form; };
+    $scope.setForm = function (form) {
+        $scope.form = form;
+    };
+
+    $http.get("api/v1/user/" + user.id)
+        .then(function(u){
+            $log.log(u)
+            $scope.user = u.data;
+        })
+    
 
     //TODO get device venue and the owners of that venues venues woah
     //TODO maybe don't move devices between venues hahahah
-    //$scope.user.venues! not owner. only the ones this person has controll of! 
-    nucleus.getUserVenues($scope.owner.id).then(function (venues) {
+    //$scope.user.venues! not owner. only the ones this person has control of!
+    /*nucleus.getUserVenues($scope.owner.id).then(function (venues) {
         $scope.owner.venues = venues;
-    });
+    });*/
+
 
     // $log.log(device);
-    
+
     $scope.update = function () {
         //post to an update with $scope.device
         nucleus.updateDevice($scope.device.id, $scope.device)
@@ -107,35 +117,38 @@ app.controller("editDeviceAdminController", function ($scope, $state, $log, devi
     $scope.listAddress = function (venue) {
 
         return venue.name + ' ('
-        + venue.address.street + ' '
-        + venue.address.city + ', '
-        + venue.address.state + ')';
+            + venue.address.street + ' '
+            + venue.address.city + ', '
+            + venue.address.state + ')';
     }
 
     $scope.addressString = function (address) {
         return address.street + ' '
-        + address.city + ', '
-        + address.state + ' '
-        + address.zip;
+            + address.city + ', '
+            + address.state + ' '
+            + address.zip;
     }
 
 });
 
-app.controller('listDeviceController', function ( $scope, devices, $log, uibHelper, nucleus, admin ) {
+app.controller('listDeviceController', function ($scope, devices, $log, uibHelper, $http, admin) {
 
-    $log.debug("loading listDeviceController");
+    $log.debug("loading listDeviceController" + devices);
     $scope.$parent.ui.pageTitle = "Device List";
     $scope.$parent.ui.panelHeading = "";
-    //TODO uh oh
-    $scope.devices = admin ? devices : _.union(_.filter(devices.owned, {regCode: ''}), _.filter(devices.managed, {regCode: ''}));
 
-    if (!admin) {
+    $scope.devices = devices;
+
+    if (!admin) { //TODO test
         _.forEach($scope.devices, function (dev) {
-            nucleus.getVenue(dev.venue)
+            $http.get("api/v1/venue/" + dev.venue)
                 .then(function (data) {
-                    dev.venue = data;
+                    dev.venue = data.data;
                 })
-        })
+
+
     }
-    
+    )
+}
+
 })
