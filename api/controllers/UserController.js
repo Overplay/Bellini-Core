@@ -46,7 +46,7 @@ module.exports = require('waterlock').actions.user({
         if (req.allParams() && req.allParams().id)
             id = req.allParams().id; //given ID
         else if (req.session && req.session.user.id)
-            id = req.session.user.id; //otherwise use current user 
+            id = req.session.user.id; //otherwise use current user
         else
             return res.badRequest('Not logged in and no given id')
 
@@ -54,7 +54,7 @@ module.exports = require('waterlock').actions.user({
             .populate("ownedVenues")
             .then(function (user) {
                 if (user) {
-                    sails.log.debug(user)
+                    //sails.log.debug(user)
                     var devices = [];
 
                     var chain = Promise.resolve()
@@ -83,38 +83,6 @@ module.exports = require('waterlock').actions.user({
                 return res.serverError(err);
             })
 
-        /*var id;
-
-         //if an id is supplied, gets the devices for that user auth, otherwise, it gets current user devices
-
-         if (req.allParams() && req.allParams().id) //policy check too?? make sure admin
-         id = req.allParams().id;
-         else if (req.session && req.session.user.id)
-         id = req.session.user.auth.id;
-         else
-         return res.badRequest('Not logged in and no given id')
-         //this query does not populate deep enough --
-         // currently fixed in controller with  api calls
-         Auth.findOne({id: id}) //auth fix due to usercontroller in uiapp
-         .then(function (auth) {
-         return User.findOne(auth.user)
-         //.populate("ownedDevices")
-         //.populate("managedDevices")
-         .then(function (user) { //NOTE: does not populate venue in devices
-         if (user) {
-         return this.getVenues()
-         .then(function(venues){
-         sails.log.debug(venues);
-         })
-         //TODO get devices based on users owned and managed venues! wooooohooo :)
-         }
-         else
-         return res.badRequest();
-         })
-         .catch(function (err) {
-         return res.serverError(err);
-         })
-         })*/
     },
 
     getVenues: function (req, res) {
@@ -132,10 +100,6 @@ module.exports = require('waterlock').actions.user({
             .populate("managedVenues")
             .then(function (user) {
                 if (user) {
-                    /*var venues = {owned: [], managed: []};
-                     venues.owned = user.ownedVenues;
-                     venues.managed = user.managedVenues;*/
-                    //there should be ZERO overlap in these two arrays
                     return res.json(user.ownedVenues); //TODO refactor all places this is called
                 }
                 else
@@ -146,7 +110,7 @@ module.exports = require('waterlock').actions.user({
             })
     },
 
-    getAlist: function (req, res) {
+    getAlist: function (req, res) { //cant have ad or advertisement in name of endpoint due to adblock
         var id;
 
         if (req.allParams() && req.allParams().id)

@@ -19,7 +19,7 @@ module.exports = {
         if ((params.regCode === undefined)) //test other stuff too
             return res.badRequest();
 
-        sails.log.debug(params);
+        //sails.log.debug(params);
 
 
         var deviceObj = {};
@@ -30,7 +30,7 @@ module.exports = {
 
         deviceObj.regCode = params.regCode;
 
-        sails.log.debug(deviceObj, "searching ");
+        //sails.log.debug(deviceObj, "searching ");
 
         Device.findOne(deviceObj)
             .then(function (device) {
