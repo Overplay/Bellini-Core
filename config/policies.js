@@ -81,7 +81,8 @@ module.exports.policies = {
         'find':    [ 'sessionAuth', 'isAdmin' ],
         'findOne': [ 'sessionAuth', 'isMeOrAdmin' ],
         'update':  [ 'sessionAuth', 'isMeOrAdmin' ],
-        'destroy': [ 'sessionAuth', 'isAdmin' ]
+        'destroy': [ 'sessionAuth', 'isAdmin' ],
+        'queryFirstLastEmail' : ['sessionAuth']
 
     },
 

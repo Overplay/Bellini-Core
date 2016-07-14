@@ -8,6 +8,9 @@
  * @docs        :: http://waterlock.ninja/documentation
  */
 
+var _ = require("lodash")
+
+
 module.exports = require('waterlock').actions.user({
     /* e.g.
      action: function(req, res){
@@ -132,6 +135,65 @@ module.exports = require('waterlock').actions.user({
             .catch(function (err) {
                 return res.serverError(err);
             })
+    },
+
+    //endpoint that finds users with either first, last or email in their auth
+
+    queryFirstLastEmail: function(req, res) {
+        //TODO policies (very important so nobody malicious queries user info
+
+        var params = req.allParams();
+
+        var query = params.query;
+
+        var users = [];
+        
+        var chain = Promise.resolve();
+
+        chain = chain.then(function() {
+            return User.find(
+                {
+                    or: [
+                        {firstName: {'contains': query}},
+                        {lastName: {'contains': query}},
+                    ],
+                    sort: 'firstName DESC'
+                })
+                .populate("auth")
+                .then(function (userList) {
+                    users = _.unionWith(users, userList, _.isEqual)
+                })
+                .catch(function (err) {
+                    sails.log.debug(err)
+                    return res.badRequest(err)
+                })
+        })
+        chain = chain.then(function(){
+            return Auth.find({email: {'contains': query}})
+                .then(function(auths){
+                    return auths.map(function(a){
+                        return a.user;
+                    })
+                })
+                .then(function(userIDs){
+                    return User.find({id: userIDs})
+                        .populate("auth")
+                        .then(function(userList){
+                            users = _.unionWith(users, userList, _.isEqual)
+                        })
+                })
+        })
+
+        chain.then(function(){
+            return res.json(users)
+        })
+
+        
+
+
+
+
+
     }
 
 });
