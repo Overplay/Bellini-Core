@@ -1,5 +1,7 @@
 <style>
-    .angular-google-map-container { height: 450px; }
+    .angular-google-map-container {
+        height: 450px;
+    }
 </style>
 
 <div class="top15 sidepad10">
@@ -42,4 +44,63 @@
         </tr>
         </tbody>
     </table>
+    <h3 ng-show="venue.venueManagers.length"> Venue Managers </h3>
+
+    <table class="table table-striped top15" ng-show="venue.venueManagers.length">
+        <thead>
+        <tr>
+            <td>Name</td>
+            <td></td>
+            <td></td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="user in venue.venueManagers">
+            <td>{{user.firstName}} {{user.lastName}}</td>
+            <td>
+                <button class="btn btn-sm btn-danger" ng-click="removeManager(user.id)">Remove</button>
+            </td>
+            <td width="10%"><a ui-sref="user.ownerView({id: user.id})" class="btn btn-sm btn-warning">More
+                info TODO</a></td>
+        </tr>
+        </tbody>
+
+    </table>
+    <h3> Venue Owners </h3>
+
+    <table class="table table-striped top15" ng-show="venue.venueOwners.length">
+        <thead>
+        <tr>
+            <td>Name</td>
+            <td></td>
+            <td></td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="user in venue.venueOwners">
+            <td>{{user.firstName}} {{user.lastName}}</td>
+            <td>
+                <button class="btn btn-sm btn-danger" ng-click="removeOwner(user.id)" ng-if="user.id != uid && venue.venueOwners.length > 1">Remove</button> <!--TODO do not remove self-->
+            </td>
+            <td width="10%"><a ui-sref="user.ownerView({id: user.id})" class="btn btn-sm btn-warning">More
+                info TODO</a></td>
+        </tr>
+        </tbody>
+
+    </table>
+    <div>
+        Add Owners and Managers
+        <input type="text" ng-model="input"
+               placeholder="Search for a user to add by Name or Email"
+               uib-typeahead="user as user.name + ' - ' + user.email for user in searchUsers($viewValue)"
+               typeahead-loading="loadingUsers"
+               typeahead-no-results="noResults" class="form-control">
+        <i ng-show="loadingUsers" class="glyphicon glyphicon-refresh"></i>
+        <div ng-show="noResults">
+            <i class="glyphicon glyphicon-remove"></i> No Results Found
+        </div>
+        <br>
+        <button ng-click="addManager()" class="btn btn-sm btn-success">Add Manager</button>
+        <button ng-click="addOwner()" class="btn btn-sm btn-warning">Add Owner</button>
+    </div>
 </div>

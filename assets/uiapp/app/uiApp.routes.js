@@ -119,6 +119,9 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                             return err;
                         })
                 },
+                user: function(nucleus) {
+                    return nucleus.getMe()
+                }
             },
             templateUrl: '/uiapp/app/components/venue/viewvenue.partial.html',
             controller:  'viewVenueController'
@@ -142,6 +145,8 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             templateUrl: '/uiapp/app/components/venue/addeditvenue.partial.html',
             controller:  'addEditVenueController'
         } )
+
+
 
         .state( 'venue.list', {
             url:         '/list',

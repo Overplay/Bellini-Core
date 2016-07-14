@@ -40,21 +40,21 @@ var self = module.exports.testdata = {
         }
         self.organizations.forEach(function (o) {
             Organization.findOne(o)
-                .then(function(org){
-                    if (org){
+                .then(function (org) {
+                    if (org) {
                         reject(new Error("Organization exists, skipping creation"))
                     }
-                    else{
+                    else {
                         return Organization.create(o)
                             .then(function (o) {
                                 sails.log.debug("organization created")
                             })
-                            .catch(function(err) {
+                            .catch(function (err) {
                                 sails.log.debug("Organization Error Caught" + err)
                             })
                     }
                 })
-                .catch(function(err){
+                .catch(function (err) {
                     sails.log.debug(err);
                 })
 
@@ -86,11 +86,13 @@ var self = module.exports.testdata = {
                     .then(function () {
                         sails.log.debug("Created user " + email)
                     })
-                    .catch(function(err) {
+                    .catch(function (err) {
                         sails.log.debug("error caught: " + err)
                     })
             })
         });
+
+
 
         self.advertisements.forEach(function (a) {
             var creatorEmail = a.creatorEmail;
@@ -101,9 +103,8 @@ var self = module.exports.testdata = {
                     .then(function (u) {
                         a.creator = u.user;
                         return Ad.findOne(a)
-                            .then(function(ad)
-                            {
-                                if (ad){
+                            .then(function (ad) {
+                                if (ad) {
                                     sails.log.debug("Ad exists")
                                     return new Error("Ad already in system")
                                 }
@@ -137,12 +138,13 @@ var self = module.exports.testdata = {
 
 
         self.venues.forEach(function (v) {
-            var ownerEmail = v.ownerEmail;
+
+            var ownerEmails = v.ownerEmails;
             var managerEmails = v.managerEmails;
-            delete v.ownerEmail;
+            delete v.ownerEmails;
             delete v.managerEmails;
-            v.venueOwners = [];
-            v.venueManagers = [];
+            var venueOwners = [];
+            var venueManagers = [];
 
             if (v.organizationEmail) {
                 var organizationEmail = v.organizationEmail;
@@ -157,49 +159,67 @@ var self = module.exports.testdata = {
 
             managerEmails.forEach(function (manager) {
                 chain = chain.then(function () {
-                    return Auth.findOne({ email : manager })
-                        .then( function (user) {
-                            v.venueManagers.push(user.user);
+                    return Auth.findOne({email: manager})
+                        .then(function (user) {
+                            venueManagers.push(user.user);
+                        })
+                })
+            })
+
+            ownerEmails.forEach(function (owner) {
+                chain = chain.then(function () {
+                    return Auth.findOne({email: owner})
+                        .then(function (user) {
+                            venueOwners.push(user.user);
                         })
                 })
             })
 
             chain = chain.then(function () {
-                return Auth.findOne({email: ownerEmail})
+                return Auth.findOne({email: ownerEmails[0]}) //dumb fix
                     .then(function (user) {
                         //v.venueOwners.push(user.user);
-                        //sails.log.debug(v)
+                        //sails.log.debug(venueManagers)
                         return Venue.findOne({name: v.name}) //this will work but venues could be double named (not unique)
-                            .then(function(ven){
+                            .then(function (ven) {
                                 //sails.log.debug(ven);
-                                if (ven){
+                                if (ven) {
                                     sails.log.debug("Venue exists")
                                     return new Error("Venue Exists, skipping creation")
                                 }
                                 else {
                                     return Venue.create(v)
-                                        .then(function (veee) {
-                                            User.findOne({id: user.user})
-                                                .then(function(u){
-                                                    u.ownedVenues.add(veee)
-                                                    u.save(function(err){}); //WOW sick 
 
-                                                }
-                                            )
-                                            sails.log.debug("Venue created with owner " + ownerEmail);
+                                        .then(function (newV) {
+                                            //sails.log(newV)
+                                            //sails.log(venueManagers)
+                                            //sails.log(venueOwners)
+                                            newV.venueOwners.add(venueOwners)
+                                            newV.save(function(err){
+                                                if (err) sails.log.debug(err)
+                                            });
+                                            newV.venueManagers.add(venueManagers)
+                                            newV.save(function(err){
+                                                if (err) sails.log.debug(err)
+                                            });
+
+                                            sails.log.debug("Venue created with name " + newV.name);
                                         })
-                                        .catch(function(err){
+                                        .catch(function (err) {
                                             sails.log.debug(err)
                                         })
                                 }
 
                             })
-                            .catch(function(err){
+                            .catch(function (err) {
                                 sails.log.debug(err)
                             })
 
                     })
+
             })
+
+
 
         });
 
@@ -211,10 +231,10 @@ var self = module.exports.testdata = {
                 })
         });
 
-        chain = chain.then(function() {
+        chain = chain.then(function () {
             return User.find()
                 .populate('managedVenues')
-                .then( function () {
+                .then(function () {
                     sails.log.debug("Managed Venues populated");
                 })
         })
@@ -230,10 +250,10 @@ var self = module.exports.testdata = {
                         d.venue = venue;
                         //sails.log.debug(d)
                         return Device.findOne({name: d.name, venue: venue.id}) //TODO use venue id and user id
-                            .then(function(dev){
+                            .then(function (dev) {
                                 //sails.log.debug(dev)
 
-                                if(dev){
+                                if (dev) {
                                     device = dev;
                                     return new Error("Device Exists, skipping creation")
                                 }
@@ -243,13 +263,13 @@ var self = module.exports.testdata = {
                                             device = newDev;
                                             sails.log.debug("Device created at location: " + d.locationWithinVenue);
                                         })
-                                        .catch(function(err){
+                                        .catch(function (err) {
                                             sails.log.debug(err)
                                         })
                                 }
 
                             })
-                            .catch(function(err){
+                            .catch(function (err) {
                                 sails.log.debug(err)
                             })
 
@@ -422,45 +442,45 @@ var self = module.exports.testdata = {
         {
             name: "Le Boulanger",
             address: {street: "20488 Stevens Creek Blvd", city: "Cupertino", state: "CA", zip: "95014"},
-            ownerEmail: "john@test.com",
+            ownerEmails: ["john@test.com"],
             managerEmails: ["silvanus@test.com", "jerref@test.com"]
         },
         {
             name: "Ajito",
             address: {street: "7335 Bollinger Rd", city: "Cupertino", state: "CA", zip: "95014"},
-            ownerEmail: "john@test.com",
+            ownerEmails: ["john@test.com"],
             managerEmails: ["silvanus@test.com", "unice@test.com"]
         },
         {
             name: "The Sink",
             address: {street: "1165 13th St.", city: "Boulder", state: "CO", zip: "80302"},
-            ownerEmail: "vogel@test.com",
+            ownerEmails: ["vogel@test.com"],
             managerEmails: ["annegret@test.com", "caterina@test.com"]
         },
         {
             name: "B Bar & Grill",
             address: {street: "40 E 4th St", city: "New York", state: "NY", zip: "10003"},
-            ownerEmail: "ryan@test.com",
+            ownerEmails: ["ryan@test.com"],
             managerEmails: ["unice@test.com", "jerref@test.com"]
         },
         {
             name: "Novo",
             address: {street: "726 Higuera St", city: "San Luis Obispo", state: "CA", zip: "93401"},
-            ownerEmail: "elizabeth@test.com",
+            ownerEmails: ["elizabeth@test.com"],
             organizationEmail: "dr@test.com",
             managerEmails: ["caterina@test.com", "annegret@test.com"]
         },
         {
             name: "Not Your Average Joe's",
             address: {street: "305 Main St", city: "Acton", state: "MA", zip: "01720"},
-            ownerEmail: "elizabeth@test.com",
+            ownerEmails: ["elizabeth@test.com"],
             organizationEmail: "dr@test.com",
             managerEmails: ["jerref@test.com", "silvanus@test.com"]
         },
         {
             name: "Islands",
             address: {street: "20750 Stevens Creek Blvd", city: "Cupertino", state: "CA", zip: "95014"},
-            ownerEmail: "carina@test.com",
+            ownerEmails: ["carina@test.com"],
             managerEmails: ["annegret@test.com", "silvanus@test.com"]
         }
     ],

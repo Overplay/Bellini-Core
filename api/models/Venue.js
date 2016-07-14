@@ -59,12 +59,12 @@ module.exports = {
         },
 
         venueOwners: {
-            model: 'User',
+            collection: 'User',
             via: 'ownedVenues'
         },
 
         venueManagers: {
-            model: 'User',
+            collection: 'User',
             via: 'managedVenues'
         },
 
@@ -75,7 +75,7 @@ module.exports = {
 
     beforeUpdate: function( valuesToUpdate, cb ){
         //TODO remove managers/owners ! needs to be dropped from join table
-        sails.log.debug("In before update for venue", valuesToUpdate);
+        sails.log.debug("In before update for venue");//, valuesToUpdate);
         cb();
     }
 };
