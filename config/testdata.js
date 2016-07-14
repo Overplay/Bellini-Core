@@ -217,7 +217,7 @@ var self = module.exports.testdata = {
                 .then( function () {
                     sails.log.debug("Managed Venues populated");
                 })
-        })
+        });
 
         self.devices.forEach(function (d) {
             var venueName = d.venueName; //be careful there can be multiple venues with the same name....

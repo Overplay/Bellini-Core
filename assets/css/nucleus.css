@@ -48,13 +48,14 @@
 
 .side-menu a {
     color: #808080;
+    text-wrap: none;
 }
 
 .side-menu a:hover {
     color: #4f4b50;
     text-decoration: none;
-    font-weight: 500;
-
+    font-weight: 400;
+    text-wrap: none;
 }
 
 .sidepad10 {
