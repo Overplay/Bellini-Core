@@ -182,8 +182,7 @@ var self = module.exports.testdata = {
                                             User.findOne({id: user.user})
                                                 .then(function(u){
                                                     u.ownedVenues.add(veee)
-                                                    u.save(function(err){}); //WOW sick 
-
+                                                    u.save(function(err){}); //WOW sick
                                                 }
                                             )
                                             sails.log.debug("Venue created with owner " + ownerEmail);

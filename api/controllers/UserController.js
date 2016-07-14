@@ -8,6 +8,8 @@
  * @docs        :: http://waterlock.ninja/documentation
  */
 
+var Promise = require('bluebird');
+
 module.exports = require('waterlock').actions.user({
     /* e.g.
      action: function(req, res){
@@ -28,13 +30,6 @@ module.exports = require('waterlock').actions.user({
             .catch(function (err) {
                 return res.error(err);
             });
-    },
-
-    ownedDevices: function (req, res) {
-
-        User.find(req.session.user)
-            .populate("ownedDevices")
-
     },
 
     //TODO document endpoint

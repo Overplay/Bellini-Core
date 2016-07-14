@@ -161,7 +161,7 @@ app.controller('listVenueController', function ( $scope, venues, $log ) {
     $scope.$parent.ui.pageTitle = "Venue List";
     $scope.$parent.ui.panelHeading = "";
     $scope.venues = venues;
-        
+    
 })
 
 app.controller( 'viewVenueController', function ( $scope, venue, $log, uiGmapGoogleMapApi, nucleus ) {

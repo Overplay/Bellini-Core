@@ -59,12 +59,12 @@ module.exports = {
         },
 
         venueOwners: {
-            model: 'User',
+            collection: 'User',
             via: 'ownedVenues'
         },
 
         venueManagers: {
-            model: 'User',
+            collection: 'User',
             via: 'managedVenues'
         },
 

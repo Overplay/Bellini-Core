@@ -227,7 +227,13 @@ app.controller( "addUserController", function ( $scope, $state, $log, toastr, nu
             } )
             .catch( function ( err ) {
                 toastr.error( "Something went wrong", "Damn!" );
-            } );
+            });
     }
 
 });
+
+app.controller( 'listUserController', function ( $scope, $state, $log, nucleus, managers ) {
+    $scope.managers = managers;
+    $scope.$parent.ui.pageTitle = "Managers";
+    $scope.$parent.ui.panelHeading = "";
+})

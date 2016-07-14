@@ -60,6 +60,19 @@ module.exports = {
             })
     },
 
+    getVenueManagers: function (req, res) {
+        if (!req.session || !req.session.user) {
+            return res.badRequest("user not logged in");
+        }
+        
+        Venue.findOne({ id: req.allParams().id }).populate('venueManagers')
+            .then( function (venue) {
+                if (venue) {
+                    return res.json(venue.venueManagers);
+                }
+            })
+    },
+    
     yelpSearch: function (req, res) {
         yelp.search(req.allParams())
             .then(function (data) {
@@ -71,6 +84,36 @@ module.exports = {
         yelp.business(req.allParams().yelpId)
             .then(function (data) {
                 return res.json(data);
+            })
+    },
+
+    addManager: function(req, res) {
+        //params : user ID , venue ID
+        var params = req.allParams().params;
+
+        //have to add proprietor.manager role to user if not already there.
+        //call role cache sync
+        User.findOne(params.userId)
+            .populate("managedVenues")
+            .then(function(user){
+                if (user ) { //TODO check that user doesn't already manage venue
+                    //thought - own OR manage , not both
+                    user.roles = _.union(user.roles, [RoleCacheService.roleByName("proprietor", "manager")])
+                    user.managedVenues.add(params.venueId)
+                    user.save(function (err) {
+                        if (err)
+                            sails.log.debug(err)
+                        Venue.findOne(params.venueId)
+                            .populate("venueManagers")
+                            .populate("venueOwners")
+                            .then(function(venue){
+                                return res.json(venue)
+
+                            })
+                    })
+                }
+                else
+                    return res.badRequest("invalid user id")
             })
     }
 };
