@@ -23,17 +23,31 @@ module.exports = function (req, res, next) {
      }*/
 
     var device = req.allParams();
-    // fix for delete
-    if (req.method == "DELETE") {
+    if (RoleCacheService.hasAdminRole(req.session.user.roles)) {
+        return next();
+    }
+    else {
         Device.findOne(device.id)
             .then(function (d) {
 
                 if (d) {
                     device = d;
-                    if (req.session.user.id === device.deviceOwner) {
-                        sails.log.debug(req.allParams(), "has access")
-                        return next();
-                    }
+                    User.findOne(req.session.user.id)
+                        .populate("ownedVenues")
+                        .then(function (user) {
+                            if (_.filter(user.ownedVenues, function (v) {
+                                    return device.venue === v.id;
+                                })) {
+                                sails.log.debug(req.allParams(), "has access")
+                                return next();
+                            }
+                            else {
+                                return res.forbidden('You are not permitted to perform this action.');
+
+                            }
+                        })
+                    //check if current users ownedVenues matches up with the devices venue id
+
                 }
                 else {
                     sails.log.debug("Device not found when it should exist")
@@ -45,18 +59,6 @@ module.exports = function (req, res, next) {
             })
 
     }
-    //PUT for update 
-    else if (req.session.user.id === device.deviceOwner.id) {
-        sails.log.debug(req.allParams(), "has access")
-        return next();
-    }
-    else if (RoleCacheService.hasAdminRole(req.session.user.roles)) {
-        return next();
-    }
-    // User is not allowed
-    // (default res.forbidden() behavior can be overridden in `config/403.js`)
-    else
-        return res.forbidden('You are not permitted to perform this action.');
-
+    
 
 };

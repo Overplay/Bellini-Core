@@ -74,8 +74,8 @@ module.exports = {
     },
 
     beforeUpdate: function( valuesToUpdate, cb ){
-        
-        sails.log.debug("In before update for venue");
+        //TODO remove managers/owners ! needs to be dropped from join table
+        sails.log.debug("In before update for venue", valuesToUpdate);
         cb();
     }
 };

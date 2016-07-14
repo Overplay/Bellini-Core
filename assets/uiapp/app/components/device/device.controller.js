@@ -10,18 +10,19 @@ app.controller("addDeviceController", function ($scope, $state, $log, toastr, nu
     $scope.$parent.ui.pageTitle = "Activate Device";
     $scope.$parent.ui.panelHeading = "";
     $scope.device = {};
-    $scope.user = user;
     $scope.code = false;
 
-    nucleus.getUserVenues($scope.user.id).then(function (venues) {
-        $scope.user.venues = venues;
-    });
-
+    $http.get("api/v1/user/" + user.id) //nucleus.getMe doesn't populate ownedVenues (probably because of waterlock)
+        .then(function(u){
+            $scope.user = u.data;
+        });
     $scope.testDevice = function () {
         //create a device for testing purposes! 
         $http.post('/device/testDevice', $scope.device)
             .then(function (dev) {
                 toastr.success("test device: " + dev.name + " created successfully", "Yay!")
+                //TODO redirect
+                $state.go("device.list")
             })
             .catch(function (err) {
                 toastr.error("Test Device not created: " + err, "Damn!");
@@ -63,25 +64,14 @@ app.controller("editDeviceAdminController", function ($scope, $state, $log, devi
         $scope.form = form;
     };
 
-    $http.get("api/v1/user/" + user.id)
+    $http.get("api/v1/user/" + user.id) //nucleus.getMe doesn't populate ownedVenues (probably because of waterlock)
         .then(function(u){
-            $log.log(u)
             $scope.user = u.data;
-        })
-    
-
-    //TODO get device venue and the owners of that venues venues woah
-    //TODO maybe don't move devices between venues hahahah
-    //$scope.user.venues! not owner. only the ones this person has control of!
-    /*nucleus.getUserVenues($scope.owner.id).then(function (venues) {
-        $scope.owner.venues = venues;
-    });*/
-
-
-    // $log.log(device);
+        });
 
     $scope.update = function () {
         //post to an update with $scope.device
+        //TODO refactor this
         nucleus.updateDevice($scope.device.id, $scope.device)
             .then(function (d) {
                 toastr.success("Device info updated", "Success!");
@@ -102,15 +92,20 @@ app.controller("editDeviceAdminController", function ($scope, $state, $log, devi
             .then(function (confirmed) {
                 if (confirmed) { // probably not necessary since reject should be called for cancel
 
-                    nucleus.deleteDevice($scope.device.id)
+                    $log.log("ugh")
+                    $http.delete("api/v1/device/"+$scope.device.id) //todo make sure user doesnt change device id in scope and click delete
                         .then(function () {
+                            $log.log("wut")
                             toastr.success("It's gone!", "Device Deleted");
                             $state.go('device.list')
                         })
                         .catch(function (err) {
                             toastr.error(err.status, "Problem Deleting Device");
                         })
+
                 }
+                else
+                    $log.log("WOWWWW")
             })
     }
 

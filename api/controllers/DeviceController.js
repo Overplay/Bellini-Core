@@ -66,10 +66,10 @@ module.exports = {
 
     //TODO remove once production
     testDevice: function(req, res) {
-        sails.log.debug(params);
+        //sails.log.debug(req.allParams());
         Device.create(req.allParams())
             .then(function(dev){
-                sails.log.debug(dev)
+                //sails.log.debug(dev)
                 return res.json(dev)
             })
             .catch(function(err){

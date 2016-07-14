@@ -3,7 +3,7 @@
  */
 
 
-//TODO test
+//might be completely unnecessary
 module.exports = function (req, res, next) {
 
     var device = req.allParams();
