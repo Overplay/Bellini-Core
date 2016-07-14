@@ -7,6 +7,7 @@
  */
 app.controller( "editUserController", function ( $scope, $log, user, toastr, nucleus ) {
 
+    //TODO for anyone that can edit this particular user 
     $log.debug( "userController starting for userauth: " + user.id );
     $scope.user = user;
     $scope.userUpdate = JSON.parse(JSON.stringify(user));
@@ -61,7 +62,8 @@ app.controller( "editUserController", function ( $scope, $log, user, toastr, nuc
  */
 
 app.controller("editUserAdminController", function ($scope, $http, $state, $log, user, roles, toastr, uibHelper, nucleus) {
-
+    
+    //TODO for admin only 
     $log.debug( "editUserAdminController starting for userauth: " + user.id );
     $scope.user = user;
     $scope.userUpdate = JSON.parse(JSON.stringify(user));

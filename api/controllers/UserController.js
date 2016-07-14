@@ -44,9 +44,9 @@ module.exports = require('waterlock').actions.user({
         var id;
 
         if (req.allParams() && req.allParams().id)
-            id = req.allParams().id;
+            id = req.allParams().id; //given ID
         else if (req.session && req.session.user.id)
-            id = req.session.user.id;
+            id = req.session.user.id; //otherwise use current user 
         else
             return res.badRequest('Not logged in and no given id')
 

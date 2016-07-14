@@ -269,15 +269,6 @@
 
             }
 
-            service.deleteDevice = function (deviceId) {
-
-                if (!deviceId)
-                    throw new Error("Bad deviceId");
-
-                var endPoint = _apiPath + '/device/' + deviceId;
-                return apiDelete(endPoint);
-            }
-
             service.mediaPath = function ( mediaId ) {
                 return '/media/download/' + mediaId;
             }
