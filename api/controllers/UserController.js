@@ -8,6 +8,7 @@
  * @docs        :: http://waterlock.ninja/documentation
  */
 
+var Promise = require('bluebird');
 var _ = require("lodash")
 
 

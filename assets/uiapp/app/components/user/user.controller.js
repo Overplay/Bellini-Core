@@ -61,7 +61,7 @@ app.controller( "editUserController", function ( $scope, $log, user, toastr, nuc
  * Created by mkahn on 4/8/16.
  */
 
-app.controller("editUserAdminController", function ($scope, $http, $state, $log, user, roles, toastr, uibHelper, nucleus) {
+app.controller("editUserAdminController", function ($scope, $http, $state, $log, user, roles, toastr, uibHelper, nucleus, links) {
     
     //TODO for admin only 
     $log.debug( "editUserAdminController starting for userauth: " + user.id );
@@ -69,29 +69,9 @@ app.controller("editUserAdminController", function ($scope, $http, $state, $log,
     $scope.userUpdate = JSON.parse(JSON.stringify(user));
     $scope.user.newPwd = "";
     $scope.confirm = {checked: false};
-
-    //returns devices.owned and devices.managed
-
-    $http.get('/user/getDevices/' + $scope.user.id)
-        .then(function (data) {
-            var devices = data.data;
-            user.ownedDevices = _.filter(devices.owned, {regCode: ''});
-            user.managedDevices = _.filter(devices.managed, {regCode: ''});
-
-            _.forEach(_.union(user.ownedDevices, user.managedDevices), function (dev) {
-                $http.get('api/v1/venue/' + dev.venue)
-                    .then(function (data) {
-                        dev.venue = data.data;
-                    })
-                    .catch(function (err) {
-                        toastr.error("Venue not found", "Damn!");
-                    });
-            })
-
-        })
-        .catch(function (err) {
-            toastr.error(err, "Damn! Really not good");
-        });
+    $scope.$parent.ui.panelHeading = user.email;
+    $scope.$parent.ui.pageTitle = "Manage User";
+    $scope.$parent.links = links;
 
     $scope.proprietor = user.user.roleTypes.indexOf("proprietor.owner") > -1 || user.user.roleTypes.indexOf("proprietor.manager") > -1;
 
@@ -227,7 +207,14 @@ app.controller( "addUserController", function ( $scope, $state, $log, toastr, nu
             } )
             .catch( function ( err ) {
                 toastr.error( "Something went wrong", "Damn!" );
-            } );
+            });
     }
 
 });
+
+app.controller( 'listUserController', function ( $scope, $state, $log, nucleus, managers, links ) {
+    $scope.managers = managers;
+    $scope.$parent.links = links;
+    $scope.$parent.ui.pageTitle = "Managers";
+    $scope.$parent.ui.panelHeading = "";
+})

@@ -60,16 +60,71 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             url:         '/add-user',
             data:        { subTitle: "Add User" },
             controller:  "addUserController",
-            templateUrl: '/uiapp/app/components/user/add-user-admin.partial.html',
+            templateUrl: '/uiapp/app/components/user/add-user-admin.partial.html'
 
         } )
 
         .state( 'user', {
             url:         '/user',
-            templateUrl: '/uiapp/app/components/user/user.partial.html',
+            templateUrl: '/uiapp/app/components/user/user-sidemenu.partial.html',
+            controller:  function ( $scope ) { $scope.panelHeading = { text: "", color: "#0000FF" }},
             abstract:    true
-
         } )
+        
+        .state( 'user.managerList', {
+            url:         '/managers',
+            controller:  'listUserController',
+            templateUrl: 'uiapp/app/components/user/userlist.partial.html',
+            resolve: {
+                managers: function ( $http, $q, nucleus ) {
+                    var managers = [];
+
+                    return $http.get('/user/getVenues')
+                        .then(function (data) {
+                            return data.data;
+                        })
+                        .then(function (venues) {
+                            var all = [];
+                            angular.forEach(venues, function (venue) {
+                                all.push($http.get('/venue/getVenueManagers', {params: {id: venue.id}})
+                                    .then(function (data) {
+                                        angular.forEach(data.data, function (manager) {
+                                            if (managers.indexOf(manager) === -1) {
+                                                manager.managedVenues = [venue];
+                                                managers.push(manager);
+                                            }
+                                            else
+                                                managers.indexOf(manager).managedVenues.push(venue);
+
+                                        })
+                                    }));
+                            });
+
+                            return $q.all(all);
+                        })
+                        .then(function() {
+                            var all = [];
+                            angular.forEach(managers, function(manager) {
+                                all.push(nucleus.getAuth(manager.auth)
+                                    .then(function (data) {
+                                        manager.auth = data;
+                                    }))
+                            })
+                            return $q.all(all);
+                        })
+                        .then(function() {
+                            return managers;
+                        })
+                },
+                links: function() {
+                    return [
+                        { text: "Managers", link: "user.managerList" },
+                        { text: "Add Manager", link: "user.addManager" }
+                    ]
+                }
+            }
+            
+        })
 
         .state( 'user.editUser', {
             url:         '/edit-user/:id',
@@ -94,6 +149,12 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                 },
                 roles: function ( nucleus ) {
                     return nucleus.getRole()
+                },
+                links: function() {
+                    return [
+                        { text: "Managers", link: "user.managerList" },
+                        { text: "Add Manager", link: "user.addManager" }
+                    ]
                 }
             }
         } )

@@ -4,9 +4,9 @@
 
 addressify = function (address) {
     return address.street + ' '
-        + address.city + ', '
-        + address.state + ' '
-        + address.zip
+    + address.city + ', '
+    + address.state + ' '
+    + address.zip
 };
 
 app.controller("addEditVenueController", function ($scope, $log, nucleus, $state, $http, $q, toastr, uibHelper, venue, edit, uiGmapGoogleMapApi) {
@@ -19,19 +19,15 @@ app.controller("addEditVenueController", function ($scope, $log, nucleus, $state
     $scope.yelp = {};
     $scope.venue = venue || {showInMobileAppMap: true, address: {}, photos: []};
     $scope.regex = "\\d{5}([\\-]\\d{4})?";
-    $scope.confirm = {checked: false};
-    $scope.setForm = function (form) {
-        $scope.form = form;
-    };
-    uiGmapGoogleMapApi.then(function (maps) {
-        $scope.maps = maps;
-    });
+    $scope.confirm = { checked: false };
+    $scope.setForm = function (form) { $scope.form = form; };
+    uiGmapGoogleMapApi.then( function (maps) { $scope.maps = maps; });
 
     $scope.geolocation = "";
 
     $scope.media = {
         logo: null,
-        photos: [null, null, null]
+        photos: [ null, null, null ]
     };
 
     $scope.parameters = {
@@ -42,8 +38,8 @@ app.controller("addEditVenueController", function ($scope, $log, nucleus, $state
     $scope.results = {};
 
     // initialize location to prepopulate location field
-    $scope.initializeLocation = function () {
-        if (!edit) {
+    $scope.initializeLocation = function() {
+        if (!edit ) {
             if ($scope.geolocation)
                 $scope.parameters.location = $scope.geolocation;
             else if (navigator.geolocation) {
@@ -71,7 +67,7 @@ app.controller("addEditVenueController", function ($scope, $log, nucleus, $state
 
         if ($scope.media.logo) {
             promise = nucleus.uploadMedia($scope.media.logo)
-                .then(function (data) {
+                .then( function(data) {
                     $scope.venue.logo = data.id;
                 })
         }
@@ -80,11 +76,11 @@ app.controller("addEditVenueController", function ($scope, $log, nucleus, $state
                 resolve();
             });
         }
-        $scope.media.photos.forEach(function (img, index) {
+        $scope.media.photos.forEach( function (img, index) {
             if (img) {
-                promise = promise.then(function () {
+                promise = promise.then( function() {
                     return nucleus.uploadMedia(img)
-                        .then(function (data) {
+                        .then( function(data) {
                             $scope.venue.photos[index] = data.id;
                         })
                 })
@@ -92,7 +88,7 @@ app.controller("addEditVenueController", function ($scope, $log, nucleus, $state
         })
 
         if ($scope.edit) {
-            promise = promise.then(function () {
+            promise = promise.then( function() {
                 nucleus.updateVenue($scope.venue.id, $scope.venue)
                     .then(function (v) {
                         toastr.success("Venue info updated", "Success!");
@@ -104,7 +100,7 @@ app.controller("addEditVenueController", function ($scope, $log, nucleus, $state
             })
         }
         else {
-            promise = promise.then(function () {
+            promise = promise.then( function() {
                 nucleus.addVenue($scope.venue)
                     .then(function (v) {
                         toastr.success("Venue created", "Success!")
@@ -140,11 +136,11 @@ app.controller("addEditVenueController", function ($scope, $log, nucleus, $state
         };
         $scope.venue.yelpId = $model.id;
     };
-
+    
     $scope.deleteVenue = function () {
 
         uibHelper.confirmModal("Delete Venue?", "Are you sure you want to delete " + $scope.venue.name + "?", true)
-            .then(function (confirmed) {
+        .then( function (confirmed) {
                 if (confirmed) {
                     nucleus.deleteVenue($scope.venue.id)
                         .then(function () {
@@ -159,25 +155,24 @@ app.controller("addEditVenueController", function ($scope, $log, nucleus, $state
     }
 })
 
-app.controller('listVenueController', function ($scope, venues, $log) {
+app.controller('listVenueController', function ( $scope, venues, $log ) {
 
     $log.debug("loading listVenueController");
     $scope.$parent.ui.pageTitle = "Venue List";
     $scope.$parent.ui.panelHeading = "";
     $scope.venues = venues;
-
+        
 })
 
-app.controller('viewVenueController', function ($scope, venue, $log, uiGmapGoogleMapApi, nucleus, $http, toastr, user) {
-
-
+app.controller( 'viewVenueController', function ( $scope, venue, $log, uiGmapGoogleMapApi, nucleus ) {
+    
     $scope.venue = venue;
     $scope.$parent.ui.pageTitle = "Venue Overview";
     $scope.$parent.ui.panelHeading = venue.name;
 
     $scope.uid = user.id
 
-    $log.log($scope.uid)
+    //$log.log($scope.uid)
 
     $scope.map = {
         center: {
@@ -189,7 +184,7 @@ app.controller('viewVenueController', function ($scope, venue, $log, uiGmapGoogl
         markerId: 0
     };
 
-    uiGmapGoogleMapApi.then(function (maps) {
+    uiGmapGoogleMapApi.then( function (maps) {
         $scope.maps = maps;
 
         if (venue.geolocation && venue.geolocation.latitude && venue.geolocation.longitude) {
@@ -200,13 +195,13 @@ app.controller('viewVenueController', function ($scope, venue, $log, uiGmapGoogl
             var geocode = new maps.Geocoder();
             geocode.geocode({
                 address: $scope.map.address
-            }, function (res, stat) {
+            }, function(res, stat) {
                 $scope.venue.geolocation = {
                     latitude: $scope.map.center.latitude = res[0].geometry.location.lat(),
                     longitude: $scope.map.center.longitude = res[0].geometry.location.lng()
                 };
                 nucleus.updateVenue($scope.venue.id, $scope.venue)
-                    .then(function () {
+                    .then( function() {
                         $log.debug("Venue updated with lat/long");
                     })
             })
