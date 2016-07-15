@@ -7,11 +7,15 @@
 
 module.exports = {
 
-
+    /*
+        given an activation code, registerDevice searches for a device with this code
+        if it exists, it removes the code, and updates the device information so that it is active
+        if it does not exist, the code was incorrect / a user never started the registration proc for it
+     */
     registerDevice: function (req, res) {
         //get code
         var params = req.allParams();
-        /*TODO req certain params? CEG
+        /*req certain params? CEG
 
          wifi mac address -tbd 
          code 
@@ -65,6 +69,7 @@ module.exports = {
     },
 
     //TODO remove once production
+    //creates a test device for demo purposes 
     testDevice: function(req, res) {
         //sails.log.debug(req.allParams());
         Device.create(req.allParams())

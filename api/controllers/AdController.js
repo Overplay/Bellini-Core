@@ -7,6 +7,11 @@
 
 module.exports = {
 
+    
+    /*
+    getMedia returns the media objects of an advertisement
+    It steps through the array of media ids and finds the Media entries with those ids and pushes them to a returned array 
+     */
     getMedia: function (req, res) {
 
         if (!req.allParams().id) {

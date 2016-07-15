@@ -8,8 +8,12 @@
 module.exports = {
 
     //TODO more policy mapping
-    generateCode: function (req, res) {
 
+    /*
+    Creates a random 6 digit code and assigned it to a new device object with the given name
+    Device is not active until registered  (code is removed by entering for it) 
+     */
+    generateCode: function (req, res) {
         
         
         //check req session and user 

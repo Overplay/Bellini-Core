@@ -150,6 +150,8 @@ module.exports = require('waterlock').actions.user({
         
         var chain = Promise.resolve();
 
+
+        //TODO limit and exclude OGs
         chain = chain.then(function() {
             return User.find(
                 {

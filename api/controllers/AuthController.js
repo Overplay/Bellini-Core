@@ -10,6 +10,7 @@
 
 module.exports = require( 'waterlock' ).waterlocked( {
 
+    //returns the session user 
     status: function ( req, res ) {
 
         if ( req.session && req.session.user )
