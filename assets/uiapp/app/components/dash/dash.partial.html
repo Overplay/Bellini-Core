@@ -1,4 +1,13 @@
+<div class="jumbotron">
+    <H1>Welcome!</H1>
+    Select the dash you wish to view
+    <br>
+    <button class="btn btn-default" ng-repeat="role in roles" ui-sref="dash.{{role.replace('.', '')}}">{{humanize(role)
+        | capitalize}}
+    </button>
+
+</div>
 
 
-<!-- subviews of the dashboard -->
+<!-- subviews of the dashboard  maybe multiple ui-views?? one for each role! then do tabs or dropdown to select-->
 <div ui-view></div>

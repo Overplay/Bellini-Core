@@ -5,16 +5,25 @@
 
 
 
-app.controller("dashController", function ($scope, $log, $state) {
+app.controller("dashController", function ($scope, $log, user) {
+    $log.log("starting dashController")
 
 
-    //TODO redirect to appropriate dashboards? 
-    $state.go('dash.po')
+    $scope.roles = user.roleTypes;
 
+    $scope.humanize = function(role){
+        var sub = role.split('.');
+        if (sub[1])
+            return sub[1];
+        else return role;
+    }
+
+    //TODO default dash view? change button style?
 
 });
 
 app.controller("poDashController", function ($scope, $log, $state, venues) {
+    $log.log("starting poDashController")
 
     $scope.venues = []
     while (venues.length) {
@@ -33,6 +42,27 @@ app.controller("poDashController", function ($scope, $log, $state, venues) {
 
 });
 
+
+app.controller("pmDashController", function($scope, $log){
+    $log.log("starting pmDashController")
+});
+
+
+app.controller("userDashController", function($scope, $log){
+    $log.log("starting userDashController")
+
+});
+
+app.controller("adminDashController", function($scope, $log){
+    $log.log("starting adminDashController")
+
+});
+
+
+app.controller("adDashController", function($scope, $log){
+    $log.log("starting adDashController")
+
+});
 
 
 

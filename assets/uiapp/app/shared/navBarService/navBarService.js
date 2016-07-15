@@ -105,7 +105,7 @@ app.factory('navBarService', function ($log) {
             },
             'user': {
                 left: [
-                    {
+                    /*{
                         label: 'Me',
                         id: "user",
                         items: [{
@@ -119,7 +119,8 @@ app.factory('navBarService', function ($log) {
                         items: [{
                             label: 'Check Ins', link: {type: 'href', addr: '#'}
                         }]
-                    }],
+                    }
+                    */],
                 right: [{
                     label: 'Account',
                     id: 'account',

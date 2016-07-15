@@ -420,11 +420,15 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
         .state( 'dash', {
             url:         '/dash',
             templateUrl: '/uiapp/app/components/dash/dash.partial.html',
-            controller: 'dashController'
+            controller: 'dashController',
+            resolve: {
+                user: function (nucleus) {
+                    return nucleus.getMe();
+                }
+            }
         } )
 
-        .state('dash.po', {
-            url: "/",
+        .state('dash.proprietorowner', {
             templateUrl: '/uiapp/app/components/dash/po-dash.partial.html',
             controller: 'poDashController',
             resolve: {
@@ -435,6 +439,23 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                         })
                 }
             }
+        })
+
+        .state('dash.proprietormanager', {
+            templateUrl: '/uiapp/app/components/dash/pm-dash.partial.html',
+            controller: 'pmDashController',
+        })
+        .state('dash.user', {
+            templateUrl: '/uiapp/app/components/dash/user-dash.partial.html',
+            controller: 'userDashController',
+        })
+        .state('dash.admin', {
+        templateUrl: '/uiapp/app/components/dash/admin-dash.partial.html',
+        controller: 'adminDashController',
+        })
+        .state('dash.advertiser', {
+            templateUrl: '/uiapp/app/components/dash/ad-dash.partial.html',
+            controller: 'adDashController',
         })
 
 

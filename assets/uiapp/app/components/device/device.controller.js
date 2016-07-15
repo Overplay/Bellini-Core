@@ -64,7 +64,7 @@ app.controller("editDeviceAdminController", function ($scope, $state, $log, devi
         $scope.form = form;
     };
 
-    $http.get("api/v1/user/" + user.id) //nucleus.getMe doesn't populate ownedVenues (probably because of waterlock)
+    $http.get("api/v1/user/" + user.id) //nucleus.getMe doesn't populate ownedVenues (nucleus uses and auth endpoint in getMe)
         .then(function(u){
             $scope.user = u.data;
         });
@@ -94,7 +94,7 @@ app.controller("editDeviceAdminController", function ($scope, $state, $log, devi
 
                     //$log.log("ugh")
                     //TODO 
-                    $http.delete("api/v1/device/"+$scope.device.id) //todo make sure user doesnt change device id in scope and click delete
+                    $http.delete("api/v1/device/"+$scope.device.id) //todo make sure malicios user doesnt change device id in scope and click delete
                         .then(function () {
                             //$log.log("wut")
                             toastr.success("It's gone!", "Device Deleted");
