@@ -34,13 +34,15 @@
 .dash-panel {
     min-width: 200px;
     transition: all .2s ease-in-out;
-    background-color: #2aabd2;
+    background-color: rgb(42, 171, 210);
+    background-color: rgba(42, 171, 210, .5);
     border-radius: 10px;
     margin: 10px;
+    cursor: pointer;
+
 }
 .dash-panel:hover {
     transform: scale(1.1);
-    text-align: center;
 }
 .dash-name {
     font-size: 150%

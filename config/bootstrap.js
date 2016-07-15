@@ -52,7 +52,7 @@ module.exports.bootstrap = function ( cb ) {
         } )
         .then( function () {
 
-            var roles = [ RoleCacheService.roleByName( "admin", '' ) ];
+            var roles = [ RoleCacheService.roleByName( "admin", '' ) , RoleCacheService.roleByName("user", '')];
 
             return AdminService.addUser( 'admin2@test.com', 'beerchugs', { roles: roles } )
                 .then( function () { sails.log.debug( "Admin user created." )} )

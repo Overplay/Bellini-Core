@@ -5,7 +5,7 @@
 
 
 
-app.controller("dashController", function ($scope, $log, user) {
+app.controller("dashController", function ($scope, $log, user, $state) {
     $log.log("starting dashController")
 
 
@@ -18,16 +18,25 @@ app.controller("dashController", function ($scope, $log, user) {
         else return role;
     }
 
+
+    $state.go("dash." +$scope.roles[0].replace('.', ''))
+
     //TODO default dash view? change button style?
+    //highlight current view button
+    
 
 });
 
 app.controller("poDashController", function ($scope, $log, $state, venues) {
     $log.log("starting poDashController")
 
+    $scope.venueList = angular.copy(venues);
+
+    var v = angular.copy(venues);
+
     $scope.venues = []
-    while (venues.length) {
-        $scope.venues.push(venues.splice(0,2))
+    while (v.length) {
+        $scope.venues.push(v.splice(0,2))
     }
 
     $scope.addressify = function (address) {
