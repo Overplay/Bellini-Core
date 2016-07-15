@@ -20,6 +20,32 @@
     border: 1px solid black;
 }
 
+.dash-logo {
+    width: 60%;
+    max-width: 200px;
+    test-align: center;
+
+}
+.dash-address {
+    font-size: 125%;
+
+}
+.dash-panel {
+    min-width: 200px;
+    transition: all .2s ease-in-out;
+    background-color: #2aabd2;
+    border-radius: 10px;
+    margin: 10px;
+}
+.dash-panel:hover {
+    transform: scale(1.1);
+    text-align: center;
+}
+.dash-name {
+    font-size: 150%
+}
+
+
 .strike-media {
     text-decoration: line-through;
     background-color: #ffb3b3;

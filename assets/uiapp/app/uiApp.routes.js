@@ -419,8 +419,23 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
 
         .state( 'dash', {
             url:         '/dash',
-            templateUrl: '/uiapp/app/components/dash/dash.partial.html'
+            templateUrl: '/uiapp/app/components/dash/dash.partial.html',
+            controller: 'dashController'
         } )
+
+        .state('dash.po', {
+            url: "/",
+            templateUrl: '/uiapp/app/components/dash/po-dash.partial.html',
+            controller: 'poDashController',
+            resolve: {
+                venues: function ( $http ) {
+                    return $http.get( '/user/getVenues')
+                        .then( function (data) {
+                            return data.data;
+                        })
+                }
+            }
+        })
 
 
         // Examples pages!

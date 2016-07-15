@@ -100,8 +100,7 @@
             <i class="glyphicon glyphicon-remove"></i> No Results Found
         </div>
         <br>
-        <!--TODO NGDISABLED-->
-        <button ng-click="addManager()" class="btn btn-sm btn-success">Add Manager</button>
-        <button ng-click="addOwner()" class="btn btn-sm btn-warning">Add Owner</button>
+        <button ng-click="addManager()" ng-disabled="validInput()" class="btn btn-sm btn-success">Add Manager</button>
+        <button ng-click="addOwner()" ng-disabled="validInput()" class="btn btn-sm btn-warning">Add Owner</button>
     </div>
 </div>

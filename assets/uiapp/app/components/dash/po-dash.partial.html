@@ -1,0 +1,53 @@
+<div class="jumbotron">
+    <H1>Welcome!</H1>
+</div>
+<h3 ng-if="venues" class="text-center">Venues you own</h3>
+
+<div  ng-repeat="vens in venues">
+
+    <div class="col-md-6 text-center">
+
+        <div class="text-center dash-panel" ui-sref="venue.view({id: vens[0].id})">
+            <div class="dash-name">
+                {{vens[0].name}}
+            </div>
+            <div>
+                <img ng-if="vens[0].logo" class="dash-logo"
+                     ng-src="media/download/{{vens[0].logo}}"/>
+                <img ng-if="!vens[0].logo" class="dash-logo"
+                     ng-src="images/default-venue.jpg"/>
+            </div>
+            <div >
+                <div class="dash-address">
+                    {{addressify(vens[0].address)}}
+                </div>
+            </div>
+
+
+        </div>
+
+    </div>
+    <div></div>
+    <div class="col-md-6 text-center">
+
+        <div ng-if="vens[1]" class="text-center dash-panel" ui-sref="venue.view({id: vens[1].id})">
+            <div class="dash-name">
+                {{vens[1].name}}
+            </div>
+            <div>
+                <img ng-if="vens[1].logo" class="dash-logo"
+                     ng-src="media/download/{{vens[1].logo}}"/>
+                <img ng-if="!vens[1].logo" class="dash-logo"
+                     ng-src="images/default-venue.jpg"/>
+            </div>
+            <div >
+                <div class="dash-address text-center">
+                    {{addressify(vens[1].address)}}
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

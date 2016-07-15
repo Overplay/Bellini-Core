@@ -164,7 +164,7 @@ app.controller('listVenueController', function ( $scope, venues, $log ) {
         
 })
 
-app.controller( 'viewVenueController', function ( $scope, venue, $log, uiGmapGoogleMapApi, nucleus ) {
+app.controller( 'viewVenueController', function ( $scope, venue, $log, uiGmapGoogleMapApi, nucleus, user, $http ) {
     
     $scope.venue = venue;
     $scope.$parent.ui.pageTitle = "Venue Overview";
@@ -223,9 +223,9 @@ app.controller( 'viewVenueController', function ( $scope, venue, $log, uiGmapGoo
     }
 
 
-
-    //TODO disable buttons if no valid input is there
-    //method to do this
+    $scope.validInput = function() {
+        return !($scope.input.id)
+    }
 
 
     $scope.addManager = function () {
