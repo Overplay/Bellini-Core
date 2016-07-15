@@ -284,7 +284,7 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             }
         })
 
-        .state( 'device.addDevice', {
+        .state( 'device.add', {
             url:         '/activate',
             data:        { subTitle: "Add a Device" },
             controller:  "addDeviceController",
@@ -296,15 +296,15 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             }
         } )
 
-        .state( 'device.regDevice', {
+        .state( 'device.register', {
             url:         '/register',
             data:        { subTitle: "Register a Device" },
             // controller:  "registerDeviceController",
             templateUrl: '/uiapp/app/components/device/register-device.partial.html'
         } )
 
-        .state( 'device.manageDevice', {
-            url:         '/manage-device/:id',
+        .state( 'device.manage', {
+            url:         '/manage/:id',
             data:        { subTitle: "Manage Device" },
             controller:  'editDeviceAdminController',
             templateUrl: '/uiapp/app/components/device/manage-device.partial.html',
@@ -335,13 +335,6 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             }
         } )
 
-        .state( 'organization.view', {
-            url:         '/view',
-            resolve:     {},
-            templateUrl: '/uiapp/app/components/organization/view-organization.partial.html',
-            controller:  'viewOrganizationController'
-        } )
-
         .state( 'organization.edit', {
             url:         '/edit',
             resolve:     {},
@@ -349,8 +342,8 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             controller:  'editOrganizationController'
         } )
 
-        .state( 'organization.manageOrganization', {
-            url:         '/manage-organization',
+        .state( 'organization.manage', {
+            url:         '/manage',
             data:        { subTitle: "Manage Organization" },
             controller:  'editOrganizationController',
             templateUrl: '/uiapp/app/components/organization/manage-organization.partial.html',
@@ -364,8 +357,8 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
              }*/
         } )
 
-        .state( 'organization.viewOrganization', {
-            url:         '/view-organization',
+        .state( 'organization.view', {
+            url:         '/view',
             data:        { subTitle: "View Organization" },
             controller:  'viewOrganizationController',
             templateUrl: '/uiapp/app/components/organization/view-organization.partial.html',
@@ -392,22 +385,22 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             }
         })
 
-        .state( 'advertisement.addAdvertisement', {
-            url:         '/add-advertisement',
+        .state( 'advertisement.add', {
+            url:         '/add',
             templateUrl: '/uiapp/app/components/trevda/add-trevda.partial.html',
             data:        { subTitle: "Add Advertisement" },
             controller:  'addAdvertisementController'
         } )
 
-        .state( 'advertisement.manageAdvertisements', {
-            url:         '/manage-advertisements',
+        .state( 'advertisement.manage', {
+            url:         '/manage',
             templateUrl: '/uiapp/app/components/trevda/manage-trevda.partial.html',
             data:        { subTitle: "Manage Advertisements" },
             controller:  'manageAdvertisementController'
         } )
 
-        .state( 'advertisement.editAdvertisement', {
-            url:         '/edit-advertisement/:id',
+        .state( 'advertisement.edit', {
+            url:         '/edit/:id',
             templateUrl: '/uiapp/app/components/trevda/edit-trevda.partial.html',
             data:        { subTitle: "Edit Advertisement" },
             controller:  'editAdvertisementController',

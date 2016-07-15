@@ -164,7 +164,7 @@ app.controller('listVenueController', function ( $scope, venues, $log ) {
         
 })
 
-app.controller( 'viewVenueController', function ( $scope, venue, $log, uiGmapGoogleMapApi, nucleus ) {
+app.controller( 'viewVenueController', function ( $scope, venue, $log, uiGmapGoogleMapApi, nucleus, user ) {
     
     $scope.venue = venue;
     $scope.$parent.ui.pageTitle = "Venue Overview";
