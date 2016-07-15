@@ -19,6 +19,7 @@ module.exports = require('waterlock').actions.user({
      }
      */
 
+    //searches if the email is in use
     hasAccount: function (req, res) {
 
         Auth.findOne({email: req.query.email})
@@ -34,15 +35,9 @@ module.exports = require('waterlock').actions.user({
             });
     },
 
-    ownedDevices: function (req, res) {
 
-        User.find(req.session.user)
-            .populate("ownedDevices")
-
-    },
-
-    //TODO document endpoint
     //ONLY DEVICES OF OWNED VENUES FOR THE PO
+    //returns the devices a user has control over (exist in the users ownedVenues
     getDevices: function (req, res) {
 
         var id;
@@ -89,6 +84,7 @@ module.exports = require('waterlock').actions.user({
 
     },
 
+    //gets the owned Venues of the user
     getVenues: function (req, res) {
         var id;
 
@@ -104,7 +100,7 @@ module.exports = require('waterlock').actions.user({
             .populate("managedVenues")
             .then(function (user) {
                 if (user) {
-                    return res.json(user.ownedVenues); //TODO refactor all places this is called
+                    return res.json(user.ownedVenues);
                 }
                 else
                     return res.badRequest();
@@ -114,6 +110,7 @@ module.exports = require('waterlock').actions.user({
             })
     },
 
+    //gets the advertisements the user owns
     getAlist: function (req, res) { //cant have ad or advertisement in name of endpoint due to adblock
         var id;
 
@@ -138,8 +135,7 @@ module.exports = require('waterlock').actions.user({
             })
     },
 
-    //endpoint that finds users with either first, last or email in their auth
-
+    //endpoint that finds users with either firstname, lastname or email
     queryFirstLastEmail: function(req, res) {
         //TODO policies (very important so nobody malicious queries user info
 

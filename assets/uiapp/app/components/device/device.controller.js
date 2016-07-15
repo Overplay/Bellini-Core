@@ -93,6 +93,7 @@ app.controller("editDeviceAdminController", function ($scope, $state, $log, devi
                 if (confirmed) { // probably not necessary since reject should be called for cancel
 
                     //$log.log("ugh")
+                    //TODO 
                     $http.delete("api/v1/device/"+$scope.device.id) //todo make sure user doesnt change device id in scope and click delete
                         .then(function () {
                             //$log.log("wut")

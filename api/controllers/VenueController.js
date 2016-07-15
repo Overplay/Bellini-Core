@@ -16,6 +16,8 @@ var yelp = new Yelp({
 
 module.exports = {
 
+
+    //creates a new venue
     addVenue: function (req, res) {
 
         //check req session and user 
@@ -126,6 +128,11 @@ module.exports = {
                     return res.badRequest("invalid user id")
             })
     },
+
+    /*Add and remove owner/manager of the venue
+    *does this so the join table is altered for the many to many relationship
+    * also changes the roles of the user! 
+     */
     addOwner: function (req, res) {
         //params : user ID , venue ID
         var params = req.allParams().params;

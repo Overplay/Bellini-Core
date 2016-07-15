@@ -223,40 +223,11 @@ app.controller( 'viewVenueController', function ( $scope, venue, $log, uiGmapGoo
     }
 
 
-    //TODO warnings if the input is empty
-    $scope.addManager = function () {
-        var userId = $scope.input.id;
-        var venueId = $scope.venue.id;
 
-        //TODO clear input and toastr.
+    //TODO disable buttons if no valid input is there
+    //method to do this 
 
 
-    }
-    $scope.addManager = function () {
-        var userId = $scope.input.id;
-        var venueId = $scope.venue.id;
-
-        $http.post('/venue/addManager', {
-            params: {
-                userId: userId,
-                venueId: venueId
-            }
-        })
-            .then(function (response) {
-                $log.log(response)
-                if (response.data) {
-                    $scope.venue = response.data
-                    toastr.success("Added manager", "Woohoo!")
-
-                }
-                else
-                    toastr.success("User already manages or owns venue", "Heads up!")
-
-
-                $scope.input = ''
-            })
-
-    }
     $scope.addManager = function () {
         var userId = $scope.input.id;
         var venueId = $scope.venue.id;
