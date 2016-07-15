@@ -80,7 +80,7 @@
         <tr ng-repeat="user in venue.venueOwners">
             <td>{{user.firstName}} {{user.lastName}}</td>
             <td>
-                <button class="btn btn-sm btn-danger" ng-click="removeOwner(user.id)" ng-if="user.id != uid && venue.venueOwners.length > 1">Remove</button> <!--TODO do not remove self-->
+                <button class="btn btn-sm btn-danger" ng-click="removeOwner(user.id)" ng-if="user.id != uid && venue.venueOwners.length > 1">Remove</button>
             </td>
             <td width="10%"><a ui-sref="user.ownerView({id: user.id})" class="btn btn-sm btn-warning">More
                 info TODO</a></td>
@@ -100,6 +100,7 @@
             <i class="glyphicon glyphicon-remove"></i> No Results Found
         </div>
         <br>
+        <!--TODO NGDISABLED-->
         <button ng-click="addManager()" class="btn btn-sm btn-success">Add Manager</button>
         <button ng-click="addOwner()" class="btn btn-sm btn-warning">Add Owner</button>
     </div>

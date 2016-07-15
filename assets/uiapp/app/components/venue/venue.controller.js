@@ -225,7 +225,7 @@ app.controller( 'viewVenueController', function ( $scope, venue, $log, uiGmapGoo
 
 
     //TODO disable buttons if no valid input is there
-    //method to do this 
+    //method to do this
 
 
     $scope.addManager = function () {
