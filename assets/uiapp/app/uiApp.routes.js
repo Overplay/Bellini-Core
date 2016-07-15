@@ -89,8 +89,13 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                                 all.push($http.get('/venue/getVenueManagers', {params: {id: venue.id}})
                                     .then(function (data) {
                                         angular.forEach(data.data, function (manager) {
-                                            if (managers.indexOf(manager) === -1)
+                                            if (managers.indexOf(manager) === -1) {
+                                                manager.managedVenues = [venue];
                                                 managers.push(manager);
+                                            }
+                                            else
+                                                managers.indexOf(manager).managedVenues.push(venue);
+
                                         })
                                     }));
                             });
@@ -110,6 +115,12 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                         .then(function() {
                             return managers;
                         })
+                },
+                links: function() {
+                    return [
+                        { text: "Managers", link: "user.managerList" },
+                        { text: "Add Manager", link: "user.addManager" }
+                    ]
                 }
             }
             
@@ -138,6 +149,12 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                 },
                 roles: function ( nucleus ) {
                     return nucleus.getRole()
+                },
+                links: function() {
+                    return [
+                        { text: "Managers", link: "user.managerList" },
+                        { text: "Add Manager", link: "user.addManager" }
+                    ]
                 }
             }
         } )
