@@ -10,14 +10,22 @@ app.controller("addAdvertisementController", function ($scope, $log, $http, $sta
     $scope.advertisement = {creator: user};
     $scope.filesToUpload = [];
 
-    $scope.$on('droppedFile', function (e, files) {
+    $scope.addFilesToUpload = function(files) {
+        var l = files.length;
+        for (var i = 0; i < l; i++) {
+            $scope.filesToUpload.push(files[i]);
+        }
+        $scope.$apply();
+    }
+
+    /*$scope.$on('droppedFile', function (e, files) {
         var l = files.length;
         //alert(l);
         for (var i = 0; i < l; i++) {
             $scope.filesToUpload.push(files[i]);
         }
         $scope.$apply();
-    });
+    });*/
 
 
     $scope.removeUpload = function (index) {
@@ -111,14 +119,22 @@ app.controller("editAdvertisementController", function ($scope, $log, $http, $st
 
 
     //dz listener 
-    $scope.$on('droppedFile', function (e, files) {
+    /*$scope.$on('droppedFile', function (e, files) {
         var l = files.length;
         //alert(l);
         for (var i = 0; i < l; i++) {
             $scope.filesToUpload.push(files[i]);
         }
         $scope.$apply();
-    });
+    });*/
+    $scope.addFilesToUpload = function(files) {
+        var l = files.length;
+        for (var i = 0; i < l; i++) {
+            $scope.filesToUpload.push(files[i]);
+        }
+        $scope.$apply();
+    }
+
 
 
     //to update the advertisement 
