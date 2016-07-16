@@ -5,6 +5,14 @@
 /**
  * This is the non-privileged controller
  */
+
+addressify = function (address) {
+    return address.street + ' '
+        + address.city + ', '
+        + address.state + ' '
+        + address.zip
+};
+
 app.controller( "editUserController", function ( $scope, $log, user, toastr, nucleus ) {
 
     //TODO for anyone that can edit this particular user 
@@ -175,7 +183,7 @@ app.controller("editUserAdminController", function ($scope, $http, $state, $log,
                             toastr.error( err.status, "Problem Deleting User" );
                         } )
 
-                    
+
                 }
 
                 },
@@ -188,6 +196,63 @@ app.controller("editUserAdminController", function ($scope, $http, $state, $log,
 
 } );
 
+
+app.controller("editUserOwnerController", function ($scope, $http, $state, $log, user, toastr, uibHelper, nucleus, links, owned) {
+
+    $log.debug( "editUserOwnerController starting for userauth: " + user.id );
+    $scope.user = user;
+    $scope.userUpdate = JSON.parse(JSON.stringify(user));
+    $scope.user.newPwd = "";
+    $scope.confirm = {checked: false};
+    $scope.$parent.ui.panelHeading = user.email;
+    $scope.$parent.ui.pageTitle = "Manage User";
+    $scope.$parent.links = links;
+    $scope.owner = true;
+    $scope.ownedVenues = owned;
+    $scope.newVenue = null;
+    $scope.addressify = addressify;
+
+    $scope.removeVenue = function (venue) {
+        uibHelper.confirmModal('Remove Manager?', 'Remove ' + $scope.user.user.firstName + ' as a manager of ' + venue.name + '?' )
+            .then( function (confirmed) {
+                $http.post('/venue/removeManager', { params : {userId : user.user.id, venueId: venue.id}})
+                    .then( function ( u ) {
+                        toastr.success( "Removed as venue manager", "Success!" );
+                        $scope.user.user.managedVenues.splice($scope.user.user.managedVenues.indexOf(venue), 1);
+                        if (!$scope.user.user.managedVenues.length)
+                            $state.go('user.managerList');
+                    })
+                    .catch( function (err) {
+                        toastr.error( "Something went wrong", "Error!" );
+                    })
+            })
+
+    }
+
+    $scope.addVenue = function () {
+        var dup = false;
+        if ($scope.newVenue) {
+            angular.forEach($scope.user.user.managedVenues, function(venue) {
+                if (venue.id === $scope.newVenue.id) {
+                    toastr.error("User already manages this venue", "Error!");
+                    dup = true;
+                    $scope.newVenue = null;
+                }
+            })
+            if (!dup) {
+                $http.post('/venue/addManager', {params : { userId: user.user.id, venueId: $scope.newVenue.id }})
+                    .then( function ( u ) {
+                        toastr.success( "Manager added to venue", "Success!");
+                        $scope.user.user.managedVenues.push($scope.newVenue);
+                        $scope.newVenue = null;
+                    })
+                    .catch( function (err) {
+                        toastr.error( "There was a problem adding the manager", "Error!");
+                    })
+            }
+        }
+    }
+} );
 
 app.controller( "addUserController", function ( $scope, $state, $log, toastr, nucleus ) {
 
@@ -215,6 +280,6 @@ app.controller( "addUserController", function ( $scope, $state, $log, toastr, nu
 app.controller( 'listUserController', function ( $scope, $state, $log, nucleus, managers, links ) {
     $scope.managers = managers;
     $scope.$parent.links = links;
-    $scope.$parent.ui.pageTitle = "Managers";
+    $scope.$parent.ui.pageTitle = "Venue Managers";
     $scope.$parent.ui.panelHeading = "";
 })

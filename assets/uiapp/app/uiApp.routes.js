@@ -89,12 +89,13 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                                 all.push($http.get('/venue/getVenueManagers', {params: {id: venue.id}})
                                     .then(function (data) {
                                         angular.forEach(data.data, function (manager) {
-                                            if (managers.indexOf(manager) === -1) {
+                                            var i;
+                                            if ((i = _.findIndex(managers, function(o) { return o.id === manager.id })) === -1) {
                                                 manager.managedVenues = [venue];
                                                 managers.push(manager);
                                             }
                                             else
-                                                managers.indexOf(manager).managedVenues.push(venue);
+                                                managers[i].managedVenues.push(venue);
 
                                         })
                                     }));
@@ -118,8 +119,7 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                 },
                 links: function() {
                     return [
-                        { text: "Managers", link: "user.managerList" },
-                        { text: "Add Manager", link: "user.addManager" }
+                        { text: "Managers", link: "user.managerList" }
                     ]
                 }
             }
@@ -137,6 +137,49 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                 }
             }
         } )
+
+        .state( 'user.editUserOwner', {
+            url:         '/edit-user-owner/:id',
+            controller:  'editUserOwnerController',
+            templateUrl: '/uiapp/app/components/user/edit-user-admin.partial.html',
+            resolve:     {
+                user: function ( nucleus, $stateParams ) {
+                    return nucleus.getAuth( $stateParams.id )
+                        .then( function (auth) {
+                            return nucleus.getUser( auth.user.id )
+                                .then( function (user) {
+                                    auth.user = user;
+                                    return auth;
+                                })
+                        })
+                        .then( function (auth) {
+                            return nucleus.getMe()
+                                .then( function (me) {
+                                    return nucleus.getUser(me.id);
+                                })
+                                .then( function (user) {
+                                    auth.user.managedVenues = _.intersectionWith(user.ownedVenues, auth.user.managedVenues,
+                                                                                 function (v1, v2) { return v1.id === v2.id; })
+                                    return auth;
+                                })
+                        })
+                },
+                owned: function ( nucleus ) {
+                    return nucleus.getMe()
+                        .then( function (me) {
+                            return nucleus.getUser(me.id)
+                                .then( function (user) {
+                                    return user.ownedVenues;
+                                })
+                        })
+                },
+                links: function() {
+                    return [
+                        { text: "Managers", link: "user.managerList" }
+                    ]
+                }
+            }
+        })
 
         .state( 'user.editUserAdmin', {
             url:         '/edit-user-admin/:id',
