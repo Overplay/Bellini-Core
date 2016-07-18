@@ -28,6 +28,7 @@ app.controller('signupController', function ($scope, $log, nucleus, $timeout, $w
                 $log.error("Could not create account");
                 $scope.ui.errorMessage = "Account creation failed: " + err.data.message;
                 $scope.ui.error = true;
+                $scope.auth.email = '';
                 $timeout(function () {
                     $scope.ui.error = false;
                 }, 5000)
