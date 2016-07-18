@@ -115,6 +115,7 @@ module.exports = require( 'waterlock' ).waterlocked( {
             return res.badRequest();
 
         if (params.user.roleNames) {
+            params.user.roles = [];
             async.forEach(params.user.roleNames, function (name) {
                 params.user.roles.push(RoleCacheService.roleByName(name.role, name.sub))
             })

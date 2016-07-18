@@ -6,7 +6,7 @@
 var app = angular.module('signupApp', ['ui.bootstrap', 'ngAnimate', 'nucleus.service']);
 
 
-app.controller('signupController', function ($scope, $log, nucleus, $timeout) {
+app.controller('signupController', function ($scope, $log, nucleus, $timeout, $window) {
 
     $scope.auth = {email: "", password: "", passwordConfirm: ""};
     $scope.user = {firstName: '', lastName: '', roleNames: [{ role: 'user', sub: ''}], roles: [], address: {}};
@@ -21,7 +21,7 @@ app.controller('signupController', function ($scope, $log, nucleus, $timeout) {
             .then(function (data) {
                 $log.log(data);
                 //todo redirect to ui app if successful
-                // $window.location.href = '/ui';
+                $window.location.href = '/ui';
 
             })
             .catch(function (err) {
