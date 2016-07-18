@@ -132,7 +132,7 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             controller:  'editUserController',
             templateUrl: '/uiapp/app/components/user/edit-user.partial.html',
             resolve:     {
-                user: function ( nucleus ) {
+                user: function (nucleus) { //TODO this is broken
                     return nucleus.getMe()
                 }
             }

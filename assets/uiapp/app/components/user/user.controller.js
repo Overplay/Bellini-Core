@@ -20,7 +20,11 @@ app.controller( "editUserController", function ( $scope, $log, user, toastr, nuc
     $scope.user = user;
     $scope.userUpdate = JSON.parse(JSON.stringify(user));
     $scope.user.email = user.auth.email;
-    
+
+
+    $scope.$parent.ui.panelHeading = user.email;
+    $scope.$parent.ui.pageTitle = "Edit User";
+
     $scope.user.newPwd1 = '';
     $scope.user.newPwd2 = '';
     $scope.user.currentPwd = '';
