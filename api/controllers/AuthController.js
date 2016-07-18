@@ -27,6 +27,11 @@ module.exports = require( 'waterlock' ).waterlocked( {
 
     },
 
+    signupPage: function (req, res) {
+
+        res.view('users/signup' + ThemeService.getTheme());
+    },
+
     /**
      * Does the same stuff as the built-in waterlock logout,
      * but lets us do a redirect that won't affect REST usage.
