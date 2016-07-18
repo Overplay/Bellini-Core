@@ -119,7 +119,8 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                 },
                 links: function() {
                     return [
-                        { text: "Managers", link: "user.managerList" }
+                        { text: "Managers", link: "user.managerList" },
+                        { text: "Me", link: "user.editUser" }
                     ]
                 }
             }
@@ -134,6 +135,12 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             resolve:     {
                 user: function ( nucleus ) {
                     return nucleus.getMe()
+                },
+                links: function () {
+                    return [
+                        { text: "Managers", link: "user.managerList" },
+                        { text: "Me", link: "user.editUser" }
+                    ]
                 }
             }
         } )
@@ -175,7 +182,8 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                 },
                 links: function() {
                     return [
-                        { text: "Managers", link: "user.managerList" }
+                        { text: "Managers", link: "user.managerList" },
+                        { text: "Me", link: "user.editUser" }
                     ]
                 }
             }

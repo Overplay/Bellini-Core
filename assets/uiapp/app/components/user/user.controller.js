@@ -13,7 +13,7 @@ addressify = function (address) {
         + address.zip
 };
 
-app.controller( "editUserController", function ( $scope, $log, user, toastr, nucleus ) {
+app.controller( "editUserController", function ( $scope, $log, user, toastr, nucleus, links ) {
 
     //TODO for anyone that can edit this particular user 
     $log.debug( "userController starting for userauth: " + user.id );
@@ -24,6 +24,9 @@ app.controller( "editUserController", function ( $scope, $log, user, toastr, nuc
     $scope.user.newPwd1 = '';
     $scope.user.newPwd2 = '';
     $scope.user.currentPwd = '';
+    $scope.$parent.ui.pageTitle = "Manage My Account";
+    $scope.$parent.ui.panelHeading = user.auth.email;
+    $scope.$parent.links = links;
 
     $scope.ui = { pwdMsg: ''};
 
