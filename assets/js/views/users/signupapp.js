@@ -21,12 +21,12 @@ app.controller('signupController', function ($scope, $log, nucleus, $timeout, $w
             .then(function (data) {
                 $log.log(data);
                 //todo redirect to ui app if successful
-                $window.location.href = '/ui';
+                //$window.location.href = '/ui';
 
             })
             .catch(function (err) {
                 $log.error("Could not create account");
-                $scope.ui.errorMessage = "Account creation failed";
+                $scope.ui.errorMessage = "Account creation failed: " + err.data.message;
                 $scope.ui.error = true;
                 $timeout(function () {
                     $scope.ui.error = false;

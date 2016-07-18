@@ -128,7 +128,7 @@ module.exports = require( 'waterlock' ).waterlocked( {
                 return res.json( data );
             } )
             .catch( function ( err ) {
-                return res.error( err );
+                return res.badRequest( err );
             } )
 
 
