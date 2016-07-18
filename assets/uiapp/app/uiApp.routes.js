@@ -136,12 +136,12 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                 user: function (nucleus) { //TODO this is broken
                     return nucleus.getMe()
                 },
-                links: function () {
-                    return [
-                        { text: "Managers", link: "user.managerList" },
-                        { text: "Me", link: "user.editUser" }
-                    ]
-                }
+                // links: function () {
+                //     return [
+                //         { text: "Managers", link: "user.managerList" },
+                //         { text: "Me", link: "user.editUser" }
+                //     ]
+                // }
             }
         } )
 

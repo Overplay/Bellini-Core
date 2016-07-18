@@ -146,61 +146,74 @@
         <div class="row">
             <div class="col-sm-8 col-sm-offset-2" style="background: rgba(1,1,1,0.5); padding: 30px;">
                 <h1>Create New Account</h1>
-                <form ng-submit="submit()" name="form" role="form">
+                <form ng-submit="signup()" name="form" role="form">
                     <!-- fake fields are a workaround for chrome autofill getting the wrong fields -->
                     <input style="display:none" type="text" name="fakeusernameremembered"/>
                     <input style="display:none" type="password" name="fakepasswordremembered"/>
 
                     <div class="row">
                         <div class="col-md-6">
-                            <div class="form-group">
+                            <div class="form-group" ng-class="{ 'has-error' : !form.firstName.$valid && form.firstName.$touched, 'has-success' : form.firstName.$valid}">
                                 <div class="input-group input-group-lg">
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
                                     <input type="text" class="form-control" placeholder="First Name" name="firstName"
-                                           ng-model="user.firstName" autofocus>
+                                           ng-model="user.firstName" autofocus required>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="form-group">
+                            <div class="form-group" ng-class="{ 'has-error' : !form.lastName.$valid && form.lastName.$touched, 'has-success' : form.lastName.$valid }">
                                 <div class="input-group input-group-lg">
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
                                     <input type="text" class="form-control" placeholder="Last Name" name="lastName"
-                                           ng-model="user.lastName">
+                                           ng-model="user.lastName" required>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="row top30">
                         <div class="col-md-6">
-                            <div class="form-group">
+                            <div class="form-group" ng-class="{ 'has-success' : user.mobilePhone && form.mobilePhone.$valid && form.mobilePhone.$dirty, 'has-error': !form.mobilePhone.$valid && form.mobilePhone.$touched}">
+                                <div class="input-group input-group-lg">
+                                    <span class="input-group-addon"><i class="glyphicon-earphone glyphicon"></i></span>
+                                    <input type="text" class="form-control" placeholder="Cell Phone (optional)" name="mobilePhone"
+                                           ng-model="user.mobilePhone" ng-pattern="phoneRegex">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row top30">
+                        <div class="col-md-6">
+                            <div class="form-group" ng-class="{ 'has-error' : !form.email.$valid && form.email.$touched, 'has-success' : form.email.$valid }">
                                 <div class="input-group input-group-lg">
                                     <span class="input-group-addon"><i class="glyphicon-envelope glyphicon"></i></span>
 
                                     <input type="email" class="form-control" placeholder="Email Address" name="email"
-                                           ng-model="auth.email">
+                                           ng-model="auth.email" required>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                     <div class="row top30">
                         <div class="col-md-6">
-                            <div class="form-group">
+                            <div class="form-group" ng-class="{ 'has-error' : form.password.$touched && (auth.password.length < 8 || !form.password.$valid),
+                                                                'has-success' : form.password.$valid && auth.password.length > 7 }">
                                 <div class="input-group input-group-lg">
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
 
                                     <input type="password" class="form-control" placeholder="Password" name="password"
-                                           ng-model="auth.password">
+                                           ng-model="auth.password" required>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="form-group">
+                            <div class="form-group" ng-class="{ 'has-error' : form.passwordConfirm.$touched && !pwCheck(), 'has-success' : form.passwordConfirm.$valid && pwCheck() }">
                                 <div class="input-group input-group-lg">
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
 
                                     <input type="password" class="form-control" placeholder="Confirm Password" name="passwordConfirm"
-                                           ng-model="auth.passwordConfirm">
+                                           ng-model="auth.passwordConfirm" required>
                                 </div>
                             </div>
                         </div>
@@ -208,11 +221,11 @@
 
 
 
-                    <button ng-click="create()" id='login' class="btn btn-primary btn-lg top15">Create Account</button>
+                    <button ng-click="create()" id='login' class="btn btn-primary btn-lg top15" ng-disabled="form.$invalid || !pwCheck()">Create Account</button>
 
-                    <!--<div class="alertbubble" ng-show="ui.error">-->
-                        <!--{{ ui.errorMessage }}-->
-                    <!--</div>-->
+                    <div class="alertbubble" ng-show="ui.error">
+                        {{ ui.errorMessage }}
+                    </div>
                 </form>
             </div>
         </div>
