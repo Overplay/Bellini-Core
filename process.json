@@ -5,8 +5,8 @@
   "apps" : [{
     "name"       : "asahi",
     "script"     : "app.js", //TODO change if nec. depends on file locations
-    "instances"  : 1,
-    "exec_mode"  : "fork",
+    "instances": 2,
+    "exec_mode": "cluster",
     "cwd" : "/opt/asahi", //TODO change this if deploying in a different folder!
     "env": {
       "COMMON_VARIABLE": "true",
