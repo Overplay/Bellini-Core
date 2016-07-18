@@ -50,7 +50,7 @@ app.controller("addAdvertisementController", function ($scope, $log, $http, $sta
         chain.then(function () {
             $http.post("/ad/create", $scope.advertisement)
                 .then(function (a) {
-                    $state.go("advertisement.manageAdvertisements")
+                    $state.go("advertisement.manage")
                 })
         })
 

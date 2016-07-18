@@ -158,10 +158,10 @@ app.factory('navBarService', function ($log) {
                         id: "ads",
                         items: [
                             {
-                                label: 'Manage Ads', link: {type: 'ui-sref', addr: 'advertisement.manageAdvertisements'}
+                                label: 'Manage Ads', link: {type: 'ui-sref', addr: 'advertisement.manage'}
                             },
                             {
-                                label: 'Add Ad', link: {type: 'ui-sref', addr: 'advertisement.addAdvertisement'}
+                                label: 'Add Ad', link: {type: 'ui-sref', addr: 'advertisement.add'}
                             }
                         ]
                     }]

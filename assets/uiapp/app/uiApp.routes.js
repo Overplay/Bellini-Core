@@ -89,12 +89,13 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                                 all.push($http.get('/venue/getVenueManagers', {params: {id: venue.id}})
                                     .then(function (data) {
                                         angular.forEach(data.data, function (manager) {
-                                            if (managers.indexOf(manager) === -1) {
+                                            var i;
+                                            if ((i = _.findIndex(managers, function(o) { return o.id === manager.id })) === -1) {
                                                 manager.managedVenues = [venue];
                                                 managers.push(manager);
                                             }
                                             else
-                                                managers.indexOf(manager).managedVenues.push(venue);
+                                                managers[i].managedVenues.push(venue);
 
                                         })
                                     }));
@@ -118,8 +119,7 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                 },
                 links: function() {
                     return [
-                        { text: "Managers", link: "user.managerList" },
-                        { text: "Add Manager", link: "user.addManager" }
+                        { text: "Managers", link: "user.managerList" }
                     ]
                 }
             }
@@ -137,6 +137,49 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                 }
             }
         } )
+
+        .state( 'user.editUserOwner', {
+            url:         '/edit-user-owner/:id',
+            controller:  'editUserOwnerController',
+            templateUrl: '/uiapp/app/components/user/edit-user-admin.partial.html',
+            resolve:     {
+                user: function ( nucleus, $stateParams ) {
+                    return nucleus.getAuth( $stateParams.id )
+                        .then( function (auth) {
+                            return nucleus.getUser( auth.user.id )
+                                .then( function (user) {
+                                    auth.user = user;
+                                    return auth;
+                                })
+                        })
+                        .then( function (auth) {
+                            return nucleus.getMe()
+                                .then( function (me) {
+                                    return nucleus.getUser(me.id);
+                                })
+                                .then( function (user) {
+                                    auth.user.managedVenues = _.intersectionWith(user.ownedVenues, auth.user.managedVenues,
+                                                                                 function (v1, v2) { return v1.id === v2.id; })
+                                    return auth;
+                                })
+                        })
+                },
+                owned: function ( nucleus ) {
+                    return nucleus.getMe()
+                        .then( function (me) {
+                            return nucleus.getUser(me.id)
+                                .then( function (user) {
+                                    return user.ownedVenues;
+                                })
+                        })
+                },
+                links: function() {
+                    return [
+                        { text: "Managers", link: "user.managerList" }
+                    ]
+                }
+            }
+        })
 
         .state( 'user.editUserAdmin', {
             url:         '/edit-user-admin/:id',
@@ -284,7 +327,7 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             }
         })
 
-        .state( 'device.addDevice', {
+        .state( 'device.add', {
             url:         '/activate',
             data:        { subTitle: "Add a Device" },
             controller:  "addDeviceController",
@@ -296,15 +339,15 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             }
         } )
 
-        .state( 'device.regDevice', {
+        .state( 'device.register', {
             url:         '/register',
             data:        { subTitle: "Register a Device" },
             // controller:  "registerDeviceController",
             templateUrl: '/uiapp/app/components/device/register-device.partial.html'
         } )
 
-        .state( 'device.manageDevice', {
-            url:         '/manage-device/:id',
+        .state( 'device.manage', {
+            url:         '/manage/:id',
             data:        { subTitle: "Manage Device" },
             controller:  'editDeviceAdminController',
             templateUrl: '/uiapp/app/components/device/manage-device.partial.html',
@@ -335,13 +378,6 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             }
         } )
 
-        .state( 'organization.view', {
-            url:         '/view',
-            resolve:     {},
-            templateUrl: '/uiapp/app/components/organization/view-organization.partial.html',
-            controller:  'viewOrganizationController'
-        } )
-
         .state( 'organization.edit', {
             url:         '/edit',
             resolve:     {},
@@ -349,8 +385,8 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             controller:  'editOrganizationController'
         } )
 
-        .state( 'organization.manageOrganization', {
-            url:         '/manage-organization',
+        .state( 'organization.manage', {
+            url:         '/manage',
             data:        { subTitle: "Manage Organization" },
             controller:  'editOrganizationController',
             templateUrl: '/uiapp/app/components/organization/manage-organization.partial.html',
@@ -364,8 +400,8 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
              }*/
         } )
 
-        .state( 'organization.viewOrganization', {
-            url:         '/view-organization',
+        .state( 'organization.view', {
+            url:         '/view',
             data:        { subTitle: "View Organization" },
             controller:  'viewOrganizationController',
             templateUrl: '/uiapp/app/components/organization/view-organization.partial.html',
@@ -392,22 +428,22 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             }
         })
 
-        .state( 'advertisement.addAdvertisement', {
-            url:         '/add-advertisement',
+        .state( 'advertisement.add', {
+            url:         '/add',
             templateUrl: '/uiapp/app/components/trevda/add-trevda.partial.html',
             data:        { subTitle: "Add Advertisement" },
             controller:  'addAdvertisementController'
         } )
 
-        .state( 'advertisement.manageAdvertisements', {
-            url:         '/manage-advertisements',
+        .state( 'advertisement.manage', {
+            url:         '/manage',
             templateUrl: '/uiapp/app/components/trevda/manage-trevda.partial.html',
             data:        { subTitle: "Manage Advertisements" },
             controller:  'manageAdvertisementController'
         } )
 
-        .state( 'advertisement.editAdvertisement', {
-            url:         '/edit-advertisement/:id',
+        .state( 'advertisement.edit', {
+            url:         '/edit/:id',
             templateUrl: '/uiapp/app/components/trevda/edit-trevda.partial.html',
             data:        { subTitle: "Edit Advertisement" },
             controller:  'editAdvertisementController',
