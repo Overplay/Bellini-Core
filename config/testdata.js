@@ -82,17 +82,26 @@ var self = module.exports.testdata = {
                 delete u.organizationEmail;
             }
             chain = chain.then(function () {
-                return AdminService.addUser(email, password, u)
-                    .then(function () {
-                        sails.log.debug("Created user " + email)
+                return Auth.findOne({email: email})
+                    .then(function (a) {
+                        if (a) {
+                            sails.log.debug("User exists")
+                            return new Error("user already in system")
+                        }
+                        else {
+                            return AdminService.addUser(email, password, u)
+                                .then(function () {
+                                    sails.log.debug("Created user " + email)
+                                })
+                                .catch(function (err) {
+                                    sails.log.debug("error caught: " + err)
+                                })
+                        }
+
                     })
-                    .catch(function (err) {
-                        sails.log.debug("error caught: " + err)
-                    })
+
             })
         });
-
-
 
         self.advertisements.forEach(function (a) {
             var creatorEmail = a.creatorEmail;
@@ -216,10 +225,7 @@ var self = module.exports.testdata = {
                             })
 
                     })
-
             })
-
-
 
         });
 
@@ -237,7 +243,7 @@ var self = module.exports.testdata = {
                 .then(function () {
                     sails.log.debug("Managed Venues populated");
                 })
-        })
+        });
 
         self.devices.forEach(function (d) {
             var venueName = d.venueName; //be careful there can be multiple venues with the same name....

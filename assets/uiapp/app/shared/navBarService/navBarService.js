@@ -42,9 +42,9 @@ app.factory('navBarService', function ($log) {
             },
             'proprietor.owner': {
                 left: [{
-                    label: 'Managers',
+                    label: 'Users',
                     id: 'users',
-                    items: [{label: "Managers", link: {type: 'ui-sref', addr: 'user.managerList'}}
+                    items: [{label: "Users", link: {type: 'ui-sref', addr: 'user.managerList'}}
                     ]
                 },
                     {

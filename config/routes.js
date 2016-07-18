@@ -54,13 +54,16 @@ module.exports.routes = {
   ***************************************************************************/
 
   '/': 'LandingController.landing',
-
+  
+  '/signup': 'AuthController.signupPage',
 
   '/login': 'AuthController.loginPage',
   
   '/logout': 'AuthController.logoutPage',
   
   '/resetpwd': 'AuthController.resetPwd',
+
+  '/signup': 'AuthController.signupPage',
   
   '/ui': "UIController.uiApp",
 
