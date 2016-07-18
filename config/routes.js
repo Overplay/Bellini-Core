@@ -61,6 +61,8 @@ module.exports.routes = {
   '/logout': 'AuthController.logoutPage',
   
   '/resetpwd': 'AuthController.resetPwd',
+
+  '/signup': 'AuthController.signupPage',
   
   '/ui': "UIController.uiApp",
 

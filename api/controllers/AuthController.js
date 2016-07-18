@@ -27,6 +27,11 @@ module.exports = require( 'waterlock' ).waterlocked( {
 
     },
 
+    signupPage: function (req, res) {
+
+        res.view('users/signup' + ThemeService.getTheme());
+    },
+
     /**
      * Does the same stuff as the built-in waterlock logout,
      * but lets us do a redirect that won't affect REST usage.
@@ -108,6 +113,14 @@ module.exports = require( 'waterlock' ).waterlocked( {
 
         if ( ( params.email === undefined) || (params.password === undefined) || (params.user === undefined) )
             return res.badRequest();
+
+        if (params.user.roleNames) {
+            async.forEach(params.user.roleNames, function (name) {
+                params.user.roles.push(RoleCacheService.roleByName(name.role, name.sub))
+            })
+            delete params.user.roleNames;
+
+        }
 
         AdminService.addUser( params.email, params.password, params.user )
             .then( function ( data ) {
