@@ -54,7 +54,8 @@ module.exports.routes = {
   ***************************************************************************/
 
   '/': 'LandingController.landing',
-
+  
+  '/signup': 'AuthController.signupPage',
 
   '/login': 'AuthController.loginPage',
   
