@@ -19,10 +19,22 @@ app.controller('signupController', function ($scope, $log, nucleus) {
         nucleus.addUser($scope.auth.email, $scope.auth.password, $scope.user)
             .then(function (data) {
                 $log.log(data)
-                //todo redirect to ui app if successful 
+                //todo redirect to ui app if successful
+                // $window.location.href = '/ui';
+
             })
             .catch(function (err) {
-                $log.log(err)
+                $log.error("Could not create account");
+                $scope.ui.errorMessage = "Account Creation failed";
+                $scope.ui.error = true;
+                $timeout(function () {
+                    $scope.ui.error = false;
+                }, 5000)
+                    .then(function () {
+                        $timeout(function () {
+                            $scope.ui.errorMessage = "";
+                        }, 1000);
+                    });
             })
     }
 
