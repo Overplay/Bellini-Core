@@ -8,7 +8,7 @@
 app.controller("dashController", function ($scope, $log, user, $state) {
     $log.log("starting dashController")
 
-
+    
     $scope.roles = user.roleTypes;
 
     $scope.humanize = function(role){
