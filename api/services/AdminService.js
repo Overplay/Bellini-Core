@@ -122,7 +122,7 @@ module.exports = require( 'waterlock' ).waterlocked( {
                                         reject(err);
                                     } else {
                                         if (requireValidation) {
-                                            sails.log.info("dminService.addUser: adding validation token");
+                                            sails.log.info("AdminService.addUser: adding validation token");
                                             ValidateToken.create({owner: userWithAuth.auth.id})
                                                 .then(function (tok) {
                                                     sails.log.info(tok);

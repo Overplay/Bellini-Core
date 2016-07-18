@@ -7,6 +7,7 @@
     "script"     : "app.js", //TODO change if nec. depends on file locations
     "instances": 2,
     "exec_mode": "cluster",
+    //TODO clustering support
     "cwd" : "/opt/asahi", //TODO change this if deploying in a different folder!
     "env": {
       "COMMON_VARIABLE": "true",

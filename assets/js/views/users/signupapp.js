@@ -9,7 +9,7 @@ var app = angular.module('signupApp', ['ui.bootstrap', 'ngAnimate', 'nucleus.ser
 app.controller('signupController', function ($scope, $log, nucleus) {
 
     $scope.auth = {email: "", password: ""}
-    $scope.user = {firstName: '', lastName: '', roles: [RoleCacheService.roleByName("user", '')]}
+    $scope.user = {firstName: '', lastName: '', roleNames: {role: 'user', sub: ''}}
     $scope.ui = {errorMessage: "", error: false}
 
     $scope.signup = function () {
