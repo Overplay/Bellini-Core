@@ -232,6 +232,7 @@ app.controller("editUserOwnerController", function ($scope, $http, $state, $log,
     $scope.addVenue = function () {
         var dup = false;
         if ($scope.newVenue) {
+            //TODO change to lodash findIndex
             angular.forEach($scope.user.user.managedVenues, function(venue) {
                 if (venue.id === $scope.newVenue.id) {
                     toastr.error("User already manages this venue", "Error!");
