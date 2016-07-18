@@ -82,13 +82,24 @@ var self = module.exports.testdata = {
                 delete u.organizationEmail;
             }
             chain = chain.then(function () {
-                return AdminService.addUser(email, password, u)
-                    .then(function () {
-                        sails.log.debug("Created user " + email)
+                return Auth.findOne({email: email})
+                    .then(function (a) {
+                        if (a) {
+                            sails.log.debug("User exists")
+                            return new Error("user already in system")
+                        }
+                        else {
+                            return AdminService.addUser(email, password, u)
+                                .then(function () {
+                                    sails.log.debug("Created user " + email)
+                                })
+                                .catch(function (err) {
+                                    sails.log.debug("error caught: " + err)
+                                })
+                        }
+
                     })
-                    .catch(function (err) {
-                        sails.log.debug("error caught: " + err)
-                    })
+
             })
         });
 

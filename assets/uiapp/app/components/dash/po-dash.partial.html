@@ -1,5 +1,5 @@
 
-<h2 ng-if="venues" class="text-center">Venues you own</h2>
+<h2 ng-if="venues" class="text-center">Venues You Own</h2>
 
 <!--add search function??
 
@@ -16,10 +16,8 @@
                 {{ven.name}}
             </div>
             <div>
-                <img ng-if="ven.logo" class="dash-logo"
-                     ng-src="media/download/{{ven.logo}}"/>
-                <img ng-if="!ven.logo" class="dash-logo"
-                     ng-src="images/default-venue.jpg"/>
+                <img class="dash-logo"
+                     ng-src="{{ven.logo ? 'media/download/' + ven.logo : 'images/default-venue.jpg'}}"/>
             </div>
             <div >
                 <div class="dash-address">

@@ -67,11 +67,11 @@ module.exports.session = {
   *          TODO adapt this to make sure sessions are correct time          *
   ***************************************************************************/
 
-  /*adapter: 'mongo',
+  adapter: 'mongo',
   host: 'localhost',
   port: 27017,
   db: 'asahi',
-  collection: 'sessions',*/
+  collection: 'sessions',
 
   /***************************************************************************
   *                                                                          *
