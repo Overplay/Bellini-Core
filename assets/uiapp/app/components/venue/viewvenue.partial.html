@@ -82,10 +82,7 @@
             <td>
                 <button class="btn btn-sm btn-danger" ng-click="removeOwner(user.id)" ng-if="user.id != uid && venue.venueOwners.length > 1">Remove</button>
             </td>
-            <td width="10%"><a ng-if="user.id != uid" ui-sref="user.editUserOwner({id: user.auth})"
-                               class="btn btn-sm btn-warning">More
-                info</a></td>
-            <td width="10%"><a ng-if="user.id == uid" ui-sref="user.editUser" class="btn btn-sm btn-warning">More
+            <td width="10%"><a ui-sref="{{user.id !== uid ? 'user.editUserOwner({id: user.id})' : 'user.editUser()'}}" class="btn btn-sm btn-warning">More
                 info</a></td>
         </tr>
         </tbody>

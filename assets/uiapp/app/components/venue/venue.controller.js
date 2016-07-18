@@ -164,13 +164,13 @@ app.controller('listVenueController', function ( $scope, venues, $log ) {
         
 })
 
-app.controller( 'viewVenueController', function ( $scope, venue, $log, uiGmapGoogleMapApi, nucleus, user, $http ) {
+app.controller( 'viewVenueController', function ( $scope, venue, $log, uiGmapGoogleMapApi, nucleus, user, $http, toastr ) {
     
     $scope.venue = venue;
     $scope.$parent.ui.pageTitle = "Venue Overview";
     $scope.$parent.ui.panelHeading = venue.name;
 
-    $scope.uid = user.id
+    $scope.uid = user.id;
 
     //$log.log($scope.uid)
 
@@ -202,7 +202,6 @@ app.controller( 'viewVenueController', function ( $scope, venue, $log, uiGmapGoo
                 };
                 nucleus.updateVenue($scope.venue.id, $scope.venue)
                     .then( function() {
-                        $log.debug("Venue updated with lat/long");
                     })
             })
         }

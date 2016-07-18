@@ -133,6 +133,12 @@ module.exports = require( 'waterlock' ).waterlocked( {
 
     },
 
+    signupPage: function ( req, res ) {
+
+        return res.view('users/signup' + ThemeService.getTheme());
+
+    },
+
     resetPwd: function ( req, res ) {
 
         return res.view('users/resetPassword' + ThemeService.getTheme());
