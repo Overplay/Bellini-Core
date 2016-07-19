@@ -87,6 +87,7 @@ app.controller("editUserAdminController", function ($scope, $http, $state, $log,
     $scope.$parent.ui.panelHeading = user.email;
     $scope.$parent.ui.pageTitle = "Manage User";
     $scope.$parent.links = links;
+    $scope.admin = true;
 
     $scope.proprietor = user.user.roleTypes.indexOf("proprietor.owner") > -1 || user.user.roleTypes.indexOf("proprietor.manager") > -1;
 
@@ -262,10 +263,12 @@ app.controller("editUserOwnerController", function ($scope, $http, $state, $log,
     }
 } );
 
-app.controller( "addUserController", function ( $scope, $state, $log, toastr, nucleus ) {
+app.controller( "addUserController", function ( $scope, $state, $log, toastr, nucleus, links ) {
 
     $log.debug( "addUserController starting.");
     $scope.user = {};
+    $scope.$parent.ui = { pageTitle: "Add User", panelHeading: "" };
+    $scope.$parent.links = links;
 
     $scope.addUser = function(){
 
@@ -285,9 +288,10 @@ app.controller( "addUserController", function ( $scope, $state, $log, toastr, nu
 
 });
 
-app.controller( 'listUserController', function ( $scope, $state, $log, nucleus, managers, links ) {
-    $scope.managers = managers;
+app.controller( 'listUserController', function ( $scope, $state, $log, nucleus, users, links, admin ) {
+    $scope.users = users;
     $scope.$parent.links = links;
-    $scope.$parent.ui.pageTitle = "Venue Managers";
+    $scope.$parent.ui.pageTitle = admin ? "Users" : "Venue Managers";
     $scope.$parent.ui.panelHeading = "";
-})
+    $scope.admin = admin;
+});

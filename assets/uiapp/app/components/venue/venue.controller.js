@@ -9,11 +9,12 @@ addressify = function (address) {
     + address.zip
 };
 
-app.controller("addEditVenueController", function ($scope, $log, nucleus, $state, $http, $q, toastr, uibHelper, venue, edit, uiGmapGoogleMapApi) {
+app.controller("addEditVenueController", function ($scope, $log, nucleus, $state, $http, $q, toastr, uibHelper, venue, edit, uiGmapGoogleMapApi, links ) {
 
     $log.debug("addEditVenueController starting");
     $scope.$parent.ui.pageTitle = edit ? "Edit Venue" : "Add New Venue";
     $scope.$parent.ui.panelHeading = venue ? venue.name : "";
+    $scope.$parent.links = links;
 
     $scope.edit = edit;
     $scope.yelp = {};
@@ -155,20 +156,22 @@ app.controller("addEditVenueController", function ($scope, $log, nucleus, $state
     }
 })
 
-app.controller('listVenueController', function ( $scope, venues, $log ) {
+app.controller('listVenueController', function ( $scope, venues, $log, links ) {
 
     $log.debug("loading listVenueController");
     $scope.$parent.ui.pageTitle = "Venue List";
     $scope.$parent.ui.panelHeading = "";
+    $scope.$parent.links = links;
     $scope.venues = venues;
-        
+
 })
 
-app.controller( 'viewVenueController', function ( $scope, venue, $log, uiGmapGoogleMapApi, nucleus, user, $http, toastr ) {
+app.controller( 'viewVenueController', function ( $scope, venue, $log, uiGmapGoogleMapApi, nucleus, user, $http, toastr, links ) {
     
     $scope.venue = venue;
     $scope.$parent.ui.pageTitle = "Venue Overview";
     $scope.$parent.ui.panelHeading = venue.name;
+    $scope.$parent.links = links;
 
     $scope.uid = user.id;
 

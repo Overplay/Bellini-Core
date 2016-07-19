@@ -135,7 +135,7 @@
             </uib-tab>
         </uib-tabset>
         <br>
-        <a class="btn btn-primary" ui-sref="user.managerList">Back to Users</a>
+        <a class="btn btn-primary" ui-sref="{{ admin ? 'user.adminList' : 'user.managerList' }}">Back to Users</a>
     </div>
 
 </div>
