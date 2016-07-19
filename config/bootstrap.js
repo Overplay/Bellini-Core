@@ -42,7 +42,7 @@ module.exports.bootstrap = function ( cb ) {
                 firstName: 'Admin',
                 lastName: 'Pre-installed',
                 metadata: {preinstall: true},
-                roles: [RoleCacheService.roleByName("admin", '')]
+                roles: [RoleCacheService.roleByName("admin", ''), RoleCacheService.roleByName("user", '')]
             }
 
             return AdminService.addUser('admin@test.com', 'beerchugs', adminUser, false)

@@ -146,7 +146,8 @@
 
     <div class="container-fluid popin" ng-app="loginApp" ng-controller="loginController">
         <div class="row">
-            <div class="col-sm-8 col-sm-offset-2 col-lg-6 col-lg-offset-3" style="background: rgba(1,1,1,0.5); padding: 30px;">
+            <div class="col-sm-8 col-sm-offset-2 col-lg-6 col-lg-offset-3"
+                 style="background: rgba(1,1,1,0.5); padding: 30px;">
                 <h2>Please Log In</h2>
                 <form ng-submit="submit()">
                     <!-- fake fields are a workaround for chrome autofill getting the wrong fields -->
@@ -154,21 +155,20 @@
                     <input style="display:none" type="password" name="fakepasswordremembered"/>
 
 
-                            <div class="input-group input-group-lg">
-                                <span class="input-group-addon"><li class="glyphicon-envelope glyphicon"></li></span>
+                    <div class="input-group input-group-lg">
+                        <span class="input-group-addon"><li class="glyphicon-envelope glyphicon"></li></span>
 
-                                <input type="text" class="form-control" placeholder="Email"
-                                       ng-model="user.email" autofocus>
+                        <input type="text" class="form-control" placeholder="Email"
+                               ng-model="user.email" autofocus>
 
-                            </div>
+                    </div>
 
-                            <div class="input-group input-group-lg top15">
-                                <span class="input-group-addon"><li class="glyphicon glyphicon-lock"></li></span>
+                    <div class="input-group input-group-lg top15">
+                        <span class="input-group-addon"><li class="glyphicon glyphicon-lock"></li></span>
 
-                                <input type="password" class="form-control" placeholder="Password"
-                                       ng-model="user.password">
-                            </div>
-
+                        <input type="password" class="form-control" placeholder="Password"
+                               ng-model="user.password">
+                    </div>
 
 
                     <button ng-click="login()" id='login' class="btn btn-success btn-lg top30">Go</button>

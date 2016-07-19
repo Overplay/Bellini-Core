@@ -22,7 +22,8 @@
                 <div class="col-sm-8">
                     <select class="form-control" id="venue"
                             ng-model="device.venue"
-                            ng-options="listAddress(venue) for venue in {{ venues ? 'venues' : 'user.ownedVenues' }} track by venue.id" required>
+                            ng-options="listAddress(venue) for venue in {{ venues ? 'venues' : 'user.ownedVenues' }} track by venue.id"
+                            required>
                     </select>
                 </div>
             </fieldset>

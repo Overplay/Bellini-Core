@@ -9,7 +9,7 @@ addressify = function (address) {
     + address.zip
 };
 
-app.controller("addEditVenueController", function ($scope, $log, nucleus, $state, $http, $q, toastr, uibHelper, venue, edit, uiGmapGoogleMapApi, links ) {
+app.controller("addEditVenueController", function ($scope, $log, nucleus, $state, $http, $q, toastr, uibHelper, venue, edit, uiGmapGoogleMapApi, links) {
 
     $log.debug("addEditVenueController starting");
     $scope.$parent.ui.pageTitle = edit ? "Edit Venue" : "Add New Venue";
@@ -156,7 +156,7 @@ app.controller("addEditVenueController", function ($scope, $log, nucleus, $state
     }
 })
 
-app.controller('listVenueController', function ( $scope, venues, $log, links ) {
+app.controller('listVenueController', function ($scope, venues, $log, links) {
 
     $log.debug("loading listVenueController");
     $scope.$parent.ui.pageTitle = "Venue List";
@@ -166,7 +166,7 @@ app.controller('listVenueController', function ( $scope, venues, $log, links ) {
 
 })
 
-app.controller( 'viewVenueController', function ( $scope, venue, $log, uiGmapGoogleMapApi, nucleus, user, $http, toastr, links ) {
+app.controller('viewVenueController', function ($scope, venue, $log, uiGmapGoogleMapApi, nucleus, user, $http, toastr, links) {
     
     $scope.venue = venue;
     $scope.$parent.ui.pageTitle = "Venue Overview";

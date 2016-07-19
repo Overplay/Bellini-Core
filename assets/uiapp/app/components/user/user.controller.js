@@ -179,7 +179,7 @@ app.controller("editUserAdminController", function ($scope, $http, $state, $log,
                     nucleus.deleteUser($scope.user)
                         .then( function () {
                             toastr.success( "See ya later!", "User Deleted" );
-                            $state.go( 'user.adminList' )
+                            $state.go('user.adminList')
                         } )
                         .catch( function ( err ) {
                             toastr.error( err.status, "Problem Deleting User" );
@@ -228,12 +228,14 @@ app.controller("editUserOwnerController", function ($scope, $http, $state, $log,
 
     $scope.addVenue = function () {
         if ($scope.newManagedVenue) {
-            if (_.findIndex($scope.user.user.managedVenues, function (o) { return o.id === $scope.newManagedVenue.id }) > -1) {
+            if (_.findIndex($scope.user.user.managedVenues, function (o) {
+                    return o.id === $scope.newManagedVenue.id
+                }) > -1) {
                 toastr.error("User already manages this venue", "Error!");
                 $scope.newManagedVenue = null;
             }
             else {
-                $http.post('/venue/addManager', {params : { userId: user.user.id, venueId: $scope.newManagedVenue.id }})
+                $http.post('/venue/addManager', {params: {userId: user.user.id, venueId: $scope.newManagedVenue.id}})
                     .then( function ( u ) {
                         toastr.success( "Manager added to venue", "Success!");
                         $scope.user.user.managedVenues.push($scope.newManagedVenue);
@@ -247,11 +249,11 @@ app.controller("editUserOwnerController", function ($scope, $http, $state, $log,
     }
 } );
 
-app.controller( "addUserController", function ( $scope, $state, $log, toastr, nucleus, links ) {
+app.controller("addUserController", function ($scope, $state, $log, toastr, nucleus, links) {
 
     $log.debug( "addUserController starting.");
     $scope.user = {};
-    $scope.$parent.ui = { pageTitle: "Add User", panelHeading: "" };
+    $scope.$parent.ui = {pageTitle: "Add User", panelHeading: ""};
     $scope.$parent.links = links;
 
     $scope.addUser = function(){
@@ -272,7 +274,7 @@ app.controller( "addUserController", function ( $scope, $state, $log, toastr, nu
 
 });
 
-app.controller( 'listUserController', function ( $scope, $state, $log, nucleus, users, links, admin ) {
+app.controller('listUserController', function ($scope, $state, $log, nucleus, users, links, admin) {
     $scope.users = users;
     $scope.$parent.links = links;
     $scope.$parent.ui.pageTitle = admin ? "Users" : "Venue Managers";

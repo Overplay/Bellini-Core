@@ -134,7 +134,7 @@ app.controller("editDeviceAdminController", function ($scope, $state, $log, devi
 
                     //$log.log("ugh")
                     //TODO 
-                    $http.delete("api/v1/device/"+$scope.device.id) //todo make sure malicious user doesn't change device id in scope and click delete
+                    $http.delete("api/v1/device/" + $scope.device.id) //todo make sure malicious user doesn't change device id in scope and click delete
                         .then(function () {
                             //$log.log("wut")
                             toastr.success("It's gone!", "Device Deleted");
@@ -210,7 +210,7 @@ app.controller("editDeviceOwnerController", function ($scope, $state, $log, devi
 
                     //$log.log("ugh")
                     //TODO
-                    $http.delete("api/v1/device/"+$scope.device.id) //todo make sure malicious user doesn't change device id in scope and click delete
+                    $http.delete("api/v1/device/" + $scope.device.id) //todo make sure malicious user doesn't change device id in scope and click delete
                         .then(function () {
                             //$log.log("wut")
                             toastr.success("It's gone!", "Device Deleted");

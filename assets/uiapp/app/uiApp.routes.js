@@ -28,36 +28,38 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
         } )
 
 
-        .state( 'user.adminList', {
-            url:         '/admin-list',
+        .state('user.adminList', {
+            url: '/admin-list',
             data:        { subTitle: "Manage Users" },
-            controller:  'listUserController',
+            controller: 'listUserController',
             templateUrl: '/uiapp/app/components/user/userlist.partial.html',
             resolve:     {
-                users: function ( nucleus ) {
+                users: function (nucleus) {
                     return nucleus.getAuth()
                 },
-                admin: function () { return true; },
+                admin: function () {
+                    return true;
+                },
                 links: function () {
                     return [
-                        { text: "All Users", link: "user.adminList" },
-                        { text: "Add User", link: "user.addUser" }
+                        {text: "All Users", link: "user.adminList"},
+                        {text: "Add User", link: "user.addUser"}
                     ]
                 }
             }
 
         } )
 
-        .state( 'user.addUser', {
+        .state('user.addUser', {
             url:         '/add-user',
             data:        { subTitle: "Add User" },
             controller:  "addUserController",
             templateUrl: '/uiapp/app/components/user/add-user-admin.partial.html',
-            resolve:     {
+            resolve: {
                 links: function () {
                     return [
-                        { text: "All Users", link: "user.adminList" },
-                        { text: "Add User", link: "user.addUser" }
+                        {text: "All Users", link: "user.adminList"},
+                        {text: "Add User", link: "user.addUser"}
                     ]
                 }
             }
@@ -76,7 +78,7 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             controller:  'listUserController',
             templateUrl: 'uiapp/app/components/user/userlist.partial.html',
             resolve: {
-                users: function ( $http, $q, nucleus ) {
+                users: function ($http, $q, nucleus) {
                     var managers = [];
 
                     return $http.get('/user/getVenues')
@@ -119,10 +121,12 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                 },
                 links: function() {
                     return [
-                        { text: "Managers", link: "user.managerList" }
+                        {text: "Managers", link: "user.managerList"}
                     ]
                 },
-                admin: function () { return false; }
+                admin: function () {
+                    return false;
+                }
             }
             
         })
@@ -138,7 +142,7 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                 },
                 links: function () {
                     return [
-                        { text: "Back to Dash", link: "dash" }
+                        {text: "Back to Dash", link: "dash"}
                     ]
                 }
             }
@@ -181,7 +185,7 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                 },
                 links: function() {
                     return [
-                        { text: "Managers", link: "user.managerList" }
+                        {text: "Managers", link: "user.managerList"}
                     ]
                 }
             }
@@ -195,9 +199,9 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             resolve:     {
                 user:  function ( nucleus, $stateParams ) {
                     return nucleus.getAuth( $stateParams.id )
-                        .then ( function (auth) {
-                            return nucleus.getUser( auth.user.id )
-                                .then( function (user) {
+                        .then(function (auth) {
+                            return nucleus.getUser(auth.user.id)
+                                .then(function (user) {
                                     auth.user = user;
                                     return auth;
                                 })
@@ -208,8 +212,8 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                 },
                 links: function () {
                     return [
-                        { text: "All Users", link: "user.adminList" },
-                        { text: "Add User", link: "user.addUser" }
+                        {text: "All Users", link: "user.adminList"},
+                        {text: "Add User", link: "user.addUser"}
                     ]
                 }
             }
@@ -241,8 +245,8 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                 },
                 links: function () {
                     return [
-                        { text: "My Venues", link: "venue.list" },
-                        { text: "Add Venue", link: "venue.new" }
+                        {text: "My Venues", link: "venue.list"},
+                        {text: "Add Venue", link: "venue.new"}
                     ]
                 }
             },
@@ -263,11 +267,13 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                             return err;
                         })
                 },
-                edit: function () { return true; },
+                edit: function () {
+                    return true;
+                },
                 links: function () {
                     return [
-                        { text: "My Venues", link: "venue.list" },
-                        { text: "Add Venue", link: "venue.new" }
+                        {text: "My Venues", link: "venue.list"},
+                        {text: "Add Venue", link: "venue.new"}
                     ]
                 }
             },
@@ -290,8 +296,8 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                 },
                 links: function () {
                     return [
-                        { text: "My Venues", link: "venue.list" },
-                        { text: "Add Venue", link: "venue.new" }
+                        {text: "My Venues", link: "venue.list"},
+                        {text: "Add Venue", link: "venue.new"}
                     ]
                 }
             }
@@ -310,8 +316,8 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                 },
                 links: function () {
                     return [
-                        { text: "All Venues", link: "venue.adminList" },
-                        { text: "Add Venue", link: "venue.new"}
+                        {text: "All Venues", link: "venue.adminList"},
+                        {text: "Add Venue", link: "venue.new"}
                     ]
                 }
             }
@@ -323,11 +329,13 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             controller: 'addEditVenueController',
             resolve: {
                 edit: function() { return false; },
-                venue: function() { return null; },
+                venue: function () {
+                    return null;
+                },
                 links: function () {
                     return [
-                        { text: "My Venues", link: "venue.list" },
-                        { text: "Add Venue", link: "venue.new" }
+                        {text: "My Venues", link: "venue.list"},
+                        {text: "Add Venue", link: "venue.new"}
                     ]
                 }
             }
@@ -351,11 +359,13 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                             return data.data;
                         })
                 },
-                admin: function() { return false; },
+                admin: function () {
+                    return false;
+                },
                 links: function () {
                     return [
-                        { link: 'device.list', text: "My Devices" },
-                        { link: 'device.add', text: 'Add Device' }
+                        {link: 'device.list', text: "My Devices"},
+                        {link: 'device.add', text: 'Add Device'}
                     ]
                 }
             }
@@ -367,16 +377,18 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             templateUrl: '/uiapp/app/components/device/devicelist.partial.html',
             resolve:     {
                 devices: function ( $http ) {
-                    return $http.get( apiPath + '/device')
+                    return $http.get(apiPath + '/device')
                         .then(function (data) {
                             return data.data;
                         })
                 },
-                admin: function () { return true; },
+                admin: function () {
+                    return true;
+                },
                 links: function () {
                     return [
-                        { link: 'device.adminList', text: 'All Devices' },
-                        { link: 'device.adminAdd', text: 'Add Device' }
+                        {link: 'device.adminList', text: 'All Devices'},
+                        {link: 'device.adminAdd', text: 'Add Device'}
                     ]
                 }
             }
@@ -393,33 +405,33 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                 },
                 links: function () {
                     return [
-                        { link: 'device.list', text: 'My Devices' },
-                        { link: 'device.add', text: 'Add Device' }
+                        {link: 'device.list', text: 'My Devices'},
+                        {link: 'device.add', text: 'Add Device'}
                     ]
                 }
             }
         } )
 
-        .state( 'device.adminAdd', {
-            url:         '/activate-admin',
-            data:        { subTitle: "Add a Device" },
-            controller:  "addDeviceAdminController",
+        .state('device.adminAdd', {
+            url: '/activate-admin',
+            data: {subTitle: "Add a Device"},
+            controller: "addDeviceAdminController",
             templateUrl: '/uiapp/app/components/device/add-device.partial.html',
-            resolve:     {
-                venues: function ( $http ) {
-                    return $http.get( apiPath + '/venue')
-                        .then( function (data) {
+            resolve: {
+                venues: function ($http) {
+                    return $http.get(apiPath + '/venue')
+                        .then(function (data) {
                             return data.data;
                         });
                 },
                 links: function () {
                     return [
-                        { link: 'device.adminList', text: 'All Devices' },
-                        { link: 'device.adminAdd', text: 'Add Device' }
+                        {link: 'device.adminList', text: 'All Devices'},
+                        {link: 'device.adminAdd', text: 'Add Device'}
                     ]
                 }
             }
-        } )
+        })
 
         .state( 'device.register', {
             url:         '/register',
@@ -428,8 +440,8 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             templateUrl: '/uiapp/app/components/device/register-device.partial.html'
         } )
 
-        .state( 'device.adminManage', {
-            url:         '/admin-manage/:id',
+        .state('device.adminManage', {
+            url: '/admin-manage/:id',
             data:        { subTitle: "Manage Device" },
             controller:  'editDeviceAdminController',
             templateUrl: '/uiapp/app/components/device/manage-device.partial.html',
@@ -440,30 +452,30 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                             return data.data;
                         })
                 },
-                venues: function ( $http ) {
-                    return $http.get( apiPath + '/venue')
-                        .then( function (data) {
+                venues: function ($http) {
+                    return $http.get(apiPath + '/venue')
+                        .then(function (data) {
                             return data.data;
                         })
                 },
                 links: function () {
                     return [
-                        { link: 'device.adminList', text: 'All Devices' },
-                        { link: 'device.adminAdd', text: 'Add Device' }
+                        {link: 'device.adminList', text: 'All Devices'},
+                        {link: 'device.adminAdd', text: 'Add Device'}
                     ]
                 }
             }
-        } )
+        })
 
-        .state( 'device.ownerManage', {
-            url:         '/owner-manage/:id',
-            data:        { subTitle: "Manage Device" },
-            controller:  'editDeviceOwnerController',
+        .state('device.ownerManage', {
+            url: '/owner-manage/:id',
+            data: {subTitle: "Manage Device"},
+            controller: 'editDeviceOwnerController',
             templateUrl: '/uiapp/app/components/device/manage-device.partial.html',
-            resolve:     {
-                device: function ( $http, $stateParams) {
-                    return $http.get( apiPath+"/device/" +$stateParams.id)
-                        .then( function (data) {
+            resolve: {
+                device: function ($http, $stateParams) {
+                    return $http.get(apiPath + "/device/" + $stateParams.id)
+                        .then(function (data) {
                             return data.data;
                         })
                         .catch(function(err){
@@ -475,8 +487,8 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                 },
                 links: function () {
                     return [
-                        { link: 'device.list', text: 'My Devices' },
-                        { link: 'device.add', text: 'Add Device' }
+                        {link: 'device.list', text: 'My Devices'},
+                        {link: 'device.add', text: 'Add Device'}
                     ]
                 }
             }
