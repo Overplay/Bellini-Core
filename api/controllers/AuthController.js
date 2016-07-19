@@ -125,20 +125,10 @@ module.exports = require( 'waterlock' ).waterlocked( {
 
         }
 
-        AdminService.addUser( params.email, params.password, params.user )
+        AdminService.addUser( params.email, params.password, params.user, true ) //TRUE requires validation
             .then( function ( data ) {
+                return res.json(data)
 
-                return Auth.findOne(data.auth)
-                    .then(function(a){
-
-                        return ValidateToken.create({owner: a})
-                            .then(function(v){
-                                a.validateToken = v;
-                                a.save();
-                                return res.json(data)
-                            })
-
-                    })
             } )
             .catch( function ( err ) {
                 return res.badRequest( err );

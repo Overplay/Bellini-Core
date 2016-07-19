@@ -114,8 +114,9 @@ module.exports = require( 'waterlock' ).waterlocked( {
                         sails.log.debug("Email is not in system, adding account.")
                         return User.create(userObj || {})
                             .then(function (user) {
-
+                                sails.log.debug(authAttrib)
                                 waterlock.engine.attachAuthToUser(authAttrib, user, function (err, userWithAuth) {
+                                    sails.log.debug(userWithAuth)
                                     if (err) {
                                         sails.log.error('AdminService.addUser: Error attaching auth to user');
                                         sails.log.error( err );
@@ -123,19 +124,28 @@ module.exports = require( 'waterlock' ).waterlocked( {
                                     } else {
                                         if (requireValidation) {
                                             sails.log.info("AdminService.addUser: adding validation token");
+
                                             ValidateToken.create({owner: userWithAuth.auth.id})
                                                 .then(function (tok) {
                                                     sails.log.info(tok);
+                                                    
                                                     Auth.update({id: tok.owner}, {
-                                                            validateToken: tok,
-                                                            blocked: true
-                                                        })
+                                                        validateToken: tok,
+                                                        blocked: true
+                                                        //password: authAttrib.password
+                                                    })
                                                         .then(function (data) {
+                                                            sails.log.debug(data)
                                                             sails.log.debug("Back attach of validateToken OK");
                                                             resolve(userWithAuth);
                                                         })
+
+
+
+
                                                 })
                                                 .catch(reject);
+
                                         } else {
                                             resolve(userWithAuth);
                                         }
