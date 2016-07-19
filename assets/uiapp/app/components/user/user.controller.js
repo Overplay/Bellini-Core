@@ -6,13 +6,6 @@
  * This is the non-privileged controller
  */
 
-addressify = function (address) {
-    return address.street + ' '
-        + address.city + ', '
-        + address.state + ' '
-        + address.zip
-};
-
 app.controller( "editUserController", function ( $scope, $log, user, toastr, nucleus, links ) {
 
     //TODO for anyone that can edit this particular user 
@@ -88,6 +81,7 @@ app.controller("editUserAdminController", function ($scope, $http, $state, $log,
     $scope.$parent.ui.pageTitle = "Manage User";
     $scope.$parent.links = links;
     $scope.admin = true;
+    $scope.addressify = addressify;
 
     $scope.proprietor = user.user.roleTypes.indexOf("proprietor.owner") > -1 || user.user.roleTypes.indexOf("proprietor.manager") > -1;
 
@@ -185,13 +179,11 @@ app.controller("editUserAdminController", function ($scope, $http, $state, $log,
                     nucleus.deleteUser($scope.user)
                         .then( function () {
                             toastr.success( "See ya later!", "User Deleted" );
-                            $state.go( 'admin.manageUsers' )
+                            $state.go( 'user.adminList' )
                         } )
                         .catch( function ( err ) {
                             toastr.error( err.status, "Problem Deleting User" );
                         } )
-
-
                 }
 
                 },
@@ -209,15 +201,12 @@ app.controller("editUserOwnerController", function ($scope, $http, $state, $log,
 
     $log.debug( "editUserOwnerController starting for userauth: " + user.id );
     $scope.user = user;
-    $scope.userUpdate = JSON.parse(JSON.stringify(user));
-    $scope.user.newPwd = "";
-    $scope.confirm = {checked: false};
     $scope.$parent.ui.panelHeading = user.email;
     $scope.$parent.ui.pageTitle = "Manage User";
     $scope.$parent.links = links;
     $scope.owner = true;
     $scope.ownedVenues = owned;
-    $scope.newVenue = null;
+    $scope.newManagedVenue = null;
     $scope.addressify = addressify;
 
     $scope.removeVenue = function (venue) {
@@ -238,22 +227,17 @@ app.controller("editUserOwnerController", function ($scope, $http, $state, $log,
     }
 
     $scope.addVenue = function () {
-        var dup = false;
-        if ($scope.newVenue) {
-            //TODO change to lodash findIndex
-            angular.forEach($scope.user.user.managedVenues, function(venue) {
-                if (venue.id === $scope.newVenue.id) {
-                    toastr.error("User already manages this venue", "Error!");
-                    dup = true;
-                    $scope.newVenue = null;
-                }
-            })
-            if (!dup) {
-                $http.post('/venue/addManager', {params : { userId: user.user.id, venueId: $scope.newVenue.id }})
+        if ($scope.newManagedVenue) {
+            if (_.findIndex($scope.user.user.managedVenues, function (o) { return o.id === $scope.newManagedVenue.id }) > -1) {
+                toastr.error("User already manages this venue", "Error!");
+                $scope.newManagedVenue = null;
+            }
+            else {
+                $http.post('/venue/addManager', {params : { userId: user.user.id, venueId: $scope.newManagedVenue.id }})
                     .then( function ( u ) {
                         toastr.success( "Manager added to venue", "Success!");
-                        $scope.user.user.managedVenues.push($scope.newVenue);
-                        $scope.newVenue = null;
+                        $scope.user.user.managedVenues.push($scope.newManagedVenue);
+                        $scope.newManagedVenue = null;
                     })
                     .catch( function (err) {
                         toastr.error( "There was a problem adding the manager", "Error!");

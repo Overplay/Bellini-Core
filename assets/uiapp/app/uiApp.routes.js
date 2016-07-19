@@ -35,7 +35,7 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             templateUrl: '/uiapp/app/components/user/userlist.partial.html',
             resolve:     {
                 users: function ( nucleus ) {
-                    return nucleus.getAuth();
+                    return nucleus.getAuth()
                 },
                 admin: function () { return true; },
                 links: function () {
@@ -119,8 +119,7 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                 },
                 links: function() {
                     return [
-                        { text: "Managers", link: "user.managerList" },
-                        { text: "Me", link: "user.editUser" }
+                        { text: "Managers", link: "user.managerList" }
                     ]
                 },
                 admin: function () { return false; }
@@ -139,8 +138,7 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                 },
                 links: function () {
                     return [
-                        { text: "Managers", link: "user.managerList" },
-                        { text: "Me", link: "user.editUser" }
+                        { text: "Back to Dash", link: "dash" }
                     ]
                 }
             }
@@ -183,8 +181,7 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                 },
                 links: function() {
                     return [
-                        { text: "Managers", link: "user.managerList" },
-                        { text: "Me", link: "user.editUser" }
+                        { text: "Managers", link: "user.managerList" }
                     ]
                 }
             }
@@ -198,6 +195,13 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             resolve:     {
                 user:  function ( nucleus, $stateParams ) {
                     return nucleus.getAuth( $stateParams.id )
+                        .then ( function (auth) {
+                            return nucleus.getUser( auth.user.id )
+                                .then( function (user) {
+                                    auth.user = user;
+                                    return auth;
+                                })
+                        })
                 },
                 roles: function ( nucleus ) {
                     return nucleus.getRole()
@@ -306,7 +310,8 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                 },
                 links: function () {
                     return [
-                        { text: "All Venues", link: "venue.adminList" }
+                        { text: "All Venues", link: "venue.adminList" },
+                        { text: "Add Venue", link: "venue.new"}
                     ]
                 }
             }
@@ -346,7 +351,13 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                             return data.data;
                         })
                 },
-                admin: function() { return false; }
+                admin: function() { return false; },
+                links: function () {
+                    return [
+                        { link: 'device.list', text: "My Devices" },
+                        { link: 'device.add', text: 'Add Device' }
+                    ]
+                }
             }
         })
 
@@ -361,7 +372,13 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                             return data.data;
                         })
                 },
-                admin: function () { return true; }
+                admin: function () { return true; },
+                links: function () {
+                    return [
+                        { link: 'device.adminList', text: 'All Devices' },
+                        { link: 'device.adminAdd', text: 'Add Device' }
+                    ]
+                }
             }
         })
 
@@ -373,6 +390,33 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             resolve:     {
                 user: function ( nucleus ) {
                     return nucleus.getMe()
+                },
+                links: function () {
+                    return [
+                        { link: 'device.list', text: 'My Devices' },
+                        { link: 'device.add', text: 'Add Device' }
+                    ]
+                }
+            }
+        } )
+
+        .state( 'device.adminAdd', {
+            url:         '/activate-admin',
+            data:        { subTitle: "Add a Device" },
+            controller:  "addDeviceAdminController",
+            templateUrl: '/uiapp/app/components/device/add-device.partial.html',
+            resolve:     {
+                venues: function ( $http ) {
+                    return $http.get( apiPath + '/venue')
+                        .then( function (data) {
+                            return data.data;
+                        });
+                },
+                links: function () {
+                    return [
+                        { link: 'device.adminList', text: 'All Devices' },
+                        { link: 'device.adminAdd', text: 'Add Device' }
+                    ]
                 }
             }
         } )
@@ -384,10 +428,37 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             templateUrl: '/uiapp/app/components/device/register-device.partial.html'
         } )
 
-        .state( 'device.manage', {
-            url:         '/manage/:id',
+        .state( 'device.adminManage', {
+            url:         '/admin-manage/:id',
             data:        { subTitle: "Manage Device" },
             controller:  'editDeviceAdminController',
+            templateUrl: '/uiapp/app/components/device/manage-device.partial.html',
+            resolve:     {
+                device: function ( $http, $stateParams) {
+                    return $http.get( apiPath+"/device/" +$stateParams.id)
+                        .then( function (data) {
+                            return data.data;
+                        })
+                },
+                venues: function ( $http ) {
+                    return $http.get( apiPath + '/venue')
+                        .then( function (data) {
+                            return data.data;
+                        })
+                },
+                links: function () {
+                    return [
+                        { link: 'device.adminList', text: 'All Devices' },
+                        { link: 'device.adminAdd', text: 'Add Device' }
+                    ]
+                }
+            }
+        } )
+
+        .state( 'device.ownerManage', {
+            url:         '/owner-manage/:id',
+            data:        { subTitle: "Manage Device" },
+            controller:  'editDeviceOwnerController',
             templateUrl: '/uiapp/app/components/device/manage-device.partial.html',
             resolve:     {
                 device: function ( $http, $stateParams) {
@@ -401,6 +472,12 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                 },
                 user: function ( nucleus ) {
                     return nucleus.getMe()
+                },
+                links: function () {
+                    return [
+                        { link: 'device.list', text: 'My Devices' },
+                        { link: 'device.add', text: 'Add Device' }
+                    ]
                 }
             }
         } )

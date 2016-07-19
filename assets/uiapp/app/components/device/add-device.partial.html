@@ -17,12 +17,12 @@
                            ng-model="device.locationWithinVenue" required/>
                 </div>
             </fieldset>
-            <fieldset class="form-group" ng-if="user.ownedVenues.length > 0">
+            <fieldset class="form-group" ng-if="user.ownedVenues.length || venues.length">
                 <label for="venue" class="col-sm-3 control-label">Venue</label>
                 <div class="col-sm-8">
-                    <select type="text" class="form-control" id="venue"
+                    <select class="form-control" id="venue"
                             ng-model="device.venue"
-                            ng-options="listAddress(venue) for venue in user.ownedVenues track by venue.id" required>
+                            ng-options="listAddress(venue) for venue in {{ venues ? 'venues' : 'user.ownedVenues' }} track by venue.id" required>
                     </select>
                 </div>
             </fieldset>
