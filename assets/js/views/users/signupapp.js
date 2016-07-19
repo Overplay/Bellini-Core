@@ -3,10 +3,10 @@
  */
 
 
-var app = angular.module('signupApp', ['ui.bootstrap', 'ngAnimate', 'nucleus.service']);
+var app = angular.module('signupApp', ['ui.bootstrap', 'ngAnimate', 'nucleus.service', 'toastr']);
 
 
-app.controller('signupController', function ($scope, $log, nucleus, $timeout, $window, $http) {
+app.controller('signupController', function ($scope, $log, nucleus, $timeout, $window, toastr) {
 
     $scope.auth = {email: "", password: "", passwordConfirm: ""};
     $scope.user = {firstName: '', lastName: '', roleNames: [{ role: 'user', sub: ''}], roles: [], address: {}};
@@ -17,19 +17,13 @@ app.controller('signupController', function ($scope, $log, nucleus, $timeout, $w
         $log.debug("Signup clicked for: " + $scope.auth.email + " and password: " + $scope.auth.password);
 
 
-        /*$http.get('/auth/validate', {params: "woah"})
-            .then(function(data){
-                $log.log(data)
-            })
-            .catch(function(err){
-                $log.log(err)
-            })*/
-
         nucleus.addUser($scope.auth.email, $scope.auth.password, $scope.user)
             .then(function (data) {
                 $log.log(data);
+                toastr.success("Please check your email to validate your account", "Success!")
                 //todo redirect to ui app if successful
-                //$window.location.href = '/ui';
+                //TODO give the user a warning that they will need to click the link in the email
+                $timeout(function() {$window.location.href = '/';}, 5000);
                 //TODO toastr or something to let them knwo to check their email & go to login or something 
 
             })

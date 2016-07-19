@@ -39,5 +39,5 @@ PASSWORD RESET FLOW
 
 USER VALIDATION FLOW
 --------------------
-Create the user , get the auth and send the authvalidate token 
-An HTTP `GET` to `/auth/validate` will invoke the validation process and send the user an email to validate from. 
+Create the user, get the auth and create a token then add it to the auth and the token creation will send an email.
+An HTTP `GET` to `/auth/validate` will invoke the validation process. This is done by clicking the link from the email

@@ -127,17 +127,18 @@ module.exports = require( 'waterlock' ).waterlocked( {
 
         AdminService.addUser( params.email, params.password, params.user )
             .then( function ( data ) {
+
                 return Auth.findOne(data.auth)
                     .then(function(a){
-                        ValidateToken.create({owner: a})
+
+                        return ValidateToken.create({owner: a})
                             .then(function(v){
                                 a.validateToken = v;
                                 a.save();
+                                return res.json(data)
                             })
 
                     })
-
-                //get the auth then get the email sent using validate?
             } )
             .catch( function ( err ) {
                 return res.badRequest( err );
