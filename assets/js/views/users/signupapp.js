@@ -8,6 +8,7 @@ var app = angular.module('signupApp', ['ui.bootstrap', 'ngAnimate', 'nucleus.ser
 
 app.controller('signupController', function ($scope, $log, nucleus, $timeout, $window, toastr) {
 
+    $scope.form = {title: 'Create New Account', show: true};
     $scope.auth = {email: "", password: "", passwordConfirm: ""};
     $scope.user = {firstName: '', lastName: '', roleNames: [{ role: 'user', sub: ''}], roles: [], address: {}};
     $scope.ui = {errorMessage: "", error: false};
@@ -19,16 +20,16 @@ app.controller('signupController', function ($scope, $log, nucleus, $timeout, $w
 
         nucleus.addUser($scope.auth.email, $scope.auth.password, $scope.user)
             .then(function (data) {
-                $log.log(data);
-                toastr.success("Please check your email to validate your account", "Success!")
-                //todo redirect to ui app if successful
-                //TODO give the user a warning that they will need to click the link in the email
-                $timeout(function() {$window.location.href = '/';}, 5000);
-                //TODO toastr or something to let them knwo to check their email & go to login or something 
+                $scope.form = {
+                    title: "Validate your account before logging in by clicking the link in your email!",
+                    show: false
+                };
 
             })
             .catch(function (err) {
                 $log.error("Could not create account");
+
+                //TODO test different messages
                 $scope.ui.errorMessage = "Account creation failed: " + err.data.message;
                 $scope.ui.error = true;
                 $scope.auth.email = '';
@@ -42,7 +43,11 @@ app.controller('signupController', function ($scope, $log, nucleus, $timeout, $w
                     });
             })
     }
-    
+
+    $scope.home = function () {
+        $window.location.href = "/"
+    }
+
     $scope.pwCheck = function () {
         return $scope.auth.password && $scope.auth.passwordConfirm &&
                $scope.auth.password.length > 7 && $scope.auth.passwordConfirm.length > 7 &&

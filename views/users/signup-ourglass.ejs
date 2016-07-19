@@ -145,8 +145,8 @@
     <div class="container-fluid popin" ng-app="signupApp" ng-controller="signupController">
         <div class="row">
             <div class="col-sm-8 col-sm-offset-2" style="background: rgba(1,1,1,0.5); padding: 30px;">
-                <h1>Create New Account</h1>
-                <form ng-submit="signup()" name="form" role="form">
+                <h1>{{form.title}}</h1>
+                <form ng-if="form.show" ng-submit="signup()" name="form" role="form">
                     <!-- fake fields are a workaround for chrome autofill getting the wrong fields -->
                     <input style="display:none" type="text" name="fakeusernameremembered"/>
                     <input style="display:none" type="password" name="fakepasswordremembered"/>
@@ -228,7 +228,9 @@
                         {{ ui.errorMessage }}
                     </div>
                 </form>
+                <button ng-if="!form.show" ng-click="home()" class="btn btn-success btn-lg">Home</button>
             </div>
+
         </div>
     </div>
 
