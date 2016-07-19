@@ -17,12 +17,12 @@
             <tr ng-repeat="device in devices">
                 <td>{{ device.name }}</td>
                 <td>{{ device.locationWithinVenue }}</td>
-                <td uib-popover-template="'uiapp/app/components/admin/address-popover.template.html'"
+                <td><span uib-popover-template="'uiapp/app/components/device/address-popover.template.html'"
                     popover-trigger="mouseenter"
                     popover-append-to-body="true"
-                    popover-placement="top-left">{{ device.venue.name }}
+                    popover-placement="top-left">{{ device.venue.name }}</span>
                 </td>
-                <td><a ui-sref="device.manage({ id: device.id })" class="btn btn-sm btn-warning">MORE INFO</a></td>
+                <td><a ui-sref="{{ admin ? 'device.adminManage({ id: device.id })' : 'device.ownerManage({ id: device.id })' }}" class="btn btn-sm btn-warning">MORE INFO</a></td>
             </tr>
             </tbody>
         </table>

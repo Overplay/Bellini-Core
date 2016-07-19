@@ -6,8 +6,7 @@
 <div class="row">
     <div class="col-md-3 col-lg-2">
         <ul class="side-menu top30">
-            <li><a ui-sref=".list">My Venues</a></li>
-            <li><a ui-sref=".new">Add Venue</a></li>
+            <li ng-repeat="link in links"><a ui-sref="{{link.link}}">{{ link.text }}</a></li>
         </ul>
     </div>
     <div class="col-md-8 top30" style="border: 1px solid #f0f0f0; border-radius: 3px; padding: 20px;">
