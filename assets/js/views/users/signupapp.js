@@ -6,7 +6,7 @@
 var app = angular.module('signupApp', ['ui.bootstrap', 'ngAnimate', 'nucleus.service']);
 
 
-app.controller('signupController', function ($scope, $log, nucleus, $timeout, $window) {
+app.controller('signupController', function ($scope, $log, nucleus, $timeout, $window, $http) {
 
     $scope.auth = {email: "", password: "", passwordConfirm: ""};
     $scope.user = {firstName: '', lastName: '', roleNames: [{ role: 'user', sub: ''}], roles: [], address: {}};
@@ -17,11 +17,20 @@ app.controller('signupController', function ($scope, $log, nucleus, $timeout, $w
         $log.debug("Signup clicked for: " + $scope.auth.email + " and password: " + $scope.auth.password);
 
 
+        /*$http.get('/auth/validate', {params: "woah"})
+            .then(function(data){
+                $log.log(data)
+            })
+            .catch(function(err){
+                $log.log(err)
+            })*/
+
         nucleus.addUser($scope.auth.email, $scope.auth.password, $scope.user)
             .then(function (data) {
                 $log.log(data);
                 //todo redirect to ui app if successful
                 //$window.location.href = '/ui';
+                //TODO toastr or something to let them knwo to check their email & go to login or something 
 
             })
             .catch(function (err) {
@@ -48,3 +57,7 @@ app.controller('signupController', function ($scope, $log, nucleus, $timeout, $w
 
 
 });
+
+app.controller('validateController', function($scope, $log, $window){
+
+})

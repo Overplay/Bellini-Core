@@ -35,3 +35,9 @@ PASSWORD RESET FLOW
    to whatever URL is in there. It should be a page to deal with letting the user enter a new password. `res.session.resetToken`
    is set to the same token. 
 4. A policy should be run to check the session token that gates access to a password rest page.
+
+
+USER VALIDATION FLOW
+--------------------
+Create the user , get the auth and send the authvalidate token 
+An HTTP `GET` to `/auth/validate` will invoke the validation process and send the user an email to validate from. 

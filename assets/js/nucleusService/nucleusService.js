@@ -197,7 +197,7 @@
              */
             service.changePassword = function ( params ) {
 
-                return $http.post( 'auth/changePwd', params );
+                return $http.post( '/auth/changePwd', params );
 
             }
 

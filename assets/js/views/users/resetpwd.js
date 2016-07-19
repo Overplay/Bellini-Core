@@ -4,7 +4,7 @@
 
 var app = angular.module( 'resetApp', [ 'ui.bootstrap', 'ngAnimate', 'nucleus.service' ] );
 
-app.controller( "resetController", function ( $scope, $log, nucleus, $location ) {
+app.controller( "resetController", function ( $scope, $log, nucleus, $window ) {
 
     // Using this method instead of $location.search() because search() is broken with # routes
     function getParameterByName( name, url ) {
@@ -37,9 +37,11 @@ app.controller( "resetController", function ( $scope, $log, nucleus, $location )
         // TODO: do something useful and throw up toasts
         nucleus.changePassword({ email: email, newpass: $scope.user.password, resetToken: resetToken })
             .then( function(){
-                $location.path('/login');
+                $log.log("WOAH")
+                $window.location.href = '/login'
             })
-            .catch( function(){
+            .catch( function(err){
+                $log.log(err)
                 $log.error("Change fail, do something useful!");
             })
     }
