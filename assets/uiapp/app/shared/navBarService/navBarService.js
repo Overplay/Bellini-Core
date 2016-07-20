@@ -41,9 +41,9 @@ app.factory('navBarService', function ($log) {
             },
             'proprietor.owner': {
                 left: [{
-                    label: 'Users',
-                    id: 'users',
-                    items: [{label: "Users", link: {type: 'ui-sref', addr: 'user.managerList'}}
+                    label: 'Managers',
+                    id: 'managers',
+                    items: [{label: "Managers", link: {type: 'ui-sref', addr: 'user.managerList'}}
                     ]
                 },
                     {
@@ -73,16 +73,18 @@ app.factory('navBarService', function ($log) {
                 ]
             },
             'proprietor.manager': {
-                left: [{
-                    label: 'Users',
-                    id: 'users',
-                    items: [{label: "Manage Users", link: {type: 'ui-sref', addr: 'admin.manageUsers'}},
-                        {label: "Add User", link: {type: 'ui-sref', addr: 'admin.addUser'}}
-                    ]
-                }, {
+                left: [
+                    // {
+                    // label: 'Users',
+                    // id: 'users',
+                    // items: [{label: "Manage Users", link: {type: 'ui-sref', addr: 'admin.manageUsers'}},
+                    //     {label: "Add User", link: {type: 'ui-sref', addr: 'admin.addUser'}}
+                    // ]
+                // },
+                {
                     label: "Devices", //might need to be modified
                     id: "devices",
-                    items: [{label: "Devices", link: {type: 'ui-sref', addr: 'device.list'}}]
+                    items: [{label: "Devices", link: {type: 'ui-sref', addr: 'device.managerList'}}]
                 },
                     /*{
                         label: "Organization",

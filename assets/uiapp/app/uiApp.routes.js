@@ -371,6 +371,29 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             }
         })
 
+        .state( 'device.managerList', {
+            url:         '/manager-list',
+            controller:  'listDeviceController',
+            templateUrl: '/uiapp/app/components/device/devicelist.partial.html',
+            resolve:     {
+                devices: function ( $http ) {
+                    return $http.get( '/user/getManagedDevices')
+                        .then(function (data) {
+                            return data.data;
+                        })
+                },
+                admin: function () {
+                    return false;
+                },
+                links: function () {
+                    return [
+                        {link: 'device.managerList', text: "Managed Devices"},
+                        // {link: 'device.add', text: 'Add Device'}
+                    ]
+                }
+            }
+        })
+
         .state( 'device.adminList', {
             url:        '/admin-list',
             controller:  'listDeviceController',
