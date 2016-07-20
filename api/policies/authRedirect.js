@@ -9,8 +9,9 @@
  */
  
 module.exports = function ( req, res, next ) {
+    
 
-    if ( req.session.authenticated && !req.session.user.blocked ) {
+    if ( req.session.authenticated && !req.session.user.auth.blocked ) {
         return res.redirect( "/ui" );
     }
 
