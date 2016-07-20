@@ -68,8 +68,15 @@ app.controller("adminDashController", function($scope, $log){
 });
 
 
-app.controller("adDashController", function($scope, $log){
+app.controller("adDashController", function($scope, $log, ads){
     $log.log("starting adDashController")
+
+    var a = angular.copy(ads)
+
+    $scope.advertisements = []
+    while (a.length) {
+        $scope.advertisements.push(a.splice(0,2))
+    }
 
 });
 

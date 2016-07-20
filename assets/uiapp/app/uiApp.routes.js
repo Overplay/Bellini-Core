@@ -546,11 +546,18 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
 
         .state( 'advertisement', {
             url:         '/advertisement',
-            templateUrl: '/uiapp/app/components/trevda/trevda.partial.html',
-            abstract: true,
+            templateUrl: '/uiapp/app/components/device/device-sidemenu.partial.html',
+            controller:  function ( $scope ) { $scope.panelHeading = { text: "", color: "#0000FF" }},
+            abstract:    true,
             resolve: {
                 user: function (nucleus) {
                     return nucleus.getMe();
+                },
+                links: function(){
+                    return [
+                        {text: 'My Advertisements', link: 'advertisement.list'},
+                        {text: 'Create an Advertisement', link: 'advertisement.add'}
+                    ]
                 }
             }
         })
@@ -562,11 +569,20 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             controller:  'addAdvertisementController'
         } )
 
-        .state( 'advertisement.manage', {
+        .state( 'advertisement.list', {
             url:         '/manage',
-            templateUrl: '/uiapp/app/components/trevda/manage-trevda.partial.html',
+            templateUrl: '/uiapp/app/components/trevda/trevdalist.partial.html',
             data:        { subTitle: "Manage Advertisements" },
-            controller:  'manageAdvertisementController'
+            controller:  'manageAdvertisementController',
+            resolve: {
+                ads: function($http) {
+                    return $http.get("/user/getAlist").then(function (ads) {
+                        return ads.data;
+                    })
+                }
+
+
+            }
         } )
 
         .state( 'advertisement.edit', {
@@ -574,9 +590,8 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             templateUrl: '/uiapp/app/components/trevda/edit-trevda.partial.html',
             data:        { subTitle: "Edit Advertisement" },
             controller:  'editAdvertisementController',
-            resolve:     {
-                //TODO
-            }
+            resolve: {}
+
         } )
         // =========== DASHBOARD
 
@@ -624,6 +639,13 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
         .state('dash.advertiser', {
             templateUrl: '/uiapp/app/components/dash/ad-dash.partial.html',
             controller: 'adDashController',
+            resolve: {
+                ads: function ($http) {
+                    return $http.get("/user/getAlist").then(function (ads) {
+                        return ads.data;
+                    })
+                }
+            }
         })
 
 

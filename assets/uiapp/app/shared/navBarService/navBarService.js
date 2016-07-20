@@ -29,6 +29,11 @@ app.factory('navBarService', function ($log) {
                         id: "venues",
                         items: [{label: "venues", link: {type: 'ui-sref', addr: 'venue.adminList'}}]
                     }
+                    /*{
+                     label: "Advertisements",
+                     id: "trevda",
+                     items: [{label: "Ads", link: {type: 'ui-sref', addr: 'advertisement.adminList'}}]
+                     },*/
                 ],
                 right: [{
                     label: 'Account',
@@ -163,10 +168,7 @@ app.factory('navBarService', function ($log) {
                         id: "ads",
                         items: [
                             {
-                                label: 'Manage Ads', link: {type: 'ui-sref', addr: 'advertisement.manage'}
-                            },
-                            {
-                                label: 'Add Ad', link: {type: 'ui-sref', addr: 'advertisement.add'}
+                                label: 'manage', link: {type: 'ui-sref', addr: 'advertisement.list'}
                             }
                         ]
                     }]

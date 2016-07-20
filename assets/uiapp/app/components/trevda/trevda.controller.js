@@ -4,9 +4,14 @@
  */
 
 
-app.controller("addAdvertisementController", function ($scope, $log, $http, $state, user, asahiService) {
+app.controller("addAdvertisementController", function ($scope, $log, $http, $state, user, asahiService, links) {
     $log.debug("addAdvertisementController starting");
 
+
+    $scope.$parent.ui.pageTitle = "Create An Advertisement";
+    $scope.$parent.ui.panelHeading = '';
+    $scope.$parent.links = links;
+    
     $scope.advertisement = {creator: user};
     $scope.filesToUpload = [];
 
@@ -33,12 +38,28 @@ app.controller("addAdvertisementController", function ($scope, $log, $http, $sta
     };
 
 
+    $scope.media = {img: null}
+
+
 
     $scope.advertisement.marr = [];
 
     $scope.submit = function () {
 
         var chain = Promise.resolve();
+
+
+        if ($scope.media.img) {
+
+            chain = chain.then(function () {
+                return asahiService.uploadMedia($scope.media.img)
+                    .then(function (data) {
+                        $scope.advertisement.marr.push(data.data.id);
+                    })
+            })
+        }
+
+        /*This is for my old multifile uploads
         $scope.filesToUpload.forEach(function (file) {
             chain = chain.then(function () {
                 return asahiService.uploadMedia(file)
@@ -46,11 +67,11 @@ app.controller("addAdvertisementController", function ($scope, $log, $http, $sta
                         $scope.advertisement.marr.push(m.data.id);
                     })
             })
-        })
+        })*/
         chain.then(function () {
             $http.post("/ad/create", $scope.advertisement)
                 .then(function (a) {
-                    $state.go("advertisement.manage")
+                    $state.go("advertisement.list")
                 })
         })
 
@@ -60,25 +81,35 @@ app.controller("addAdvertisementController", function ($scope, $log, $http, $sta
 });
 
 //list ads for the user 
-app.controller("manageAdvertisementController", function ($scope, $log, user, $http) {
+app.controller("manageAdvertisementController", function ($scope, $log, ads, links) {
     $log.debug("manageAdvertisementController starting");
-    //cant use user.advertisements because media wont be populated ?? TODO test this with media
-    $http.get("/user/getAlist").then(function (ads) {
-        $scope.advertisements = ads.data;
-    })
+
+    $scope.$parent.ui.pageTitle = "Manage My Advertisements";
+    $scope.$parent.ui.panelHeading = '';
+    $scope.$parent.links = links;
+
+    $scope.advertisements = ads;
 
 });
 
 
-app.controller("editAdvertisementController", function ($scope, $log, $http, $stateParams, toastr, asahiService) {
+app.controller("editAdvertisementController", function ($scope, $log, $http, $stateParams, toastr, asahiService, links) {
     $log.debug("editAdvertisementController starting");
 
+    $scope.$parent.ui.pageTitle = "Manage Advertisement";
+    $scope.$parent.ui.panelHeading = "";
+    $scope.$parent.links = links;
+
     $scope.filesToUpload = [];
+
+    $scope.media = {img: null}
 
     //get the ad and populate media 
     $http.get("api/v1/ad/" + $stateParams.id)
         .then(function (data) {
             $scope.advertisement = data.data;
+            $scope.$parent.ui.panelHeading = $scope.advertisement.name;
+
             $scope.advertisementUpdate = JSON.parse(JSON.stringify(data.data));
         })
         .then(function () {
@@ -137,10 +168,26 @@ app.controller("editAdvertisementController", function ($scope, $log, $http, $st
 
 
 
+
+    $scope.media = {img: ''}
+
     //to update the advertisement 
     $scope.update = function () {
 
         var chain = Promise.resolve();
+
+        $log.log($scope.media)
+
+        if ($scope.media.img) {
+
+            chain = chain.then(function () {
+                return asahiService.uploadMedia($scope.media.img)
+                    .then(function (data) {
+                        $scope.advertisementUpdate.marr.push(data.data.id);
+                    })
+            })
+        }
+        /* OLD multifile upload
         //upload necesary files
         $scope.filesToUpload.forEach(function (file) {
             chain = chain.then(function () {
@@ -149,7 +196,7 @@ app.controller("editAdvertisementController", function ($scope, $log, $http, $st
                         $scope.advertisementUpdate.marr.push(m.data.id);
                     })
             })
-        });
+        });*/
         //update the ad
         chain = chain.then(function () {
             delete $scope.advertisement.media;
