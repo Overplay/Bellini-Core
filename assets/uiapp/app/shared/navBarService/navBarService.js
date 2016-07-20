@@ -105,6 +105,12 @@ app.factory('navBarService', function ($log) {
             'user': {
                 left: [
                     /*{
+                        label: 'Register a Device',
+                        id: 'device',
+                        items: [{label: "device", link: {type: 'ui-sref', addr: 'device.add'}}]
+
+                    }*/
+                    /*{
                         label: 'Me',
                         id: "user",
                         items: [{

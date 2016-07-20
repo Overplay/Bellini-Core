@@ -78,11 +78,11 @@ module.exports.policies = {
     
     UserController: {
         '*':       true,
-        'find':    [ 'sessionAuth', 'isAdmin' ],
+        'find':    [ 'sessionAuth', 'isAdmin' ],                                                                            
         'findOne': [ 'sessionAuth', 'isMeOrAdmin' ],
         'update':  [ 'sessionAuth', 'isMeOrAdmin' ],
         'destroy': [ 'sessionAuth', 'isAdmin' ],
-        'queryFirstLastEmail' : ['sessionAuth']
+        'queryFirstLastEmail' : ['sessionAuth', 'isProprietorOwner']
 
     },
 

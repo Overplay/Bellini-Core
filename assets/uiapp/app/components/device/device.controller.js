@@ -17,12 +17,13 @@ app.controller("addDeviceController", function ($scope, $state, $log, toastr, nu
         .then(function(u){
             $scope.user = u.data;
         });
+
+
     $scope.testDevice = function () {
         //create a device for testing purposes! 
         $http.post('/device/testDevice', $scope.device)
             .then(function (dev) {
                 toastr.success("test device: " + dev.name + " created successfully", "Yay!")
-                //TODO redirect
                 $state.go("device.list")
             })
             .catch(function (err) {

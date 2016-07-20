@@ -611,6 +611,11 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
         .state('dash.user', {
             templateUrl: '/uiapp/app/components/dash/user-dash.partial.html',
             controller: 'userDashController',
+            resolve: {
+                user: function (nucleus) {
+                    return nucleus.getMe();
+                }
+            }
         })
         .state('dash.admin', {
         templateUrl: '/uiapp/app/components/dash/admin-dash.partial.html',
