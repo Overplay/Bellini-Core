@@ -4,6 +4,30 @@
 
 
 
+app.controller("addDeviceUserController", function ($scope, $state, $log, toastr, nucleus, $http, links, user) {
+
+    $log.debug("addDeviceUserController");
+    $scope.$parent.ui.pageTitle = "Activate Device";
+    $scope.$parent.ui.panelHeading = "";
+    $scope.$parent.links = links;
+    $scope.user = user;
+
+    if (!$scope.user.ownedVenues.length) {
+        toastr.warning("You must add a venue before adding a device", "No Owned Venues");
+        $state.go('venue.userAdd');
+    }
+
+    $scope.listAddress = function (venue) {
+
+        return venue.name + ' ('
+            + venue.address.street + ' '
+            + venue.address.city + ', '
+            + venue.address.state + ')';
+    }
+
+
+});
+
 app.controller("addDeviceController", function ($scope, $state, $log, toastr, nucleus, $http, user, uibHelper, links) {
 
     $log.debug("addDeviceController starting.");
@@ -22,8 +46,8 @@ app.controller("addDeviceController", function ($scope, $state, $log, toastr, nu
     $scope.testDevice = function () {
         //create a device for testing purposes! 
         $http.post('/device/testDevice', $scope.device)
-            .then(function (dev) {
-                toastr.success("test device: " + dev.name + " created successfully", "Yay!")
+            .then(function (data) {
+                toastr.success("test device: " + data.data.name + " created successfully", "Yay!")
                 $state.go("device.list")
             })
             .catch(function (err) {

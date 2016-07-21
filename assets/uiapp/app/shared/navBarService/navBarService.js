@@ -140,9 +140,9 @@ app.factory('navBarService', function ($log) {
                         label: "Edit My Account",
                         link: {type: 'ui-sref', addr: 'user.editUser'}
                     },
-                        {
-                            label: "Logout", link: {type: 'href', addr: '/logout'}
-                        }
+                    {
+                        label: "Logout", link: {type: 'href', addr: '/logout'}
+                    }
                     ]
                 }]
             },

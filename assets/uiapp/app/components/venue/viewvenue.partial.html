@@ -39,7 +39,7 @@
         <tr ng-repeat="device in venue.devices">
             <td>{{device.name}}</td>
             <td>{{device.locationWithinVenue}}</td>
-            <td width="10%"><a ui-sref="device.manageDevice({id: device.id})" class="btn btn-sm btn-warning">More
+            <td width="10%"><a ui-sref="device.ownerManage({id: device.id})" class="btn btn-sm btn-warning">More
                 Info</a></td>
         </tr>
         </tbody>

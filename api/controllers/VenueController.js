@@ -48,18 +48,29 @@ module.exports = {
 
         var newVenue = req.allParams();
 
+        User.findOne({id: req.session.user.id})
+            .then( function (user) {
+                if (user) {
+                    user.roles = _.union(user.roles, [RoleCacheService.roleByName("proprietor", "owner")]);
+                    user.save(function (err) {
+                        if (err)
+                            sails.log.debug(err);
+                        Venue.create(newVenue)
+                            .then(function (v) {
+                                //TODO test venue owners
+                                v.venueOwners.add(req.session.user);
+                                v.save();
+                                sails.log.debug("venue ownership", v)
+                                return res.json(v);
+                            })
+                            .catch(function (err) {
+                                return res.serverError(err); //give out error (will only show error info if not in production)
+                            })
+                    });
+                }
+            })
 
-        Venue.create(newVenue)
-            .then(function (v) {
-                //TODO test venue owners
-                v.venueOwners.add(req.session.user);
-                v.save();
-                sails.log.debug("venue ownership", v)
-                return res.json(v);
-            })
-            .catch(function (err) {
-                return res.serverError(err); //give out error (will only show error info if not in production) 
-            })
+
     },
 
     getVenueManagers: function (req, res) {
