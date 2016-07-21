@@ -110,7 +110,7 @@ module.exports = require( 'waterlock' ).waterlocked( {
     },
 
     addUser: function ( req, res ) {
-        sails.log.debug(req)
+        //sails.log.debug(req)
         var params = req.allParams();
 
         if ( ( params.email === undefined) || (params.password === undefined) || (params.user === undefined) )
@@ -127,12 +127,12 @@ module.exports = require( 'waterlock' ).waterlocked( {
 
         AdminService.addUser( params.email, params.password, params.user, true ) //TRUE requires validation
             .then( function ( data ) {
-                sails.log.debug(data)
+                //sails.log.debug(data)
                 return res.json(data)
 
             } )
             .catch( function ( err ) {
-                sails.log.debug(err)
+                //sails.log.debug(err)
                 return res.badRequest( err );
             } )
 
