@@ -175,9 +175,7 @@ app.controller("editAdvertisementController", function ($scope, $log, $http, $st
     $scope.update = function () {
 
         var chain = Promise.resolve();
-
-        $log.log($scope.media)
-
+        
         if ($scope.media.img) {
 
             chain = chain.then(function () {
