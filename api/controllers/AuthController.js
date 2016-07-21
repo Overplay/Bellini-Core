@@ -128,7 +128,7 @@ module.exports = require( 'waterlock' ).waterlocked( {
         AdminService.addUser( params.email, params.password, params.user, true ) //TRUE requires validation
             .then( function ( data ) {
                 //sails.log.debug(data)
-                return res.json(data)
+                return res.ok()
 
             } )
             .catch( function ( err ) {
