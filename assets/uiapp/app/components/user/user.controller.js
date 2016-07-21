@@ -56,6 +56,8 @@ app.controller( "editUserController", function ( $scope, $log, user, toastr, nuc
 
         nucleus.changePassword({ email: $scope.user.email, newpass: $scope.user.newPwd1 })
             .then( function ( res ) {
+                $scope.user.newPwd1 = '';
+                $scope.user.newPwd2 = '';
                 toastr.success( "Password updated", "Success!" );
             } )
             .catch( function ( err ) {

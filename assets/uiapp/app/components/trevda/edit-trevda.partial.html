@@ -1,6 +1,5 @@
 <div class="row">
-    <div class="col-md-6">
-        <h2 class="n-blue-box">{{ advertisement.name }}</h2>
+    <div class="col-sm-10 col-sm-offset-1">
         <uib-tabset active="active">
             <uib-tab heading="More Info">
                 <div class="top15" style="padding: 20px; border: 2px solid #cacaca; border-radius: 5px;">
@@ -43,6 +42,7 @@
                                 <input type="text" class="form-control" id="desc"
                                        ng-model="advertisementUpdate.description"/>
                             </fieldset>
+                            <!--old media stuff
                             <table class="table  top15">
                                 <thead ng-if="advertisement.media.length > 0">
                                 <td><h3>Media</h3></td>
@@ -52,7 +52,7 @@
                                 <tr ng-if="advertisement.media.length > 0"
                                     ng-repeat="media in advertisementUpdate.media" id="media_{{media.id}}">
                                     <td>{{media.createdAt | date:'medium'}}</td>
-                                    <!-- TODO ADD NAME TO MEDIA? -->
+                                    <!-- TODO ADD NAME TO MEDIA?
                                     <td><a href="media/download/{{media.id}}"><img class="media-prev"
                                                                                    ng-src="media/download/{{media.id}}"/></a>
                                     </td>
@@ -68,8 +68,10 @@
                                     </td>
 
                                 </tr>
-                            </table>
-                            <div class="panel panel-default">
+                            </table>-->
+                            <img-input prompt="Image" width="800" height="600" dirty="media.img" src-field="advertisement.marr[0]"exact></img-input>
+
+                            <!--<div class="panel panel-default">
                                 <div class="panel-heading">Add Media</div>
                                 <div class="panel-body">
                                     <div class="row">
@@ -100,7 +102,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div>-->
 
 
                             <div class="form-actions">
