@@ -156,7 +156,8 @@ module.exports = require('waterlock').actions.user({
                         {firstName: {'contains': query}},
                         {lastName: {'contains': query}},
                     ],
-                    sort: 'firstName DESC'
+                    sort: 'firstName DESC',
+                    limit: 10
                 })
                 .populate("auth")
                 .then(function (userList) {
@@ -168,7 +169,11 @@ module.exports = require('waterlock').actions.user({
                 })
         })
         chain = chain.then(function(){
-            return Auth.find({email: {'contains': query}})
+            return Auth.find({
+                    email: {'contains': query}, sort: 'firstName DESC',
+                    sort: 'email DESC',
+                    limit: 10
+                })
                 .then(function(auths){
                     return auths.map(function(a){
                         return a.user;
