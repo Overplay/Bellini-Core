@@ -105,7 +105,10 @@ app.controller("addEditVenueController", function ($scope, $log, nucleus, $state
                 nucleus.addVenue($scope.venue)
                     .then(function (v) {
                         toastr.success("Venue created", "Success!")
-                        $state.go('venue.view', {id: v.id});
+                        if (links.length === 1)
+                            $state.go('device.userAdd');
+                        else
+                            $state.go('venue.view', {id: v.id});
                     })
                     .catch(function (err) {
                         toastr.error("Something went wrong", "Error")

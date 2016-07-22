@@ -555,6 +555,33 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             }
         } )
 
+        .state('device.managerManage', {
+            url: '/manager-manage/:id',
+            data: {subTitle: "Manage Device"},
+            controller: 'editDeviceOwnerController',
+            templateUrl: '/uiapp/app/components/device/manage-device.partial.html',
+            resolve: {
+                device: function ($http, $stateParams) {
+                    return $http.get(apiPath + "/device/" + $stateParams.id)
+                        .then(function (data) {
+                            return data.data;
+                        })
+                        .catch(function(err){
+                            return err;
+                        })
+                },
+                user: function ( nucleus ) {
+                    return nucleus.getMe()
+                },
+                links: function () {
+                    return [
+                        {link: 'device.managerList', text: 'Managed Devices'},
+                        // {link: 'device.add', text: 'Add Device'}
+                    ]
+                }
+            }
+        } )
+
         .state( 'organization', {
             url:         '/organization',
             templateUrl: '/uiapp/app/components/organization/organization-sidemenu.partial.html',

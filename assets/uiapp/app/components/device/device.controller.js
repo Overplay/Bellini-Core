@@ -40,6 +40,12 @@ app.controller("addDeviceController", function ($scope, $state, $log, toastr, nu
     $http.get("api/v1/user/" + user.id) //nucleus.getMe doesn't populate ownedVenues (probably because of waterlock)
         .then(function(u){
             $scope.user = u.data;
+        })
+        .then( function () {
+            if (!$scope.user.ownedVenues.length) {
+                toastr.warning("You must add a venue before adding a device", "No Owned Venues");
+                $state.go('venue.userAdd');
+            }
         });
 
 
@@ -283,8 +289,7 @@ app.controller('listDeviceController', function ($scope, devices, $log, uibHelpe
                 .then(function (data) {
                     dev.venue = data.data;
                 })
-    }
-    )
+    })
 }
 
 })
