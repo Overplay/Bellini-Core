@@ -127,7 +127,7 @@ module.exports = require( 'waterlock' ).waterlocked( {
                                                 .then(function (tok) {
                                                     sails.log.info(tok);
                                                     
-                                                    Auth.update({id: tok.owner}, {
+                                                    return Auth.update({id: tok.owner}, {
                                                         validateToken: tok,
                                                         blocked: true
                                                     })
