@@ -30,15 +30,15 @@ module.exports.waterlock = {
                 mail:     {
                     protocol:   'SMTP',
                     options:    {
-                        service: 'SendGrid',
+                        service: 'Gmail',
                         auth:    {
-                            user: 'USER', // These are set in local.js in our fork of waterlock-local-auth
-                            pass: 'PASS'  //
+                            user: 'cole@ourglass.tv', // These are set in local.js in our fork of waterlock-local-auth
+                            pass: '!0fb3dbafc6'  //
                         }
                     },
-                    from:       'no-reply@domain.com',
+                    from:       'no-reply@ourglass.tv',
                     subject:    'You forgot how to Ourglass!',
-                    forwardUrl: 'http://localhost:1337/auth/resetPwd'
+                    forwardUrl: 'http://localhost:1337/auth/resetPwd' //TODO 
                 },
                 template: {
                     file: '../views/email.jade',
@@ -55,6 +55,15 @@ module.exports.waterlock = {
                 
             },
             createOnNotFound: true // MAK: otherwise it autocreates account
+        },
+        {
+            name: "waterlock-facebook-auth",
+            appId: "116037555501905",
+            appSecret: "687340f68620fb47a6bf11d0cc8574d3",
+            fieldMap: {
+                'firstName': 'first_name',
+                'lastName': 'last_name'
+            }
         }
     ],
 
@@ -113,7 +122,7 @@ module.exports.waterlock = {
             // obj - {controller: 'blog', action: 'post'}
             // string - 'custom json response string'
             // default - 'default'
-            success: '/ui',
+            success: "/ui",
 
             // This can be any one of the following
             //
@@ -122,7 +131,7 @@ module.exports.waterlock = {
             // obj - {controller: 'blog', action: 'post'}
             // string - 'custom json response string'
             // default - 'default'
-            failure: 'default'
+            failure: '{"message": "failure"}'
         },
 
         //post logout event
@@ -135,7 +144,7 @@ module.exports.waterlock = {
             // obj - {controller: 'blog', action: 'post'}
             // string - 'custom json response string'
             // default - 'default'
-            success: 'default',
+            success: '{"message": "success"}',
 
             // This can be any one of the following
             //
@@ -144,7 +153,7 @@ module.exports.waterlock = {
             // obj - {controller: 'blog', action: 'post'}
             // string - 'custom json response string'
             // default - 'default'
-            failure: 'default'
+            failure: '{"message": "failue"}'
         },
         // post register event
         register: {
@@ -155,7 +164,7 @@ module.exports.waterlock = {
             // obj - {controller: 'blog', action: 'post'}
             // string - 'custom json response string'
             // default - 'default'
-            success: 'default',
+            success: '{"message": "success"}',
             // This can be any one of the following
             //
             // url - 'http://example.com'
@@ -163,7 +172,7 @@ module.exports.waterlock = {
             // obj - {controller: 'blog', action: 'post'}
             // string - 'custom json response string'
             // default - 'default'
-            failure: 'default'
+            failure: '{"message": "failure"}'
         }
     }
 };

@@ -176,7 +176,7 @@ module.exports = require( 'waterlock' ).waterlocked( {
                 Auth.findOneByEmail( params.email )
                     .then( function ( authObj ) {
                         authObj.password = params.password;
-                        authObj.save()
+                        return authObj.save()
                             .then( function ( authObjNew ) {
                                 resolve();
                             } )

@@ -55,7 +55,8 @@
 
             service.authorize = function ( email, pass ) {
 
-                return $http.post( '/auth/login', { email: email, password: pass } )
+
+                return $http.post( '/auth/login', { email: email, password: pass, type: "local" } ) //local required with facebook 
                     .then( function ( resp ) {
                         $log.debug( "User is authorized." );
                         _authorized = true;
