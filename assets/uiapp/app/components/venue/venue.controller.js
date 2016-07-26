@@ -9,7 +9,7 @@ addressify = function (address) {
     + address.zip
 };
 
-app.controller("addEditVenueController", function ($scope, $log, nucleus, $state, $http, $q, toastr, uibHelper, venue, edit, uiGmapGoogleMapApi, links) {
+app.controller("addEditVenueController", function ($scope, $log, nucleus, $state, $http, $q, toastr, uibHelper, venue, edit, uiGmapGoogleMapApi, links, $window) {
 
     $log.debug("addEditVenueController starting");
     $scope.$parent.ui.pageTitle = edit ? "Edit Venue" : "Add New Venue";
@@ -105,8 +105,11 @@ app.controller("addEditVenueController", function ($scope, $log, nucleus, $state
                 nucleus.addVenue($scope.venue)
                     .then(function (v) {
                         toastr.success("Venue created", "Success!")
-                        if (links.length === 1)
+                        if (links.length === 1) {
+                            if ($window.nucleus.roles.indexOf('proprietor.owner') === -1)
+                                $window.nucleus.roles.push('proprietor.owner');
                             $state.go('device.userAdd');
+                        }
                         else
                             $state.go('venue.view', {id: v.id});
                     })
@@ -119,10 +122,15 @@ app.controller("addEditVenueController", function ($scope, $log, nucleus, $state
     };
 
     $scope.getResults = function () {
-        return $http.get('/venue/yelpSearch', {params: $scope.parameters, timeout: 2000})
-            .then(function (data) {
-                return data.data.businesses;
-            })
+        if ($scope.parameters.location) {
+            return $http.get('/venue/yelpSearch', {params: $scope.parameters, timeout: 2000})
+                .then(function (data) {
+                    return data.data.businesses;
+                })
+        }
+
+        return null;
+
     };
 
     $scope.selected = function ($item, $model) {
