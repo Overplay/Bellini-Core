@@ -30,10 +30,10 @@ module.exports.waterlock = {
                 mail:     {
                     protocol:   'SMTP',
                     options:    {
-                        service: 'Gmail',
+                        service: 'SendGrid',
                         auth:    {
-                            user: 'cole@ourglass.tv', // These are set in local.js in our fork of waterlock-local-auth
-                            pass: '!0fb3dbafc6'  //
+                            user: 'USER', // These are set in local.js in our fork of waterlock-local-auth
+                            pass: 'PASS'  //
                         }
                     },
                     from:       'no-reply@ourglass.tv',
