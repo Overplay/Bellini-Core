@@ -106,6 +106,7 @@
         - In `config/session.js`,  uncomment mongo settings to enable 
         - Also, if pushing for production, do NOT leave local.js `wideOpen: true`
 
+17.2. Config urls in waterlock.js and add to .gitignore
 
 18. Start `asahi` application 
     - `git checkout BRANCH` if you're running something other than master! (make sure it has process.json in it) 
@@ -116,7 +117,9 @@
         - it is on the npm registry and will install automatically! 
 
 20. Checkout http://104.131.145.36/ and see how it looks! 
-    
+
+
+
 
 -----------------
 At this point, the app runs properly.
