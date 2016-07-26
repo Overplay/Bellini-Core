@@ -11,6 +11,12 @@
         margin: 50px auto;
     }
 
+    or {
+        color: white;
+        font-size: 200%;
+        vertical-align: middle;
+    }
+
     h1 {
         color: white;
         margin-bottom: 50px;
@@ -225,8 +231,8 @@
 
                     <button ng-click="create()" id='login' class="btn btn-primary btn-lg top15" ng-disabled="form.$invalid || !pwCheck()">Create Account</button>
                     <% if (typeof data == 'undefined') { %>
-                    OR TODO style
-                    <a class="btn btn-default btn-lg top15" href="/auth/login?type=facebook">Signup with Facebook</a>
+                    <or>OR</or>
+                    <a class="btn btn-default btn-lg top15" href="/auth/login?type=facebook"><img src="/images/FB-f-Logo__blue_100.png" style="height:30px;">&nbsp;Signup with Facebook</a>
                     <% } %>
                     <a  class="btn btn-info btn-lg top15" href="/">Back</a>
 
