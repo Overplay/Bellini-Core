@@ -63,7 +63,9 @@ module.exports.waterlock = {
             fieldMap: {
                 'firstName': 'first_name',
                 'lastName': 'last_name'
-            }
+            },
+            doubleReqRedirect: "/logout",
+            newUserRedirect: "users/signup-ourglass.ejs"
         }
     ],
 

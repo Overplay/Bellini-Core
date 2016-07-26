@@ -8,22 +8,38 @@ var app = angular.module('signupApp', ['ui.bootstrap', 'ngAnimate', 'nucleus.ser
 
 app.controller('signupController', function ($scope, $log, nucleus, $timeout, $window, toastr) {
 
+
     $scope.form = {title: 'Create New Account', show: true};
     $scope.auth = {email: "", password: "", passwordConfirm: ""};
     $scope.user = {firstName: '', lastName: '', roleNames: [{ role: 'user', sub: ''}], roles: [], address: {}};
     $scope.ui = {errorMessage: "", error: false};
     $scope.phoneRegex = "^(?:(?:\\+?1\\s*(?:[.-]\\s*)?)?(?:\\(\\s*([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9])\\s*\\)|([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\\s*(?:[.-]\\s*)?)?([2-9]1[02-9]|[2-9][02-9]1|[2-9][02-9]{2})\\s*(?:[.-]\\s*)?([0-9]{4})(?:\\s*(?:#|x\\.?|ext\\.?|extension)\\s*(\\d+))?$";
+    $scope.validate = true;
+
+    $scope.getData = function (data) {
+        var data = JSON.parse(data);
+        _.merge($scope.auth, data.auth);
+        _.merge($scope.user, data.user);
+        $scope.validate = false; //already facebook validated 
+    }
 
     $scope.signup = function () {
         $log.debug("Signup clicked for: " + $scope.auth.email + " and password: " + $scope.auth.password);
 
 
-        nucleus.addUser($scope.auth.email, $scope.auth.password, $scope.user)
+        nucleus.addUser($scope.auth.email, $scope.auth.password, $scope.user, $scope.auth.facebookId, $scope.validate)
             .then(function (data) {
-                $scope.form = {
-                    title: "Validate your account before logging in by clicking the link in your email!",
-                    show: false
-                };
+                //TODO sign person in for validate = false?? 
+                if (!$scope.validate) {
+                    //only happens when 
+                    $window.location.href = '/auth/login?type=facebook'
+                }
+                else {
+                    $scope.form = {
+                        title: "Validate your account before logging in by clicking the link in your email!",
+                        show: false
+                    };
+                }
 
             })
             .catch(function (err) {
@@ -56,7 +72,3 @@ app.controller('signupController', function ($scope, $log, nucleus, $timeout, $w
 
 
 });
-
-app.controller('validateController', function($scope, $log, $window){
-
-})

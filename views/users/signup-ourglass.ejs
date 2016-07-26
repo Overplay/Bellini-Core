@@ -137,12 +137,14 @@
 
 </style>
 
-
 <div style="background: url(/images/hourglass-nebula.jpg) fixed no-repeat center; background-size: cover; min-height: 100vh;">
 
     <img style="margin: auto; display: block; max-width: 30vw; padding: 50px 0" src="/images/ourglass-white.png"/>
 
     <div class="container-fluid popin" ng-app="signupApp" ng-controller="signupController">
+        <% if (typeof data !== 'undefined') { %>
+        <div ng-init="getData( '<%= data %>' )"></div>
+        <% } %>
         <div class="row">
             <div class="col-sm-8 col-sm-offset-2" style="background: rgba(1,1,1,0.5); padding: 30px;">
                 <h1>{{form.title}}</h1>
@@ -222,7 +224,12 @@
 
 
                     <button ng-click="create()" id='login' class="btn btn-primary btn-lg top15" ng-disabled="form.$invalid || !pwCheck()">Create Account</button>
+                    <% if (typeof data == 'undefined') { %>
+                    OR TODO style
+                    <a class="btn btn-default btn-lg top15" href="/auth/login?type=facebook">Signup with Facebook</a>
+                    <% } %>
                     <a  class="btn btn-info btn-lg top15" href="/">Back</a>
+
 
                     <div class="alertbubble" ng-show="ui.error">
                         {{ ui.errorMessage }}

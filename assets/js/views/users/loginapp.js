@@ -20,7 +20,7 @@ app.controller("loginController", function ($scope, $log, $http, $window, $timeo
             })
             .catch(function (err) {
                 $log.error("Could not log in");
-                $scope.ui.errorMessage = err.data.error;
+                $scope.ui.errorMessage = "Invalid login";
                 $scope.ui.error = true;
                 $timeout(function () {
                     $scope.ui.error = false;

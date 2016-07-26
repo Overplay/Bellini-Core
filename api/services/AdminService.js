@@ -94,7 +94,7 @@ module.exports = require( 'waterlock' ).waterlocked( {
      */
 
     // TODO: This should do a check before attempting create to keep the log noise level down :)
-    addUser: function ( emailAddr, password, userObj, requireValidation ) {
+    addUser: function (emailAddr, password, userObj, facebookId, requireValidation) {
 
         return new Promise( function ( resolve, reject ) {
 
@@ -103,9 +103,12 @@ module.exports = require( 'waterlock' ).waterlocked( {
                 password: password
             };
 
+            if (facebookId && typeof facebookId !== 'undefined')
+                authAttrib.facebookId = facebookId;
+
             requireValidation = requireValidation || sails.config.waterlock.alwaysValidate;
 
-            Auth.findOne({email: emailAddr})
+            Auth.findOne({email: emailAddr}) //TODO check on facebook id too?? 
                 .then(function (auth) {
                     if (auth) {
                         sails.log.debug("Email is in system, rejecting create.")
