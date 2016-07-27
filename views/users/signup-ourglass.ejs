@@ -14,7 +14,10 @@
     or {
         color: white;
         font-size: 200%;
-        vertical-align: middle;
+        padding: 10px 10px;
+        vertical-align: text-top;
+        display: inline;
+
     }
 
     h1 {
@@ -228,14 +231,14 @@
                     </div>
 
 
-
-                    <button ng-click="create()" id='login' class="btn btn-primary btn-lg top15" ng-disabled="form.$invalid || !pwCheck()">Create Account</button>
-                    <% if (typeof data == 'undefined') { %>
-                    <or>OR</or>
-                    <a class="btn btn-default btn-lg top15" href="/auth/login?type=facebook"><img src="/images/FB-f-Logo__blue_100.png" style="height:30px;">&nbsp;Signup with Facebook</a>
-                    <% } %>
-                    <a  class="btn btn-info btn-lg top15" href="/">Back</a>
-
+                    <div>
+                        <button ng-click="create()" id='login' class="btn btn-primary btn-lg top15" ng-disabled="form.$invalid || !pwCheck()">Create Account</button>
+                        <% if (typeof data == 'undefined') { %>
+                        <or>OR</or>
+                        <a class="btn btn-default btn-lg top15" href="/auth/login?type=facebook"><img src="/images/FB-f-Logo__blue_100.png" style="height:25px;">&nbsp;Signup with Facebook</a>
+                        <% } %>
+                        <a  class="btn btn-info btn-lg top15" href="/">Back</a>
+                    </div>
 
                     <div class="alertbubble" ng-show="ui.error">
                         {{ ui.errorMessage }}
