@@ -7,13 +7,22 @@
 app.controller("addAdvertisementController", function ($scope, $log, $http, $state, user, asahiService, links) {
     $log.debug("addAdvertisementController starting");
 
+    //TODO toastrs
 
     $scope.$parent.ui.pageTitle = "Create An Advertisement";
     $scope.$parent.ui.panelHeading = '';
     $scope.$parent.links = links;
-    
-    $scope.advertisement = {creator: user};
-    $scope.filesToUpload = [];
+
+    $scope.advertisement = {
+        creator: user, media: {
+            sm: null,
+            md: null,
+            lg: null,
+            wide: null
+        }
+    };
+
+    /*$scope.filesToUpload = [];
 
     $scope.addFilesToUpload = function(files) {
         var l = files.length;
@@ -23,41 +32,46 @@ app.controller("addAdvertisementController", function ($scope, $log, $http, $sta
         $scope.$apply();
     }
 
-    /*$scope.$on('droppedFile', function (e, files) {
+     $scope.$on('droppedFile', function (e, files) {
         var l = files.length;
         //alert(l);
         for (var i = 0; i < l; i++) {
             $scope.filesToUpload.push(files[i]);
         }
         $scope.$apply();
-    });*/
+     });
 
 
     $scope.removeUpload = function (index) {
         $scope.filesToUpload.splice(index, 1)
-    };
+     };*/
 
 
-    $scope.media = {img: null}
+    $scope.media = {
+        sm: null,
+        md: null,
+        lg: null,
+        wide: null
+    }
 
-
-
-    $scope.advertisement.marr = [];
 
     $scope.submit = function () {
 
         var chain = Promise.resolve();
 
+        _.forEach($scope.media, function (val, key) {
+            if (val != null) {
+                chain = chain.then(function () {
+                    return asahiService.uploadMedia(val)
+                        .then(function (data) {
+                            $scope.advertisement.media[key] = data.data.id;
+                        })
+                })
+            }
 
-        if ($scope.media.img) {
+        })
 
-            chain = chain.then(function () {
-                return asahiService.uploadMedia($scope.media.img)
-                    .then(function (data) {
-                        $scope.advertisement.marr.push(data.data.id);
-                    })
-            })
-        }
+
 
         /*This is for my old multifile uploads
         $scope.filesToUpload.forEach(function (file) {
@@ -69,8 +83,10 @@ app.controller("addAdvertisementController", function ($scope, $log, $http, $sta
             })
         })*/
         chain.then(function () {
+            $log.log($scope.advertisement.media)
             $http.post("/ad/create", $scope.advertisement)
                 .then(function (a) {
+                    $log.log(a)
                     $state.go("advertisement.list")
                 })
         })
@@ -100,9 +116,12 @@ app.controller("editAdvertisementController", function ($scope, $log, $http, $st
     $scope.$parent.ui.panelHeading = "";
     $scope.$parent.links = links;
 
-    $scope.filesToUpload = [];
-
-    $scope.media = {img: null}
+    $scope.media = {
+        sm: null,
+        md: null,
+        lg: null,
+        wide: null
+    }
 
     //get the ad and populate media 
     $http.get("api/v1/ad/" + $stateParams.id)
@@ -115,15 +134,18 @@ app.controller("editAdvertisementController", function ($scope, $log, $http, $st
         .then(function () {
             $http.get("ad/getMedia/" + $stateParams.id)
                 .then(function (data) {
-                    $scope.advertisement.media = data.data;
-                    $scope.advertisementUpdate.media = data.data;
-                    $scope.advertisementUpdate.media.forEach(function (m) {
-                        m.remove = true;
+                    $log.log(data)
+                    $scope.advertisement.mediaMeta = data.data;
+                    $scope.advertisementUpdate.mediaMeta = data.data;
+                    _.forEach($scope.advertisementUpdate.mediaMeta, function (m) {
+                        if (m)
+                            m.remove = true; //why 
                     })
                 })
         });
 
     //toggle whether to keep or remove the media on update 
+    //TODO
     $scope.removeMedia = function (id) {
         _.remove($scope.advertisementUpdate.marr, function (i) {
             return id == i;
@@ -143,11 +165,13 @@ app.controller("editAdvertisementController", function ($scope, $log, $http, $st
 
     };
 
+    /*
     //remove a file that is queued to be uploaded and added to the ad 
     $scope.removeUpload = function (index) {
         $scope.filesToUpload.splice(index, 1)
     };
-
+     */
+    
 
     //dz listener 
     /*$scope.$on('droppedFile', function (e, files) {
@@ -157,34 +181,33 @@ app.controller("editAdvertisementController", function ($scope, $log, $http, $st
             $scope.filesToUpload.push(files[i]);
         }
         $scope.$apply();
-    });*/
+     });*/
+    /*
     $scope.addFilesToUpload = function(files) {
         var l = files.length;
         for (var i = 0; i < l; i++) {
             $scope.filesToUpload.push(files[i]);
         }
         $scope.$apply();
-    }
-
-
-
-
-    $scope.media = {img: ''}
+     }*/
+    
 
     //to update the advertisement 
     $scope.update = function () {
 
         var chain = Promise.resolve();
-        
-        if ($scope.media.img) {
+        _.forEach($scope.media, function (val, key) {
+            if (val != null) {
+                chain = chain.then(function () {
+                    return asahiService.uploadMedia(val)
+                        .then(function (data) {
+                            $scope.advertisement.media[key] = data.data.id;
+                        })
+                })
+            }
 
-            chain = chain.then(function () {
-                return asahiService.uploadMedia($scope.media.img)
-                    .then(function (data) {
-                        $scope.advertisementUpdate.marr.push(data.data.id);
-                    })
-            })
-        }
+        })
+
         /* OLD multifile upload
         //upload necesary files
         $scope.filesToUpload.forEach(function (file) {
@@ -197,7 +220,6 @@ app.controller("editAdvertisementController", function ($scope, $log, $http, $st
         });*/
         //update the ad
         chain = chain.then(function () {
-            delete $scope.advertisement.media;
             return $http.put("api/v1/ad/" + $scope.advertisement.id, $scope.advertisementUpdate)
                 .then(function (data) {
                     $scope.advertisement = data.data;
