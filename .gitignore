@@ -19,6 +19,7 @@
 
 .tmp
 local.js
+waterlock.js 
 
 ################################################
 # Local Configuration
