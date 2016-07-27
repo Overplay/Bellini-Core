@@ -16,7 +16,7 @@ app.factory('navBarService', function ($log) {
                 }, {
                     label: "Devices", //might need to be modified
                     id: "devices",
-                    items: [{label: "Devices", link: {type: 'ui-sref', addr: 'device.adminList'}}
+                    items: [{label: "All Devices", link: {type: 'ui-sref', addr: 'device.adminList'}}
                     ]
                 },
                     /*{
@@ -27,7 +27,7 @@ app.factory('navBarService', function ($log) {
                     {
                         label: "Venues",
                         id: "venues",
-                        items: [{label: "venues", link: {type: 'ui-sref', addr: 'venue.adminList'}}]
+                        items: [{label: "All Venues", link: {type: 'ui-sref', addr: 'venue.adminList'}}]
                     }
                     /*{
                      label: "Advertisements",
@@ -54,13 +54,13 @@ app.factory('navBarService', function ($log) {
                     {
                         label: "Devices", //might need to be modified
                         id: "devices",
-                        items: [{label: "Devices", link: {type: 'ui-sref', addr: 'device.list'}}
+                        items: [{label: "My Devices", link: {type: 'ui-sref', addr: 'device.list'}}
                         ]
                     },
                     {
                         label: "Venues",
                         id: "venues",
-                        items: [{label: "venues", link: {type: 'ui-sref', addr: 'venue.list'}}]
+                        items: [{label: "My Venues", link: {type: 'ui-sref', addr: 'venue.list'}}]
                     },
                    /* {
                         label: "Organization",
@@ -89,7 +89,7 @@ app.factory('navBarService', function ($log) {
                 {
                     label: "Devices", //might need to be modified
                     id: "devices",
-                    items: [{label: "Devices", link: {type: 'ui-sref', addr: 'device.managerList'}}]
+                    items: [{label: "Managed Devices", link: {type: 'ui-sref', addr: 'device.managerList'}}]
                 },
                     /*{
                         label: "Organization",

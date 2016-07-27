@@ -9,7 +9,7 @@ addressify = function (address) {
     + address.zip
 };
 
-app.controller("addEditVenueController", function ($scope, $log, nucleus, $state, $http, $q, toastr, uibHelper, venue, edit, uiGmapGoogleMapApi, links, $window) {
+app.controller("addEditVenueController", function ($scope, $log, nucleus, $state, $http, $q, toastr, uibHelper, venue, edit, uiGmapGoogleMapApi, links, $window, admin) {
 
     $log.debug("addEditVenueController starting");
     $scope.$parent.ui.pageTitle = edit ? "Edit Venue" : "Add New Venue";
@@ -21,8 +21,10 @@ app.controller("addEditVenueController", function ($scope, $log, nucleus, $state
     $scope.venue = venue || {showInMobileAppMap: true, address: {}, photos: []};
     $scope.regex = "\\d{5}([\\-]\\d{4})?";
     $scope.confirm = { checked: false };
+    $scope.admin = admin;
     $scope.setForm = function (form) { $scope.form = form; };
     uiGmapGoogleMapApi.then( function (maps) { $scope.maps = maps; });
+
 
     $scope.geolocation = "";
 
@@ -106,10 +108,14 @@ app.controller("addEditVenueController", function ($scope, $log, nucleus, $state
                     .then(function (v) {
                         toastr.success("Venue created", "Success!")
                         if (links.length === 1) {
-                            if ($window.nucleus.roles.indexOf('proprietor.owner') === -1)
+                            if ($window.nucleus.roles.indexOf('proprietor.owner') === -1) {
                                 $window.nucleus.roles.push('proprietor.owner');
+                                // $window.location.reload();
+                            }
                             $state.go('device.userAdd');
                         }
+                        else if (admin)
+                            $state.go('venue.adminView', {id: v.id});
                         else
                             $state.go('venue.view', {id: v.id});
                     })
@@ -157,7 +163,10 @@ app.controller("addEditVenueController", function ($scope, $log, nucleus, $state
                     nucleus.deleteVenue($scope.venue.id)
                         .then(function () {
                             toastr.success("It's gone!", "Venue Deleted");
-                            $state.go('venue.list')
+                            if (admin)
+                                $state.go('venue.adminList');
+                            else
+                                $state.go('venue.list');
                         })
                         .catch(function (err) {
                             toastr.error(err.status, "Problem Deleting Venue");
@@ -167,26 +176,36 @@ app.controller("addEditVenueController", function ($scope, $log, nucleus, $state
     }
 })
 
-app.controller('listVenueController', function ($scope, venues, $log, links) {
+app.controller('listVenueController', function ($scope, venues, $log, links, admin) {
 
     $log.debug("loading listVenueController");
     $scope.$parent.ui.pageTitle = "Venue List";
     $scope.$parent.ui.panelHeading = "";
     $scope.$parent.links = links;
     $scope.venues = venues;
+    $scope.admin = admin;
 
 })
 
-app.controller('viewVenueController', function ($scope, venue, $log, uiGmapGoogleMapApi, nucleus, user, $http, toastr, links) {
+app.controller('viewVenueController', function ($scope, venue, $log, uiGmapGoogleMapApi, nucleus, user, $http, toastr, links, admin) {
     
     $scope.venue = venue;
     $scope.$parent.ui.pageTitle = "Venue Overview";
     $scope.$parent.ui.panelHeading = venue.name;
     $scope.$parent.links = links;
 
+    $scope.admin = admin;
     $scope.uid = user.id;
 
     //$log.log($scope.uid)
+
+    $scope.userRoute = function (id) {
+        if (id === user.id)
+            return "user.edit()";
+        else if (admin)
+            return "user.editUserAdmin({id: user.auth})";
+        return "user.editUserOwner({id: user.auth})";
+    }
 
     $scope.map = {
         center: {

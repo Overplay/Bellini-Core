@@ -248,7 +248,35 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                         {text: "My Venues", link: "venue.list"},
                         {text: "Add Venue", link: "venue.add"}
                     ]
-                }
+                },
+                admin: function () { return false; }
+            },
+            templateUrl: '/uiapp/app/components/venue/viewvenue.partial.html',
+            controller:  'viewVenueController'
+        } )
+
+        .state( 'venue.adminView', {
+            url:         '/admin-view/:id',
+            resolve:     {
+                venue: function ( $http, $stateParams) {
+                    return $http.get( apiPath+"/venue/" +$stateParams.id)
+                        .then( function (data) {
+                            return data.data;
+                        })
+                        .catch(function(err){
+                            return err;
+                        })
+                },
+                user: function(nucleus) {
+                    return nucleus.getMe()
+                },
+                links: function () {
+                    return [
+                        {text: "All Venues", link: "venue.adminList"},
+                        {text: "Add Venue", link: "venue.adminAdd"}
+                    ]
+                },
+                admin: function () { return true; }
             },
             templateUrl: '/uiapp/app/components/venue/viewvenue.partial.html',
             controller:  'viewVenueController'
@@ -275,7 +303,36 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                         {text: "My Venues", link: "venue.list"},
                         {text: "Add Venue", link: "venue.add"}
                     ]
-                }
+                },
+                admin: function () { return false; }
+            },
+            templateUrl: '/uiapp/app/components/venue/addeditvenue.partial.html',
+            controller:  'addEditVenueController'
+        } )
+
+        .state( 'venue.adminEdit', {
+            url:         '/admin-edit/:id',
+            resolve:     {
+
+                venue: function ( $http, $stateParams) {
+                    return $http.get( apiPath+"/venue/" +$stateParams.id)
+                        .then( function (data) {
+                            return data.data;
+                        })
+                        .catch(function(err){
+                            return err;
+                        })
+                },
+                edit: function () {
+                    return true;
+                },
+                links: function () {
+                    return [
+                        {text: "All Venues", link: "venue.adminList"},
+                        {text: "Add Venue", link: "venue.adminAdd"}
+                    ]
+                },
+                admin: function () { return true; }
             },
             templateUrl: '/uiapp/app/components/venue/addeditvenue.partial.html',
             controller:  'addEditVenueController'
@@ -299,7 +356,8 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                         {text: "My Venues", link: "venue.list"},
                         {text: "Add Venue", link: "venue.add"}
                     ]
-                }
+                },
+                admin: function () { return false; }
             }
         })
 
@@ -317,9 +375,10 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                 links: function () {
                     return [
                         {text: "All Venues", link: "venue.adminList"},
-                        {text: "Add Venue", link: "venue.add"}
+                        {text: "Add Venue", link: "venue.adminAdd"}
                     ]
-                }
+                },
+                admin: function () { return true; }
             }
         })
 
@@ -337,7 +396,27 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                         {text: "My Venues", link: "venue.list"},
                         {text: "Add Venue", link: "venue.add"}
                     ]
-                }
+                },
+                admin: function () { return false; }
+            }
+        })
+
+        .state( 'venue.adminAdd', {
+            url: '/admin-add',
+            templateUrl: '/uiapp/app/components/venue/addeditvenue.partial.html',
+            controller: 'addEditVenueController',
+            resolve: {
+                edit: function() { return false; },
+                venue: function () {
+                    return null;
+                },
+                links: function () {
+                    return [
+                        {text: "All Venues", link: "venue.adminList"},
+                        {text: "Add Venue", link: "venue.adminAdd"}
+                    ]
+                },
+                admin: function () { return true; }
             }
         })
 
@@ -354,7 +433,8 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                     return [
                         {text: "Back to Dash", link: "dash"}
                     ]
-                }
+                },
+                admin: function () { return false; }
             }
         })
 

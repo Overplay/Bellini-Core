@@ -47,7 +47,7 @@
                     {{ edit ? "Update" : "Create" }}
                 </button>
                 <button class="btn btn-default" style="margin-left: 10px" ng-if="edit"
-                        ui-sref="venue.view({id: venue.id})">
+                        ui-sref="{{ admin ? 'venue.adminView({id: venue.id})' : 'venue.view({id: venue.id})'}}">
                     Cancel
                 </button>
                 <div class="pull-right" ng-if="edit">
