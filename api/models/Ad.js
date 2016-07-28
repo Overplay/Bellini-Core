@@ -44,9 +44,14 @@ module.exports = {
          },
          metadata: {
          type: 'json',
-         defaultsTo: {}
+         defaultsTo: {}       
 
-         }*/
+         },
+         reviewed: {
+         type:boolean,
+         defaultsTo: false
+         }
+         */
 
 
     }

@@ -7,27 +7,42 @@
                         <table class="table table-striped top15">
                             <tr>
                                 <td>Name</td>
+                                <td></td>
+                                <td></td>
                                 <td>{{advertisement.name}}</td>
                             </tr>
                             <tr>
                                 <td>Description</td>
+                                <td></td>
+                                <td></td>
                                 <td>{{advertisement.description}}</td>
                             </tr>
+
+
                             <tr ng-if="advertisement.mediaMeta">
                                 <td>Media</td>
                                 <td></td>
+                                <td></td>
+                                <td></td>
+
                             </tr>
                             <!--TODO small medium and large-->
-                            <tr ng-if="advertisement.mediaMeta" ng-repeat="media in advertisement.mediaMeta">
-                                <td>{{mediaMeta.updatedAt | date:'medium'}}</td>
-                                <td><a href="media/download/{{media.id}}"><img class="media-prev"
-                                                                               ng-src="media/download/{{media.id}}"/></a>
+                            <tr ng-repeat="size in mediaSizes" ng-if="advertisement.mediaMeta[size]">
+                                <td></td>
+                                <td>{{size}}</td>
+                                <td>{{advertisement.mediaMeta[size].updatedAt | date:'medium'}}</td>
+                                <td><a href="media/download/{{advertisement.mediaMeta[size].id}}"><img
+                                        class="media-prev"
+                                        ng-src="media/download/{{advertisement.mediaMeta[size].id}}"/></a>
                                 </td>
                             </tr>
                         </table>
                     </div>
                 </div>
 
+            </uib-tab>
+            <uib-tab heading="Stats">
+                TODOOOOOOO
             </uib-tab>
             <uib-tab heading="Edit Advertisement"> <!--TODO only show if user can edit advertisment (which roles??) -->
                 <div class="top15" style="padding: 20px; border: 2px solid #cacaca; border-radius: 5px;">
@@ -71,14 +86,13 @@
                                 </tr>
                             </table>-->
                             <img-input prompt="Small" width="800" height="600" dirty="media.sm"
-                                       src-field="advertisement.metaMeta.sm.id" exact></img-input>
+                                       src-field="advertisementUpdate.mediaMeta.sm.id" exact></img-input>
                             <img-input prompt="Medium" width="800" height="600" dirty="media.md"
-                                       src-field="advertisement.metaMeta.md" exact></img-input>
+                                       src-field="advertisementUpdate.mediaMeta.md.id" exact></img-input>
                             <img-input prompt="Large" width="800" height="600" dirty="media.lg"
-                                       src-field="advertisement.metaMeta.lg" exact></img-input>
-                            <img-input prompt="Wide" width="800" height="600" dirty="media.wide"
-                                       src-field="advertisement.metaMeta.wide" exact></img-input>
-
+                                       src-field="advertisementUpdate.mediaMeta.lg.id" exact></img-input>
+                            <img-input prompt="Wide" width="800" height="100" dirty="media.wide"
+                                       src-field="advertisementUpdate.mediaMeta.wide.id" exact></img-input>
                             <!--<div class="panel panel-default">
                                 <div class="panel-heading">Add Media</div>
                                 <div class="panel-body">

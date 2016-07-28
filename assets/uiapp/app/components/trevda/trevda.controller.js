@@ -109,13 +109,22 @@ app.controller("manageAdvertisementController", function ($scope, $log, ads, lin
 });
 
 
-app.controller("editAdvertisementController", function ($scope, $log, $http, $stateParams, toastr, asahiService, links) {
+app.controller("editAdvertisementController", function ($scope, $log, $http, $stateParams, toastr, asahiService, links, advertisement, mediaMeta) {
     $log.debug("editAdvertisementController starting");
+
+    $scope.advertisement = advertisement;
+    $scope.$parent.ui.panelHeading = $scope.advertisement.name;
+    $scope.advertisementUpdate = angular.copy(advertisement);
+
+    $scope.advertisement.mediaMeta = mediaMeta;
+    $scope.advertisementUpdate.mediaMeta = angular.copy(mediaMeta);
 
     $scope.$parent.ui.pageTitle = "Manage Advertisement";
     $scope.$parent.ui.panelHeading = "";
     $scope.$parent.links = links;
 
+    $scope.mediaSizes = ['sm', 'md', 'lg', 'wide']
+    
     $scope.media = {
         sm: null,
         md: null,
@@ -123,29 +132,10 @@ app.controller("editAdvertisementController", function ($scope, $log, $http, $st
         wide: null
     }
 
-    //get the ad and populate media 
-    $http.get("api/v1/ad/" + $stateParams.id)
-        .then(function (data) {
-            $scope.advertisement = data.data;
-            $scope.$parent.ui.panelHeading = $scope.advertisement.name;
-
-            $scope.advertisementUpdate = JSON.parse(JSON.stringify(data.data));
-        })
-        .then(function () {
-            $http.get("ad/getMedia/" + $stateParams.id)
-                .then(function (data) {
-                    $log.log(data)
-                    $scope.advertisement.mediaMeta = data.data;
-                    $scope.advertisementUpdate.mediaMeta = data.data;
-                    _.forEach($scope.advertisementUpdate.mediaMeta, function (m) {
-                        if (m)
-                            m.remove = true; //why 
-                    })
-                })
-        });
 
     //toggle whether to keep or remove the media on update 
     //TODO
+    /*
     $scope.removeMedia = function (id) {
         _.remove($scope.advertisementUpdate.marr, function (i) {
             return id == i;
@@ -164,6 +154,7 @@ app.controller("editAdvertisementController", function ($scope, $log, $http, $st
 
 
     };
+     */
 
     /*
     //remove a file that is queued to be uploaded and added to the ad 
@@ -194,6 +185,7 @@ app.controller("editAdvertisementController", function ($scope, $log, $http, $st
 
     //to update the advertisement 
     $scope.update = function () {
+        delete $scope.advertisementUpdate.mediaMeta
 
         var chain = Promise.resolve();
         _.forEach($scope.media, function (val, key) {
@@ -201,7 +193,7 @@ app.controller("editAdvertisementController", function ($scope, $log, $http, $st
                 chain = chain.then(function () {
                     return asahiService.uploadMedia(val)
                         .then(function (data) {
-                            $scope.advertisement.media[key] = data.data.id;
+                            $scope.advertisementUpdate.media[key] = data.data.id;
                         })
                 })
             }
@@ -219,11 +211,12 @@ app.controller("editAdvertisementController", function ($scope, $log, $http, $st
             })
         });*/
         //update the ad
+
         chain = chain.then(function () {
             return $http.put("api/v1/ad/" + $scope.advertisement.id, $scope.advertisementUpdate)
                 .then(function (data) {
                     $scope.advertisement = data.data;
-                    $scope.advertisementUpdate = JSON.parse(JSON.stringify(data.data));
+                    $scope.advertisementUpdate = angular.copy(data.data);
                     toastr.success("Advertisement info updated", "Success!");
                 })
                 .catch(function (err) {
@@ -236,17 +229,12 @@ app.controller("editAdvertisementController", function ($scope, $log, $http, $st
         chain = chain.then(function () {
             return $http.get("ad/getMedia/" + $stateParams.id)
                 .then(function (data) {
-                    $scope.advertisement.media = data.data;
-                    $scope.advertisementUpdate.media = data.data;
-                    $scope.advertisementUpdate.media.forEach(function (m) {
-                        m.remove = true;
-                    })
+                    $scope.advertisement.mediaMeta = data.data;
+                    $scope.advertisementUpdate.mediaMeta = angular.copy(data.data);
+                    $log.log(data.data)
                 })
         })
-        //clear the files that need to be uploaded
-        chain = chain.then(function () {
-            $scope.filesToUpload = [];
-        })
+
 
     }
 })

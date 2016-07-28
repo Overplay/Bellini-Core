@@ -5,6 +5,7 @@
             <tr>
                 <td>Name</td>
                 <td>Description</td>
+                <td>Accepted</td>
                 <td></td>
             </tr>
             </thead>
@@ -12,6 +13,7 @@
             <tr ng-repeat="advertisement in advertisements">
                 <td>{{advertisement.name}}</td>
                 <td>{{advertisement.description}}</td>
+                <td>{{advertisement.accepted}}</td>
                 <td width="10%"><a ui-sref="advertisement.edit({id: advertisement.id})"
                                    class="btn btn-sm btn-warning">More Info</a></td>
             </tr>

@@ -24,28 +24,13 @@ module.exports = {
 
         Ad.findOne(req.allParams().id)
             .then(function (a) {
-                /*
-                 var medias = [];
 
-
-                 a.marr.forEach(function (m) {
-                 chain = chain.then(function () {
-                 return Media.findOne(m)
-                 .then(function (media) {
-                 medias.push(media);
-                 })
-                 })
-
-                 });
-                 */
                 var media = a.media;
-                sails.log.debug(media)
                 _.forEach(media, function (val, key) {
                     if (val != null) {
                         chain = chain.then(function () {
                             return Media.findOne(val)
                                 .then(function (m) {
-                                    sails.log.debug(m)
                                     media[key] = m;
                                 })
                         })
