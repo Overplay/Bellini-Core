@@ -5,6 +5,8 @@
             <tr>
                 <td>Name</td>
                 <td>Description</td>
+                <td>Reviewed</td>
+                <td>Accepted</td>
                 <td></td>
             </tr>
             </thead>
@@ -12,8 +14,12 @@
             <tr ng-repeat="advertisement in advertisements">
                 <td>{{advertisement.name}}</td>
                 <td>{{advertisement.description}}</td>
-                <td width="10%"><a ui-sref="advertisement.edit({id: advertisement.id})"
-                                   class="btn btn-sm btn-warning">More Info</a></td>
+                <td>{{advertisement.reviewed}}</td>
+                <td>{{advertisement.accepted}}</td>
+                <td ng-if="!admin" width="10%"><a ui-sref="advertisement.edit({id: advertisement.id})"
+                                                  class="btn btn-sm btn-warning">More Info</a></td>
+                <td ng-if="admin" width="10%"><a ui-sref="advertisement.adminReview({id: advertisement.id})"
+                                                 class="btn btn-sm btn-warning">Review</a></td>
             </tr>
             </tbody>
         </table>

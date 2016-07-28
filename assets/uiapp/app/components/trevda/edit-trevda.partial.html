@@ -6,28 +6,50 @@
                     <div class="panel-body">
                         <table class="table table-striped top15">
                             <tr>
-                                <td>Name</td>
+                                <td><b>Name</b></td>
+                                <td></td>
+                                <td></td>
                                 <td>{{advertisement.name}}</td>
                             </tr>
                             <tr>
-                                <td>Description</td>
+                                <td><b>Description</b></td>
+                                <td></td>
+                                <td></td>
                                 <td>{{advertisement.description}}</td>
                             </tr>
+
+                            <tr>
+                                <td><b>Reviewed</b></td>
+                                <td>{{advertisement.reviewed}}</td>
+                                <td><b>Accepted</b></td>
+                                <td>{{advertisement.accepted}}</td>
+                            </tr>
+
+
                             <tr ng-if="advertisement.mediaMeta">
-                                <td>Media</td>
+                                <td><b>Media</b></td>
                                 <td></td>
+                                <td></td>
+                                <td></td>
+
                             </tr>
                             <!--TODO small medium and large-->
-                            <tr ng-if="advertisement.mediaMeta" ng-repeat="media in advertisement.mediaMeta">
-                                <td>{{mediaMeta.updatedAt | date:'medium'}}</td>
-                                <td><a href="media/download/{{media.id}}"><img class="media-prev"
-                                                                               ng-src="media/download/{{media.id}}"/></a>
+                            <tr ng-repeat="size in mediaSizes" ng-if="advertisement.mediaMeta[size]">
+                                <td></td>
+                                <td><b>{{size}}</b></td>
+                                <td>{{advertisement.mediaMeta[size].updatedAt | date:'medium'}}</td>
+                                <td><a href="media/download/{{advertisement.mediaMeta[size].id}}"><img
+                                        class="media-prev"
+                                        ng-src="media/download/{{advertisement.mediaMeta[size].id}}"/></a>
                                 </td>
                             </tr>
                         </table>
                     </div>
                 </div>
 
+            </uib-tab>
+            <uib-tab heading="Stats">
+                TODOOOOOOO
             </uib-tab>
             <uib-tab heading="Edit Advertisement"> <!--TODO only show if user can edit advertisment (which roles??) -->
                 <div class="top15" style="padding: 20px; border: 2px solid #cacaca; border-radius: 5px;">
@@ -43,75 +65,15 @@
                                 <input type="text" class="form-control" id="desc"
                                        ng-model="advertisementUpdate.description"/>
                             </fieldset>
-                            <!--old media stuff
-                            <table class="table  top15">
-                                <thead ng-if="advertisement.media.length > 0">
-                                <td><h3>Media</h3></td>
-                                <td></td>
-                                <td></td>
-                                </thead>
-                                <tr ng-if="advertisement.media.length > 0"
-                                    ng-repeat="media in advertisementUpdate.media" id="media_{{media.id}}">
-                                    <td>{{media.createdAt | date:'medium'}}</td>
-                                    <!-- TODO ADD NAME TO MEDIA?
-                                    <td><a href="media/download/{{media.id}}"><img class="media-prev"
-                                                                                   ng-src="media/download/{{media.id}}"/></a>
-                                    </td>
-                                    <td>
-                                        <button type="button" ng-click="removeMedia(media.id)" class="btn btn-danger"
-                                                ng-if="media.remove">
-                                            Remove
-                                        </button>
-                                        <button type="button" ng-click="keepMedia(media.id)" class="btn btn-warning"
-                                                ng-if="!media.remove">
-                                            Keep
-                                        </button>
-                                    </td>
 
-                                </tr>
-                            </table>-->
                             <img-input prompt="Small" width="800" height="600" dirty="media.sm"
-                                       src-field="advertisement.metaMeta.sm.id" exact></img-input>
+                                       src-field="advertisementUpdate.mediaMeta.sm.id" exact></img-input>
                             <img-input prompt="Medium" width="800" height="600" dirty="media.md"
-                                       src-field="advertisement.metaMeta.md" exact></img-input>
+                                       src-field="advertisementUpdate.mediaMeta.md.id" exact></img-input>
                             <img-input prompt="Large" width="800" height="600" dirty="media.lg"
-                                       src-field="advertisement.metaMeta.lg" exact></img-input>
-                            <img-input prompt="Wide" width="800" height="600" dirty="media.wide"
-                                       src-field="advertisement.metaMeta.wide" exact></img-input>
-
-                            <!--<div class="panel panel-default">
-                                <div class="panel-heading">Add Media</div>
-                                <div class="panel-body">
-                                    <div class="row">
-                                        <div class="dz" drag-and-drop on-drop="addFilesToUpload">
-                                            <p> DROP FILES HERE </p>
-                                        </div>
-                                    </div>
-                                    <br>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div ng-show="filesToUpload.length>0">
-                                                <div class="panel panel-default">
-                                                    <div class="panel-heading">
-                                                        Files to Create Media From
-                                                    </div>
-                                                    <div class="panel-body">
-                                                        <ul>
-                                                            <li ng-repeat="f in filesToUpload track by $index">
-                                                                {{f.name}}
-                                                                <button type="button" ng-click="removeUpload($index)">
-                                                                    Remove
-                                                                </button>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>-->
-
+                                       src-field="advertisementUpdate.mediaMeta.lg.id" exact></img-input>
+                            <img-input prompt="Wide" width="800" height="100" dirty="media.wide"
+                                       src-field="advertisementUpdate.mediaMeta.wide.id" exact></img-input>
 
                             <div class="form-actions">
 

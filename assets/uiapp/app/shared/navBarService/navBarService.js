@@ -28,12 +28,12 @@ app.factory('navBarService', function ($log) {
                         label: "Venues",
                         id: "venues",
                         items: [{label: "venues", link: {type: 'ui-sref', addr: 'venue.adminList'}}]
-                    }
-                    /*{
+                    },
+                    {
                      label: "Advertisements",
                      id: "trevda",
                      items: [{label: "Ads", link: {type: 'ui-sref', addr: 'advertisement.adminList'}}]
-                     },*/
+                    }
                 ],
                 right: [{
                     label: 'Account',

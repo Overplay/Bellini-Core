@@ -1,0 +1,58 @@
+<div class="row">
+    <div class="col-sm-10 col-sm-offset-1">
+        <div class="top15" style="padding: 20px; border: 2px solid #cacaca; border-radius: 5px;">
+            <div class="panel-body">
+                <table class="table table-striped top15">
+                    <tr>
+                        <td><b>Name</b></td>
+                        <td></td>
+                        <td></td>
+                        <td>{{advertisement.name}}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Description</b></td>
+                        <td></td>
+                        <td></td>
+                        <td>{{advertisement.description}}</td>
+                    </tr>
+
+                    <tr>
+                        <td><b>Reviewed</b></td>
+                        <td>{{advertisement.reviewed}}</td>
+                        <td><b>Accepted</b></td>
+                        <td>{{advertisement.accepted}}</td>
+                    </tr>
+
+
+                    <tr ng-if="advertisement.mediaMeta">
+                        <td>Media</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+
+                    </tr>
+                    <tr ng-repeat="size in mediaSizes" ng-if="advertisement.media[size]">
+                        <td><b>{{size}}</b></td>
+                        <td></td>
+                        <td></td>
+
+                        <td><a href="media/download/{{advertisement.media[size]}}"><img
+                                class="media-prev"
+                                ng-src="media/download/{{advertisement.media[size]}}"/></a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="text-center">
+                <button class="btn btn-md btn-success" ng-click="review(true)">Accept</button>
+                <button class="btn btn-md btn-danger" ng-click="review(false)">Reject</button>
+            </div>
+            <div ng-if="advertisement.accepted" class="text-center">
+                <br>
+                <b>Place in venue</b>
+                <br>
+                venue selector somehow
+            </div>
+        </div>
+    </div>
+</div>
