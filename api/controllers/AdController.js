@@ -49,6 +49,23 @@ module.exports = {
                 res.serverError(err);
             })
 
+    },
+
+    review: function (req, res) {
+        var params = req.allParams();
+
+        if (typeof params.accepted == 'undefined' || !params.id) {
+            return res.badRequest("Invalid req params ")
+        }
+        else {
+            Ad.update(params.id, {accepted: params.accepted, reviewed: true})
+                .then(function (updated) {
+                    if (updated.length == 1) {
+                        return res.json(updated[0])
+                    }
+                    else return res.serverError("Too many or too few ads updated")
+                })
+        }
     }
 
 };

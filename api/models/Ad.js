@@ -26,6 +26,10 @@ module.exports = {
                 wide: null
             }
         },
+        reviewed: {
+            type: 'boolean',
+            defaultsTo: false
+        },
         accepted: {
             type: 'boolean',
             defaultsTo: false
