@@ -187,7 +187,7 @@ app.controller('listVenueController', function ($scope, venues, $log, links, adm
 
 })
 
-app.controller('viewVenueController', function ($scope, venue, $log, uiGmapGoogleMapApi, nucleus, user, $http, toastr, links, admin) {
+app.controller('viewVenueController', function ($scope, venue, $log, uiGmapGoogleMapApi, uibHelper, nucleus, user, $http, toastr, links, admin) {
     
     $scope.venue = venue;
     $scope.$parent.ui.pageTitle = "Venue Overview";
@@ -310,39 +310,46 @@ app.controller('viewVenueController', function ($scope, venue, $log, uiGmapGoogl
 
     }
 
-    $scope.removeManager = function (userId) {
+    $scope.removeManager = function (user) {
         var venueId = $scope.venue.id;
 
-        $http.post('/venue/removeManager', {
-            params: {
-                userId: userId,
-                venueId: venueId
-            }
-        })
-            .then(function (response) {
-                $scope.venue.venueManagers = response.data
-                toastr.success("Removed manager", "Nice!")
+        uibHelper.confirmModal("Remove Manager?", "Are you sure you want to remove " + user.firstName + " " + user.lastName + " as a manager of " + $scope.venue.name + "?", true)
+            .then( function (confirmed) {
+                $http.post('/venue/removeManager', {
+                    params: {
+                        userId: user.id,
+                        venueId: venueId
+                    }
+                })
+                    .then(function (response) {
+                        $scope.venue.venueManagers = response.data
+                        toastr.success("Removed manager", "Nice!")
 
-                $scope.input = ''
+                        $scope.input = ''
+                    })
             })
     }
 
     $scope.removeOwner = function (userId) {
         var venueId = $scope.venue.id;
 
-        $http.post('/venue/removeOwner', {
-            params: {
-                userId: userId,
-                venueId: venueId
-            }
-        })
-            .then(function (response) {
-                $log.log(response)
-                $scope.venue.venueOwners = response.data
-                toastr.success("Removed owner", "Nice!")
+        uibHelper.confirmModal("Remove Owner?", "Are you sure you want to remove this owner?", true)
+            .then( function (confirmed) {
+                $http.post('/venue/removeOwner', {
+                    params: {
+                        userId: userId,
+                        venueId: venueId
+                    }
+                })
+                    .then(function (response) {
+                        $log.log(response)
+                        $scope.venue.venueOwners = response.data
+                        toastr.success("Removed owner", "Nice!")
 
-                $scope.input = ''
-            })
+                        $scope.input = ''
+                    })
+            });
+
     }
 
 

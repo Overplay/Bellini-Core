@@ -193,7 +193,25 @@ app.controller("editUserAdminController", function ($scope, $http, $state, $log,
                     $scope.confirm.checked = false;
                 })
 
+    }
 
+    $scope.removeManager = function (venue) {
+        var venueId = venue.id;
+        var userId = user.user.id;
+
+        uibHelper.confirmModal("Remove Manager?", "Are you sure you want to remove " + $scope.user.user.firstName + " " + $scope.user.user.lastName + " as a manager of " + venue.name + "?", true)
+            .then( function (confirmed) {
+                $http.post('/venue/removeManager', {
+                    params: {
+                        userId: userId,
+                        venueId: venueId
+                    }
+                })
+                    .then(function (response) {
+                        $scope.user.user.managedVenues.splice($scope.user.user.managedVenues.indexOf(venue), 1);
+                        toastr.success("Removed manager", "Nice!");
+                    })
+            })
     }
 
 } );
