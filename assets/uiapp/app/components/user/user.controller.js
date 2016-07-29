@@ -15,7 +15,7 @@ app.controller("editUserController", function ($scope, $log, user, toastr, nucle
     $scope.user.email = user.auth.email;
 
 
-    $scope.advertiser = _.findIndex($scope.user.roleTypes, "advertiser") != -1
+    $scope.advertiser = $scope.user.roleTypes.indexOf("advertiser") != -1
 
     $scope.$parent.ui.panelHeading = user.email;
     $scope.$parent.ui.pageTitle = "Edit User";
@@ -66,6 +66,7 @@ app.controller("editUserController", function ($scope, $log, user, toastr, nucle
                 toastr.error( "Something went wrong", "Dang!" );
             } );
     }
+
 
     $scope.becomeAdvertiser = function () {
         //TODO ask them if its cool to become one etc
