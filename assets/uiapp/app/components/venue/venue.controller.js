@@ -9,7 +9,7 @@ addressify = function (address) {
     + address.zip
 };
 
-app.controller("addEditVenueController", function ($scope, $log, nucleus, $state, $http, $q, toastr, uibHelper, venue, edit, uiGmapGoogleMapApi, links, $window, admin) {
+app.controller("addEditVenueController", function ($scope, $log, nucleus, $state, $http, $q, toastr, uibHelper, venue, edit, uiGmapGoogleMapApi, links, $window, admin, $rootScope) {
 
     $log.debug("addEditVenueController starting");
     $scope.$parent.ui.pageTitle = edit ? "Edit Venue" : "Add New Venue";
@@ -105,19 +105,16 @@ app.controller("addEditVenueController", function ($scope, $log, nucleus, $state
         else {
             promise = promise.then( function() {
                 nucleus.addVenue($scope.venue)
-                    .then(function (v) {
+                    .then(function (res) {
                         toastr.success("Venue created", "Success!")
                         if (links.length === 1) {
-                            if ($window.nucleus.roles.indexOf('proprietor.owner') === -1) {
-                                $window.nucleus.roles.push('proprietor.owner');
-                                // $window.location.reload();
-                            }
+                            $rootScope.$emit('navBarUpdate', res.user.roleTypes);
                             $state.go('device.userAdd');
                         }
                         else if (admin)
-                            $state.go('venue.adminView', {id: v.id});
+                            $state.go('venue.adminView', {id: res.venue.id});
                         else
-                            $state.go('venue.view', {id: v.id});
+                            $state.go('venue.view', {id: res.venue.id});
                     })
                     .catch(function (err) {
                         toastr.error("Something went wrong", "Error")

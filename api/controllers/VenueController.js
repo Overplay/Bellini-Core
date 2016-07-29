@@ -55,13 +55,14 @@ module.exports = {
                     user.save(function (err) {
                         if (err)
                             sails.log.debug(err);
+                        req.session.user = user;
                         Venue.create(newVenue)
                             .then(function (v) {
                                 //TODO test venue owners
                                 v.venueOwners.add(req.session.user);
                                 v.save();
                                 sails.log.debug("venue ownership", v)
-                                return res.json(v);
+                                return res.json({ venue: v, user: user })
                             })
                             .catch(function (err) {
                                 return res.serverError(err); //give out error (will only show error info if not in production)

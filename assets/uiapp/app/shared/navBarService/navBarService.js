@@ -243,9 +243,10 @@ app.factory('navBarService', function ($log) {
         ;
 
 
-    service.getMenuForRoles = function () {
+    service.getMenuForRoles = function (r) {
         //init menus so that it can be merged with
         var menus = {};
+        var roles = r || nucleus.roles;
 
         //helper method to combine arrays within the object
         //basically it prevents duplicate tabs and combines sub links
@@ -268,10 +269,10 @@ app.factory('navBarService', function ($log) {
             }
         }
 
-        //step through all the roles and append them to the nav bar
+        // step through all the roles and append them to the nav bar
         // order of tabs for multiple roles??
 
-        nucleus.roles.forEach(function (val) {
+        roles.forEach(function (val) {
             menus = _.mergeWith(menus, _navBarMenus[val], mergeHelper);
 
         });
