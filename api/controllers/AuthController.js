@@ -93,11 +93,11 @@ module.exports = require( 'waterlock' ).waterlocked( {
 
 
     //TODO add role so that a user can become a advertiser 
-    addRole: function ( req, res ) {
+    /*addRole: function ( req, res ) { MOVED TO USERCONTROLLLER
 
         var params = req.allParams();
 
-        if ( ( params.email === undefined) || (params.newpass === undefined) ) {
+     if ( !params.id ) {
             res.badRequest();
         } else {
             AdminService.changePwd( params.email, params.newpass )
@@ -109,7 +109,7 @@ module.exports = require( 'waterlock' ).waterlocked( {
                 } )
         }
 
-    },
+     },*/
 
     addUser: function ( req, res ) {
         //sails.log.debug(req)

@@ -238,11 +238,30 @@ module.exports = require('waterlock').actions.user({
             return res.json(users)
         })
 
-        
+
+    },
 
 
+    addRole: function (req, res) {
 
+        var params = req.allParams();
 
+        if (!params.id || !params.roleName) {
+            res.badRequest();
+        } else {
+            User.findOne(params.id)
+                .then(function (u) {
+                    u.roles = _.union(u.roles, [RoleCacheService.roleByName(params.roleName)])
+                    u.save(function (err) {
+                        if (err)
+                            return res.serverError("Add role error ")
+                        else {
+                            req.session.user = u
+                            return res.json(u)
+                        }
+                    })
+                })
+        }
 
     }
 

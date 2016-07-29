@@ -8,6 +8,7 @@
 app.controller("dashController", function ($scope, $log, user, $state) {
     $log.log("starting dashController")
 
+    $log.log(user)
     
     $scope.roles = user.roleTypes;
 
