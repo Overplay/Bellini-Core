@@ -9,7 +9,7 @@ addressify = function (address) {
     + address.zip
 };
 
-app.controller("addEditVenueController", function ($scope, $log, nucleus, $state, $http, $q, toastr, uibHelper, venue, edit, uiGmapGoogleMapApi, links) {
+app.controller("addEditVenueController", function ($scope, $log, nucleus, $state, $http, $q, toastr, uibHelper, venue, edit, uiGmapGoogleMapApi, links, $window, admin, $rootScope) {
 
     $log.debug("addEditVenueController starting");
     $scope.$parent.ui.pageTitle = edit ? "Edit Venue" : "Add New Venue";
@@ -21,8 +21,10 @@ app.controller("addEditVenueController", function ($scope, $log, nucleus, $state
     $scope.venue = venue || {showInMobileAppMap: true, address: {}, photos: []};
     $scope.regex = "\\d{5}([\\-]\\d{4})?";
     $scope.confirm = { checked: false };
+    $scope.admin = admin;
     $scope.setForm = function (form) { $scope.form = form; };
     uiGmapGoogleMapApi.then( function (maps) { $scope.maps = maps; });
+
 
     $scope.geolocation = "";
 
@@ -103,9 +105,16 @@ app.controller("addEditVenueController", function ($scope, $log, nucleus, $state
         else {
             promise = promise.then( function() {
                 nucleus.addVenue($scope.venue)
-                    .then(function (v) {
+                    .then(function (res) {
                         toastr.success("Venue created", "Success!")
-                        $state.go('venue.view', {id: v.id});
+                        if (links.length === 1) {
+                            $rootScope.$emit('navBarUpdate', res.user.roleTypes);
+                            $state.go('device.userAdd');
+                        }
+                        else if (admin)
+                            $state.go('venue.adminView', {id: res.venue.id});
+                        else
+                            $state.go('venue.view', {id: res.venue.id});
                     })
                     .catch(function (err) {
                         toastr.error("Something went wrong", "Error")
@@ -116,10 +125,15 @@ app.controller("addEditVenueController", function ($scope, $log, nucleus, $state
     };
 
     $scope.getResults = function () {
-        return $http.get('/venue/yelpSearch', {params: $scope.parameters, timeout: 2000})
-            .then(function (data) {
-                return data.data.businesses;
-            })
+        if ($scope.parameters.location) {
+            return $http.get('/venue/yelpSearch', {params: $scope.parameters, timeout: 2000})
+                .then(function (data) {
+                    return data.data.businesses;
+                })
+        }
+
+        return null;
+
     };
 
     $scope.selected = function ($item, $model) {
@@ -146,7 +160,10 @@ app.controller("addEditVenueController", function ($scope, $log, nucleus, $state
                     nucleus.deleteVenue($scope.venue.id)
                         .then(function () {
                             toastr.success("It's gone!", "Venue Deleted");
-                            $state.go('venue.list')
+                            if (admin)
+                                $state.go('venue.adminList');
+                            else
+                                $state.go('venue.list');
                         })
                         .catch(function (err) {
                             toastr.error(err.status, "Problem Deleting Venue");
@@ -156,26 +173,36 @@ app.controller("addEditVenueController", function ($scope, $log, nucleus, $state
     }
 })
 
-app.controller('listVenueController', function ($scope, venues, $log, links) {
+app.controller('listVenueController', function ($scope, venues, $log, links, admin) {
 
     $log.debug("loading listVenueController");
     $scope.$parent.ui.pageTitle = "Venue List";
     $scope.$parent.ui.panelHeading = "";
     $scope.$parent.links = links;
     $scope.venues = venues;
+    $scope.admin = admin;
 
 })
 
-app.controller('viewVenueController', function ($scope, venue, $log, uiGmapGoogleMapApi, nucleus, user, $http, toastr, links) {
+app.controller('viewVenueController', function ($scope, venue, $log, uiGmapGoogleMapApi, uibHelper, nucleus, user, $http, toastr, links, admin) {
     
     $scope.venue = venue;
     $scope.$parent.ui.pageTitle = "Venue Overview";
     $scope.$parent.ui.panelHeading = venue.name;
     $scope.$parent.links = links;
 
+    $scope.admin = admin;
     $scope.uid = user.id;
 
     //$log.log($scope.uid)
+
+    $scope.userRoute = function (id) {
+        if (id === user.id)
+            return "user.edit()";
+        else if (admin)
+            return "user.editUserAdmin({id: user.auth})";
+        return "user.editUserOwner({id: user.auth})";
+    }
 
     $scope.map = {
         center: {
@@ -280,39 +307,46 @@ app.controller('viewVenueController', function ($scope, venue, $log, uiGmapGoogl
 
     }
 
-    $scope.removeManager = function (userId) {
+    $scope.removeManager = function (user) {
         var venueId = $scope.venue.id;
 
-        $http.post('/venue/removeManager', {
-            params: {
-                userId: userId,
-                venueId: venueId
-            }
-        })
-            .then(function (response) {
-                $scope.venue.venueManagers = response.data
-                toastr.success("Removed manager", "Nice!")
+        uibHelper.confirmModal("Remove Manager?", "Are you sure you want to remove " + user.firstName + " " + user.lastName + " as a manager of " + $scope.venue.name + "?", true)
+            .then( function (confirmed) {
+                $http.post('/venue/removeManager', {
+                    params: {
+                        userId: user.id,
+                        venueId: venueId
+                    }
+                })
+                    .then(function (response) {
+                        $scope.venue.venueManagers = response.data
+                        toastr.success("Removed manager", "Nice!")
 
-                $scope.input = ''
+                        $scope.input = ''
+                    })
             })
     }
 
     $scope.removeOwner = function (userId) {
         var venueId = $scope.venue.id;
 
-        $http.post('/venue/removeOwner', {
-            params: {
-                userId: userId,
-                venueId: venueId
-            }
-        })
-            .then(function (response) {
-                $log.log(response)
-                $scope.venue.venueOwners = response.data
-                toastr.success("Removed owner", "Nice!")
+        uibHelper.confirmModal("Remove Owner?", "Are you sure you want to remove this owner?", true)
+            .then( function (confirmed) {
+                $http.post('/venue/removeOwner', {
+                    params: {
+                        userId: userId,
+                        venueId: venueId
+                    }
+                })
+                    .then(function (response) {
+                        $log.log(response)
+                        $scope.venue.venueOwners = response.data
+                        toastr.success("Removed owner", "Nice!")
 
-                $scope.input = ''
-            })
+                        $scope.input = ''
+                    })
+            });
+
     }
 
 

@@ -84,6 +84,52 @@ module.exports = require('waterlock').actions.user({
 
     },
 
+    getManagedDevices: function (req, res) {
+
+        var id;
+
+        if (req.allParams() && req.allParams().id)
+            id = req.allParams().id; //given ID
+        else if (req.session && req.session.user.id)
+            id = req.session.user.id; //otherwise use current user
+        else
+            return res.badRequest('Not logged in and no given id')
+
+        User.findOne({id: id})
+            .populate("managedVenues")
+            .then(function (user) {
+                if (user) {
+                    //sails.log.debug(user)
+                    var devices = [];
+
+                    var chain = Promise.resolve()
+
+
+                    user.managedVenues.forEach(function (venue) {
+                        chain = chain.then(function () {
+                            return Venue.findOne({id: venue.id})
+                                .populate("devices")
+                                .then(function (v) {
+                                    devices = _.union(devices, v.devices);
+                                })
+                        })
+                    })
+
+                    chain.then(function () {
+                        return res.json(devices)
+                    })
+
+                }
+                else
+                    return res.badRequest();
+            })
+
+            .catch(function (err) {
+                return res.serverError(err);
+            })
+
+    },
+
     //gets the owned Venues of the user
     getVenues: function (req, res) {
         var id;

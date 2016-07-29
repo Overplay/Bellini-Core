@@ -17,7 +17,7 @@
                        v.address.street2 + " " +
                        v.address.city + ", " +
                        v.address.state}}</td>
-                <td><a ui-sref="venue.view({id: v.id})" class="btn btn-sm btn-warning">MORE INFO</a></td>
+                <td><a ui-sref="{{ admin ? 'venue.adminView({id: v.id})' : 'venue.view({id: v.id})' }}" class="btn btn-sm btn-warning">MORE INFO</a></td>
             </tr>
             </tbody>
         </table>

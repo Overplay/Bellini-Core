@@ -132,7 +132,7 @@ module.exports = {
 
         return Promise( function(resolve, reject){
 
-            User.findOneById(userId)
+            User.findOne(userId)
                 .then( function(user){
                     if (!user)
                         return reject( new Error('No such user id'));
@@ -144,10 +144,10 @@ module.exports = {
                                 // So in theory we could have a role get deleted out and not fixed in the db
                                 // we will ignore that here and just not return ot throw such
                                 if (role)
-                                    rval.push( );
+                                    rval.push(role);
                             });
                     })
-                
+
                 })
             
 

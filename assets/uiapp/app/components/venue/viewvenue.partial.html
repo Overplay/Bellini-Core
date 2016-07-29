@@ -6,7 +6,7 @@
 
 <div class="top15 sidepad10">
 
-    <a ui-sref="venue.edit({id: venue.id})" class="btn btn-primary pull-right">Edit</a>
+    <a ui-sref="{{ admin ? 'venue.adminEdit({id: venue.id})' : 'venue.edit({id: venue.id})'}}" class="btn btn-primary pull-right">Edit</a>
 
     <a ng-click="showMap = !showMap;" class="btn btn-primary" style="margin-bottom: 15px" ng-init="showMap = true">
         {{!showMap ? "Show" : "Hide"}} Map
@@ -39,7 +39,7 @@
         <tr ng-repeat="device in venue.devices">
             <td>{{device.name}}</td>
             <td>{{device.locationWithinVenue}}</td>
-            <td width="10%"><a ui-sref="device.manageDevice({id: device.id})" class="btn btn-sm btn-warning">More
+            <td width="10%"><a ui-sref="{{admin ? 'device.adminManage({id: device.id})' : 'device.ownerManage({id: device.id})'}}" class="btn btn-sm btn-warning">More
                 Info</a></td>
         </tr>
         </tbody>
@@ -58,9 +58,9 @@
         <tr ng-repeat="user in venue.venueManagers">
             <td>{{user.firstName}} {{user.lastName}}</td>
             <td>
-                <button class="btn btn-sm btn-danger" ng-click="removeManager(user.id)">Remove</button>
+                <button class="btn btn-sm btn-danger" ng-click="removeManager(user)">Remove</button>
             </td>
-            <td width="10%"><a ui-sref="user.editUserOwner({id: user.auth})" class="btn btn-sm btn-warning">More
+            <td width="10%"><a ui-sref="{{admin ? 'user.editUserAdmin({id: user.auth})' : 'user.editUserOwner({id: user.auth})'}}" class="btn btn-sm btn-warning">More
                 info</a></td>
         </tr>
         </tbody>
@@ -82,7 +82,7 @@
             <td>
                 <button class="btn btn-sm btn-danger" ng-click="removeOwner(user.id)" ng-if="user.id != uid && venue.venueOwners.length > 1">Remove</button>
             </td>
-            <td width="10%"><a ui-sref="{{user.id !== uid ? 'user.editUserOwner({id: user.id})' : 'user.editUser()'}}" class="btn btn-sm btn-warning">More
+            <td width="10%"><a ui-sref="{{userRoute(user.id)}}" class="btn btn-sm btn-warning">More
                 info</a></td>
         </tr>
         </tbody>
@@ -91,7 +91,7 @@
     <div>
         Add Owners and Managers <!--TODO might have to move this to EDIT venue? ?-->
         <input type="text" ng-model="input"
-               placeholder="Search for a user to add by Name or Email"
+               placeholder="Enter a user's email"
                uib-typeahead="user as user.name + ' - ' + user.email for user in searchUsers($viewValue)"
                typeahead-loading="loadingUsers"
                typeahead-no-results="noResults" class="form-control">

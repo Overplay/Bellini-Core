@@ -9,7 +9,12 @@ app.directive("genNavigationBar", function ($log, navBarService) {
             templateUrl: "/uiapp/app/components/directives/navbar/gennavbar.template.html",
             link: function (scope, element, attrs) {
                 scope.menus = navBarService.getMenuForRoles();
-                
+
+                scope.$on("navBarUpdate", function(event, r) {
+                    $log.log('UPDATE');
+                    scope.menus = navBarService.getMenuForRoles(r);
+                    $log.log(scope.menus);
+                })
             }
 
         }

@@ -151,14 +151,6 @@
 
             }
 
-            service.getUserVenues = function (userId) {
-                if (!userId)
-                    throw new Error("Bad userId");
-
-                var endPoint = _apiPath + '/user/' + userId + '/venues';
-                return apiGet(endPoint);
-            }
-
             service.updateUser = function ( userId, newFields ) {
 
                 if (!userId)

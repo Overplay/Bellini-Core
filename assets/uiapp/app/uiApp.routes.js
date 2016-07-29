@@ -246,9 +246,37 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                 links: function () {
                     return [
                         {text: "My Venues", link: "venue.list"},
-                        {text: "Add Venue", link: "venue.new"}
+                        {text: "Add Venue", link: "venue.add"}
                     ]
-                }
+                },
+                admin: function () { return false; }
+            },
+            templateUrl: '/uiapp/app/components/venue/viewvenue.partial.html',
+            controller:  'viewVenueController'
+        } )
+
+        .state( 'venue.adminView', {
+            url:         '/admin-view/:id',
+            resolve:     {
+                venue: function ( $http, $stateParams) {
+                    return $http.get( apiPath+"/venue/" +$stateParams.id)
+                        .then( function (data) {
+                            return data.data;
+                        })
+                        .catch(function(err){
+                            return err;
+                        })
+                },
+                user: function(nucleus) {
+                    return nucleus.getMe()
+                },
+                links: function () {
+                    return [
+                        {text: "All Venues", link: "venue.adminList"},
+                        {text: "Add Venue", link: "venue.adminAdd"}
+                    ]
+                },
+                admin: function () { return true; }
             },
             templateUrl: '/uiapp/app/components/venue/viewvenue.partial.html',
             controller:  'viewVenueController'
@@ -273,9 +301,38 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                 links: function () {
                     return [
                         {text: "My Venues", link: "venue.list"},
-                        {text: "Add Venue", link: "venue.new"}
+                        {text: "Add Venue", link: "venue.add"}
                     ]
-                }
+                },
+                admin: function () { return false; }
+            },
+            templateUrl: '/uiapp/app/components/venue/addeditvenue.partial.html',
+            controller:  'addEditVenueController'
+        } )
+
+        .state( 'venue.adminEdit', {
+            url:         '/admin-edit/:id',
+            resolve:     {
+
+                venue: function ( $http, $stateParams) {
+                    return $http.get( apiPath+"/venue/" +$stateParams.id)
+                        .then( function (data) {
+                            return data.data;
+                        })
+                        .catch(function(err){
+                            return err;
+                        })
+                },
+                edit: function () {
+                    return true;
+                },
+                links: function () {
+                    return [
+                        {text: "All Venues", link: "venue.adminList"},
+                        {text: "Add Venue", link: "venue.adminAdd"}
+                    ]
+                },
+                admin: function () { return true; }
             },
             templateUrl: '/uiapp/app/components/venue/addeditvenue.partial.html',
             controller:  'addEditVenueController'
@@ -297,9 +354,10 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                 links: function () {
                     return [
                         {text: "My Venues", link: "venue.list"},
-                        {text: "Add Venue", link: "venue.new"}
+                        {text: "Add Venue", link: "venue.add"}
                     ]
-                }
+                },
+                admin: function () { return false; }
             }
         })
 
@@ -317,14 +375,15 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                 links: function () {
                     return [
                         {text: "All Venues", link: "venue.adminList"},
-                        {text: "Add Venue", link: "venue.new"}
+                        {text: "Add Venue", link: "venue.adminAdd"}
                     ]
-                }
+                },
+                admin: function () { return true; }
             }
         })
 
-        .state( 'venue.new', {
-            url: '/new',
+        .state( 'venue.add', {
+            url: '/add',
             templateUrl: '/uiapp/app/components/venue/addeditvenue.partial.html',
             controller: 'addEditVenueController',
             resolve: {
@@ -335,9 +394,47 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                 links: function () {
                     return [
                         {text: "My Venues", link: "venue.list"},
-                        {text: "Add Venue", link: "venue.new"}
+                        {text: "Add Venue", link: "venue.add"}
                     ]
-                }
+                },
+                admin: function () { return false; }
+            }
+        })
+
+        .state( 'venue.adminAdd', {
+            url: '/admin-add',
+            templateUrl: '/uiapp/app/components/venue/addeditvenue.partial.html',
+            controller: 'addEditVenueController',
+            resolve: {
+                edit: function() { return false; },
+                venue: function () {
+                    return null;
+                },
+                links: function () {
+                    return [
+                        {text: "All Venues", link: "venue.adminList"},
+                        {text: "Add Venue", link: "venue.adminAdd"}
+                    ]
+                },
+                admin: function () { return true; }
+            }
+        })
+
+        .state( 'venue.userAdd', {
+            url: '/user-add',
+            templateUrl: '/uiapp/app/components/venue/addeditvenue.partial.html',
+            controller: 'addEditVenueController',
+            resolve: {
+                edit: function() { return false; },
+                venue: function () {
+                    return null;
+                },
+                links: function () {
+                    return [
+                        {text: "Back to Dash", link: "dash"}
+                    ]
+                },
+                admin: function () { return false; }
             }
         })
 
@@ -371,6 +468,29 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             }
         })
 
+        .state( 'device.managerList', {
+            url:         '/manager-list',
+            controller:  'listDeviceController',
+            templateUrl: '/uiapp/app/components/device/devicelist.partial.html',
+            resolve:     {
+                devices: function ( $http ) {
+                    return $http.get( '/user/getManagedDevices')
+                        .then(function (data) {
+                            return data.data;
+                        })
+                },
+                admin: function () {
+                    return false;
+                },
+                links: function () {
+                    return [
+                        {link: 'device.managerList', text: "Managed Devices"},
+                        // {link: 'device.add', text: 'Add Device'}
+                    ]
+                }
+            }
+        })
+
         .state( 'device.adminList', {
             url:        '/admin-list',
             controller:  'listDeviceController',
@@ -392,6 +512,27 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                     ]
                 }
             }
+        })
+
+        .state( 'device.userAdd', {
+            url:         '/user-activate',
+            data:        { subTitle: "Add a Device" },
+            controller:  'addDeviceController',
+            templateUrl: '/uiapp/app/components/device/add-device.partial.html',
+            resolve:     {
+                links: function () {
+                    return [
+                        { link: 'dash', text: 'Back to Dash' }
+                    ]
+                },
+                user: function ( nucleus ) {
+                    return nucleus.getMe()
+                        // .then( function (me) {
+                        //     return nucleus.getUser(me.id);
+                        // });
+                }
+            }
+
         })
 
         .state( 'device.add', {
@@ -489,6 +630,33 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                     return [
                         {link: 'device.list', text: 'My Devices'},
                         {link: 'device.add', text: 'Add Device'}
+                    ]
+                }
+            }
+        } )
+
+        .state('device.managerManage', {
+            url: '/manager-manage/:id',
+            data: {subTitle: "Manage Device"},
+            controller: 'editDeviceOwnerController',
+            templateUrl: '/uiapp/app/components/device/manage-device.partial.html',
+            resolve: {
+                device: function ($http, $stateParams) {
+                    return $http.get(apiPath + "/device/" + $stateParams.id)
+                        .then(function (data) {
+                            return data.data;
+                        })
+                        .catch(function(err){
+                            return err;
+                        })
+                },
+                user: function ( nucleus ) {
+                    return nucleus.getMe()
+                },
+                links: function () {
+                    return [
+                        {link: 'device.managerList', text: 'Managed Devices'},
+                        // {link: 'device.add', text: 'Add Device'}
                     ]
                 }
             }
