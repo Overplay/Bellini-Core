@@ -11,9 +11,7 @@ app.directive("genNavigationBar", function ($log, navBarService) {
                 scope.menus = navBarService.getMenuForRoles();
 
                 scope.$on("navBarUpdate", function(event, r) {
-                    $log.log('UPDATE');
                     scope.menus = navBarService.getMenuForRoles(r);
-                    $log.log(scope.menus);
                 })
             }
 
