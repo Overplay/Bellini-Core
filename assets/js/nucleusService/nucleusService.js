@@ -55,7 +55,8 @@
 
             service.authorize = function ( email, pass ) {
 
-                return $http.post( '/auth/login', { email: email, password: pass } )
+
+                return $http.post( '/auth/login', { email: email, password: pass, type: "local" } ) //local required with facebook 
                     .then( function ( resp ) {
                         $log.debug( "User is authorized." );
                         _authorized = true;
@@ -125,10 +126,17 @@
 
 
             }
-            
-            service.addUser = function( email, password, userObj ){
+
+            //TODO test validate TODO handle facebookId 
+            service.addUser = function (email, password, userObj, facebookId, validate) {
                 
-                return $http.post( '/auth/addUser', { email: email, password: password, user: userObj})
+                return $http.post('/auth/addUser', {
+                        email: email,
+                        password: password,
+                        user: userObj,
+                        facebookId: facebookId,
+                        validate: validate
+                    })
                     .then( function(data){
                         return data.data;
                     });

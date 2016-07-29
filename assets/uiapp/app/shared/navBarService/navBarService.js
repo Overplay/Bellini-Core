@@ -29,11 +29,11 @@ app.factory('navBarService', function ($log) {
                         id: "venues",
                         items: [{label: "All Venues", link: {type: 'ui-sref', addr: 'venue.adminList'}}]
                     }
-                    /*{
+                    {
                      label: "Advertisements",
                      id: "trevda",
                      items: [{label: "Ads", link: {type: 'ui-sref', addr: 'advertisement.adminList'}}]
-                     },*/
+                    }
                 ],
                 right: [{
                     label: 'Account',

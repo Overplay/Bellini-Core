@@ -91,6 +91,8 @@ module.exports = require( 'waterlock' ).waterlocked( {
 
     },
 
+
+    //TODO add role so that a user can become a advertiser 
     addRole: function ( req, res ) {
 
         var params = req.allParams();
@@ -125,7 +127,7 @@ module.exports = require( 'waterlock' ).waterlocked( {
 
         }
 
-        AdminService.addUser( params.email, params.password, params.user, true ) //TRUE requires validation
+        AdminService.addUser(params.email, params.password, params.user, params.facebookId, params.validate) //TRUE requires validation
             .then( function ( data ) {
                 //sails.log.debug(data)
                 return res.ok()

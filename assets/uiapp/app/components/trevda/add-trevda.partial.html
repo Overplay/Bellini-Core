@@ -13,8 +13,19 @@
                        ng-model="advertisement.description"/>
             </fieldset>
 
-            <img-input prompt="Image" width="800" height="600" dirty="media.img" src-field="advertisement.marr[0]" exact></img-input>
+            <fieldset>
+                <h2>Images</h2>
+                <img-input prompt="Small" width="800" height="600" dirty="media.sm" src-field="advertisement.images.sm"
+                           exact></img-input>
+                <img-input prompt="Medium" width="800" height="600" dirty="media.md" src-field="advertisement.images.md"
+                           exact></img-input>
+                <img-input prompt="Large" width="800" height="600" dirty="media.lg" src-field="advertisement.images.lg"
+                           exact></img-input>
+                <img-input prompt="Wide" width="800" height="100" dirty="media.wide"
+                           src-field="advertisement.images.wide" exact></img-input>
 
+
+            </fieldset>
             <!--<div class="panel panel-default">
                 <div class="panel-heading">Add Media</div>
                 <div class="panel-body">

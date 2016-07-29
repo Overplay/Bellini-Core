@@ -39,7 +39,7 @@
     "util": "^0.10.3",
     "verror": "^1.6.1",
     "waterlock": "waterlock/waterlock",
-    "waterlock-facebook-auth": "waterlock/waterlock-facebook-auth",
+    "waterlock-facebook-auth": "Overplay/waterlock-facebook-auth",
     "waterlock-local-auth": "Overplay/waterlock-local-auth",
     "yelp": "^1.0.1"
   },

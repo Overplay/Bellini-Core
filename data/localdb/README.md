@@ -1,1 +1,0 @@
-This folder would be used if we use a database that uses a disk file such as localDB or Redis(?).

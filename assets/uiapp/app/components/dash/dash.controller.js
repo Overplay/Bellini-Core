@@ -73,6 +73,7 @@ app.controller("adDashController", function($scope, $log, ads){
 
     var a = angular.copy(ads)
 
+    //todo handle images for dash
     $scope.advertisements = []
     while (a.length) {
         $scope.advertisements.push(a.splice(0,2))

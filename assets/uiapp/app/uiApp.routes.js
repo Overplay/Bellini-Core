@@ -722,6 +722,7 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                     return nucleus.getMe();
                 },
                 links: function(){
+
                     return [
                         {text: 'My Advertisements', link: 'advertisement.list'},
                         {text: 'Create an Advertisement', link: 'advertisement.add'}
@@ -747,18 +748,86 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                     return $http.get("/user/getAlist").then(function (ads) {
                         return ads.data;
                     })
+                },
+                admin: function () {
+                    return false;
                 }
 
 
             }
         } )
 
+        .state('advertisement.adminList', {
+            url: '/admin-list',
+            templateUrl: '/uiapp/app/components/trevda/trevdalist.partial.html',
+            data: {subTitle: "Manage Advertisements"},
+            controller: 'manageAdvertisementController',
+            resolve: {
+                ads: function ($http) {
+                    return $http.get(apiPath + "/ad").then(function (ads) {
+                        return ads.data;
+                    })
+                },
+                admin: function () {
+                    return true
+                },
+                links: function () {
+
+                    return [
+                        {text: 'All Advertisements', link: 'advertisement.adminList'},
+                        //                      {text: 'Create an Advertisement', link: 'advertisement.add'}
+                    ]
+                }
+
+
+            }
+        })
+        .state('advertisement.adminReview', {
+            url: '/admin-review/:id',
+            templateUrl: '/uiapp/app/components/trevda/trevdareview.partial.html',
+            data: {subTitle: "Review Advertisement"},
+            controller: 'reviewAdvertisementController',
+            resolve: {
+                ad: function ($http, $stateParams) {
+                    return $http.get(apiPath + "/ad/" + $stateParams.id).then(function (ad) {
+                        return ad.data;
+                    })
+                },
+                admin: function () {
+                    return true
+                },
+                links: function () {
+
+                    return [
+                        {text: 'All Advertisements', link: 'advertisement.adminList'},
+                        //{text: 'Create an Advertisement', link: 'advertisement.add'}
+                    ]
+                }
+
+
+            }
+        })
+
         .state( 'advertisement.edit', {
             url:         '/edit/:id',
             templateUrl: '/uiapp/app/components/trevda/edit-trevda.partial.html',
             data:        { subTitle: "Edit Advertisement" },
             controller:  'editAdvertisementController',
-            resolve: {}
+            resolve: {
+                advertisement: function ($stateParams, $http) {
+                    return $http.get("api/v1/ad/" + $stateParams.id)
+                        .then(function (data) {
+                            return data.data;
+                        })
+                },
+                mediaMeta: function ($stateParams, $http) {
+                    return $http.get("ad/getMedia/" + $stateParams.id)
+                        .then(function (data) {
+                            return data.data;
+
+                        })
+                }
+            }
 
         } )
         // =========== DASHBOARD

@@ -11,7 +11,7 @@ app.directive('imgInput', function($log, $timeout){
             prompt: '@'
         },
         link: function ( scope, elem, attrs ){
-
+            
             var w = attrs.width || '128';
             var h = attrs.height || '128';
 
