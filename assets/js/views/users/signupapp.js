@@ -31,7 +31,7 @@ app.controller('signupController', function ($scope, $log, nucleus, $timeout, $w
             .then(function (data) {
                 //TODO sign person in for validate = false?? 
                 if (!$scope.validate) {
-                    //only happens when 
+                    //only happens when facebook signup  
                     $window.location.href = '/auth/login?type=facebook'
                 }
                 else {

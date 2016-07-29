@@ -108,6 +108,9 @@ module.exports = require( 'waterlock' ).waterlocked( {
 
             requireValidation = requireValidation || sails.config.waterlock.alwaysValidate;
 
+            //figure out password shit if facebook account (maybe leave blank?????) 
+
+
             Auth.findOne({email: emailAddr}) //TODO check on facebook id too?? 
                 .then(function (auth) {
                     if (auth) {

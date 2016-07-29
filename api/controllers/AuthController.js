@@ -115,6 +115,8 @@ module.exports = require( 'waterlock' ).waterlocked( {
         //sails.log.debug(req)
         var params = req.allParams();
 
+
+        //handle no password if facebook 
         if ( ( params.email === undefined) || (params.password === undefined) || (params.user === undefined) )
             return res.badRequest();
 
