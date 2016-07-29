@@ -28,7 +28,7 @@ app.factory('navBarService', function ($log) {
                         label: "Venues",
                         id: "venues",
                         items: [{label: "All Venues", link: {type: 'ui-sref', addr: 'venue.adminList'}}]
-                    }
+                    },
                     {
                      label: "Advertisements",
                      id: "trevda",
