@@ -18,8 +18,7 @@ app.directive("genNavigationBar", function ($log, navBarService) {
         }
 
     }
-)
-;
+);
 
 
 app.directive("navTabs", function ($log) {

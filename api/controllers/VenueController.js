@@ -101,6 +101,34 @@ module.exports = {
             })
     },
 
+    queryName: function (req, res) {
+
+        var params = req.allParams();
+        var query = params.query;
+        var venues = [];
+        var chain = Promise.resolve();
+
+        chain = chain.then( function() {
+            return Venue.find(
+                {
+                    where: {
+                        name: {'contains' : query}
+                    },
+                    limit: 10
+                })
+                .then( function (venueList) {
+                    venues = venueList;
+                })
+                .catch( function (err) {
+                    sails.log.debug(err);
+                    return res.badRequest(err);
+                })
+                .then( function () {
+                    return res.json(venues);
+                })
+        })
+
+    },
 
     addManager: function (req, res) {
         //params : user ID , venue ID
@@ -251,37 +279,40 @@ module.exports = {
         })
 
         //have to remove from many to many and possibly role
-        chain.then(function () {
-            return User.findOne(params.userId)
-                .populate("managedVenues")
-                .populate("ownedVenues")
-                .then(function (user) {
-                    if (user) {
+        chain.then(function (res) {
+            if (!res) {
+                return User.findOne(params.userId)
+                    .populate("managedVenues")
+                    .populate("ownedVenues")
+                    .then(function (user) {
+                        if (user) {
 
-                        //remove their role as a manager if they are no longer managing any venues
-                        if (user.ownedVenues.length < 2) {
-                            _.remove(user.roles, function (r) {
-                                return r == RoleCacheService.roleByName("proprietor", "owner")
+                            //remove their role as a manager if they are no longer managing any venues
+                            if (user.ownedVenues.length < 2) {
+                                _.remove(user.roles, function (r) {
+                                    return r == RoleCacheService.roleByName("proprietor", "owner")
+                                })
+
+                            }
+
+                            user.ownedVenues.remove(params.venueId)
+                            user.save(function (err) {
+                                if (err)
+                                    sails.log.debug(err)
+                                Venue.findOne(params.venueId)
+                                    .populate("venueOwners")
+                                    .then(function (venue) {
+                                        return res.json(venue.venueOwners)
+
+                                    })
                             })
-
                         }
 
-                        user.ownedVenues.remove(params.venueId)
-                        user.save(function (err) {
-                            if (err)
-                                sails.log.debug(err)
-                            Venue.findOne(params.venueId)
-                                .populate("venueOwners")
-                                .then(function (venue) {
-                                    return res.json(venue.venueOwners)
+                        else
+                            return res.badRequest("invalid user id")
+                    })
+            }
 
-                                })
-                        })
-                    }
-
-                    else
-                        return res.badRequest("invalid user id")
-                })
 
         })
 

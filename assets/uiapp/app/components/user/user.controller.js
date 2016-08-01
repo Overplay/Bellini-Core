@@ -188,11 +188,64 @@ app.controller("editUserAdminController", function ($scope, $http, $state, $log,
                         } )
                 }
 
-                },
-                function (rejected) {
-                    $scope.confirm.checked = false;
-                })
+            },
+            function (rejected) {
+                $scope.confirm.checked = false;
+            })
 
+    }
+
+    $scope.findVenue = function (query) {
+        return $http.get('venue/queryName', {
+            params: { query : query }
+        })
+            .then( function (data) {
+                return data.data;
+            })
+    }
+
+    $scope.addManagedVenue = function () {
+        if ($scope.newManagedVenue) {
+            if (_.findIndex($scope.user.user.managedVenues, function (o) {
+                    return o.id === $scope.newManagedVenue.id
+                }) > -1) {
+                toastr.error("User already manages this venue", "Error!");
+                $scope.newManagedVenue = null;
+            }
+            else {
+                $http.post('/venue/addManager', {params: {userId: user.user.id, venueId: $scope.newManagedVenue.id}})
+                    .then( function ( u ) {
+                        toastr.success( "Managed venue added", "Success!");
+                        $scope.user.user.managedVenues.push($scope.newManagedVenue);
+                        $scope.newManagedVenue = null;
+                    })
+                    .catch( function (err) {
+                        toastr.error( "There was a problem adding the manager", "Error!");
+                    })
+            }
+        }
+    }
+
+    $scope.addOwnedVenue = function () {
+        if ($scope.newOwnedVenue) {
+            if (_.findIndex($scope.user.user.ownedVenues, function (o) {
+                    return o.id === $scope.newOwnedVenue.id
+                }) > -1) {
+                toastr.error("User already manages this venue", "Error!");
+                $scope.newOwnedVenue = null;
+            }
+            else {
+                $http.post('/venue/addOwner', {params: {userId: user.user.id, venueId: $scope.newOwnedVenue.id}})
+                    .then( function ( u ) {
+                        toastr.success( "Owned venue added", "Success!");
+                        $scope.user.user.ownedVenues.push($scope.newOwnedVenue);
+                        $scope.newOwnedVenue = null;
+                    })
+                    .catch( function (err) {
+                        toastr.error( "There was a problem adding the owner", "Error!");
+                    })
+            }
+        }
     }
 
     $scope.removeManager = function (venue) {
@@ -209,11 +262,32 @@ app.controller("editUserAdminController", function ($scope, $http, $state, $log,
                 })
                     .then(function (response) {
                         $scope.user.user.managedVenues.splice($scope.user.user.managedVenues.indexOf(venue), 1);
-                        toastr.success("Removed manager", "Nice!");
+                        toastr.success("Removed managed venue", "Nice!");
                     })
             })
     }
 
+    $scope.removeOwner = function (venue) {
+        var venueId = venue.id;
+        var userId = user.user.id;
+
+        uibHelper.confirmModal("Remove Owner?", "Are you sure you want to remove " + $scope.user.user.firstName + " " + $scope.user.user.lastName + " as an owner of " + venue.name + "?", true)
+            .then( function (confirmed) {
+                $http.post('/venue/removeOwner', {
+                    params: {
+                        userId: userId,
+                        venueId: venueId
+                    }
+                })
+                .then(function (response) {
+                    $scope.user.user.ownedVenues.splice($scope.user.user.ownerVenues.indexOf(venue), 1);
+                    toastr.success("Removed owned venue", "Nice!");
+                })
+                .catch( function (err) {
+                    toastr.error(err.data, "Error!")
+                })
+            })
+    }
 } );
 
 
@@ -246,7 +320,7 @@ app.controller("editUserOwnerController", function ($scope, $http, $state, $log,
 
     }
 
-    $scope.addVenue = function () {
+    $scope.addManagedVenue = function () {
         if ($scope.newManagedVenue) {
             if (_.findIndex($scope.user.user.managedVenues, function (o) {
                     return o.id === $scope.newManagedVenue.id

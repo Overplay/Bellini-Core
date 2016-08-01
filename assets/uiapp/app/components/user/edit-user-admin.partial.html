@@ -54,9 +54,10 @@
                                         <input type="text" class="form-control" id="name1" name="name1"
                                                placeholder="Venue Name"
                                                ng-model="$parent.$parent.$parent.newManagedVenue"
-                                               uib-typeahead="venue as venue.name for venue in ownedVenues | filter:$viewValue"/>
+                                               uib-typeahead="venue as venue.name + ' - ' + venue.address.street + ' ' + venue.address.city + ', ' + venue.address.state
+                                                              for venue in findVenue($viewValue)"/>
                                         <span class="input-group-btn">
-                                            <button class="btn-default btn" ng-click="addVenue()"
+                                            <button class="btn-default btn" ng-click="addManagedVenue()"
                                                     ng-disabled="!$parent.$parent.$parent.newManagedVenue">
                                                 <i class="fa fa-plus fa-fw"></i>
                                             </button>
@@ -74,14 +75,14 @@
                             <tr>
                                 <th>Venue</th>
                                 <th>Address</th>
-                                <!--<th>Remove Owner</th>-->
+                                <th>Remove Owner</th>
                             </tr>
                             </thead>
                             <tbody>
                             <tr ng-repeat="venue in user.user.ownedVenues">
                                 <td>{{ venue.name }}</td>
                                 <td>{{ addressify(venue.address) }}</td>
-                                <!--<td><button class="btn btn-sm btn-danger" ng-click="removeVenue(venue)">Remove</button></td>-->
+                                <td><button class="btn btn-sm btn-danger" ng-click="removeOwner(venue)">Remove</button></td>
                             </tr>
                             </tbody>
                         </table>
@@ -93,9 +94,10 @@
                                         <input type="text" class="form-control" id="name2" name="name2"
                                                placeholder="Venue Name"
                                                ng-model="$parent.$parent.$parent.newOwnedVenue"
-                                               uib-typeahead="venue as venue.name for venue in ownedVenues | filter:$viewValue"/>
+                                               uib-typeahead="venue as venue.name + ' - ' + venue.address.street + ' ' + venue.address.city + ', ' + venue.address.state
+                                                              for venue in findVenue($viewValue)"/>
                                         <span class="input-group-btn">
-                                            <button class="btn-default btn" ng-click="addVenue()"
+                                            <button class="btn-default btn" ng-click="addOwnedVenue()"
                                                     ng-disabled="!$parent.$parent.$parent.newOwnedVenue">
                                                 <i class="fa fa-plus fa-fw"></i>
                                             </button>
