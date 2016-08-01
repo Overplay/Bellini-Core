@@ -182,8 +182,8 @@ module.exports = require('waterlock').actions.user({
     },
 
     //endpoint that finds users with either firstname, lastname or email
-    queryFirstLastEmail: function(req, res) {
-        //TODO policies (very important so nobody malicious queries user info
+    //Huge security hole coal wrote - might be useful for OG's to lookup users tho 
+    /*queryFirstLastEmail: function(req, res) {
 
         var params = req.allParams();
 
@@ -193,8 +193,6 @@ module.exports = require('waterlock').actions.user({
         
         var chain = Promise.resolve();
 
-
-        //TODO limit and exclude OGs
         chain = chain.then(function() {
             return User.find(
                 {
@@ -239,8 +237,41 @@ module.exports = require('waterlock').actions.user({
         })
 
 
+     },*/
+
+    findByEmail: function (req, res) {
+        var params = req.allParams();
+
+        if (!params.email) {
+            res.badRequest();
+        } else {
+            Auth.findOne({email: params.email})
+                .populate("user")
+                .then(function (auth) {
+                    if (auth) {
+                        //success
+                        return res.json(auth)
+                    }
+                    else {
+                        //failure
+                        return res.json({message: "Not found"})
+                    }
+                })
+        }
     },
 
+    inviteUser: function (req, res) {
+        //only allow PO's to do this... still kind of a security hole though
+        //don't want someone sending thousands of emails....
+
+        var params = req.allParams()
+
+        //check params
+
+        MailerService.inviteEmail()
+        
+
+    },
 
     addRole: function (req, res) {
 

@@ -6,7 +6,8 @@
 
 <div class="top15 sidepad10">
 
-    <a ui-sref="{{ admin ? 'venue.adminEdit({id: venue.id})' : 'venue.edit({id: venue.id})'}}" class="btn btn-primary pull-right">Edit</a>
+    <a ui-sref="{{ admin ? 'venue.adminEdit({id: venue.id})' : 'venue.edit({id: venue.id})'}}"
+       class="btn btn-primary pull-right">Edit</a>
 
     <a ng-click="showMap = !showMap;" class="btn btn-primary" style="margin-bottom: 15px" ng-init="showMap = true">
         {{!showMap ? "Show" : "Hide"}} Map
@@ -39,7 +40,9 @@
         <tr ng-repeat="device in venue.devices">
             <td>{{device.name}}</td>
             <td>{{device.locationWithinVenue}}</td>
-            <td width="10%"><a ui-sref="{{admin ? 'device.adminManage({id: device.id})' : 'device.ownerManage({id: device.id})'}}" class="btn btn-sm btn-warning">More
+            <td width="10%"><a
+                    ui-sref="{{admin ? 'device.adminManage({id: device.id})' : 'device.ownerManage({id: device.id})'}}"
+                    class="btn btn-sm btn-warning">More
                 Info</a></td>
         </tr>
         </tbody>
@@ -60,7 +63,9 @@
             <td>
                 <button class="btn btn-sm btn-danger" ng-click="removeManager(user)">Remove</button>
             </td>
-            <td width="10%"><a ui-sref="{{admin ? 'user.editUserAdmin({id: user.auth})' : 'user.editUserOwner({id: user.auth})'}}" class="btn btn-sm btn-warning">More
+            <td width="10%"><a
+                    ui-sref="{{admin ? 'user.editUserAdmin({id: user.auth})' : 'user.editUserOwner({id: user.auth})'}}"
+                    class="btn btn-sm btn-warning">More
                 info</a></td>
         </tr>
         </tbody>
@@ -80,7 +85,9 @@
         <tr ng-repeat="user in venue.venueOwners">
             <td>{{user.firstName}} {{user.lastName}}</td>
             <td>
-                <button class="btn btn-sm btn-danger" ng-click="removeOwner(user.id)" ng-if="user.id != uid && venue.venueOwners.length > 1">Remove</button>
+                <button class="btn btn-sm btn-danger" ng-click="removeOwner(user.id)"
+                        ng-if="user.id != uid && venue.venueOwners.length > 1">Remove
+                </button>
             </td>
             <td width="10%"><a ui-sref="{{userRoute(user.id)}}" class="btn btn-sm btn-warning">More
                 info</a></td>
@@ -89,8 +96,7 @@
 
     </table>
     <div>
-        Add Owners and Managers <!--TODO might have to move this to EDIT venue? ?-->
-        <input type="text" ng-model="input"
+        <!--<input type="text" ng-model="input"
                placeholder="Enter a user's email"
                uib-typeahead="user as user.name + ' - ' + user.email for user in searchUsers($viewValue)"
                typeahead-loading="loadingUsers"
@@ -98,9 +104,26 @@
         <i ng-show="loadingUsers" class="glyphicon glyphicon-refresh"></i>
         <div ng-show="noResults">
             <i class="glyphicon glyphicon-remove"></i> No Results Found
-        </div>
-        <br>
-        <button ng-click="addManager()" ng-disabled="validInput()" class="btn btn-sm btn-success">Add Manager</button>
-        <button ng-click="addOwner()" ng-disabled="validInput()" class="btn btn-sm btn-warning">Add Owner</button>
+        </div>-->
+        <form name="form" role="form">
+            <div class="form-group"
+                 ng-class="{ 'has-error' : !form.email.$valid && form.email.$touched, 'has-success' : form.email.$valid}">
+                Add Owners and Managers <!--TODO might have to move this to EDIT venue? ?-->
+
+                <div class="input-group ">
+                    <span class="input-group-addon"><i class="glyphicon-envelope glyphicon"></i></span>
+
+                    <input type="email" class="form-control" placeholder="Email Address" name="email"
+                           ng-model="proprietor.email" required><br>
+                </div>
+            </div>
+            <button ng-click="addProprietor('Manager')" ng-disabled="form.$invalid" class="btn btn-sm btn-success">Add
+                Manager
+            </button>
+            <button ng-click="addProprietor('Owner')" ng-disabled="form.$invalid" class="btn btn-sm btn-warning">Add
+                Owner
+            </button>
+        </form>
+
     </div>
 </div>

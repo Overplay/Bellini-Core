@@ -65,7 +65,7 @@ app.controller('signupController', function ($scope, $log, nucleus, $timeout, $w
     }
 
     $scope.pwCheck = function () {
-        return (!$scope.validate && $scope.auth.password == '' && $scope.auth.password === $scope.auth.passwordConfirm)
+        return (!$scope.validate && $scope.auth.password == '' && $scope.auth.passwordConfirm == '')
             || ($scope.auth.password && $scope.auth.passwordConfirm &&
                $scope.auth.password.length > 7 && $scope.auth.passwordConfirm.length > 7 &&
                $scope.auth.password === $scope.auth.passwordConfirm);

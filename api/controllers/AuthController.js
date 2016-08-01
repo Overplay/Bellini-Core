@@ -92,7 +92,6 @@ module.exports = require( 'waterlock' ).waterlocked( {
     },
 
 
-    //TODO add role so that a user can become a advertiser 
     /*addRole: function ( req, res ) { MOVED TO USERCONTROLLLER
 
         var params = req.allParams();
