@@ -14,41 +14,48 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
     $stateProvider
 
 
-        .state( 'admin', {
-            url:         '/admin',
-            templateUrl: '/uiapp/app/components/admin/admin.partial.html',
-            abstract:    true,
-            resolve:     {
-                user: function ( nucleus ) {
-                    return nucleus.getMe();
-                }
-            }
+        // .state( 'admin', {
+        //     url:         '/admin',
+        //     templateUrl: '/uiapp/app/components/admin/admin.partial.html',
+        //     abstract:    true,
+        //     resolve:     {
+        //         user: function ( nucleus ) {
+        //             return nucleus.getMe();
+        //         }
+        //     }
+        //
+        //
+        // } )
+        //
+        //
+        // .state('user.adminList', {
+        //     url: '/admin-list',
+        //     data:        { subTitle: "Manage Users" },
+        //     controller: 'listUserController',
+        //     templateUrl: '/uiapp/app/components/user/userlist.partial.html',
+        //     resolve:     {
+        //         users: function (nucleus) {
+        //             return nucleus.getAuth()
+        //         },
+        //         admin: function () {
+        //             return true;
+        //         },
+        //         links: function () {
+        //             return [
+        //                 {text: "All Users", link: "user.adminList"},
+        //                 {text: "Add User", link: "user.addUser"}
+        //             ]
+        //         }
+        //     }
+        //
+        // } )
 
-
-        } )
-
-
-        .state('user.adminList', {
-            url: '/admin-list',
-            data:        { subTitle: "Manage Users" },
-            controller: 'listUserController',
-            templateUrl: '/uiapp/app/components/user/userlist.partial.html',
-            resolve:     {
-                users: function (nucleus) {
-                    return nucleus.getAuth()
-                },
-                admin: function () {
-                    return true;
-                },
-                links: function () {
-                    return [
-                        {text: "All Users", link: "user.adminList"},
-                        {text: "Add User", link: "user.addUser"}
-                    ]
-                }
-            }
-
-        } )
+        .state( 'user', {
+            url:         '/user',
+            templateUrl: '/uiapp/app/components/user/user-sidemenu.partial.html',
+            controller:  function ( $scope ) { $scope.panelHeading = { text: "", color: "#0000FF" }},
+            abstract:    true
+        })
 
         .state('user.addUser', {
             url:         '/add-user',
@@ -66,13 +73,6 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
 
         })
 
-        .state( 'user', {
-            url:         '/user',
-            templateUrl: '/uiapp/app/components/user/user-sidemenu.partial.html',
-            controller:  function ( $scope ) { $scope.panelHeading = { text: "", color: "#0000FF" }},
-            abstract:    true
-        })
-        
         .state( 'user.managerList', {
             url:         '/managers',
             controller:  'listUserController',
@@ -884,47 +884,5 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                 }
             }
         })
-
-
-        // Examples pages!
-        // HOME STATES AND NESTED VIEWS ========================================
-        .state( 'example1', {
-            url:         '/example1',
-            templateUrl: '/uiapp/app/components/example1/landingPage.partial.html'
-        } )
-
-        // nested list with custom controller
-        .state( 'example1.list', {
-            url:         '/list',
-            templateUrl: '/uiapp/app/components/example1/partial-home-list.html',
-            controller:  function ( $scope ) {
-                $scope.dogs = [ 'Bernese', 'Husky', 'Goldendoodle' ];
-            }
-        } )
-
-        // nested list with just some random string data
-        .state( 'example1.paragraph', {
-            url:      '/paragraph',
-            template: 'I could sure use a drink right now.'
-        } )
-
-        // ABOUT PAGE AND MULTIPLE NAMED VIEWS =================================
-        .state( 'example2', {
-            url:   '/example2',
-            views: {
-
-                // the main template will be placed here (relatively named)
-                '': { templateUrl: '/uiapp/app/components/example2/aboutpage.partial.html' },
-
-                // the child views will be defined here (absolutely named)
-                'columnOne@about': { template: 'Look I am a column!' },
-
-                // for column two, we'll define a separate controller
-                'columnTwo@about': {
-                    templateUrl: '/uiapp/app/components/example2/table-data.html',
-                    controller:  'scotchController'
-                }
-            }
-        } );
 
 } );
