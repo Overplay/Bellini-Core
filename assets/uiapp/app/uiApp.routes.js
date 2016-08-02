@@ -28,27 +28,27 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
         // } )
         //
         //
-        // .state('user.adminList', {
-        //     url: '/admin-list',
-        //     data:        { subTitle: "Manage Users" },
-        //     controller: 'listUserController',
-        //     templateUrl: '/uiapp/app/components/user/userlist.partial.html',
-        //     resolve:     {
-        //         users: function (nucleus) {
-        //             return nucleus.getAuth()
-        //         },
-        //         admin: function () {
-        //             return true;
-        //         },
-        //         links: function () {
-        //             return [
-        //                 {text: "All Users", link: "user.adminList"},
-        //                 {text: "Add User", link: "user.addUser"}
-        //             ]
-        //         }
-        //     }
-        //
-        // } )
+        .state('user.adminList', {
+            url: '/admin-list',
+            data:        { subTitle: "Manage Users" },
+            controller: 'listUserController',
+            templateUrl: '/uiapp/app/components/user/userlist.partial.html',
+            resolve:     {
+                users: function (nucleus) {
+                    return nucleus.getAuth()
+                },
+                admin: function () {
+                    return true;
+                },
+                links: function () {
+                    return [
+                        {text: "All Users", link: "user.adminList"},
+                        {text: "Add User", link: "user.addUser"}
+                    ]
+                }
+            }
+
+        } )
 
         .state( 'user', {
             url:         '/user',
@@ -79,7 +79,8 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             templateUrl: 'uiapp/app/components/user/userlist.partial.html',
             resolve: {
                 users: function ($http, $q, nucleus) {
-                    var managers = [];
+                    var managerUsers = [];
+                    var managerAuths = [];
 
                     return $http.get('/user/getVenues')
                         .then(function (data) {
@@ -92,12 +93,12 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                                     .then(function (data) {
                                         angular.forEach(data.data, function (manager) {
                                             var i;
-                                            if ((i = _.findIndex(managers, function(o) { return o.id === manager.id })) === -1) {
+                                            if ((i = _.findIndex(managerUsers, function(o) { return o.id === manager.id })) === -1) {
                                                 manager.managedVenues = [venue];
-                                                managers.push(manager);
+                                                managerUsers.push(manager);
                                             }
                                             else
-                                                managers[i].managedVenues.push(venue);
+                                                managerUsers[i].managedVenues.push(venue);
 
                                         })
                                     }));
@@ -107,16 +108,17 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                         })
                         .then(function() {
                             var all = [];
-                            angular.forEach(managers, function(manager) {
+                            angular.forEach(managerUsers, function(manager) {
                                 all.push(nucleus.getAuth(manager.auth)
                                     .then(function (data) {
-                                        manager.auth = data;
+                                        data.user = manager;
+                                        managerAuths.push(data);
                                     }))
                             });
                             return $q.all(all);
                         })
                         .then(function() {
-                            return managers;
+                            return managerAuths;
                         })
                 },
                 links: function() {

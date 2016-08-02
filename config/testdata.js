@@ -336,7 +336,7 @@ var self = module.exports.testdata = {
             roleNames: [{role: "user", subRole: ""}]
         },
         {
-            firstName: 'Catarina',
+            firstName: 'Caterina',
             lastName: 'Cvetkov',
             email: 'caterina@test.com',
             password: 'pa$$word',

@@ -265,7 +265,7 @@ app.controller("editUserAdminController", function ($scope, $http, $state, $log,
                         toastr.success("Removed managed venue", "Nice!");
                     })
             })
-    }
+    };
 
     $scope.removeOwner = function (venue) {
         var venueId = venue.id;
