@@ -119,6 +119,7 @@ module.exports = require( 'waterlock' ).waterlocked( {
         if ( ( params.email === undefined) || (params.password === undefined) || (params.user === undefined) )
             return res.badRequest();
 
+        //HUGE security hole if someone tries to add themself as an OG 
         if (params.user.roleNames) {
             params.user.roles = [];
             async.forEach(params.user.roleNames, function (name) {

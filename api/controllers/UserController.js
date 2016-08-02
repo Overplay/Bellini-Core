@@ -262,14 +262,19 @@ module.exports = require('waterlock').actions.user({
 
     inviteUser: function (req, res) {
         //only allow PO's to do this... still kind of a security hole though
-        //don't want someone sending thousands of emails....
+        //don't want someone sending lots of emails....
 
+        //todo check auth (policies.js)
+        
         var params = req.allParams()
 
         //check params
-
-        MailingService.inviteEmail("cole.grigsby@gmail.com", "col", "yes", "manager")
-        
+        if (!params.email || !params.name || !params.venue || !params.role)
+            return res.badRequest();
+        else {
+            MailingService.inviteEmail(params.email, params.name, params.venue, params.role)
+            return res.ok()
+        }
 
     },
 

@@ -246,24 +246,6 @@ app.controller('viewVenueController', function ($scope, venue, $log, uiGmapGoogl
     $scope.form = {}
 
 
-    /*$scope.input = '';
-     $scope.loadingUsers = false;
-     $scope.noResults = false;
-
-
-
-     $scope.searchUsers = function (query) {
-     return $http.get('/user/queryFirstLastEmail', {
-     params: {query: query}
-     }//WHERE create call query in api
-     ).then(function (response) {
-     return response.data.map(function (user) {
-     return {id: user.id, name: user.firstName + " " + user.lastName, email: user.auth.email};
-     });
-     });
-     }*/
-
-
     $scope.addProprietor = function (type) {
 
         //query if the email exists as a user, then
@@ -277,8 +259,17 @@ app.controller('viewVenueController', function ($scope, venue, $log, uiGmapGoogl
                     uibHelper.confirmModal("Invite to Ourglass?", "We couldn't find a user with the email: " + $scope.proprietor.email + "\n Would you like us to send them an email invite to Ourglass?", true)
                         .then(function (confirmed) {
                             //invite email (validated already too??) 
-                            //send email, click link, sign up and already have the roles and venue 
+                            //Goals: send email, click link, sign up and already have the roles and venue 
                             $log.log(confirmed)
+                            $http.post("/user/inviteUser", {
+                                    email: $scope.proprietor.email,
+                                    name: user.firstName + " " + user.lastName,
+                                    role: type,
+                                    venue: $scope.venue.name
+                                })
+                                .then(function () {
+                                    $scope.proprietor.email = ''
+                                })
                         })
 
                 }
@@ -331,27 +322,6 @@ app.controller('viewVenueController', function ($scope, venue, $log, uiGmapGoogl
         //user and already manager
         //user and already owner
 
-        /* var userId = $scope.input.id;
-         var venueId = $scope.venue.id;
-
-         $http.post('/venue/addManager', {
-         params: {
-         userId: userId,
-         venueId: venueId
-         }
-         })
-         .then(function (response) {
-         if (response.data) {
-         $scope.venue.venueManagers = response.data
-         toastr.success("Added manager", "Woohoo!")
-
-         }
-         else
-         toastr.success("User already manages or owns venue", "Heads up!")
-
-
-         $scope.input = ''
-         })*/
 
     }
 
