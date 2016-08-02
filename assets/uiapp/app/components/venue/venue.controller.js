@@ -290,16 +290,21 @@ app.controller('viewVenueController', function ($scope, venue, $log, uiGmapGoogl
 
                             //TODO should it comfirm with the user first??  email confirmation? 
                             //invite tokens? ugh 
-                            $http.post('/venue/addManager', {
+                            $http.post('/venue/add' + type, {
                                     params: {
                                         userId: userId,
                                         venueId: venueId
                                     }
                                 })
                                 .then(function (response) {
-                                    if (response.data) {
+                                    if (response.data && type == "Manager") {
                                         $scope.venue.venueManagers = response.data
                                         toastr.success("Added manager", "Woohoo!")
+
+                                    }
+                                    else if (response.data && type == "Owner") {
+                                        $scope.venue.venueOwners = response.data
+                                        toastr.success("Added owner", "Woohoo!")
 
                                     }
                                     else
