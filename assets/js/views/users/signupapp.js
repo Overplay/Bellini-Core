@@ -41,7 +41,16 @@ app.controller('signupController', function ($scope, $log, nucleus, $timeout, $w
                 }
                 else if (!$scope.validate) {
                     //redirect to log in
-                    $window.location.href = '/auth/loginPage'
+
+                    //just log them in! 
+                    nucleus.authorize($scope.auth.email, $scope.auth.password)
+                        .then(function (resp) {
+                            $window.location.href = '/ui';
+                        })
+                        .catch(function (err) {
+                            $log.log("Error logging in ", err)
+                        })
+                    
                 }
                 else {
                     $scope.form = {
