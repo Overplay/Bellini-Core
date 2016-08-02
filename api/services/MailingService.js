@@ -2,7 +2,21 @@
  * Created by cgrigsby on 8/1/16.
  */
 var nodemailer = require('nodemailer');
-var transport = nodemailer.createTransport(); //TODO
+var jade = require('jade')
+
+var mail =  {
+    protocol: 'SMTP',
+    options: {
+        service: 'SendGrid',
+        auth: {
+            user: 'overplay-ocs', // These are set in local.js in our fork of waterlock-local-auth
+            pass: '@$ah10c5'  //
+        }
+    },
+}
+
+
+var transport = nodemailer.createTransport(mail); //TODO
 
 
 module.exports = {
@@ -17,10 +31,10 @@ module.exports = {
             venue: venue,
             role: role
         };
-        viewVars.url = "URL HERE HAHAHAHAHA"; //TODO auth/signuppage url? send stuff to view?? ughhhhh maybe new route 
+        viewVars.url = "http://localhost:1337/auth/signupPage"; //TODO auth/signuppage url? send stuff to view?? ughhhhh maybe new route
 
 
-        var templatePath = path.normalize(); //TODO /views/inviteemail.jade
+        var templatePath = "../views/inviteemail.jade"; //TODO /views/inviteemail.jade
         var html = jade.renderFile(templatePath, viewVars);
 
         var mailOptions = {

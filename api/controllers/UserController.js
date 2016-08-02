@@ -268,7 +268,7 @@ module.exports = require('waterlock').actions.user({
 
         //check params
 
-        MailerService.inviteEmail()
+        MailingService.inviteEmail("cole.grigsby@gmail.com", "col", "yes", "manager")
         
 
     },
