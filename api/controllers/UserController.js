@@ -272,6 +272,7 @@ module.exports = require('waterlock').actions.user({
         if (!params.email || !params.name || !params.venue || !params.role)
             return res.badRequest();
         else {
+            sails.log.debug(params.venue)
             MailingService.inviteEmail(params.email, params.name, params.venue, params.role)
             return res.ok()
         }

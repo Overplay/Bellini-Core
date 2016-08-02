@@ -205,7 +205,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row" ng-if="!validate">
+                    <div class="row" ng-if="signupType === 'facebook'">
                         <div class="col-md-12 text-center">
                             <p style="color:white;"> Password optional: if not provided, you will only be able to log in through Facebook </p>
                         </div>
@@ -214,8 +214,8 @@
 
                     <div class="row">
                         <div class="col-md-6">
-                            <div class="form-group" ng-class="{ 'has-error' : (validate && form.password.$touched && (auth.password.length < 8 || !form.password.$valid) ) || (!validate && !pwCheck()),
-                                                                'has-success' : (form.password.$valid && auth.password.length > 7) || (!validate && pwCheck())}">
+                            <div class="form-group" ng-class="{ 'has-error' : (validate && form.password.$touched && (auth.password.length < 8 || !form.password.$valid) ) || (!(signupType == 'facebook') && !pwCheck()),
+                                                                'has-success' : (form.password.$valid && auth.password.length > 7) || (!(signupType == 'facebook') && pwCheck())}">
                                 <div class="input-group input-group-lg">
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
 

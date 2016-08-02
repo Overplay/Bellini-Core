@@ -9,6 +9,8 @@
  */
 
 var wl = require('waterlock-local-auth')
+var jwt = require('jwt-simple')
+
 
 module.exports = require( 'waterlock' ).waterlocked( {
 
@@ -123,7 +125,7 @@ module.exports = require( 'waterlock' ).waterlocked( {
         if (params.user.roleNames) {
             params.user.roles = [];
             async.forEach(params.user.roleNames, function (name) {
-                params.user.roles.push(RoleCacheService.roleByName(name.role, name.sub))
+                params.user.roles.push(RoleCacheService.roleByName(name))
             })
             delete params.user.roleNames;
 
@@ -146,7 +148,37 @@ module.exports = require( 'waterlock' ).waterlocked( {
 
     signupPage: function ( req, res ) {
 
-        return res.view('users/signup' + ThemeService.getTheme());
+        if (req.allParams().token) {
+            var decoded = jwt.decode(req.allParams().token, sails.config.jwt.secret)
+            sails.log.debug(decoded)
+            var auth = {
+                email: decoded.email
+            }
+
+
+            //handle roles from the venue invite, just in case we use this 
+            //for advertiser invites in the future etc 
+
+
+            //owned and managedVenues TODO 
+            var userObj = {
+                roleNames: [decoded.role == "Manager" ? "proprietor.manager" : "proprietor.owner"],
+
+                //TODO venues managed or whatever and use the add/save method ugh lol 
+            }
+
+            return res.view('users/signup' + ThemeService.getTheme(), {
+                data: JSON.stringify({
+                    auth: auth,
+                    user: userObj,
+                    type: 'invite'
+                })
+            });
+
+
+        }
+        else
+            return res.view('users/signup' + ThemeService.getTheme());
 
     },
 

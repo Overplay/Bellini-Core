@@ -265,10 +265,11 @@ app.controller('viewVenueController', function ($scope, venue, $log, uiGmapGoogl
                                     email: $scope.proprietor.email,
                                     name: user.firstName + " " + user.lastName,
                                     role: type,
-                                    venue: $scope.venue.name
+                                    venue: $scope.venue
                                 })
                                 .then(function () {
                                     $scope.proprietor.email = ''
+                                    //TODO toastr that message sent 
                                 })
                         })
 
