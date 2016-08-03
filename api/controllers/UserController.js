@@ -305,7 +305,7 @@ module.exports = require('waterlock').actions.user({
                 if (_reqTime <= decoded.nbf)
                     return res.forbidden('This token is early.');
                 // If the subject doesn't match
-                if (sails.config.mailing.inviteSub !== decoded.sub)
+                if (sails.config.mailing.roleSub !== decoded.sub)
                     return res.forbidden('This token cannot be used for this request.');
 
                 //token passes 
