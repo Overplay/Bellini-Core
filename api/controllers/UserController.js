@@ -328,7 +328,7 @@ module.exports = require('waterlock').actions.user({
                             else {
                                 //log them in??
                                 //TODO feedback 
-                                return res.redirect("/loginPage")
+                                return res.redirect("/auth/loginPage")
                             }
 
                         })
