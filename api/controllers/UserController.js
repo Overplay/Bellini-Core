@@ -10,6 +10,7 @@
 
 var Promise = require('bluebird');
 var _ = require("lodash")
+var jwt = require("jwt-simple")
 
 
 module.exports = require('waterlock').actions.user({
@@ -239,6 +240,7 @@ module.exports = require('waterlock').actions.user({
 
      },*/
 
+    //only returns user ID so info is kept secure 
     findByEmail: function (req, res) {
         var params = req.allParams();
 
@@ -250,7 +252,7 @@ module.exports = require('waterlock').actions.user({
                 .then(function (auth) {
                     if (auth) {
                         //success
-                        return res.json(auth)
+                        return res.json({userId: auth.user.id})
                     }
                     else {
                         //failure
@@ -261,21 +263,83 @@ module.exports = require('waterlock').actions.user({
     },
 
     inviteUser: function (req, res) {
-        //only allow PO's to do this... still kind of a security hole though
-        //don't want someone sending lots of emails....
-
-        //todo check auth (policies.js)
-        
         var params = req.allParams()
 
         //check params
         if (!params.email || !params.name || !params.venue || !params.role)
             return res.badRequest();
         else {
-            sails.log.debug(params.venue)
+            //assumes email sends without issues, might need to handle this at some point
             MailingService.inviteEmail(params.email, params.name, params.venue, params.role)
             return res.ok()
         }
+
+    },
+
+    //these two endpoints are super duper similar
+
+    inviteRole: function (req, res) {
+        //todo check auth (policies.js)
+
+        var params = req.allParams()
+
+        //check params
+        if (!params.email || !params.name || !params.venue || !params.role)
+            return res.badRequest();
+        else {
+            MailingService.inviteRole(params.email, params.name, params.venue, params.role)
+            return res.ok()
+        }
+    },
+
+    acceptRole: function (req, res) {
+        if (req.allParams().token) { //TODO token expiration and what not 
+
+            try {
+                var decoded = jwt.decode(req.allParams().token, sails.config.jwt.secret)
+                var _reqTime = Date.now();
+                // If token is expired
+                if (decoded.exp <= _reqTime)
+                    return res.forbidden('Your token is expired.');
+                // If token is early
+                if (_reqTime <= decoded.nbf)
+                    return res.forbidden('This token is early.');
+                // If the subject doesn't match
+                if (sails.config.mailing.inviteSub !== decoded.sub)
+                    return res.forbidden('This token cannot be used for this request.');
+
+                //token passes 
+                Auth.findOne({email: decoded.email})
+                    .populate("user")
+                    .then(function (auth) {
+                        var user = auth.user;
+                        //add role and add venue 
+                        var role = decoded.role == "Manager" ? "proprietor.manager" : "proprietor.owner"
+                        user.roles = _.union(user.roles, [RoleCacheService.roleByName(role)])
+                        if (decoded.role == "Manager")
+                            user.managedVenues.add(decoded.venue)
+                        else if (decoded.role == "Owner")
+                            user.ownedVenues.add(decoded.venue)
+                        else
+                            return res.badRequest()
+                        user.save(function (err) {
+                            if (err)
+                                return res.serverError()
+                            else {
+                                //log them in??
+                                //TODO feedback 
+                                return res.redirect("/loginPage")
+                            }
+
+                        })
+                    })
+            }
+            catch (err) {
+                return res.badRequest(err);
+            }
+        }
+        else
+            res.badRequest();
 
     },
 

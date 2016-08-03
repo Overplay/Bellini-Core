@@ -214,8 +214,8 @@
 
                     <div class="row">
                         <div class="col-md-6">
-                            <div class="form-group" ng-class="{ 'has-error' : (validate && form.password.$touched && (auth.password.length < 8 || !form.password.$valid) ) || (!(signupType == 'facebook') && !pwCheck()),
-                                                                'has-success' : (form.password.$valid && auth.password.length > 7) || (!(signupType == 'facebook') && pwCheck())}">
+                            <div class="form-group" ng-class="{ 'has-error' : (form.password.$touched && (auth.password.length < 8 || !form.password.$valid) && !pwCheck()),
+                                                                'has-success' : (form.password.$valid && auth.password.length > 7) || ((signupType == 'facebook') && auth.password.length == '')}">
                                 <div class="input-group input-group-lg">
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
 

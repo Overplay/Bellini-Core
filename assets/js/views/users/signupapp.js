@@ -15,15 +15,17 @@ app.controller('signupController', function ($scope, $log, nucleus, $timeout, $w
     $scope.ui = {errorMessage: "", error: false};
     $scope.phoneRegex = "^(?:(?:\\+?1\\s*(?:[.-]\\s*)?)?(?:\\(\\s*([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9])\\s*\\)|([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\\s*(?:[.-]\\s*)?)?([2-9]1[02-9]|[2-9][02-9]1|[2-9][02-9]{2})\\s*(?:[.-]\\s*)?([0-9]{4})(?:\\s*(?:#|x\\.?|ext\\.?|extension)\\s*(\\d+))?$";
     $scope.validate = true;
+    $log.log($scope.user)
 
     $scope.getData = function (data) { //security hole, need to check something about data for validate 
-        $log.log("GETTIGN DATAS ")
-        $log.log(data)
-
         var data = JSON.parse(data);
-        $log.log(data)
         _.merge($scope.auth, data.auth);
         _.merge($scope.user, data.user);
+
+        var roles = ["user"];
+        roles = _.union(roles, data.user.roleNames)
+        $scope.user.roleNames = roles; 
+
         $scope.signupType = data.type;
         $scope.validate = false; //already facebook validated 
     }

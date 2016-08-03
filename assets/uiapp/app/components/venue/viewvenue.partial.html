@@ -96,15 +96,6 @@
 
     </table>
     <div>
-        <!--<input type="text" ng-model="input"
-               placeholder="Enter a user's email"
-               uib-typeahead="user as user.name + ' - ' + user.email for user in searchUsers($viewValue)"
-               typeahead-loading="loadingUsers"
-               typeahead-no-results="noResults" class="form-control">
-        <i ng-show="loadingUsers" class="glyphicon glyphicon-refresh"></i>
-        <div ng-show="noResults">
-            <i class="glyphicon glyphicon-remove"></i> No Results Found
-        </div>-->
         <form name="form" role="form">
             <div class="form-group"
                  ng-class="{ 'has-error' : !form.email.$valid && form.email.$touched, 'has-success' : form.email.$valid}">

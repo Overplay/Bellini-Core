@@ -258,9 +258,8 @@ app.controller('viewVenueController', function ($scope, venue, $log, uiGmapGoogl
                     //not found
                     uibHelper.confirmModal("Invite to Ourglass?", "We couldn't find a user with the email: " + $scope.proprietor.email + "\n Would you like us to send them an email invite to Ourglass?", true)
                         .then(function (confirmed) {
-                            //invite email (validated already too??) 
+
                             //Goals: send email, click link, sign up and already have the roles and venue 
-                            $log.log(confirmed)
                             $http.post("/user/inviteUser", {
                                     email: $scope.proprietor.email,
                                     name: user.firstName + " " + user.lastName,
@@ -269,66 +268,34 @@ app.controller('viewVenueController', function ($scope, venue, $log, uiGmapGoogl
                                 })
                                 .then(function () {
                                     $scope.proprietor.email = ''
-                                    //TODO toastr that message sent 
+                                    toastr.success("Email invite sent to " + $scope.proprietor.email, "Nice! ")
                                 })
                         })
 
                 }
-                //maybe check roles and take two different routes in the future
+                //maybe check existing roles and take two different routes in the future
                 else {
                     //found
-                    $log.log(response)
-                    var userAuth = response.data
+                    var userId = response.data
                     uibHelper.confirmModal("User found!", "Are you sure you would like to add them to " + $scope.venue.name + " as a" + (type == "owner" ? "n " : " ") + type + "?", true)
                         .then(function (confirmed) {
-                            //email notification to user??
-                            //click to accept?
-                            $log.log(confirmed)
-
-                            var userId = userAuth.user.id;
+                            var userId = userId;
                             var venueId = $scope.venue.id;
 
-
-                            //TODO should it comfirm with the user first??  email confirmation? 
-                            //invite tokens? ugh 
-                            $http.post('/venue/add' + type, {
-                                    params: {
-                                        userId: userId,
-                                        venueId: venueId
-                                    }
+                            $http.post("/user/inviteRole", {
+                                    email: $scope.proprietor.email,
+                                    name: user.firstName + " " + user.lastName,
+                                    role: type,
+                                    venue: $scope.venue
                                 })
-                                .then(function (response) {
-                                    if (response.data && type == "Manager") {
-                                        $scope.venue.venueManagers = response.data
-                                        toastr.success("Added manager", "Woohoo!")
-
-                                    }
-                                    else if (response.data && type == "Owner") {
-                                        $scope.venue.venueOwners = response.data
-                                        toastr.success("Added owner", "Woohoo!")
-
-                                    }
-                                    else
-                                        toastr.success("User already manages or owns venue", "Heads up!")
-
-
+                                .then(function () {
                                     $scope.proprietor.email = ''
-
+                                    toastr.success("Email invite sent to " + $scope.proprietor.email, "Nice! ")
                                 })
+                            //IDEA: notification to inviter when/if its accepted??
                         })
                 }
             })
-
-
-        //CASES to think about
-        //not user, being added as a manager
-        //not user, being added as owner
-        //user and needs role of manager
-        //user and needs role of owner
-        //user and already manager
-        //user and already owner
-
-
     }
 
     $scope.removeManager = function (user) {

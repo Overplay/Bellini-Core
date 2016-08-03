@@ -108,15 +108,7 @@ module.exports = require( 'waterlock' ).waterlocked( {
 
             requireValidation = requireValidation || sails.config.waterlock.alwaysValidate;
 
-            //TODO hangle the new users venues 
-            if (userObj && userObj.managedVenues)
-                //
-                ;
-            if (userObj && userObj.ownedVenues)
-                //handle this stuff
-                ;
-
-                    Auth.findOne({email: emailAddr}) //TODO check on facebook id too?? 
+            Auth.findOne({email: emailAddr}) //TODO check on facebook id too??
                 .then(function (auth) {
                     if (auth) {
                         sails.log.debug("Email is in system, rejecting create.")
@@ -136,7 +128,7 @@ module.exports = require( 'waterlock' ).waterlocked( {
 
                                             ValidateToken.create({owner: userWithAuth.auth.id})
                                                 .then(function (tok) {
-                                                    sails.log.info(tok);
+                                                    //sails.log.info(tok);
                                                     
                                                     return Auth.update({id: tok.owner}, {
                                                         validateToken: tok,

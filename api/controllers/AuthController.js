@@ -121,7 +121,7 @@ module.exports = require( 'waterlock' ).waterlocked( {
         if ( ( params.email === undefined) || (params.password === undefined) || (params.user === undefined) )
             return res.badRequest();
 
-        //HUGE security hole if someone tries to add themself as an OG 
+        //HUGE security hole if someone tries to add themselves as an OG 
         if (params.user.roleNames) {
             params.user.roles = [];
             async.forEach(params.user.roleNames, function (name) {
@@ -150,32 +150,48 @@ module.exports = require( 'waterlock' ).waterlocked( {
 
     signupPage: function ( req, res ) {
 
-        if (req.allParams().token) {
-            var decoded = jwt.decode(req.allParams().token, sails.config.jwt.secret)
-            sails.log.debug(decoded)
-            var auth = {
-                email: decoded.email
+        if (req.allParams().token) { //TODO token expiration and what not 
+
+            try {
+                var decoded = jwt.decode(req.allParams().token, sails.config.jwt.secret)
+
+                var _reqTime = Date.now();
+                // If token is expired
+                if (decoded.exp <= _reqTime)
+                    return res.forbidden('Your token is expired.');
+                // If token is early
+                if (_reqTime <= decoded.nbf)
+                    return res.forbidden('This token is early.');
+                // If the subject doesn't match
+                if (sails.config.mailing.inviteSub !== decoded.sub)
+                    return res.forbidden('This token cannot be used for this request.');
+
+                var auth = {
+                    email: decoded.email
+                }
+
+                var userObj = {
+                    roleNames: [decoded.role == "Manager" ? "proprietor.manager" : "proprietor.owner"],
+                }
+
+                if (decoded.role == "Manager" && decoded.venue) {
+                    userObj.managedVenues = [decoded.venue]
+                }
+                else if (decoded.role == "Owner" && decoded.venue) {
+                    userObj.ownedVenues = [decoded.venue]
+                }
+
+                return res.view('users/signup' + ThemeService.getTheme(), {
+                    data: JSON.stringify({
+                        auth: auth,
+                        user: userObj,
+                        type: 'invite'
+                    })
+                });
             }
-
-
-            //handle roles from the venue invite, just in case we use this 
-            //for advertiser invites in the future etc 
-
-
-            //owned and managedVenues TODO 
-            var userObj = {
-                roleNames: [decoded.role == "Manager" ? "proprietor.manager" : "proprietor.owner"],
-
-                //TODO venues managed or whatever and use the add/save method ugh lol 
+            catch (err) {
+                return res.badRequest(err)
             }
-
-            return res.view('users/signup' + ThemeService.getTheme(), {
-                data: JSON.stringify({
-                    auth: auth,
-                    user: userObj,
-                    type: 'invite'
-                })
-            });
 
 
         }

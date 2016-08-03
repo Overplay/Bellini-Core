@@ -12,8 +12,6 @@ var transport = nodemailer.createTransport(sails.config.mailing.emailConfig);
 
 module.exports = {
 
-
-    //sails.config.whatever options will be accessible hop;efulyl 
     inviteEmail: function (email, name, venue, role) {
 
         var viewVars = {
@@ -21,15 +19,11 @@ module.exports = {
             venue: venue.name,
             role: role
         };
-        viewVars.url = inviteUrl(sails.config.mailing.inviteUrl, email, venue, role)
-        ; //TODO auth/signuppage url? send stuff to view?? ughhhhh maybe new route
+        viewVars.url = inviteUrl(sails.config.mailing.inviteUrl, email, venue, role, sails.config.mailing.inviteSub)
 
-        //AWFUL awful awful. also needs to be fixed in local auth 
+        //awful path imo. also needs to be fixed in waterlock local auth 
         var templatePath = path.normalize(__dirname + "../../../views/inviteemail.jade"); 
         var html = jade.renderFile(templatePath, viewVars);
-
-        //TODO actual venue id probably 
-        
         
         var mailOptions = {
             from: "no-reply@ourglass.tv", // sender address
@@ -40,6 +34,31 @@ module.exports = {
 
         mailOptions.to = email;
         transport.sendMail(mailOptions, mailCallback);
+    },
+
+    inviteRole: function (email, name, venue, role) {
+
+        var viewVars = {
+            name: name,
+            venue: venue.name,
+            role: role
+        };
+        viewVars.url = inviteUrl(sails.config.mailing.inviteRoleUrl, email, venue, role, sails.config.mailing.roleSub)
+        var templatePath = path.normalize(__dirname + "../../../views/inviterole.jade");
+        var html = jade.renderFile(templatePath, viewVars);
+
+        var mailOptions = {
+            from: "no-reply@ourglass.tv", // sender address
+            subject: "You have been invited to manage a venue",
+            text: html, // plaintext body
+            html: html // html body
+        };
+
+        mailOptions.to = email;
+        //front end assumes email sends without issues, might need to handle this at some point
+        transport.sendMail(mailOptions, mailCallback);
+
+
     }
 }
 
@@ -53,8 +72,19 @@ var mailCallback = function (error, info) {
 };
 
 
-var inviteUrl = function (url, email, venue, role) {
+var inviteUrl = function (url, email, venue, role, subject) {
+    var issued = Date.now();
+    var uuid = require('node-uuid');
+    var moment = require('moment')();
+    var expiration = moment.add(sails.config.jwt.expDays, 'days');
+
+
     var payload = {
+        sub: subject,
+        exp: expiration,
+        nbf: issued,
+        iat: issued,
+        jti: uuid.v1(),
         email: email,
         venue: venue.id,
         role: role
@@ -62,7 +92,11 @@ var inviteUrl = function (url, email, venue, role) {
 
     var token = jwt.encode(payload, secret)
 
+    sails.log.debug(token)
+
+
     return url + "?token=" + token;
 
 }
+
 
