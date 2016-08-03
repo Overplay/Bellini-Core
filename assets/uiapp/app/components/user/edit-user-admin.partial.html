@@ -42,7 +42,7 @@
                             <tr ng-repeat="venue in user.user.managedVenues">
                                 <td>{{ venue.name }}</td>
                                 <td>{{ addressify(venue.address) }}</td>
-                                <td><button class="btn btn-sm btn-danger" ng-click="removeManager(venue)">Remove</button></td>
+                                <td><button class="btn btn-sm btn-danger" ng-click="removeManagedVenue(venue)">Remove</button></td>
                             </tr>
                             </tbody>
                         </table>
@@ -82,7 +82,7 @@
                             <tr ng-repeat="venue in user.user.ownedVenues">
                                 <td>{{ venue.name }}</td>
                                 <td>{{ addressify(venue.address) }}</td>
-                                <td><button class="btn btn-sm btn-danger" ng-click="removeOwner(venue)">Remove</button></td>
+                                <td><button class="btn btn-sm btn-danger" ng-click="removeOwnedVenue(venue)">Remove</button></td>
                             </tr>
                             </tbody>
                         </table>

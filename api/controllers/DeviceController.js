@@ -80,7 +80,26 @@ module.exports = {
             .catch(function(err){
                 sails.log.debug(err)
             })
+    },
+
+    backup: function (req, res) {
+
+        var params = req.allParams();
+
+        if (!params || !params.id || !params.backup)
+            return res.badRequest("Missing params");
+
+        Device.findOne({ id: params.id })
+            .then( function (device) {
+                if (!device) {
+                    return res.badRequest("Device not found");
+                }
+
+
+            })
+
     }
+
 
 
 };

@@ -276,7 +276,7 @@ app.controller("editDeviceOwnerController", function ($scope, $state, $log, devi
 
 app.controller('listDeviceController', function ($scope, devices, $log, uibHelper, $http, admin, links) {
 
-    $log.debug("loading listDeviceController" + devices);
+    $log.debug("loading listDeviceController");
     $scope.$parent.ui.pageTitle = "Device List";
     $scope.$parent.ui.panelHeading = "";
     $scope.$parent.links = links;

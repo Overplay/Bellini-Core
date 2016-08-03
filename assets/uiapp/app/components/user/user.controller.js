@@ -248,7 +248,7 @@ app.controller("editUserAdminController", function ($scope, $http, $state, $log,
         }
     }
 
-    $scope.removeManager = function (venue) {
+    $scope.removeManagedVenue = function (venue) {
         var venueId = venue.id;
         var userId = user.user.id;
 
@@ -267,7 +267,7 @@ app.controller("editUserAdminController", function ($scope, $http, $state, $log,
             })
     };
 
-    $scope.removeOwner = function (venue) {
+    $scope.removeOwnedVenue = function (venue) {
         var venueId = venue.id;
         var userId = user.user.id;
 
@@ -303,7 +303,7 @@ app.controller("editUserOwnerController", function ($scope, $http, $state, $log,
     $scope.newManagedVenue = null;
     $scope.addressify = addressify;
 
-    $scope.removeVenue = function (venue) {
+    $scope.removeManagedVenue = function (venue) {
         uibHelper.confirmModal('Remove Manager?', 'Remove ' + $scope.user.user.firstName + ' as a manager of ' + venue.name + '?' )
             .then( function (confirmed) {
                 $http.post('/venue/removeManager', { params : {userId : user.user.id, venueId: venue.id}})
