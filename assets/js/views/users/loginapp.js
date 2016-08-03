@@ -12,7 +12,7 @@ app.controller("loginController", function ($scope, $log, $http, $window, $timeo
 
     $scope.login = function () {
 
-        $log.debug("Login clicked for: " + $scope.user.email + " and password: " + $scope.user.password);
+        //$log.debug("Login clicked for: " + $scope.user.email + " and password: " + $scope.user.password);
         nucleus.authorize($scope.user.email, $scope.user.password)
             .then(function (res) {
                 $log.info("Logged in");

@@ -130,6 +130,8 @@ module.exports = require( 'waterlock' ).waterlocked( {
             delete params.user.roleNames;
 
         }
+        
+        //TODO get the venue managers and owners here for the new user 
 
         AdminService.addUser(params.email, params.password, params.user, params.facebookId, params.validate) //TRUE requires validation
             .then( function ( data ) {

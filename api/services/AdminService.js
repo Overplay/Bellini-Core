@@ -108,10 +108,15 @@ module.exports = require( 'waterlock' ).waterlocked( {
 
             requireValidation = requireValidation || sails.config.waterlock.alwaysValidate;
 
-            //figure out password shit if facebook account (maybe leave blank?????) 
+            //TODO hangle the new users venues 
+            if (userObj && userObj.managedVenues)
+                //
+                ;
+            if (userObj && userObj.ownedVenues)
+                //handle this stuff
+                ;
 
-
-            Auth.findOne({email: emailAddr}) //TODO check on facebook id too?? 
+                    Auth.findOne({email: emailAddr}) //TODO check on facebook id too?? 
                 .then(function (auth) {
                     if (auth) {
                         sails.log.debug("Email is in system, rejecting create.")
