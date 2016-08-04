@@ -312,29 +312,36 @@ module.exports = require('waterlock').actions.user({
                 Auth.findOne({email: decoded.email})
                     .populate("user")
                     .then(function (auth) {
-                        var user = auth.user;
-                        //add role and add venue 
-                        var role = decoded.role == "Manager" ? "proprietor.manager" : "proprietor.owner"
-                        user.roles = _.union(user.roles, [RoleCacheService.roleByName(role)])
-                        if (decoded.role == "Manager")
-                            user.managedVenues.add(decoded.venue)
-                        else if (decoded.role == "Owner")
-                            user.ownedVenues.add(decoded.venue)
-                        else
-                            return res.badRequest()
-                        user.save(function (err) {
-                            if (err)
-                                return res.serverError()
-                            else {
-                                //log them in??
-                                //TODO feedback 
-                                return res.redirect("/auth/loginPage")
-                            }
+                        if (auth) {
+                            var user = auth.user;
+                            //add role and add venue 
+                            var role = decoded.role == "Manager" ? "proprietor.manager" : "proprietor.owner"
+                            user.roles = _.union(user.roles, [RoleCacheService.roleByName(role)])
+                            if (decoded.role == "Manager")
+                                user.managedVenues.add(decoded.venue)
+                            else if (decoded.role == "Owner")
+                                user.ownedVenues.add(decoded.venue)
+                            else
+                                return res.badRequest()
+                            user.save(function (err) {
+                                if (err)
+                                    return res.serverError(err)
+                                else {
+                                    //log them in??
+                                    //TODO feedback 
+                                    return res.redirect("/auth/loginPage")
+                                }
 
-                        })
+                            })
+                        }
+                        else //user not found hahaha fuckkkk bad token probably 
+                            return res.badRequest("No user found with that email")
+                            
                     })
             }
             catch (err) {
+                sails.log.debug("CAUGHT: bad token req", err)
+                
                 return res.badRequest(err);
             }
         }

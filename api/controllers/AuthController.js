@@ -119,7 +119,7 @@ module.exports = require( 'waterlock' ).waterlocked( {
 
         //handle no password if facebook 
         if ( ( params.email === undefined) || (params.password === undefined) || (params.user === undefined) )
-            return res.badRequest();
+            return res.status(400).json({'message': "Missing email, password or user object"});
 
         //HUGE security hole if someone tries to add themselves as an OG 
         if (params.user.roleNames) {
@@ -135,14 +135,23 @@ module.exports = require( 'waterlock' ).waterlocked( {
 
         AdminService.addUser(params.email, params.password, params.user, params.facebookId, params.validate) //TRUE requires validation
             .then( function ( data ) {
-                //sails.log.debug(data)
-                return res.ok()
+                sails.log.debug(data)
+                return res.json(200, {'message': 'Successfully registered user'})
 
             } )
             .catch( function ( err ) {
-                //sails.log.debug(err)
-                return res.badRequest( err );
-            } )
+                if (err.code && err.code === "E_VALIDATION") {
+                    var messages = {}
+                    _.forEach(err.invalidAttributes, function (att) {
+                        att.forEach(function (e) {
+                            messages[e.rule] = e.message;
+                        })
+                    })
+                    return res.status(400).json(messages)//{'message': 'Adding user failed'});
+                }
+                else
+                    return res.status(400).json({'message': err.message})
+            })
 
 
     },
@@ -190,7 +199,9 @@ module.exports = require( 'waterlock' ).waterlocked( {
                 });
             }
             catch (err) {
-                return res.badRequest(err)
+                sails.log.debug("CAUGHT: bad token request", err)
+                //tell the user the token is bad? eh 
+                return res.view('users/signup' + ThemeService.getTheme());
             }
 
 
