@@ -136,7 +136,7 @@ module.exports = require( 'waterlock' ).waterlocked( {
         AdminService.addUser(params.email, params.password, params.user, params.facebookId, params.validate) //TRUE requires validation
             .then( function ( data ) {
                 sails.log.debug(data)
-                return res.json(200, {'message': 'Successfully registered user'})
+                return res.json(data)
 
             } )
             .catch( function ( err ) {

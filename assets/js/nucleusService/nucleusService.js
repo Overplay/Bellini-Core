@@ -138,6 +138,7 @@
                         validate: validate
                     })
                     .then( function(data){
+                        $log.log(data)
                         return data.data;
                     });
             
