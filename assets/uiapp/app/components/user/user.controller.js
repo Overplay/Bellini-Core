@@ -296,7 +296,7 @@ app.controller("addUserController", function ($scope, $state, $log, toastr, nucl
             firstName: $scope.user.firstName,
             lastName: $scope.user.lastName,
             mobilePhone: $scope.user.mobilePhone
-        })
+            }, '', false)
             .then( function ( u ) {
                 toastr.success( "Account added!", "Success!" );
                 $state.go('user.editUserAdmin', { id: u.auth.id } );

@@ -147,10 +147,10 @@ module.exports = require( 'waterlock' ).waterlocked( {
                             messages[e.rule] = e.message;
                         })
                     })
-                    return res.status(400).json(messages)//{'message': 'Adding user failed'});
+                    return res.badRequest(messages)//{'message': 'Adding user failed'});
                 }
                 else
-                    return res.status(400).json({'message': err.message})
+                    return res.badRequest({'message': err.message})
             })
 
 
