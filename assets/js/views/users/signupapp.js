@@ -38,8 +38,9 @@ app.controller('signupController', function ($scope, $log, nucleus, $timeout, $w
             .then(function (data) {
                 //TODO sign person in for validate = false?? 
                 if ($scope.signupType == "facebook") {
-                    //only happens when facebook signup  false
-                    $window.location.href = '/ui'
+                    //only happens when facebook signup 
+                    //TODO fix this to log them straight in! 
+                    $window.location.href = '/'
                 }
                 else if (!$scope.validate) {
                     //redirect to log in
