@@ -25,10 +25,9 @@
 }
 
 .dash-logo {
-    width: 60%;
+    width: 100%;
     max-width: 150px;
-    text-align: center;
-
+    align-content: center;
 }
 .dash-address {
     font-size: 125%;
@@ -47,11 +46,12 @@
 }
 .dash-panel:hover {
     transform: scale(1.05);
-    background-color: rgb(42, 171, 210);
+    background-color: rgb(37, 130, 164);
+    color: #ffffff;
 
 }
 .dash-name {
-    font-size: 150%
+    font-size: 160%;
 }
 
 

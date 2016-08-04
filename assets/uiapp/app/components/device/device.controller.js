@@ -283,6 +283,13 @@ app.controller('listDeviceController', function ($scope, devices, $log, uibHelpe
     $scope.admin = admin;
     $scope.devices = devices;
 
+    if (admin)
+        $scope.edit = 'device.adminManage({ id: device.id })';
+    else if ($scope.links.length === 1)
+        $scope.edit = 'device.managerManage({ id: device.id })';
+    else
+        $scope.edit = 'device.ownerManage({ id: device.id })';
+
     if (!admin) { //TODO test
         _.forEach($scope.devices, function (dev) {
             $http.get("api/v1/venue/" + dev.venue)

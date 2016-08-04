@@ -94,11 +94,30 @@ module.exports = {
                 if (!device) {
                     return res.badRequest("Device not found");
                 }
+                device.deviceBackup = params.backup;
 
+                return Device.update({ id: device.id }, device)
 
             })
 
+    },
+
+    restore: function (req, res) {
+
+        var id = req.allParams().id;
+
+        if (!id)
+            return res.badRequest("Missing device id");
+
+        Device.findOne({ id: params.id })
+            .then( function (device) {
+                if (!device)
+                    return res.badRequest("Device not found");
+
+                return res.json(device.deviceBackup);
+            })
     }
+
 
 
 

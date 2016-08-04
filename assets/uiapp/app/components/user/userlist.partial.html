@@ -19,7 +19,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="user in users track by user.id | orderBy: 'user.lastName' | filter: searchTerm">
+            <tr ng-repeat="user in users | orderBy: 'user.lastName' | filter: searchTerm">
                 <td>{{ user.user.firstName }}</td>
                 <td>{{ user.user.lastName }}</td>
                 <td>{{ user.email }}</td>
