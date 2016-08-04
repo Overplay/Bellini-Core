@@ -105,8 +105,6 @@ module.exports = require('waterlock').waterlocked({
 
             if (facebookId && typeof facebookId !== 'undefined')
                 authAttrib.facebookId = facebookId;
-            else
-                authAttrib.facebookId = '';
 
             requireValidation = requireValidation || sails.config.waterlock.alwaysValidate;
 
