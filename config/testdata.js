@@ -446,8 +446,8 @@ var self = module.exports.testdata = {
     ],
     venues: [
         {
-            name: "Le Boulanger",
-            address: {street: "20488 Stevens Creek Blvd", city: "Cupertino", state: "CA", zip: "95014"},
+            name: "Blue Line Pizza",
+            address: {street: "415 E Campbell Ave", city: "Campbell", state: "CA", zip: "95008"},
             ownerEmails: ["john@test.com"],
             managerEmails: ["silvanus@test.com", "jerref@test.com"]
         },
@@ -494,7 +494,7 @@ var self = module.exports.testdata = {
         {
             name: "Bar Box",
             locationWithinVenue: "bar",
-            venueName: "Le Boulanger"
+            venueName: "Blue Line Pizza"
         },
         {
             name: "Bar Box",
@@ -519,7 +519,7 @@ var self = module.exports.testdata = {
         {
             name: "Entrance Box",
             locationWithinVenue: "entrance",
-            venueName: "Le Boulanger"
+            venueName: "Blue Line Pizza"
         },
         {
             name: "Entrance Box",

@@ -274,23 +274,23 @@ app.controller("editDeviceOwnerController", function ($scope, $state, $log, devi
 
 });
 
-app.controller('listDeviceController', function ($scope, devices, $log, uibHelper, $http, admin, links) {
+app.controller('listDeviceController', function ($scope, devices, $log, uibHelper, $http, role, links) {
 
     $log.debug("loading listDeviceController");
     $scope.$parent.ui.pageTitle = "Device List";
     $scope.$parent.ui.panelHeading = "";
     $scope.$parent.links = links;
-    $scope.admin = admin;
+    $scope.admin = role === "admin";
     $scope.devices = devices;
 
-    if (admin)
+    if (role === "admin")
         $scope.edit = 'device.adminManage({ id: device.id })';
-    else if ($scope.links.length === 1)
+    else if (role === "manager")
         $scope.edit = 'device.managerManage({ id: device.id })';
     else
         $scope.edit = 'device.ownerManage({ id: device.id })';
 
-    if (!admin) { //TODO test
+    if (role !== "admin") { //TODO test
         _.forEach($scope.devices, function (dev) {
             $http.get("api/v1/venue/" + dev.venue)
                 .then(function (data) {

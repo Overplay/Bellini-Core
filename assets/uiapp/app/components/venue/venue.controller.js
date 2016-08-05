@@ -9,7 +9,7 @@ addressify = function (address) {
     + address.zip
 };
 
-app.controller("addEditVenueController", function ($scope, $log, nucleus, $state, $http, $q, toastr, uibHelper, venue, edit, uiGmapGoogleMapApi, links, $window, admin, $rootScope) {
+app.controller("addEditVenueController", function ($scope, $log, nucleus, $state, $http, $q, toastr, uibHelper, venue, edit, uiGmapGoogleMapApi, links, $window, role, $rootScope) {
 
     $log.debug("addEditVenueController starting");
     $scope.$parent.ui.pageTitle = edit ? "Edit Venue" : "Add New Venue";
@@ -21,7 +21,7 @@ app.controller("addEditVenueController", function ($scope, $log, nucleus, $state
     $scope.venue = venue || {showInMobileAppMap: true, address: {}, photos: []};
     $scope.regex = "\\d{5}([\\-]\\d{4})?";
     $scope.confirm = { checked: false };
-    $scope.admin = admin;
+    $scope.admin = role === "admin";
     $scope.setForm = function (form) { $scope.form = form; };
     uiGmapGoogleMapApi.then( function (maps) { $scope.maps = maps; });
 
@@ -107,11 +107,11 @@ app.controller("addEditVenueController", function ($scope, $log, nucleus, $state
                 nucleus.addVenue($scope.venue)
                     .then(function (res) {
                         toastr.success("Venue created", "Success!")
-                        if (links.length === 1) {
+                        if (role === "user") {
                             $rootScope.$emit('navBarUpdate', res.user.roleTypes);
                             $state.go('device.userAdd');
                         }
-                        else if (admin)
+                        else if ($scope.admin)
                             $state.go('venue.adminView', {id: res.venue.id});
                         else
                             $state.go('venue.view', {id: res.venue.id});
@@ -160,7 +160,7 @@ app.controller("addEditVenueController", function ($scope, $log, nucleus, $state
                     nucleus.deleteVenue($scope.venue.id)
                         .then(function () {
                             toastr.success("It's gone!", "Venue Deleted");
-                            if (admin)
+                            if ($scope.admin)
                                 $state.go('venue.adminList');
                             else
                                 $state.go('venue.list');
@@ -173,25 +173,25 @@ app.controller("addEditVenueController", function ($scope, $log, nucleus, $state
     }
 })
 
-app.controller('listVenueController', function ($scope, venues, $log, links, admin) {
+app.controller('listVenueController', function ($scope, venues, $log, links, role) {
 
     $log.debug("loading listVenueController");
     $scope.$parent.ui.pageTitle = "Venue List";
     $scope.$parent.ui.panelHeading = "";
     $scope.$parent.links = links;
     $scope.venues = venues;
-    $scope.admin = admin;
+    $scope.admin = role === "admin";
 
 })
 
-app.controller('viewVenueController', function ($scope, venue, $log, uiGmapGoogleMapApi, uibHelper, nucleus, user, $http, toastr, links, admin) {
+app.controller('viewVenueController', function ($scope, venue, $log, uiGmapGoogleMapApi, uibHelper, nucleus, user, $http, toastr, links, role) {
     
     $scope.venue = venue;
     $scope.$parent.ui.pageTitle = "Venue Overview";
     $scope.$parent.ui.panelHeading = venue.name;
     $scope.$parent.links = links;
 
-    $scope.admin = admin;
+    $scope.admin = role === "admin";
     $scope.uid = user.id;
 
     //$log.log($scope.uid)
@@ -199,7 +199,7 @@ app.controller('viewVenueController', function ($scope, venue, $log, uiGmapGoogl
     $scope.userRoute = function (id) {
         if (id === user.id)
             return "user.edit()";
-        else if (admin)
+        else if ($scope.admin)
             return "user.editUserAdmin({id: user.auth})";
         return "user.editUserOwner({id: user.auth})";
     }

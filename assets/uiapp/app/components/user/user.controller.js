@@ -368,10 +368,10 @@ app.controller("addUserController", function ($scope, $state, $log, toastr, nucl
 
 });
 
-app.controller('listUserController', function ($scope, $state, $log, nucleus, users, links, admin) {
+app.controller('listUserController', function ($scope, $state, $log, nucleus, users, links, role) {
     $scope.users = users;
     $scope.$parent.links = links;
-    $scope.$parent.ui.pageTitle = admin ? "Users" : "Venue Managers";
+    $scope.admin = role === "admin";
+    $scope.$parent.ui.pageTitle = $scope.admin ? "Users" : "Venue Managers";
     $scope.$parent.ui.panelHeading = "";
-    $scope.admin = admin;
 });

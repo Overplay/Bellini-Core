@@ -13,21 +13,6 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
 
     $stateProvider
 
-
-        // .state( 'admin', {
-        //     url:         '/admin',
-        //     templateUrl: '/uiapp/app/components/admin/admin.partial.html',
-        //     abstract:    true,
-        //     resolve:     {
-        //         user: function ( nucleus ) {
-        //             return nucleus.getMe();
-        //         }
-        //     }
-        //
-        //
-        // } )
-        //
-        //
         .state('user.adminList', {
             url: '/admin-list',
             data:        { subTitle: "Manage Users" },
@@ -37,8 +22,8 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                 users: function (nucleus) {
                     return nucleus.getAuth()
                 },
-                admin: function () {
-                    return true;
+                role: function () {
+                    return "admin";
                 },
                 links: function () {
                     return [
@@ -126,8 +111,8 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                         {text: "Managers", link: "user.managerList"}
                     ]
                 },
-                admin: function () {
-                    return false;
+                role: function () {
+                    return "manager";
                 }
             }
             
@@ -251,7 +236,7 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                         {text: "Add Venue", link: "venue.add"}
                     ]
                 },
-                admin: function () { return false; }
+                role: function () { return "owner"; }
             },
             templateUrl: '/uiapp/app/components/venue/viewvenue.partial.html',
             controller:  'viewVenueController'
@@ -278,7 +263,7 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                         {text: "Add Venue", link: "venue.adminAdd"}
                     ]
                 },
-                admin: function () { return true; }
+                role: function () { return "role"; }
             },
             templateUrl: '/uiapp/app/components/venue/viewvenue.partial.html',
             controller:  'viewVenueController'
@@ -306,7 +291,7 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                         {text: "Add Venue", link: "venue.add"}
                     ]
                 },
-                admin: function () { return false; }
+                role: function () { return "owner"; }
             },
             templateUrl: '/uiapp/app/components/venue/addeditvenue.partial.html',
             controller:  'addEditVenueController'
@@ -334,7 +319,7 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                         {text: "Add Venue", link: "venue.adminAdd"}
                     ]
                 },
-                admin: function () { return true; }
+                role: function () { return "admin"; }
             },
             templateUrl: '/uiapp/app/components/venue/addeditvenue.partial.html',
             controller:  'addEditVenueController'
@@ -359,7 +344,7 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                         {text: "Add Venue", link: "venue.add"}
                     ]
                 },
-                admin: function () { return false; }
+                role: function () { return "owner"; }
             }
         })
 
@@ -380,7 +365,7 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                         {text: "Add Venue", link: "venue.adminAdd"}
                     ]
                 },
-                admin: function () { return true; }
+                role: function () { return "admin"; }
             }
         })
 
@@ -399,7 +384,7 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                         {text: "Add Venue", link: "venue.add"}
                     ]
                 },
-                admin: function () { return false; }
+                role: function () { return "owner"; }
             }
         })
 
@@ -418,7 +403,7 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                         {text: "Add Venue", link: "venue.adminAdd"}
                     ]
                 },
-                admin: function () { return true; }
+                role: function () { return "admin"; }
             }
         })
 
@@ -436,7 +421,7 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                         {text: "Back to Dash", link: "dash"}
                     ]
                 },
-                admin: function () { return false; }
+                role: function () { return "user"; }
             }
         })
 
@@ -458,8 +443,8 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                             return data.data;
                         })
                 },
-                admin: function () {
-                    return false;
+                role: function () {
+                    return "owner";
                 },
                 links: function () {
                     return [
@@ -481,8 +466,8 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                             return data.data;
                         })
                 },
-                admin: function () {
-                    return false;
+                role: function () {
+                    return "manager";
                 },
                 links: function () {
                     return [
@@ -504,8 +489,8 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                             return data.data;
                         })
                 },
-                admin: function () {
-                    return true;
+                role: function () {
+                    return "admin";
                 },
                 links: function () {
                     return [
