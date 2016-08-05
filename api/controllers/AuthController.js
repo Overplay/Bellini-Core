@@ -117,8 +117,8 @@ module.exports = require( 'waterlock' ).waterlocked( {
         var params = req.allParams();
 
 
-        //handle no password if facebook 
-        if (( params.email === undefined) || (params.password === undefined) || (params.user === undefined))
+        //handle no password if facebook this is ugly 
+        if (( params.email === undefined) || (params.password === undefined) || (params.user === undefined) || (params.password === '' && !params.facebookId))
             return res.status(400).json({'message': "Missing email, password or user object"});
 
         //HUGE security hole if someone tries to add themselves as an OG 

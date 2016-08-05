@@ -40,7 +40,7 @@ app.controller('signupController', function ($scope, $log, nucleus, $timeout, $w
                 if ($scope.signupType == "facebook") {
                     //only happens when facebook signup 
                     //TODO fix this to log them straight in! 
-                    $window.location.href = '/'
+                    $window.location.href = '/auth/login?type=facebook' //TODO figure this out if waterlock config changes hmmm
                 }
                 else if (!$scope.validate) {
                     //redirect to log in
