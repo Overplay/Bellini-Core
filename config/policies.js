@@ -82,7 +82,9 @@ module.exports.policies = {
         'findOne': [ 'sessionAuth', 'isMeOrAdmin' ],
         'update':  [ 'sessionAuth', 'isMeOrAdmin' ],
         'destroy': [ 'sessionAuth', 'isAdmin' ],
-        'queryFirstLastEmail' : ['sessionAuth', 'isProprietorOwner']
+        'inviteUser': ['sessionAuth', 'isProprietorOwner'],
+        'inviteRole': ['sessionAuth', 'isProprietorOwner'],
+        'findByEmail': ['sessionAuth', 'isProprietorOwner']
 
     },
 

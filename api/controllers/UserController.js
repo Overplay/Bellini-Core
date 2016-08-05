@@ -10,6 +10,7 @@
 
 var Promise = require('bluebird');
 var _ = require("lodash")
+var jwt = require("jwt-simple")
 
 
 module.exports = require('waterlock').actions.user({
@@ -182,8 +183,8 @@ module.exports = require('waterlock').actions.user({
     },
 
     //endpoint that finds users with either firstname, lastname or email
-    queryFirstLastEmail: function(req, res) {
-        //TODO policies (very important so nobody malicious queries user info
+    //Huge security hole coal wrote - might be useful for OG's to lookup users tho 
+    /*queryFirstLastEmail: function(req, res) {
 
         var params = req.allParams();
 
@@ -193,8 +194,6 @@ module.exports = require('waterlock').actions.user({
         
         var chain = Promise.resolve();
 
-
-        //TODO limit and exclude OGs
         chain = chain.then(function() {
             return User.find(
                 {
@@ -238,11 +237,139 @@ module.exports = require('waterlock').actions.user({
             return res.json(users)
         })
 
-        
 
+     },*/
 
+    //only returns user ID so info is kept secure 
+    findByEmail: function (req, res) {
+        var params = req.allParams();
 
+        if (!params.email) {
+            res.badRequest();
+        } else {
+            Auth.findOne({email: params.email})
+                .populate("user")
+                .then(function (auth) {
+                    if (auth) {
+                        //success
+                        return res.json({userId: auth.user.id})
+                    }
+                    else {
+                        //failure
+                        return res.json({message: "Not found"})
+                    }
+                })
+        }
+    },
 
+    inviteUser: function (req, res) {
+        var params = req.allParams()
+
+        //check params
+        if (!params.email || !params.name || !params.venue || !params.role)
+            return res.badRequest();
+        else {
+            //assumes email sends without issues, might need to handle this at some point
+            MailingService.inviteEmail(params.email, params.name, params.venue, params.role)
+            return res.ok()
+        }
+
+    },
+
+    //these two endpoints are super duper similar
+
+    inviteRole: function (req, res) {
+        //todo check auth (policies.js)
+
+        var params = req.allParams()
+
+        //check params
+        if (!params.email || !params.name || !params.venue || !params.role)
+            return res.badRequest();
+        else {
+            MailingService.inviteRole(params.email, params.name, params.venue, params.role)
+            return res.ok()
+        }
+    },
+
+    acceptRole: function (req, res) {
+        if (req.allParams().token) { //TODO token expiration and what not 
+
+            try {
+                var decoded = jwt.decode(req.allParams().token, sails.config.jwt.secret)
+                var _reqTime = Date.now();
+                // If token is expired
+                if (decoded.exp <= _reqTime)
+                    return res.forbidden('Your token is expired.');
+                // If token is early
+                if (_reqTime <= decoded.nbf)
+                    return res.forbidden('This token is early.');
+                // If the subject doesn't match
+                if (sails.config.mailing.roleSub !== decoded.sub)
+                    return res.forbidden('This token cannot be used for this request.');
+
+                //token passes 
+                Auth.findOne({email: decoded.email})
+                    .populate("user")
+                    .then(function (auth) {
+                        if (auth) {
+                            var user = auth.user;
+                            //add role and add venue 
+                            var role = decoded.role == "Manager" ? "proprietor.manager" : "proprietor.owner"
+                            user.roles = _.union(user.roles, [RoleCacheService.roleByName(role)])
+                            if (decoded.role == "Manager")
+                                user.managedVenues.add(decoded.venue)
+                            else if (decoded.role == "Owner")
+                                user.ownedVenues.add(decoded.venue)
+                            else
+                                return res.badRequest()
+                            user.save(function (err) {
+                                if (err)
+                                    return res.serverError(err)
+                                else {
+                                    //log them in??
+                                    //TODO feedback 
+                                    return res.redirect("/auth/loginPage")
+                                }
+
+                            })
+                        }
+                        else //user not found hahaha fuckkkk bad token probably 
+                            return res.badRequest("No user found with that email")
+                            
+                    })
+            }
+            catch (err) {
+                sails.log.debug("CAUGHT: bad token req", err)
+                
+                return res.badRequest(err);
+            }
+        }
+        else
+            res.badRequest();
+
+    },
+
+    addRole: function (req, res) {
+
+        var params = req.allParams();
+
+        if (!params.id || !params.roleName) {
+            res.badRequest();
+        } else {
+            User.findOne(params.id)
+                .then(function (u) {
+                    u.roles = _.union(u.roles, [RoleCacheService.roleByName(params.roleName)])
+                    u.save(function (err) {
+                        if (err)
+                            return res.serverError("Add role error ")
+                        else {
+                            req.session.user = u
+                            return res.json(u)
+                        }
+                    })
+                })
+        }
 
     }
 

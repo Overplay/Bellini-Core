@@ -30,31 +30,31 @@ function getAuthRole() {
     })
 }
 
-function attachAdminToAuth( authObj ) {
+function attachAdminToAuth(authObj) {
 
-    return new Promise( function ( resolve, reject ) {
+    return new Promise(function (resolve, reject) {
 
         getAuthRole()
             .then(function (authRoleId) {
 
-                User.findOneById( authObj.user )
-                    .then( function ( user ) {
+                User.findOneById(authObj.user)
+                    .then(function (user) {
                         user.accountType = 'admin';
                         user.roles = _.union(user.roles, [authRoleId]);
                         user.save();
-                        resolve( user );
-                    } )
-                    .catch( reject );
+                        resolve(user);
+                    })
+                    .catch(reject);
 
-            } )
-            .catch( reject );  //bubble it up, but this should not ever occur
+            })
+            .catch(reject);  //bubble it up, but this should not ever occur
 
 
-    } )
+    })
 }
 
 
-module.exports = require( 'waterlock' ).waterlocked( {
+module.exports = require('waterlock').waterlocked({
 
 
     /**
@@ -62,25 +62,25 @@ module.exports = require( 'waterlock' ).waterlocked( {
      *
      * @param emailAddr
      */
-    addAdmin: function ( emailAddr ) {
+    addAdmin: function (emailAddr) {
 
-        return new Promise( function ( resolve, reject ) {
+        return new Promise(function (resolve, reject) {
             "use strict";
 
-            Auth.findOneByEmail( emailAddr )
-                .then( function ( auth ) {
-                    sails.log.debug( "Found an auth for email: " + emailAddr );
-                    attachAdminToAuth( auth )
-                        .then( resolve )
-                        .catch( reject )
+            Auth.findOneByEmail(emailAddr)
+                .then(function (auth) {
+                    sails.log.debug("Found an auth for email: " + emailAddr);
+                    attachAdminToAuth(auth)
+                        .then(resolve)
+                        .catch(reject)
 
-                } )
-                .catch( function ( err ) {
-                    sails.log.error( "No email for that user: " + emailAddr );
-                    reject( err );
-                } )
+                })
+                .catch(function (err) {
+                    sails.log.error("No email for that user: " + emailAddr);
+                    reject(err);
+                })
 
-        } );
+        });
 
     },
 
@@ -96,10 +96,10 @@ module.exports = require( 'waterlock' ).waterlocked( {
     // TODO: This should do a check before attempting create to keep the log noise level down :)
     addUser: function (emailAddr, password, userObj, facebookId, requireValidation) {
 
-        return new Promise( function ( resolve, reject ) {
+        return new Promise(function (resolve, reject) {
 
             var authAttrib = {
-                email:    emailAddr,
+                email: emailAddr,
                 password: password
             };
 
@@ -107,8 +107,8 @@ module.exports = require( 'waterlock' ).waterlocked( {
                 authAttrib.facebookId = facebookId;
 
             requireValidation = requireValidation || sails.config.waterlock.alwaysValidate;
-
-            Auth.findOne({email: emailAddr}) //TODO check on facebook id too?? 
+            
+            Auth.findOne({email: emailAddr}) //TODO check on facebook id too??
                 .then(function (auth) {
                     if (auth) {
                         sails.log.debug("Email is in system, rejecting create.")
@@ -120,7 +120,7 @@ module.exports = require( 'waterlock' ).waterlocked( {
                                 waterlock.engine.attachAuthToUser(authAttrib, user, function (err, userWithAuth) {
                                     if (err) {
                                         sails.log.error('AdminService.addUser: Error attaching auth to user');
-                                        sails.log.error( err );
+                                        sails.log.error(err);
                                         reject(err);
                                     } else {
                                         if (requireValidation) {
@@ -128,18 +128,16 @@ module.exports = require( 'waterlock' ).waterlocked( {
 
                                             ValidateToken.create({owner: userWithAuth.auth.id})
                                                 .then(function (tok) {
-                                                    sails.log.info(tok);
-                                                    
+                                                    //sails.log.info(tok);
+
                                                     return Auth.update({id: tok.owner}, {
-                                                        validateToken: tok,
-                                                        blocked: true
-                                                    })
+                                                            validateToken: tok,
+                                                            blocked: true
+                                                        })
                                                         .then(function (data) {
                                                             sails.log.debug("Back attach of validateToken OK");
                                                             resolve(userWithAuth);
                                                         })
-
-
 
 
                                                 })
@@ -153,10 +151,10 @@ module.exports = require( 'waterlock' ).waterlocked( {
                             })
                             .catch(reject)
                     }
-                } )
-                .catch( reject )
+                })
+                .catch(reject)
 
-        } )
+        })
 
     },
 
@@ -166,9 +164,9 @@ module.exports = require( 'waterlock' ).waterlocked( {
      * @param params { password: "password", email | token: "value" }
      *
      */
-    changePwd: function ( params ) {
+    changePwd: function (params) {
 
-        return new Promise( function ( resolve, reject ) {
+        return new Promise(function (resolve, reject) {
 
             if (!params.password) {
                 reject(new Error("Try including a password!"));
@@ -176,17 +174,17 @@ module.exports = require( 'waterlock' ).waterlocked( {
 
             if (params.email) {
 
-                Auth.findOneByEmail( params.email )
-                    .then( function ( authObj ) {
+                Auth.findOneByEmail(params.email)
+                    .then(function (authObj) {
                         authObj.password = params.password;
                         return authObj.save()
-                            .then( function ( authObjNew ) {
+                            .then(function (authObjNew) {
                                 resolve();
-                            } )
-                            .catch( reject );
+                            })
+                            .catch(reject);
 
-                    } )
-                    .catch( reject );
+                    })
+                    .catch(reject);
 
 
             } else if (params.resetToken) {
@@ -194,24 +192,24 @@ module.exports = require( 'waterlock' ).waterlocked( {
                 // Token is stored on the Auth resetToken.token
 
                 Auth.findOne({"resetToken.token": params.token})
-                    .then( function ( authObj ) {
+                    .then(function (authObj) {
                         authObj.password = params.password;
                         authObj.save()
-                            .then( function ( authObjNew ) {
+                            .then(function (authObjNew) {
                                 resolve();
-                            } )
-                            .catch( reject );
+                            })
+                            .catch(reject);
 
-                    } )
-                    .catch( reject );
+                    })
+                    .catch(reject);
 
             }
 
 
-        } );
+        });
 
     }
 
 
-} )
+})
 ;

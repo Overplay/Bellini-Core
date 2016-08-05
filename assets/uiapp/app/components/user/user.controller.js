@@ -6,7 +6,7 @@
  * This is the non-privileged controller
  */
 
-app.controller( "editUserController", function ( $scope, $log, user, toastr, nucleus, links ) {
+app.controller("editUserController", function ($scope, $log, user, toastr, nucleus, links, $http, $rootScope) {
 
     //TODO for anyone that can edit this particular user 
     $log.debug( "userController starting for userauth: " + user.id );
@@ -14,6 +14,8 @@ app.controller( "editUserController", function ( $scope, $log, user, toastr, nuc
     $scope.userUpdate = JSON.parse(JSON.stringify(user));
     $scope.user.email = user.auth.email;
 
+
+    $scope.advertiser = $scope.user.roleTypes.indexOf("advertiser") != -1
 
     $scope.$parent.ui.panelHeading = user.email;
     $scope.$parent.ui.pageTitle = "Edit User";
@@ -63,6 +65,18 @@ app.controller( "editUserController", function ( $scope, $log, user, toastr, nuc
             .catch( function ( err ) {
                 toastr.error( "Something went wrong", "Dang!" );
             } );
+    }
+
+
+    $scope.becomeAdvertiser = function () {
+        //TODO ask them if its cool to become one etc
+        //TODO ng if
+        $http.post("/user/addRole", {id: $scope.user.id, roleName: "advertiser"})
+            .then(function (data) {
+                $rootScope.$emit('navBarUpdate', data.data.roleTypes);
+                $scope.advertiser = true;
+                toastr.success("You are now an advertiser!")
+            })
     }
 
 } );
@@ -356,7 +370,7 @@ app.controller("addUserController", function ($scope, $state, $log, toastr, nucl
             firstName: $scope.user.firstName,
             lastName: $scope.user.lastName,
             mobilePhone: $scope.user.mobilePhone
-        })
+            }, '', false)
             .then( function ( u ) {
                 toastr.success( "Account added!", "Success!" );
                 $state.go('user.editUserAdmin', { id: u.auth.id } );

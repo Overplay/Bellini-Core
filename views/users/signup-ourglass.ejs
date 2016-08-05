@@ -205,16 +205,22 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row" ng-if="signupType === 'facebook'">
+                        <div class="col-md-12 text-center">
+                            <p style="color:white;"> Password optional: if not provided, you will only be able to log in through Facebook </p>
+                        </div>
+                    </div>
+
 
                     <div class="row">
                         <div class="col-md-6">
-                            <div class="form-group" ng-class="{ 'has-error' : form.password.$touched && (auth.password.length < 8 || !form.password.$valid),
-                                                                'has-success' : form.password.$valid && auth.password.length > 7 }">
+                            <div class="form-group" ng-class="{ 'has-error' : (form.password.$touched && (auth.password.length < 8 || !form.password.$valid) && !pwCheck()),
+                                                                'has-success' : (form.password.$valid && auth.password.length > 7) || ((signupType == 'facebook') && auth.password.length == '')}">
                                 <div class="input-group input-group-lg">
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
 
                                     <input type="password" class="form-control" placeholder="Password" name="password"
-                                           ng-model="auth.password" required>
+                                           ng-model="auth.password" ng-required="validate">
                                 </div>
                             </div>
                         </div>
@@ -224,7 +230,7 @@
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
 
                                     <input type="password" class="form-control" placeholder="Confirm Password" name="passwordConfirm"
-                                           ng-model="auth.passwordConfirm" required>
+                                           ng-model="auth.passwordConfirm" ng-required="validate">
                                 </div>
                             </div>
                         </div>

@@ -3,22 +3,22 @@
  */
 
 
-app.config( function ( $stateProvider, $urlRouterProvider ) {
+app.config(function ($stateProvider, $urlRouterProvider) {
 
-    console.debug( "Loading routes" );
+    console.debug("Loading routes");
 
     var apiPath = 'api/v1';
 
-    $urlRouterProvider.otherwise( '/dash' );
+    $urlRouterProvider.otherwise('/dash');
 
     $stateProvider
 
         .state('user.adminList', {
             url: '/admin-list',
-            data:        { subTitle: "Manage Users" },
+            data: {subTitle: "Manage Users"},
             controller: 'listUserController',
             templateUrl: '/uiapp/app/components/user/userlist.partial.html',
-            resolve:     {
+            resolve: {
                 users: function (nucleus) {
                     return nucleus.getAuth()
                 },
@@ -33,7 +33,7 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                 }
             }
 
-        } )
+        })
 
         .state( 'user', {
             url:         '/user',
@@ -43,9 +43,9 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
         })
 
         .state('user.addUser', {
-            url:         '/add-user',
-            data:        { subTitle: "Add User" },
-            controller:  "addUserController",
+            url: '/add-user',
+            data: {subTitle: "Add User"},
+            controller: "addUserController",
             templateUrl: '/uiapp/app/components/user/add-user-admin.partial.html',
             resolve: {
                 links: function () {
@@ -91,7 +91,7 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
 
                             return $q.all(all);
                         })
-                        .then(function() {
+                        .then(function () {
                             var all = [];
                             angular.forEach(managerUsers, function(manager) {
                                 all.push(nucleus.getAuth(manager.auth)
@@ -106,7 +106,7 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                             return managerAuths;
                         })
                 },
-                links: function() {
+                links: function () {
                     return [
                         {text: "Managers", link: "user.managerList"}
                     ]
@@ -115,15 +115,15 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                     return "manager";
                 }
             }
-            
+
         })
 
-        .state( 'user.editUser', {
-            url:         '/edit-user/:id',
-            data:        { subTitle: "Edit User" },
-            controller:  'editUserController',
+        .state('user.editUser', {
+            url: '/edit-user/:id',
+            data: {subTitle: "Edit User"},
+            controller: 'editUserController',
             templateUrl: '/uiapp/app/components/user/edit-user.partial.html',
-            resolve:     {
+            resolve: {
                 user: function (nucleus) { //TODO this is broken
                     return nucleus.getMe()
                 },
@@ -135,42 +135,44 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             }
         })
 
-        .state( 'user.editUserOwner', {
-            url:         '/edit-user-owner/:id',
-            controller:  'editUserOwnerController',
+        .state('user.editUserOwner', {
+            url: '/edit-user-owner/:id',
+            controller: 'editUserOwnerController',
             templateUrl: '/uiapp/app/components/user/edit-user-admin.partial.html',
-            resolve:     {
-                user: function ( nucleus, $stateParams ) {
-                    return nucleus.getAuth( $stateParams.id )
-                        .then( function (auth) {
-                            return nucleus.getUser( auth.user.id )
-                                .then( function (user) {
+            resolve: {
+                user: function (nucleus, $stateParams) {
+                    return nucleus.getAuth($stateParams.id)
+                        .then(function (auth) {
+                            return nucleus.getUser(auth.user.id)
+                                .then(function (user) {
                                     auth.user = user;
                                     return auth;
                                 })
                         })
-                        .then( function (auth) {
+                        .then(function (auth) {
                             return nucleus.getMe()
-                                .then( function (me) {
+                                .then(function (me) {
                                     return nucleus.getUser(me.id);
                                 })
-                                .then( function (user) {
+                                .then(function (user) {
                                     auth.user.managedVenues = _.intersectionWith(user.ownedVenues, auth.user.managedVenues,
-                                                                                 function (v1, v2) { return v1.id === v2.id; })
+                                        function (v1, v2) {
+                                            return v1.id === v2.id;
+                                        })
                                     return auth;
                                 })
                         })
                 },
-                owned: function ( nucleus ) {
+                owned: function (nucleus) {
                     return nucleus.getMe()
-                        .then( function (me) {
+                        .then(function (me) {
                             return nucleus.getUser(me.id)
-                                .then( function (user) {
+                                .then(function (user) {
                                     return user.ownedVenues;
                                 })
                         })
                 },
-                links: function() {
+                links: function () {
                     return [
                         {text: "Managers", link: "user.managerList"}
                     ]
@@ -178,14 +180,14 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             }
         })
 
-        .state( 'user.editUserAdmin', {
-            url:         '/edit-user-admin/:id',
-            data:        { subTitle: "Edit User (Admin)" },
-            controller:  'editUserAdminController',
+        .state('user.editUserAdmin', {
+            url: '/edit-user-admin/:id',
+            data: {subTitle: "Edit User (Admin)"},
+            controller: 'editUserAdminController',
             templateUrl: '/uiapp/app/components/user/edit-user-admin.partial.html',
-            resolve:     {
-                user:  function ( nucleus, $stateParams ) {
-                    return nucleus.getAuth( $stateParams.id )
+            resolve: {
+                user: function (nucleus, $stateParams) {
+                    return nucleus.getAuth($stateParams.id)
                         .then(function (auth) {
                             return nucleus.getUser(auth.user.id)
                                 .then(function (user) {
@@ -194,7 +196,7 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                                 })
                         })
                 },
-                roles: function ( nucleus ) {
+                roles: function (nucleus) {
                     return nucleus.getRole()
                 },
                 links: function () {
@@ -204,30 +206,32 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                     ]
                 }
             }
-        } )
+        })
 
         // New Venue Routes
 
-        .state( 'venue', {
-            url:         '/venue',
+        .state('venue', {
+            url: '/venue',
             templateUrl: '/uiapp/app/components/venue/venue-sidemenu.partial.html',
-            controller:  function ( $scope ) { $scope.panelHeading = { text: "", color: "#0000FF" }},
-            abstract:    true
-        } )
+            controller: function ($scope) {
+                $scope.panelHeading = {text: "", color: "#0000FF"}
+            },
+            abstract: true
+        })
 
-        .state( 'venue.view', {
-            url:         '/view/:id',
-            resolve:     {
-                venue: function ( $http, $stateParams) {
-                    return $http.get( apiPath+"/venue/" +$stateParams.id)
-                        .then( function (data) {
+        .state('venue.view', {
+            url: '/view/:id',
+            resolve: {
+                venue: function ($http, $stateParams) {
+                    return $http.get(apiPath + "/venue/" + $stateParams.id)
+                        .then(function (data) {
                             return data.data;
                         })
-                        .catch(function(err){
+                        .catch(function (err) {
                             return err;
                         })
                 },
-                user: function(nucleus) {
+                user: function (nucleus) {
                     return nucleus.getMe()
                 },
                 links: function () {
@@ -239,22 +243,22 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                 role: function () { return "owner"; }
             },
             templateUrl: '/uiapp/app/components/venue/viewvenue.partial.html',
-            controller:  'viewVenueController'
-        } )
+            controller: 'viewVenueController'
+        })
 
-        .state( 'venue.adminView', {
-            url:         '/admin-view/:id',
-            resolve:     {
-                venue: function ( $http, $stateParams) {
-                    return $http.get( apiPath+"/venue/" +$stateParams.id)
-                        .then( function (data) {
+        .state('venue.adminView', {
+            url: '/admin-view/:id',
+            resolve: {
+                venue: function ($http, $stateParams) {
+                    return $http.get(apiPath + "/venue/" + $stateParams.id)
+                        .then(function (data) {
                             return data.data;
                         })
-                        .catch(function(err){
+                        .catch(function (err) {
                             return err;
                         })
                 },
-                user: function(nucleus) {
+                user: function (nucleus) {
                     return nucleus.getMe()
                 },
                 links: function () {
@@ -266,19 +270,19 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                 role: function () { return "role"; }
             },
             templateUrl: '/uiapp/app/components/venue/viewvenue.partial.html',
-            controller:  'viewVenueController'
-        } )
+            controller: 'viewVenueController'
+        })
 
-        .state( 'venue.edit', {
-            url:         '/edit/:id',
-            resolve:     {
+        .state('venue.edit', {
+            url: '/edit/:id',
+            resolve: {
 
-                venue: function ( $http, $stateParams) {
-                    return $http.get( apiPath+"/venue/" +$stateParams.id)
-                        .then( function (data) {
+                venue: function ($http, $stateParams) {
+                    return $http.get(apiPath + "/venue/" + $stateParams.id)
+                        .then(function (data) {
                             return data.data;
                         })
-                        .catch(function(err){
+                        .catch(function (err) {
                             return err;
                         })
                 },
@@ -294,19 +298,19 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                 role: function () { return "owner"; }
             },
             templateUrl: '/uiapp/app/components/venue/addeditvenue.partial.html',
-            controller:  'addEditVenueController'
-        } )
+            controller: 'addEditVenueController'
+        })
 
-        .state( 'venue.adminEdit', {
-            url:         '/admin-edit/:id',
-            resolve:     {
+        .state('venue.adminEdit', {
+            url: '/admin-edit/:id',
+            resolve: {
 
-                venue: function ( $http, $stateParams) {
-                    return $http.get( apiPath+"/venue/" +$stateParams.id)
-                        .then( function (data) {
+                venue: function ($http, $stateParams) {
+                    return $http.get(apiPath + "/venue/" + $stateParams.id)
+                        .then(function (data) {
                             return data.data;
                         })
-                        .catch(function(err){
+                        .catch(function (err) {
                             return err;
                         })
                 },
@@ -322,21 +326,20 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                 role: function () { return "admin"; }
             },
             templateUrl: '/uiapp/app/components/venue/addeditvenue.partial.html',
-            controller:  'addEditVenueController'
-        } )
+            controller: 'addEditVenueController'
+        })
 
 
-
-        .state( 'venue.list', {
-            url:         '/list',
-            controller:  'listVenueController',
+        .state('venue.list', {
+            url: '/list',
+            controller: 'listVenueController',
             templateUrl: '/uiapp/app/components/venue/venuelist.partial.html',
-            resolve:     {
-                venues: function ( $http ) {
-                        return $http.get( '/user/getVenues')
-                            .then( function (data) {
-                                return data.data;
-                            })
+            resolve: {
+                venues: function ($http) {
+                    return $http.get('/user/getVenues')
+                        .then(function (data) {
+                            return data.data;
+                        })
                 },
                 links: function () {
                     return [
@@ -348,14 +351,14 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             }
         })
 
-        .state( 'venue.adminList', {
-            url:         '/admin-list',
-            controller:  'listVenueController',
+        .state('venue.adminList', {
+            url: '/admin-list',
+            controller: 'listVenueController',
             templateUrl: '/uiapp/app/components/venue/venuelist.partial.html',
-            resolve:     {
-                venues: function ( $http ) {
-                    return $http.get( apiPath+'/venue')
-                        .then( function (data) {
+            resolve: {
+                venues: function ($http) {
+                    return $http.get(apiPath + '/venue')
+                        .then(function (data) {
                             return data.data;
                         })
                 },
@@ -369,12 +372,14 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             }
         })
 
-        .state( 'venue.add', {
+        .state('venue.add', {
             url: '/add',
             templateUrl: '/uiapp/app/components/venue/addeditvenue.partial.html',
             controller: 'addEditVenueController',
             resolve: {
-                edit: function() { return false; },
+                edit: function () {
+                    return false;
+                },
                 venue: function () {
                     return null;
                 },
@@ -388,12 +393,14 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             }
         })
 
-        .state( 'venue.adminAdd', {
+        .state('venue.adminAdd', {
             url: '/admin-add',
             templateUrl: '/uiapp/app/components/venue/addeditvenue.partial.html',
             controller: 'addEditVenueController',
             resolve: {
-                edit: function() { return false; },
+                edit: function () {
+                    return false;
+                },
                 venue: function () {
                     return null;
                 },
@@ -407,12 +414,14 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             }
         })
 
-        .state( 'venue.userAdd', {
+        .state('venue.userAdd', {
             url: '/user-add',
             templateUrl: '/uiapp/app/components/venue/addeditvenue.partial.html',
             controller: 'addEditVenueController',
             resolve: {
-                edit: function() { return false; },
+                edit: function () {
+                    return false;
+                },
                 venue: function () {
                     return null;
                 },
@@ -425,20 +434,22 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             }
         })
 
-        .state( 'device', {
-            url:         '/device',
+        .state('device', {
+            url: '/device',
             templateUrl: '/uiapp/app/components/device/device-sidemenu.partial.html',
-            controller:  function ( $scope ) { $scope.panelHeading = { text: "", color: "#0000FF" }},
-            abstract:    true
-        } )
+            controller: function ($scope) {
+                $scope.panelHeading = {text: "", color: "#0000FF"}
+            },
+            abstract: true
+        })
 
-        .state( 'device.list', {
-            url:         '/list',
-            controller:  'listDeviceController',
+        .state('device.list', {
+            url: '/list',
+            controller: 'listDeviceController',
             templateUrl: '/uiapp/app/components/device/devicelist.partial.html',
-            resolve:     {
-                devices: function ( $http ) {
-                    return $http.get( '/user/getDevices')
+            resolve: {
+                devices: function ($http) {
+                    return $http.get('/user/getDevices')
                         .then(function (data) {
                             return data.data;
                         })
@@ -455,13 +466,13 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             }
         })
 
-        .state( 'device.managerList', {
-            url:         '/manager-list',
-            controller:  'listDeviceController',
+        .state('device.managerList', {
+            url: '/manager-list',
+            controller: 'listDeviceController',
             templateUrl: '/uiapp/app/components/device/devicelist.partial.html',
-            resolve:     {
-                devices: function ( $http ) {
-                    return $http.get( '/user/getManagedDevices')
+            resolve: {
+                devices: function ($http) {
+                    return $http.get('/user/getManagedDevices')
                         .then(function (data) {
                             return data.data;
                         })
@@ -478,12 +489,12 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             }
         })
 
-        .state( 'device.adminList', {
-            url:        '/admin-list',
-            controller:  'listDeviceController',
+        .state('device.adminList', {
+            url: '/admin-list',
+            controller: 'listDeviceController',
             templateUrl: '/uiapp/app/components/device/devicelist.partial.html',
-            resolve:     {
-                devices: function ( $http ) {
+            resolve: {
+                devices: function ($http) {
                     return $http.get(apiPath + '/device')
                         .then(function (data) {
                             return data.data;
@@ -501,34 +512,34 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             }
         })
 
-        .state( 'device.userAdd', {
-            url:         '/user-activate',
-            data:        { subTitle: "Add a Device" },
-            controller:  'addDeviceController',
+        .state('device.userAdd', {
+            url: '/user-activate',
+            data: {subTitle: "Add a Device"},
+            controller: 'addDeviceController',
             templateUrl: '/uiapp/app/components/device/add-device.partial.html',
-            resolve:     {
+            resolve: {
                 links: function () {
                     return [
-                        { link: 'dash', text: 'Back to Dash' }
+                        {link: 'dash', text: 'Back to Dash'}
                     ]
                 },
-                user: function ( nucleus ) {
+                user: function (nucleus) {
                     return nucleus.getMe()
-                        // .then( function (me) {
-                        //     return nucleus.getUser(me.id);
-                        // });
+                    // .then( function (me) {
+                    //     return nucleus.getUser(me.id);
+                    // });
                 }
             }
 
         })
 
-        .state( 'device.add', {
-            url:         '/activate',
-            data:        { subTitle: "Add a Device" },
-            controller:  "addDeviceController",
+        .state('device.add', {
+            url: '/activate',
+            data: {subTitle: "Add a Device"},
+            controller: "addDeviceController",
             templateUrl: '/uiapp/app/components/device/add-device.partial.html',
-            resolve:     {
-                user: function ( nucleus ) {
+            resolve: {
+                user: function (nucleus) {
                     return nucleus.getMe()
                 },
                 links: function () {
@@ -538,7 +549,7 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                     ]
                 }
             }
-        } )
+        })
 
         .state('device.adminAdd', {
             url: '/activate-admin',
@@ -561,22 +572,22 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             }
         })
 
-        .state( 'device.register', {
-            url:         '/register',
-            data:        { subTitle: "Register a Device" },
+        .state('device.register', {
+            url: '/register',
+            data: {subTitle: "Register a Device"},
             // controller:  "registerDeviceController",
             templateUrl: '/uiapp/app/components/device/register-device.partial.html'
-        } )
+        })
 
         .state('device.adminManage', {
             url: '/admin-manage/:id',
-            data:        { subTitle: "Manage Device" },
-            controller:  'editDeviceAdminController',
+            data: {subTitle: "Manage Device"},
+            controller: 'editDeviceAdminController',
             templateUrl: '/uiapp/app/components/device/manage-device.partial.html',
-            resolve:     {
-                device: function ( $http, $stateParams) {
-                    return $http.get( apiPath+"/device/" +$stateParams.id)
-                        .then( function (data) {
+            resolve: {
+                device: function ($http, $stateParams) {
+                    return $http.get(apiPath + "/device/" + $stateParams.id)
+                        .then(function (data) {
                             return data.data;
                         })
                 },
@@ -606,11 +617,11 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                         .then(function (data) {
                             return data.data;
                         })
-                        .catch(function(err){
+                        .catch(function (err) {
                             return err;
                         })
                 },
-                user: function ( nucleus ) {
+                user: function (nucleus) {
                     return nucleus.getMe()
                 },
                 links: function () {
@@ -620,7 +631,7 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                     ]
                 }
             }
-        } )
+        })
 
         .state('device.managerManage', {
             url: '/manager-manage/:id',
@@ -633,11 +644,11 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                         .then(function (data) {
                             return data.data;
                         })
-                        .catch(function(err){
+                        .catch(function (err) {
                             return err;
                         })
                 },
-                user: function ( nucleus ) {
+                user: function (nucleus) {
                     return nucleus.getMe()
                 },
                 links: function () {
@@ -647,30 +658,30 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                     ]
                 }
             }
-        } )
+        })
 
-        .state( 'organization', {
-            url:         '/organization',
+        .state('organization', {
+            url: '/organization',
             templateUrl: '/uiapp/app/components/organization/organization-sidemenu.partial.html',
-            abstract:    true,
-            resolve:     {
-                user: function ( nucleus ) {
+            abstract: true,
+            resolve: {
+                user: function (nucleus) {
                     return nucleus.getMe()
                 }
             }
-        } )
+        })
 
-        .state( 'organization.edit', {
-            url:         '/edit',
-            resolve:     {},
+        .state('organization.edit', {
+            url: '/edit',
+            resolve: {},
             templateUrl: '/uiapp/app/components/organization/edit-organization.partial.html',
-            controller:  'editOrganizationController'
-        } )
+            controller: 'editOrganizationController'
+        })
 
-        .state( 'organization.manage', {
-            url:         '/manage',
-            data:        { subTitle: "Manage Organization" },
-            controller:  'editOrganizationController',
+        .state('organization.manage', {
+            url: '/manage',
+            data: {subTitle: "Manage Organization"},
+            controller: 'editOrganizationController',
             templateUrl: '/uiapp/app/components/organization/manage-organization.partial.html',
             /*resolve: { not really necesary unless someone has control of multiple organizations?
              organization: function($http, $stateParams){
@@ -680,35 +691,37 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
              })
              }
              }*/
-        } )
+        })
 
-        .state( 'organization.view', {
-            url:         '/view',
-            data:        { subTitle: "View Organization" },
-            controller:  'viewOrganizationController',
+        .state('organization.view', {
+            url: '/view',
+            data: {subTitle: "View Organization"},
+            controller: 'viewOrganizationController',
             templateUrl: '/uiapp/app/components/organization/view-organization.partial.html',
-            resolve:     {
-                organization: function ( $http, $stateParams ) {
+            resolve: {
+                organization: function ($http, $stateParams) {
 
-                    $http.get( "api/v1/organization/" + $stateParams.id )
-                        .then( function ( data ) {
+                    $http.get("api/v1/organization/" + $stateParams.id)
+                        .then(function (data) {
                             return data.data;
-                        } )
+                        })
                 }
             }
-        } )
+        })
 
 
-        .state( 'advertisement', {
-            url:         '/advertisement',
+        .state('advertisement', {
+            url: '/advertisement',
             templateUrl: '/uiapp/app/components/device/device-sidemenu.partial.html',
-            controller:  function ( $scope ) { $scope.panelHeading = { text: "", color: "#0000FF" }},
-            abstract:    true,
+            controller: function ($scope) {
+                $scope.panelHeading = {text: "", color: "#0000FF"}
+            },
+            abstract: true,
             resolve: {
                 user: function (nucleus) {
                     return nucleus.getMe();
                 },
-                links: function(){
+                links: function () {
 
                     return [
                         {text: 'My Advertisements', link: 'advertisement.list'},
@@ -718,20 +731,20 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             }
         })
 
-        .state( 'advertisement.add', {
-            url:         '/add',
+        .state('advertisement.add', {
+            url: '/add',
             templateUrl: '/uiapp/app/components/trevda/add-trevda.partial.html',
-            data:        { subTitle: "Add Advertisement" },
-            controller:  'addAdvertisementController'
-        } )
+            data: {subTitle: "Add Advertisement"},
+            controller: 'addAdvertisementController'
+        })
 
-        .state( 'advertisement.list', {
-            url:         '/manage',
+        .state('advertisement.list', {
+            url: '/manage',
             templateUrl: '/uiapp/app/components/trevda/trevdalist.partial.html',
-            data:        { subTitle: "Manage Advertisements" },
-            controller:  'manageAdvertisementController',
+            data: {subTitle: "Manage Advertisements"},
+            controller: 'manageAdvertisementController',
             resolve: {
-                ads: function($http) {
+                ads: function ($http) {
                     return $http.get("/user/getAlist").then(function (ads) {
                         return ads.data;
                     })
@@ -742,7 +755,7 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
 
 
             }
-        } )
+        })
 
         .state('advertisement.adminList', {
             url: '/admin-list',
@@ -795,11 +808,11 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             }
         })
 
-        .state( 'advertisement.edit', {
-            url:         '/edit/:id',
+        .state('advertisement.edit', {
+            url: '/edit/:id',
             templateUrl: '/uiapp/app/components/trevda/edit-trevda.partial.html',
-            data:        { subTitle: "Edit Advertisement" },
-            controller:  'editAdvertisementController',
+            data: {subTitle: "Edit Advertisement"},
+            controller: 'editAdvertisementController',
             resolve: {
                 advertisement: function ($stateParams, $http) {
                     return $http.get("api/v1/ad/" + $stateParams.id)
@@ -816,11 +829,11 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                 }
             }
 
-        } )
+        })
         // =========== DASHBOARD
 
-        .state( 'dash', {
-            url:         '/dash',
+        .state('dash', {
+            url: '/dash',
             templateUrl: '/uiapp/app/components/dash/dash.partial.html',
             controller: 'dashController',
             resolve: {
@@ -828,15 +841,15 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                     return nucleus.getMe();
                 }
             }
-        } )
+        })
 
         .state('dash.proprietorowner', {
             templateUrl: '/uiapp/app/components/dash/po-dash.partial.html',
             controller: 'poDashController',
             resolve: {
-                venues: function ( $http ) {
-                    return $http.get( '/user/getVenues')
-                        .then( function (data) {
+                venues: function ($http) {
+                    return $http.get('/user/getVenues')
+                        .then(function (data) {
                             return data.data;
                         })
                 }
@@ -857,8 +870,8 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             }
         })
         .state('dash.admin', {
-        templateUrl: '/uiapp/app/components/dash/admin-dash.partial.html',
-        controller: 'adminDashController',
+            templateUrl: '/uiapp/app/components/dash/admin-dash.partial.html',
+            controller: 'adminDashController',
         })
         .state('dash.advertiser', {
             templateUrl: '/uiapp/app/components/dash/ad-dash.partial.html',

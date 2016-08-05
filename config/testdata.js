@@ -2,7 +2,7 @@
  * Created by rhartzell on 5/6/16.
  */
 
-
+//Note: test data will be duplicated if being run on a cluster! 
 
 var Promise = require('bluebird');
 
