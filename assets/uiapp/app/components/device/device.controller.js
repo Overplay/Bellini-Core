@@ -294,9 +294,10 @@ app.controller('listDeviceController', function ($scope, devices, $log, uibHelpe
         _.forEach($scope.devices, function (dev) {
             $http.get("api/v1/venue/" + dev.venue)
                 .then(function (data) {
+                    delete data.data.devices;
                     dev.venue = data.data;
                 })
-    })
-}
+        })
+    }
 
 })
