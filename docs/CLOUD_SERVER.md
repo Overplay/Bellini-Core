@@ -98,7 +98,8 @@
         - NOW `sudo npm install pm2@next -g`
             - in testing
             - chainging module for new v
-                - methods still don't work, using exec but trying to fix still 
+                - methods still don't work, using exec but trying to fix still
+                - ugh
         - `$ pm2 update`
             - once dev is pushed to pm2 master `sudo npm install -g pm2 (As your user)`
     - set up keymetrics
