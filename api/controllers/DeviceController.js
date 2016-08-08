@@ -23,8 +23,6 @@ module.exports = {
         if ((params.regCode === undefined)) //test other stuff too
             return res.badRequest();
 
-        //sails.log.debug(params);
-
 
         var deviceObj = {};
 
@@ -59,12 +57,11 @@ module.exports = {
                 if (devices.length != 1) //should never find and update more than one device
                     sails.log.debug("NOT GOOD UPDATE :(");
                 sails.log.debug(devices, "updated/registered");
-                return res.json(devices[0]);
+                return res.ok(devices[0]);
 
             })
             .catch(function (err) {
-                //TODO tighten up security around what returns
-                return res.notFound();
+                return res.badRequest();
             });
     },
 
@@ -75,7 +72,7 @@ module.exports = {
         Device.create(req.allParams())
             .then(function(dev){
                 //sails.log.debug(dev)
-                return res.json(dev)
+                return res.ok(dev)
             })
             .catch(function(err){
                 sails.log.debug(err)
@@ -114,7 +111,7 @@ module.exports = {
                 if (!device)
                     return res.badRequest("Device not found");
 
-                return res.json(device.deviceBackup);
+                return res.ok(device.deviceBackup);
             })
     }
 

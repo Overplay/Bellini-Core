@@ -87,6 +87,11 @@ module.exports.policies = {
         'findByEmail': ['sessionAuth', 'isProprietorOwner']
 
     },
+    
+    VenueController: {
+        '*': ['sessionAuth']
+    },
+    
 
     RoleController: {
         '*':       true,

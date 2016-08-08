@@ -18,7 +18,7 @@ module.exports = {
         
         //check req session and user 
         if (!req.session || !req.session.user) {
-            return res.badRequest("user not logged in");
+            return res.badRequest({"message": "user not logged in"});
 
         }
         
@@ -66,7 +66,7 @@ module.exports = {
         Device.create(deviceObj)
             .then(function (device) {
                 sails.log.debug(device, "created");
-                return res.json({code: device.regCode});
+                return res.ok({code: device.regCode});
 
             })
             .catch(function (err) {
