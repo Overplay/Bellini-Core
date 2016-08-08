@@ -99,7 +99,7 @@
             - in testing
             - chainging module for new v
                 - methods still don't work, using exec but trying to fix still
-                - ugh
+                - ugh   
                 - submitting git issue
         - `$ pm2 update`
             - once dev is pushed to pm2 master `sudo npm install -g pm2 (As your user)`
