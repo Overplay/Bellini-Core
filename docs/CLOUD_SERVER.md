@@ -94,9 +94,8 @@
         - `sudo nginx -s reload`
 
 17. Install PM2 and set up Keymetrics
-    - currently on `sudo npm install Unitech/pm2#development -g` (as sudo priv user) 
+    - used `sudo npm install pm2@next -g` (currently on 2.0.4)
         - `$ pm2 update`
-            - once dev is pushed to pm2 master `sudo npm install -g pm2 (As your user)`
     - set up keymetrics
         - on your keymetrics bucket, simply link by copy pasting the command at the bottom 
         - https://app.keymetrics.io
@@ -125,5 +124,7 @@
 At this point, the app runs properly.
 -----------------
 
-
+make sure all the node modules and their libraries are owned by asahi for updates
+- /usr/lib/node_modules should be updatedable by asahi probably?
+- jk might have to sudo install pm2
 TODO there is going to need to be a fix for when the app reloads and keeping a user signed in probably! 

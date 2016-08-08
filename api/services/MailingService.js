@@ -92,9 +92,6 @@ var inviteUrl = function (url, email, venue, role, subject) {
 
     var token = jwt.encode(payload, secret)
 
-    sails.log.debug(token)
-
-
     return url + "?token=" + token;
 
 }

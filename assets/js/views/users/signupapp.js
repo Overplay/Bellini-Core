@@ -39,8 +39,7 @@ app.controller('signupController', function ($scope, $log, nucleus, $timeout, $w
                 //TODO sign person in for validate = false?? 
                 if ($scope.signupType == "facebook") {
                     //only happens when facebook signup 
-                    //TODO fix this to log them straight in! 
-                    $window.location.href = '/auth/login?type=facebook' //TODO figure this out if waterlock config changes hmmm
+                    $window.location.href = '/auth/login?type=facebook' //TODO figure this out if waterlock config changes hmmm, maybe have facebook auth log them in? 
                 }
                 else if (!$scope.validate) {
                     //redirect to log in
@@ -65,9 +64,8 @@ app.controller('signupController', function ($scope, $log, nucleus, $timeout, $w
             })
             .catch(function (err) {
                 $log.error("Could not create account");
-
-                //TODO test different messages
-                $scope.ui.errorMessage = "Account creation failed: " + err.data.message;
+                //it would be cool to have feedback, but production doesn't send data in err
+                $scope.ui.errorMessage = "Account creation failed";
                 $scope.ui.error = true;
                 $scope.auth.email = '';
                 $timeout(function () {
