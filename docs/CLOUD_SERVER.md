@@ -96,6 +96,7 @@
 17. Install PM2 and set up Keymetrics
     - currently on `sudo npm install Unitech/pm2#development -g` (as sudo priv user)
         - NOW `sudo npm install pm2@next -g`
+            - in testing
         - `$ pm2 update`
             - once dev is pushed to pm2 master `sudo npm install -g pm2 (As your user)`
     - set up keymetrics
