@@ -96,7 +96,6 @@
 17. Install PM2 and set up Keymetrics
     - used `sudo npm install pm2@next -g` (currently on 2.0.4)
         - `$ pm2 update`
-        - uh oh aut roealo
     - set up keymetrics
         - on your keymetrics bucket, simply link by copy pasting the command at the bottom 
         - https://app.keymetrics.io
