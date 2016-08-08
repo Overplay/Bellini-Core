@@ -124,7 +124,3 @@
 At this point, the app runs properly.
 -----------------
 
-make sure all the node modules and their libraries are owned by asahi for updates
-- /usr/lib/node_modules should be updatedable by asahi probably?
-- jk might have to sudo install pm2
-TODO there is going to need to be a fix for when the app reloads and keeping a user signed in probably! 

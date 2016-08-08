@@ -20,19 +20,19 @@ app.factory('navBarService', function ($log) {
                     ]
                 },
                     /*{
-                        label: "Organization",
-                        id: "organization",
-                        items: [{label: "organization", link: {type: 'ui-sref', addr: 'organization.view'}}]
-                    },*/
+                     label: "Organization",
+                     id: "organization",
+                     items: [{label: "organization", link: {type: 'ui-sref', addr: 'organization.view'}}]
+                     },*/
                     {
                         label: "Venues",
                         id: "venues",
                         items: [{label: "All Venues", link: {type: 'ui-sref', addr: 'venue.adminList'}}]
                     },
                     {
-                     label: "Advertisements",
-                     id: "trevda",
-                     items: [{label: "Ads", link: {type: 'ui-sref', addr: 'advertisement.adminList'}}]
+                        label: "Advertisements",
+                        id: "trevda",
+                        items: [{label: "Ads", link: {type: 'ui-sref', addr: 'advertisement.adminList'}}]
                     }
                 ],
                 right: [{
@@ -62,20 +62,24 @@ app.factory('navBarService', function ($log) {
                         id: "venues",
                         items: [{label: "My Venues", link: {type: 'ui-sref', addr: 'venue.list'}}]
                     },
-                   /* {
-                        label: "Organization",
-                        id: "organization",
-                        items: [{label: "organization", link: {type: 'ui-sref', addr: 'organization.view'}}]
-                    }*/
+                    /* {
+                     label: "Organization",
+                     id: "organization",
+                     items: [{label: "organization", link: {type: 'ui-sref', addr: 'organization.view'}}]
+                     }*/
                 ],
                 right: [{
                     label: 'Account',
                     id: 'account',
-                    items: [{label: "Edit My Account", link: {type: 'ui-sref', addr: 'user.editUser'}},
-                        {label: "Logout", link: {type: 'href', addr: '/logout'}}
+                    items: [{
+                        label: "Edit My Account",
+                        link: {type: 'ui-sref', addr: 'user.editUser'}
+                    },
+                        {
+                            label: "Logout", link: {type: 'href', addr: '/logout'}
+                        }
                     ]
-                }
-                ]
+                }]
             },
             'proprietor.manager': {
                 left: [
@@ -85,54 +89,21 @@ app.factory('navBarService', function ($log) {
                     // items: [{label: "Manage Users", link: {type: 'ui-sref', addr: 'admin.manageUsers'}},
                     //     {label: "Add User", link: {type: 'ui-sref', addr: 'admin.addUser'}}
                     // ]
-                // },
-                {
-                    label: "Devices", //might need to be modified
-                    id: "devices",
-                    items: [{label: "Managed Devices", link: {type: 'ui-sref', addr: 'device.managerList'}}]
-                },
-                    /*{
-                        label: "Organization",
-                        id: "organization",
-                        items: [{
-                            label: "organization",
-                            link: {type: 'ui-sref', addr: 'organization.view'}
-                        }]
-                    }*/
-                ],
-                right: [{
-                    label: 'Account',
-                    id: 'account',
-                    items: [{label: "Edit My Account", link: {type: 'ui-sref', addr: 'user.editUser'}},
-                        {label: "Logout", link: {type: 'href', addr: '/logout'}}
-                    ]
-                }
-                ]
-            },
-            'user': {
-                left: [
-                    /*{
-                        label: 'Register a Device',
-                        id: 'device',
-                        items: [{label: "device", link: {type: 'ui-sref', addr: 'device.add'}}]
-
-                    }*/
-                    /*{
-                        label: 'Me',
-                        id: "user",
-                        items: [{
-                            label: 'me', link: {type: 'ui-sref', addr: 'user.editUser'}
-                        }
-                        ]
-                    },
+                    // },
                     {
-                        label: 'Check Ins',
-                        id: "checkins",
-                        items: [{
-                            label: 'Check Ins', link: {type: 'href', addr: '#'}
-                        }]
-                    }
-                    */],
+                        label: "Devices", //might need to be modified
+                        id: "devices",
+                        items: [{label: "Managed Devices", link: {type: 'ui-sref', addr: 'device.managerList'}}]
+                    },
+                    /*{
+                     label: "Organization",
+                     id: "organization",
+                     items: [{
+                     label: "organization",
+                     link: {type: 'ui-sref', addr: 'organization.view'}
+                     }]
+                     }*/
+                ],
                 right: [{
                     label: 'Account',
                     id: 'account',
@@ -140,13 +111,50 @@ app.factory('navBarService', function ($log) {
                         label: "Edit My Account",
                         link: {type: 'ui-sref', addr: 'user.editUser'}
                     },
-                    {
-                        label: "Logout", link: {type: 'href', addr: '/logout'}
-                    }
+                        {
+                            label: "Logout", link: {type: 'href', addr: '/logout'}
+                        }
                     ]
                 }]
             },
-            'developer':{
+            'user': {
+                left: [
+                    /*{
+                     label: 'Register a Device',
+                     id: 'device',
+                     items: [{label: "device", link: {type: 'ui-sref', addr: 'device.add'}}]
+
+                     }*/
+                    /*{
+                     label: 'Me',
+                     id: "user",
+                     items: [{
+                     label: 'me', link: {type: 'ui-sref', addr: 'user.editUser'}
+                     }
+                     ]
+                     },
+                     {
+                     label: 'Check Ins',
+                     id: "checkins",
+                     items: [{
+                     label: 'Check Ins', link: {type: 'href', addr: '#'}
+                     }]
+                     }
+                     */],
+                right: [{
+                    label: 'Account',
+                    id: 'account',
+                    items: [{
+                        label: "Edit My Account",
+                        link: {type: 'ui-sref', addr: 'user.editUser'}
+                    },
+                        {
+                            label: "Logout", link: {type: 'href', addr: '/logout'}
+                        }
+                    ]
+                }]
+            },
+            'developer': {
                 left: {}
                 ,
 
@@ -256,7 +264,7 @@ app.factory('navBarService', function ($log) {
             _.forEach(objValue, function (val) {
                 var match;
 
-                if (match = _.find(srcValue, {label: val.label})) { //could add id to find but that seems counterintuitive
+                if (match = _.find(srcValue, {label: val.label})) {
                     val.items = match.items = _.unionWith(val.items, match.items, _.isEqual);
                     val.id = match.id = val.id; //fix not matched IDs
                 }

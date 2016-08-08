@@ -84,6 +84,7 @@ app.controller("editAdvertisementController", function ($scope, $log, $http, $st
     $scope.advertisement.mediaMeta = mediaMeta;
     $scope.advertisementUpdate.mediaMeta = angular.copy(mediaMeta);
 
+
     $scope.$parent.ui.pageTitle = "Manage Advertisement";
     $scope.$parent.ui.panelHeading = "";
     $scope.$parent.links = links;
@@ -101,6 +102,15 @@ app.controller("editAdvertisementController", function ($scope, $log, $http, $st
     //to update the advertisement 
     $scope.update = function () {
         delete $scope.advertisementUpdate.mediaMeta
+
+        if (!$scope.advertisementUpdate.media) {
+            $scope.advertisementUpdate.media = {
+                sm: null,
+                md: null,
+                lg: null,
+                wide: null
+            }
+        }
 
         var chain = Promise.resolve();
         _.forEach($scope.media, function (val, key) {
