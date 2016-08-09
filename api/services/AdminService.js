@@ -107,8 +107,8 @@ module.exports = require('waterlock').waterlocked({
                 authAttrib.facebookId = facebookId;
 
             requireValidation = requireValidation || sails.config.waterlock.alwaysValidate;
-            
-            Auth.findOne({email: emailAddr}) //TODO check on facebook id too??
+
+            Auth.findOne({email: emailAddr}) //TODO check on facebook id too?? I think that facebook auth with login if found automatically -CG 
                 .then(function (auth) {
                     if (auth) {
                         sails.log.debug("Email is in system, rejecting create.")

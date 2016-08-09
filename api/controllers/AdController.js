@@ -40,7 +40,7 @@ module.exports = {
 
                 chain = chain.then(function () {
                     sails.log.debug(media)
-                    return res.json(media);
+                    return res.ok(media);
                 });
             })
             .catch(function (err) {

@@ -20,12 +20,6 @@ module.exports = {
     //creates a new venue
     addVenue: function (req, res) {
 
-        //check req session and user 
-        if (!req.session || !req.session.user) {
-            return res.badRequest("user not logged in");
-
-        }
-
         var addressUsed = true;
 
         //TODO fix this and figure out how to prevent duplicates
@@ -82,7 +76,7 @@ module.exports = {
         Venue.findOne({ id: req.allParams().id }).populate('venueManagers')
             .then( function (venue) {
                 if (venue) {
-                    return res.json(venue.venueManagers);
+                    return res.ok(venue.venueManagers);
                 }
             })
     },
@@ -90,14 +84,14 @@ module.exports = {
     yelpSearch: function (req, res) {
         yelp.search(req.allParams())
             .then(function (data) {
-                return res.json(data);
+                return res.ok(data);
             })
     },
 
     yelpBusiness: function (req, res) {
         yelp.business(req.allParams().yelpId)
             .then(function (data) {
-                return res.json(data);
+                return res.ok(data);
             })
     },
 
@@ -124,7 +118,7 @@ module.exports = {
                     return res.badRequest(err);
                 })
                 .then( function () {
-                    return res.json(venues);
+                    return res.ok(venues);
                 })
         })
 
@@ -158,7 +152,7 @@ module.exports = {
                             Venue.findOne(params.venueId)
                                 .populate("venueManagers")
                                 .then(function (venue) {
-                                    return res.json(venue.venueManagers)
+                                    return res.ok(venue.venueManagers)
 
                                 })
                         })
@@ -201,7 +195,7 @@ module.exports = {
                             Venue.findOne(params.venueId)
                                 .populate("venueOwners")
                                 .then(function (venue) {
-                                    return res.json(venue.venueOwners)
+                                    return res.ok(venue.venueOwners)
 
                                 })
                         })
@@ -238,7 +232,7 @@ module.exports = {
                         Venue.findOne(params.venueId)
                             .populate("venueManagers")
                             .then(function (venue) {
-                                return res.json(venue.venueManagers)
+                                return res.ok(venue.venueManagers)
 
                             })
                     })
@@ -302,7 +296,7 @@ module.exports = {
                                 Venue.findOne(params.venueId)
                                     .populate("venueOwners")
                                     .then(function (venue) {
-                                        return res.json(venue.venueOwners)
+                                        return res.ok(venue.venueOwners)
 
                                     })
                             })

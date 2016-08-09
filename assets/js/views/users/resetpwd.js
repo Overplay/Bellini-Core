@@ -37,7 +37,6 @@ app.controller( "resetController", function ( $scope, $log, nucleus, $window ) {
         // TODO: do something useful and throw up toasts
         nucleus.changePassword({ email: email, newpass: $scope.user.password, resetToken: resetToken })
             .then( function(){
-                $log.log("WOAH")
                 $window.location.href = '/login'
             })
             .catch( function(err){

@@ -18,9 +18,9 @@ module.exports = require( 'waterlock' ).waterlocked( {
     status: function ( req, res ) {
 
         if ( req.session && req.session.user )
-            return res.json( req.session.user );
+            return res.ok(req.session.user);
         else
-            return res.forbidden();
+            return res.forbidden({"message": "Not authorized"});
 
     },
 
@@ -79,7 +79,7 @@ module.exports = require( 'waterlock' ).waterlocked( {
 
             AdminService.changePwd( { resetToken: params.resetToken, password: params.newpass } )
                 .then( function () {
-                    return res.json( { "message": "Password changed" } );
+                    return res.ok({"message": "Password changed"});
                 } )
                 .catch( function ( err ) {
                     return res.error( err );
@@ -119,7 +119,7 @@ module.exports = require( 'waterlock' ).waterlocked( {
 
         //handle no password if facebook this is ugly 
         if (( params.email === undefined) || (params.password === undefined) || (params.user === undefined) || (params.password === '' && !params.facebookId))
-            return res.status(400).json({'message': "Missing email, password or user object"});
+            return res.badRequest({'message': "Missing email, password or user object"});
 
         //HUGE security hole if someone tries to add themselves as an OG 
         if (params.user.roleNames) {
@@ -135,8 +135,8 @@ module.exports = require( 'waterlock' ).waterlocked( {
 
         AdminService.addUser(params.email, params.password, params.user, params.facebookId, params.validate) //TRUE requires validation
             .then( function ( data ) {
-                sails.log.debug(data)
-                return res.json(data)
+                //sails.log.debug(data)
+                return res.ok(data)
 
             } )
             .catch( function ( err ) {

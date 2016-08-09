@@ -15,16 +15,7 @@ module.exports = {
      */
     generateCode: function (req, res) {
         
-        
-        //check req session and user 
-        if (!req.session || !req.session.user) {
-            return res.badRequest("user not logged in");
 
-        }
-        
-        
-        
-        
 
         var code = '';
         var codeInUse = true;
@@ -66,7 +57,7 @@ module.exports = {
         Device.create(deviceObj)
             .then(function (device) {
                 sails.log.debug(device, "created");
-                return res.json({code: device.regCode});
+                return res.ok({code: device.regCode});
 
             })
             .catch(function (err) {
