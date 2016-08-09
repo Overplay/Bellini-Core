@@ -69,8 +69,8 @@ module.exports.policies = {
 
     DeviceController: {
         '*': true,
-        'find': ['sessionAuth', 'isDeviceOwnerOrManager'],
-        'findOne': ['sessionAuth', 'isDeviceOwnerOrManager'],
+        'find': ['sessionAuth', 'isDeviceManagerOrOwner'],
+        'findOne': ['sessionAuth', 'isDeviceManagerOrOwner'],
         'update': ['sessionAuth', 'isDeviceOwner'],
         'destroy': ['sessionAuth', 'isDeviceOwner']
 
