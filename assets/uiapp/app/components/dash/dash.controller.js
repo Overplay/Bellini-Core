@@ -8,7 +8,7 @@
 app.controller("dashController", function ($scope, $log, user, $state) {
     $log.log("starting dashController")
 
-    $log.log(user)
+    // $log.log(user)
     
     $scope.roles = user.roleTypes;
 
@@ -24,7 +24,7 @@ app.controller("dashController", function ($scope, $log, user, $state) {
 
     //TODO default dash view? change button style?
     //highlight current view button
-    
+
 
 });
 
