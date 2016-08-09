@@ -51,7 +51,7 @@ module.exports.policies = {
 
     ActivationController: {
         '*': true,
-        'generateCode': ['sessionAuth', 'isAdmin']
+        'generateCode': ['sessionAuth'] //just need to be logged in as any user 
     },
     
     AuthController: {
@@ -59,18 +59,18 @@ module.exports.policies = {
         'find':    [ 'sessionAuth', 'isAdmin' ],
         'findOne': [ 'sessionAuth', 'isMeOrAdmin' ],
         'update':  [ 'sessionAuth', 'isAdmin' ],
-        'destroy': [ 'sessionAuth', 'isAdmin' ],
+        'destroy': ['sessionAuth', 'isAdmin'], //maybe me?
         status:    [ 'sessionAuth' ],
-        loginPage: true,
-        login:     true,
-        register:  [ 'sessionAuth', 'isAdmin' ],
-        addUser:   [ 'sessionAuth', 'isAdmin' ],
+        register: ['sessionAuth', 'isAdmin'], //not even used anywhere
+        addUser: true, //used in SignupApp through nucleus service
         resetPwd:  [ 'passwordReset' ],
-        changePwd: [ 'passwordReset' ],
+        changePwd: ['sessionAuth', 'isMeOrAdmin'] //not sure on this
     },
 
     DeviceController: {
         '*': true,
+        'find': ['sessionAuth', 'isDeviceOwnerOrManager'],
+        'findOne': ['sessionAuth', 'isDeviceOwnerOrManager'],
         'update': ['sessionAuth', 'isDeviceOwner'],
         'destroy': ['sessionAuth', 'isDeviceOwner']
 

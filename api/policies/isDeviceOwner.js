@@ -17,14 +17,14 @@
 module.exports = function (req, res, next) {
 
 
-    /*if (sails.config.policies.wideOpen) {
-     sails.log.debug("In wideOpen policy mode, so skipping this policy!");
-     return next();
-     }*/
+    if (sails.config.policies.wideOpen) {
+        sails.log.debug("In wideOpen policy mode, so skipping this policy!");
+        return next();
+    }
 
     var device = req.allParams();
     if (RoleCacheService.hasAdminRole(req.session.user.roles)) {
-        return next();
+        return next(); //admin can manage any devices 
     }
     else {
         Device.findOne(device.id)
@@ -59,6 +59,6 @@ module.exports = function (req, res, next) {
             })
 
     }
-    
+
 
 };

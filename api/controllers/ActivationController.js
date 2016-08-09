@@ -15,16 +15,7 @@ module.exports = {
      */
     generateCode: function (req, res) {
         
-        
-        //check req session and user 
-        if (!req.session || !req.session.user) {
-            return res.badRequest({"message": "user not logged in"});
 
-        }
-        
-        
-        
-        
 
         var code = '';
         var codeInUse = true;
