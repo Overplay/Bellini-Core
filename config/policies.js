@@ -64,7 +64,6 @@ module.exports.policies = {
         register: ['sessionAuth', 'isAdmin'], //not even used anywhere
         addUser: true, //used in SignupApp through nucleus service
         resetPwd:  [ 'passwordReset' ],
-        changePwd: ['sessionAuth', 'isMeOrAdmin'] //not sure on this
     },
 
     DeviceController: {
@@ -84,7 +83,8 @@ module.exports.policies = {
         'destroy': [ 'sessionAuth', 'isAdmin' ],
         'inviteUser': ['sessionAuth', 'isProprietorOwner'],
         'inviteRole': ['sessionAuth', 'isProprietorOwner'],
-        'findByEmail': ['sessionAuth', 'isProprietorOwner']
+        'findByEmail': ['sessionAuth', 'isProprietorOwner'],
+        'getVenues': ['sessionAuth', 'isProprietorOwner']
 
     },
     
@@ -106,7 +106,7 @@ module.exports.policies = {
     //AuthController: [ 'sessionAuth', 'meOrAdmin' ],
 
     UIController: {
-        uiApp: [ 'authDecorator', 'sessionAuth' ]
+        uiApp: ['forceAnonToLogin', 'authDecorator', 'sessionAuth']
     },
 
     // Override this in local.js for testing
