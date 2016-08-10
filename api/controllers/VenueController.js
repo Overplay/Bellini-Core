@@ -69,9 +69,6 @@ module.exports = {
     },
 
     getVenueManagers: function (req, res) {
-        if (!req.session || !req.session.user) {
-            return res.badRequest("user not logged in");
-        }
         
         Venue.findOne({ id: req.allParams().id }).populate('venueManagers')
             .then( function (venue) {
