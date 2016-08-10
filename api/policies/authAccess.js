@@ -10,9 +10,7 @@
  *
  */
 module.exports = function (req, res, next) {
-
-    sails.log.debug("AUTH ACCESS POLICY ")
-
+    
     if (sails.config.policies.wideOpen) {
         sails.log.debug("In wideOpen policy mode, so skipping this policy!");
         return next();
@@ -72,7 +70,6 @@ module.exports = function (req, res, next) {
                                         _.filter(v.venueManagers, function (u) {
                                             return lastPath == u.auth
                                         }))
-                                    sails.log.debug(matches, lastPath)
                                     if (matches.length > 0)
                                         callback(true)
                                     else
