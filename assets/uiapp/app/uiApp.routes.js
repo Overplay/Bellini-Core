@@ -91,8 +91,8 @@ app.config(function ($stateProvider, $urlRouterProvider) {
 
                             return $q.all(all);
                         })
-                        .then(function () {
-                            var all = [];
+                        .then(function () { //do all this backend?? 
+                            var all = []; //necesary because it doesnt deep populate 
                             angular.forEach(managerUsers, function(manager) {
                                 all.push(nucleus.getAuth(manager.auth)
                                     .then(function (data) {

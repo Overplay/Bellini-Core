@@ -57,7 +57,9 @@ module.exports.policies = {
     AuthController: {
         '*':       true,
         'find':    [ 'sessionAuth', 'isAdmin' ],
-        'findOne': [ 'sessionAuth', 'isMeOrAdmin' ],
+        //maybe something that checks if the user belongs to the pos venues wow
+        //cases : ME, admin, PO of venue that user owns or manages
+        'findOne': ['sessionAuth', 'authAccess'], //tricky for manager list and whatnot
         'update':  [ 'sessionAuth', 'isAdmin' ],
         'destroy': ['sessionAuth', 'isAdmin'], //maybe me?
         status:    [ 'sessionAuth' ],
@@ -89,7 +91,10 @@ module.exports.policies = {
     },
     
     VenueController: {
-        '*': ['sessionAuth']
+        '*': ['sessionAuth'],
+        getVenueManagers: ['sessionAuth', 'isProprietorOwner', 'isVenueOwner'],
+        addManager: ['sessionAuth', 'isProprietorOwner', 'isVenueOwner'],
+        addOwner: ['sessionAuth', 'isProprietorOwner', 'isVenueOwner']
     },
     
 
