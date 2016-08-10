@@ -57,7 +57,7 @@ module.exports = require( 'waterlock' ).waterlocked( {
 
         if ( params.newpass === undefined ) {
             // Must have a password or this is a waste of time
-            res.badRequest();
+            res.badRequest("No new password specified");
 
         } else if ( params.email ) {
 
@@ -74,7 +74,7 @@ module.exports = require( 'waterlock' ).waterlocked( {
 
             // Attempt at token based reset. Let's make sure they are really cool
             if ( params.resetToken != req.session.resetToken.token ) {
-                return res.forbidden();
+                return res.forbidden("Reset token does not match");
             }
 
             AdminService.changePwd( { resetToken: params.resetToken, password: params.newpass } )
@@ -87,7 +87,7 @@ module.exports = require( 'waterlock' ).waterlocked( {
 
 
         } else {
-            res.badRequest();
+            res.badRequest("Neither email nor reset token specified");
         }
 
 
