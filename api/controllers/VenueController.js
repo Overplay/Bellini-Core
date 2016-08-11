@@ -55,7 +55,7 @@ module.exports = {
                                 //TODO test venue owners
                                 v.venueOwners.add(req.session.user);
                                 v.save();
-                                sails.log.debug("venue ownership", v)
+                                //sails.log.debug("venue ownership", v)
                                 return res.json({ venue: v, user: user })
                             })
                             .catch(function (err) {
@@ -75,6 +75,8 @@ module.exports = {
                 if (venue) {
                     return res.ok(venue.venueManagers);
                 }
+                else
+                    return res.badRequest();
             })
     },
     
