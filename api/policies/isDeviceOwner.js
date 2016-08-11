@@ -22,14 +22,18 @@ module.exports = function (req, res, next) {
         return next();
     }
 
-    var device = req.allParams();
+    //allow admin access 
     if (RoleCacheService.hasAdminRole(req.session.user.roles)) {
-        return next(); //admin can manage any devices 
+        return next();
     }
+
+
     else {
+        var device = req.allParams();
+        sails.log.debug(device)
         Device.findOne(device.id)
             .then(function (d) {
-
+                sails.log.debug(d)
                 if (d) {
                     device = d;
                     User.findOne(req.session.user.id)

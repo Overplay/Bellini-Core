@@ -6,14 +6,21 @@
 //TODO needs testing 
 module.exports = function (req, res, next) {
 
-    var device = req.allParams();
 
     if (sails.config.policies.wideOpen) {
         sails.log.debug("In wideOpen policy mode, so skipping this policy!");
         return next();
     }
 
+    //allow admin access 
+    if (RoleCacheService.hasAdminRole(req.session.user.roles)) {
+        return next();
+    }
+        
+        
     else {
+        var device = req.allParams();
+
         Device.findOne(device.id)
             .then(function (d) {
 

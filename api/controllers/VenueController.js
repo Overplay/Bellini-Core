@@ -43,13 +43,17 @@ module.exports = {
         var newVenue = req.allParams();
 
         User.findOne({id: req.session.user.id})
+            .populate('auth')
             .then( function (user) {
                 if (user) {
+                    var auth = user.auth;
                     user.roles = _.union(user.roles, [RoleCacheService.roleByName("proprietor", "owner")]);
                     user.save(function (err) {
                         if (err)
                             sails.log.debug(err);
+                        user.auth = auth; //save turns auth into an id 
                         req.session.user = user;
+                        sails.log.debug(req.session.user)
                         Venue.create(newVenue)
                             .then(function (v) {
                                 //TODO test venue owners
