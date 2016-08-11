@@ -180,16 +180,6 @@
 
             }
             
-            service.changePwd = function( email, newPwd, resetToken ){
-            
-                return $http.post('auth/changePwd', { 
-                    email: email,
-                    newpass: newPwd,
-                    resetToken: resetToken });
-                    
-            }
-
-            // TODO can a non-admin user change someone else's password?? Check in authController on Sails side.
             /**
              * Change password. Must include either email or resetToken in the params
              * @param params email or resetToken must be in the params

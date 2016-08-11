@@ -198,7 +198,7 @@ app.controller('viewVenueController', function ($scope, venue, $log, uiGmapGoogl
 
     $scope.userRoute = function (id) {
         if (id === user.id)
-            return "user.edit()";
+            return "user.editUser()";
         else if ($scope.admin)
             return "user.editUserAdmin({id: user.auth})";
         return "user.editUserOwner({id: user.auth})";

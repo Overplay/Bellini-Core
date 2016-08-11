@@ -6,7 +6,7 @@
  * This is the non-privileged controller
  */
 
-app.controller("editUserController", function ($scope, $log, user, toastr, nucleus, links, $http, $rootScope) {
+app.controller("editUserController", function ($scope, $log, user, toastr, nucleus, links, $http, $rootScope, uibHelper) {
 
     //TODO for anyone that can edit this particular user 
     $log.debug( "userController starting for userauth: " + user.id );
@@ -55,6 +55,7 @@ app.controller("editUserController", function ($scope, $log, user, toastr, nucle
 
     $scope.changePassword = function(){
 
+        $log.log($scope.user)
 
         nucleus.changePassword({ email: $scope.user.email, newpass: $scope.user.newPwd1 })
             .then( function ( res ) {
@@ -69,13 +70,14 @@ app.controller("editUserController", function ($scope, $log, user, toastr, nucle
 
 
     $scope.becomeAdvertiser = function () {
-        //TODO ask them if its cool to become one etc
-        //TODO ng if
-        $http.post("/user/addRole", {id: $scope.user.id, roleName: "advertiser"})
-            .then(function (data) {
-                $rootScope.$emit('navBarUpdate', data.data.roleTypes);
-                $scope.advertiser = true;
-                toastr.success("You are now an advertiser!")
+        uibHelper.confirmModal("Are you sure?", "Would you like to be an advertiser account on Ourglass?", true)
+            .then(function (confirmed) {
+                $http.post("/user/becomeAdvertiser")
+                    .then(function (data) {
+                        $rootScope.$emit('navBarUpdate', data.data.roleTypes);
+                        $scope.advertiser = true;
+                        toastr.success("You are now an advertiser!")
+                    })
             })
     }
 
