@@ -28,7 +28,7 @@ module.exports = require('waterlock').actions.user({
                 if (auth)
                     return res.ok('found user');
                 else
-                    return res.notFound('no such user');
+                    return res.notFound({ "error" : 'No such user' });
 
             })
             .catch(function (err) {
@@ -45,10 +45,10 @@ module.exports = require('waterlock').actions.user({
 
         if (req.allParams() && req.allParams().id)
             id = req.allParams().id; //given ID
-        else if (req.session && req.session.user.id)
+        else if (req.session && req.session.user && req.session.user.id)
             id = req.session.user.id; //otherwise use current user
         else
-            return res.badRequest('Not logged in and no given id')
+            return res.badRequest({ 'error' : 'Not logged in and no given id' });
 
         User.findOne({id: id})
             .populate("ownedVenues")
@@ -91,7 +91,7 @@ module.exports = require('waterlock').actions.user({
 
         if (req.allParams() && req.allParams().id)
             id = req.allParams().id; //given ID
-        else if (req.session && req.session.user.id)
+        else if (req.session && req.session.user && req.session.user.id)
             id = req.session.user.id; //otherwise use current user
         else
             return res.badRequest('Not logged in and no given id')
@@ -245,7 +245,7 @@ module.exports = require('waterlock').actions.user({
         var params = req.allParams();
 
         if (!params.email) {
-            res.badRequest();
+            res.badRequest("No email provided");
         } else {
             Auth.findOne({email: params.email})
                 .populate("user")
