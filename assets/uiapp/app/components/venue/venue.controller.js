@@ -300,10 +300,10 @@ app.controller('viewVenueController', function ($scope, venue, $log, uiGmapGoogl
         uibHelper.confirmModal("Remove Manager?", "Are you sure you want to remove " + user.firstName + " " + user.lastName + " as a manager of " + $scope.venue.name + "?", true)
             .then(function (confirmed) {
                 $http.post('/venue/removeManager', {
-                        params: {
-                            userId: user.id,
-                            venueId: venueId
-                        }
+
+                        userId: user.id,
+                        id: venueId
+                        
                     })
                     .then(function (response) {
                         $scope.venue.venueManagers = response.data
@@ -320,10 +320,10 @@ app.controller('viewVenueController', function ($scope, venue, $log, uiGmapGoogl
         uibHelper.confirmModal("Remove Owner?", "Are you sure you want to remove this owner?", true)
             .then(function (confirmed) {
                 $http.post('/venue/removeOwner', {
-                        params: {
-                            userId: userId,
-                            venueId: venueId
-                        }
+
+                        userId: userId,
+                        id: venueId
+                        
                     })
                     .then(function (response) {
                         $log.log(response)

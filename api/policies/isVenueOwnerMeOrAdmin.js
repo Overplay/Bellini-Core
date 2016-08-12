@@ -38,8 +38,9 @@ module.exports = function (req, res, next) {
     var isVenueReq = req.originalUrl.indexOf('/venue/') > -1;
     var lastPath;
 
-    if (isVenueReq)
+    if (isVenueReq) {
         lastPath = req.allParams().id
+    }
     else
         lastPath = req.originalUrl.substr(req.originalUrl.lastIndexOf('/') + 1);
 

@@ -210,8 +210,8 @@ module.exports = {
     },
 
     removeManager: function (req, res) {
-        var params = req.allParams().params;
-        //params : user ID , venue ID
+        var params = req.allParams();
+        //params : user ID , venue ID is id
 
         //have to remove from many to many and possibly role
         User.findOne(params.userId)
@@ -228,11 +228,11 @@ module.exports = {
 
                     }
 
-                    user.managedVenues.remove(params.venueId)
+                    user.managedVenues.remove(params.id)
                     user.save(function (err) {
                         if (err)
                             sails.log.debug(err)
-                        Venue.findOne(params.venueId)
+                        Venue.findOne(params.id)
                             .populate("venueManagers")
                             .then(function (venue) {
                                 return res.ok(venue.venueManagers)
@@ -248,7 +248,7 @@ module.exports = {
 
     },
     removeOwner: function (req, res) {
-        var params = req.allParams().params;
+        var params = req.allParams();
         //params : user ID , venue ID
 
 
@@ -261,7 +261,7 @@ module.exports = {
         var venue = {};
 
         chain = chain.then(function () {
-            return Venue.findOne(params.venueId)
+            return Venue.findOne(params.id)
                 .populate("venueOwners")
                 .then(function (v) {
                     if (v) {
@@ -276,8 +276,8 @@ module.exports = {
         })
 
         //have to remove from many to many and possibly role
-        chain.then(function (res) {
-            if (!res) {
+        chain.then(function (r) {
+            if (!r) {
                 return User.findOne(params.userId)
                     .populate("managedVenues")
                     .populate("ownedVenues")
@@ -292,11 +292,11 @@ module.exports = {
 
                             }
 
-                            user.ownedVenues.remove(params.venueId)
+                            user.ownedVenues.remove(params.id)
                             user.save(function (err) {
                                 if (err)
                                     sails.log.debug(err)
-                                Venue.findOne(params.venueId)
+                                Venue.findOne(params.id)
                                     .populate("venueOwners")
                                     .then(function (venue) {
                                         return res.ok(venue.venueOwners)
