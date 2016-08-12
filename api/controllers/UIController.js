@@ -12,6 +12,7 @@ module.exports = {
 
 
     uiApp: function ( req, res ) {
+
         return res.view("ui/uiapp", {layout: 'ui/uilayout'});
     }
 

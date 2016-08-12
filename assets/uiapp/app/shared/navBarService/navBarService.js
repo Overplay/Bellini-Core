@@ -286,9 +286,7 @@ app.factory('navBarService', function ($log) {
 
         roles.forEach(function (val) {
             menus = _.mergeWith(menus, _navBarMenus[val], mergeHelper);
-
-            $log.log(menus)
-
+            
         });
 
         return menus;

@@ -11,6 +11,7 @@
 var Promise = require('bluebird');
 var _ = require("lodash")
 var jwt = require("jwt-simple")
+var waterlock = require('waterlock')
 
 
 module.exports = require('waterlock').actions.user({
@@ -292,6 +293,8 @@ module.exports = require('waterlock').actions.user({
         }
     },
 
+
+    //only handles manager and PO currently 
     acceptRole: function (req, res) {
         if (req.allParams().token) {
 
@@ -327,9 +330,15 @@ module.exports = require('waterlock').actions.user({
                                 if (err)
                                     return res.serverError(err)
                                 else {
-                                    //log them in??
-                                    //TODO feedback 
-                                    return res.redirect("/auth/loginPage")
+                                    //TODO user feedback
+
+                                    //invert auth
+                                    var a = auth;
+                                    a.user = user.id;
+                                    user.auth = a;
+
+                                    //is this dangerous since the token isn't kept track of?
+                                    waterlock.cycle.loginSuccess(req, res, user)
                                 }
 
                             })

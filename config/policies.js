@@ -94,11 +94,11 @@ module.exports.policies = {
         'upload': ['sessionAuth'],
         'deleteAllEntries': false
     },
-    
-    
+
+
     UserController: {
-        '*': true, 
-        'find':    [ 'sessionAuth', 'isAdmin' ],
+        '*': true,
+        'find': ['sessionAuth', 'isAdmin'],
         'findOne': ['sessionAuth', 'isVenueOwnerMeOrAdmin'],
         'update':  [ 'sessionAuth', 'isMeOrAdmin' ],
         'destroy': [ 'sessionAuth', 'isAdmin' ],

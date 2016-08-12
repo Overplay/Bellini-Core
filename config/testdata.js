@@ -474,7 +474,7 @@ var self = module.exports.testdata = {
             address: {street: "726 Higuera St", city: "San Luis Obispo", state: "CA", zip: "93401"},
             ownerEmails: ["elizabeth@test.com"],
             organizationEmail: "dr@test.com",
-            managerEmails: ["caterina@test.com", "annegret@test.com"]
+            managerEmails: ["caterina@test.com", "annegret@test.com", "silvanus@test.com"]
         },
         {
             name: "Not Your Average Joe's",
