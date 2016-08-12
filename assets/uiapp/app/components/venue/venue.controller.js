@@ -263,8 +263,10 @@ app.controller('viewVenueController', function ($scope, venue, $log, uiGmapGoogl
                                     venue: $scope.venue
                                 })
                                 .then(function () {
+                                    var email = $scope.proprietor.email
+                                    toastr.success("Email invite sent to " + email, "Nice! ")
                                     $scope.proprietor.email = ''
-                                    toastr.success("Email invite sent to " + $scope.proprietor.email, "Nice! ")
+
                                 })
                         })
 
@@ -285,8 +287,10 @@ app.controller('viewVenueController', function ($scope, venue, $log, uiGmapGoogl
                                     venue: $scope.venue
                                 })
                                 .then(function () {
+                                    var email = $scope.proprietor.email
+                                    toastr.success("Email invite sent to " + email, "Nice! ")
                                     $scope.proprietor.email = ''
-                                    toastr.success("Email invite sent to " + $scope.proprietor.email, "Nice! ")
+
                                 })
                             //IDEA: notification to inviter when/if its accepted??
                         })
