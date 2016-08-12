@@ -90,11 +90,11 @@ app.factory('navBarService', function ($log) {
                     //     {label: "Add User", link: {type: 'ui-sref', addr: 'admin.addUser'}}
                     // ]
                     // },
-                    {
+                    /*{
                         label: "Devices", //might need to be modified
                         id: "devices",
                         items: [{label: "Managed Devices", link: {type: 'ui-sref', addr: 'device.managerList'}}]
-                    },
+                     },*/
                     /*{
                      label: "Organization",
                      id: "organization",
@@ -265,7 +265,11 @@ app.factory('navBarService', function ($log) {
                 var match;
 
                 if (match = _.find(srcValue, {label: val.label})) {
-                    val.items = match.items = _.unionWith(val.items, match.items, _.isEqual);
+                    val.items = match.items = _.unionWith(val.items, match.items, function (obj1, obj2) {
+                        if (obj1.label == obj2.label) {
+                            return true;
+                        }
+                    });
                     val.id = match.id = val.id; //fix not matched IDs
                 }
             });
@@ -282,6 +286,8 @@ app.factory('navBarService', function ($log) {
 
         roles.forEach(function (val) {
             menus = _.mergeWith(menus, _navBarMenus[val], mergeHelper);
+
+            $log.log(menus)
 
         });
 
