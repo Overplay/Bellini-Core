@@ -322,7 +322,7 @@ app.controller("editUserOwnerController", function ($scope, $http, $state, $log,
 
     $scope.findVenue = function (query) {
         return _.filter($scope.ownedVenues, function (v) {
-            return v.name.toLowerCase().indexOf(query) !== -1
+            return v.name.toLowerCase().indexOf(query.toLowerCase()) !== -1
         })
     }
 
