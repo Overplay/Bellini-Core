@@ -123,7 +123,7 @@ module.exports.policies = {
         'addManager': ['sessionAuth', 'isVenueOwnerMeOrAdmin'],
         'addOwner': ['sessionAuth', 'isVenueOwnerMeOrAdmin'],
         'removeManager': ['sessionAuth', 'isVenueOwnerMeOrAdmin'],
-        'removeOwner': ['sessionAuth', 'isVenueOwnerMeOrAdmin']
+        'removeOwner': ['sessionAuth', 'isVenueOwnerMeOrAdmin'],
     },
     
 

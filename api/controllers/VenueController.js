@@ -129,7 +129,7 @@ module.exports = {
 
     addManager: function (req, res) {
         //params : user ID , venue ID
-        var params = req.allParams().params;
+        var params = req.allParams();
 
         //have to add proprietor.manager role to user if not already there.
         User.findOne(params.userId)
@@ -138,21 +138,21 @@ module.exports = {
             .then(function (user) {
                 if (user) { //TODO check that user doesn't already manage venue
                     if (_.find(user.managedVenues, function (v) {
-                            return v.id == params.venueId
+                            return v.id == params.id
                         })
                         || _.find(user.ownedVenues, function (v) {
-                            return v.id == params.venueId
+                            return v.id == params.id
                         })) {
                         return res.ok();
                     }
                     else {
                         //thought - own OR manage , not both
                         user.roles = _.union(user.roles, [RoleCacheService.roleByName("proprietor", "manager")])
-                        user.managedVenues.add(params.venueId)
+                        user.managedVenues.add(params.id)
                         user.save(function (err) {
                             if (err)
                                 sails.log.debug(err)
-                            Venue.findOne(params.venueId)
+                            Venue.findOne(params.id)
                                 .populate("venueManagers")
                                 .then(function (venue) {
                                     return res.ok(venue.venueManagers)
@@ -171,8 +171,8 @@ module.exports = {
     * also changes the roles of the user! 
      */
     addOwner: function (req, res) {
-        //params : user ID , venue ID
-        var params = req.allParams().params;
+        //params : user ID , venue ID (id)
+        var params = req.allParams();
 
         //have to add proprietor.owner role to user if not already there.
         User.findOne(params.userId)
@@ -181,21 +181,21 @@ module.exports = {
             .then(function (user) {
                 if (user) { //TODO check that user doesn't already manage venue
                     if (_.find(user.managedVenues, function (v) {
-                            return v.id == params.venueId
+                            return v.id == params.id
                         })
                         || _.find(user.ownedVenues, function (v) {
-                            return v.id == params.venueId
+                            return v.id == params.id
                         })) {
                         return res.ok();
                     }
                     else {
                         //thought - own OR manage , not both
                         user.roles = _.union(user.roles, [RoleCacheService.roleByName("proprietor", "owner")])
-                        user.ownedVenues.add(params.venueId)
+                        user.ownedVenues.add(params.id)
                         user.save(function (err) {
                             if (err)
                                 sails.log.debug(err)
-                            Venue.findOne(params.venueId)
+                            Venue.findOne(params.id)
                                 .populate("venueOwners")
                                 .then(function (venue) {
                                     return res.ok(venue.venueOwners)

@@ -229,7 +229,7 @@ app.controller("editUserAdminController", function ($scope, $http, $state, $log,
                 $scope.newManagedVenue = null;
             }
             else {
-                $http.post('/venue/addManager', {params: {userId: user.user.id, venueId: $scope.newManagedVenue.id}})
+                $http.post('/venue/addManager', {userId: user.user.id, id: $scope.newManagedVenue.id})
                     .then( function ( u ) {
                         toastr.success( "Managed venue added", "Success!");
                         $scope.user.user.managedVenues.push($scope.newManagedVenue);
@@ -251,7 +251,7 @@ app.controller("editUserAdminController", function ($scope, $http, $state, $log,
                 $scope.newOwnedVenue = null;
             }
             else {
-                $http.post('/venue/addOwner', {params: {userId: user.user.id, venueId: $scope.newOwnedVenue.id}})
+                $http.post('/venue/addOwner', {userId: user.user.id, id: $scope.newOwnedVenue.id})
                     .then( function ( u ) {
                         toastr.success( "Owned venue added", "Success!");
                         $scope.user.user.ownedVenues.push($scope.newOwnedVenue);
@@ -271,10 +271,10 @@ app.controller("editUserAdminController", function ($scope, $http, $state, $log,
         uibHelper.confirmModal("Remove Manager?", "Are you sure you want to remove " + $scope.user.user.firstName + " " + $scope.user.user.lastName + " as a manager of " + venue.name + "?", true)
             .then( function (confirmed) {
                 $http.post('/venue/removeManager', {
-                    params: {
+
                         userId: userId,
-                        venueId: venueId
-                    }
+                        id: venueId
+                    
                 })
                     .then(function (response) {
                         $scope.user.user.managedVenues.splice($scope.user.user.managedVenues.indexOf(venue), 1);
@@ -290,10 +290,10 @@ app.controller("editUserAdminController", function ($scope, $http, $state, $log,
         uibHelper.confirmModal("Remove Owner?", "Are you sure you want to remove " + $scope.user.user.firstName + " " + $scope.user.user.lastName + " as an owner of " + venue.name + "?", true)
             .then( function (confirmed) {
                 $http.post('/venue/removeOwner', {
-                    params: {
+
                         userId: userId,
-                        venueId: venueId
-                    }
+                        id: venueId
+                    
                 })
                 .then(function (response) {
                     $scope.user.user.ownedVenues.splice($scope.user.user.ownerVenues.indexOf(venue), 1);
@@ -319,10 +319,17 @@ app.controller("editUserOwnerController", function ($scope, $http, $state, $log,
     $scope.newManagedVenue = null;
     $scope.addressify = addressify;
 
+
+    $scope.findVenue = function (query) {
+        return _.filter($scope.ownedVenues, function (v) {
+            return v.name.toLowerCase().indexOf(query) !== -1
+        })
+    }
+
     $scope.removeManagedVenue = function (venue) {
         uibHelper.confirmModal('Remove Manager?', 'Remove ' + $scope.user.user.firstName + ' as a manager of ' + venue.name + '?' )
             .then( function (confirmed) {
-                $http.post('/venue/removeManager', { params : {userId : user.user.id, venueId: venue.id}})
+                $http.post('/venue/removeManager', {userId: user.user.id, id: venue.id})
                     .then( function ( u ) {
                         toastr.success( "Removed as venue manager", "Success!" );
                         $scope.user.user.managedVenues.splice($scope.user.user.managedVenues.indexOf(venue), 1);
@@ -345,7 +352,7 @@ app.controller("editUserOwnerController", function ($scope, $http, $state, $log,
                 $scope.newManagedVenue = null;
             }
             else {
-                $http.post('/venue/addManager', {params: {userId: user.user.id, venueId: $scope.newManagedVenue.id}})
+                $http.post('/venue/addManager', {userId: user.user.id, id: $scope.newManagedVenue.id})
                     .then( function ( u ) {
                         toastr.success( "Manager added to venue", "Success!");
                         $scope.user.user.managedVenues.push($scope.newManagedVenue);

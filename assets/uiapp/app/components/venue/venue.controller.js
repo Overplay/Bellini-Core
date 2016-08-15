@@ -274,11 +274,8 @@ app.controller('viewVenueController', function ($scope, venue, $log, uiGmapGoogl
                 //maybe check existing roles and take two different routes in the future
                 else {
                     //found
-                    var userId = response.data
                     uibHelper.confirmModal("User found!", "Are you sure you would like to add them to " + $scope.venue.name + " as a" + (type == "owner" ? "n " : " ") + type + "?", true)
                         .then(function (confirmed) {
-                            var userId = userId;
-                            var venueId = $scope.venue.id;
 
                             $http.post("/user/inviteRole", {
                                     email: $scope.proprietor.email,
