@@ -26,7 +26,7 @@ module.exports = function (req, res, next) {
 
                 if (d) {
                     device = d;
-                    User.findOne(req.session.user.id)
+                    return User.findOne(req.session.user.id)
                         .populate("ownedVenues")
                         .populate("managedVenues")
                         .then(function (user) {
