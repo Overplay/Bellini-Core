@@ -112,6 +112,10 @@ module.exports = function (req, res, next) {
                 else
                     return res.badRequest();
             })
+            .catch(function (err) {
+                sails.log.debug(err)
+                return res.serverError(err)
+            })
     }
 
 
