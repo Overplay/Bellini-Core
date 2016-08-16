@@ -355,14 +355,14 @@ module.exports = require('waterlock').actions.user({
         var params = req.allParams();
 
         if (!params.id || !params.roleName) {
-            res.badRequest();
+            res.badRequest({ error : "Missing params" });
         } else {
             User.findOne(params.id)
                 .then(function (u) {
                     u.roles = _.union(u.roles, [RoleCacheService.roleByName(params.roleName)])
                     u.save(function (err) {
                         if (err)
-                            return res.serverError("Add role error ")
+                            return res.serverError({ error : "Add role error" })
                         else {
                             req.session.user = u
                             return res.json(u)

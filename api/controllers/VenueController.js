@@ -20,6 +20,16 @@ module.exports = {
     //creates a new venue
     addVenue: function (req, res) {
 
+        var params = req.allParams();
+
+        if (!params.address || !params.name)
+            res.badRequest({ error : "Missing params" })
+
+        if (!params.id && !(req.session && req.session.user && req.session.user.id))
+            res.badRequest({ error : "No user id provided and no user logged in"});
+
+        var id = params.id ? params.id : req.session.user.id;
+
         var addressUsed = true;
 
         //TODO fix this and figure out how to prevent duplicates
@@ -33,7 +43,7 @@ module.exports = {
                     .catch(function (err) {
                         sails.log.debug("Bad Error");
                         addressUsed = false;
-                        res.notFound("something very wrong happened");
+                        res.serverError(err);
                     });
 
             }, function (err) {
@@ -42,7 +52,7 @@ module.exports = {
 
         var newVenue = req.allParams();
 
-        User.findOne({id: req.session.user.id})
+        User.findOne({id: id})
             .then( function (user) {
                 if (user) {
                     user.roles = _.union(user.roles, [RoleCacheService.roleByName("proprietor", "owner")]);
@@ -69,6 +79,9 @@ module.exports = {
     },
 
     getVenueManagers: function (req, res) {
+
+        if (!req.allParams().id)
+            res.badRequest({ error : "No venue id specified" });
         
         Venue.findOne({ id: req.allParams().id }).populate('venueManagers')
             .then( function (venue) {
@@ -76,25 +89,35 @@ module.exports = {
                     return res.ok(venue.venueManagers);
                 }
             })
+            .catch( function (err) {
+                res.serverError(err);
+            })
     },
     
     yelpSearch: function (req, res) {
         yelp.search(req.allParams())
             .then(function (data) {
-                return res.ok(data);
+                res.ok(data);
+            })
+            .catch( function (err) {
+                res.serverError(err);
             })
     },
 
     yelpBusiness: function (req, res) {
         yelp.business(req.allParams().yelpId)
             .then(function (data) {
-                return res.ok(data);
+                res.ok(data);
             })
     },
 
     queryName: function (req, res) {
 
         var params = req.allParams();
+
+        if (!params.query)
+            res.badRequest({ error : "No query provided" });
+
         var query = params.query;
         var venues = [];
         var chain = Promise.resolve();
@@ -112,10 +135,10 @@ module.exports = {
                 })
                 .catch( function (err) {
                     sails.log.debug(err);
-                    return res.badRequest(err);
+                    res.serverError(err);
                 })
                 .then( function () {
-                    return res.ok(venues);
+                    res.ok(venues);
                 })
         })
 
@@ -124,6 +147,9 @@ module.exports = {
     addManager: function (req, res) {
         //params : user ID , venue ID
         var params = req.allParams().params;
+
+        if (!params.userId || !params.venueId)
+            res.badRequest({ error : "Missing params" });
 
         //have to add proprietor.manager role to user if not already there.
         User.findOne(params.userId)
@@ -168,6 +194,9 @@ module.exports = {
         //params : user ID , venue ID
         var params = req.allParams().params;
 
+        if (!params.userId || !params.venueId)
+            res.badRequest({ error : "Missing params" });
+
         //have to add proprietor.owner role to user if not already there.
         User.findOne(params.userId)
             .populate("managedVenues")
@@ -207,6 +236,9 @@ module.exports = {
         var params = req.allParams().params;
         //params : user ID , venue ID
 
+        if (!params.userId || !params.venueId)
+            res.badRequest({ error : "Missing params" });
+
         //have to remove from many to many and possibly role
         User.findOne(params.userId)
             .populate("managedVenues")
@@ -245,6 +277,8 @@ module.exports = {
         var params = req.allParams().params;
         //params : user ID , venue ID
 
+        if (!params.userId || !params.venueId)
+            res.badRequest("Missing params");
 
         //prevent self removal from venue owner
         if (params.userId == req.session.user.id) {
