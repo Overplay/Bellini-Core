@@ -198,7 +198,7 @@ app.controller('viewVenueController', function ($scope, venue, $log, uiGmapGoogl
 
     $scope.userRoute = function (id) {
         if (id === user.id)
-            return "user.edit()";
+            return "user.editUser()";
         else if ($scope.admin)
             return "user.editUserAdmin({id: user.auth})";
         return "user.editUserOwner({id: user.auth})";
@@ -263,8 +263,10 @@ app.controller('viewVenueController', function ($scope, venue, $log, uiGmapGoogl
                                     venue: $scope.venue
                                 })
                                 .then(function () {
+                                    var email = $scope.proprietor.email
+                                    toastr.success("Email invite sent to " + email, "Nice! ")
                                     $scope.proprietor.email = ''
-                                    toastr.success("Email invite sent to " + $scope.proprietor.email, "Nice! ")
+
                                 })
                         })
 
@@ -272,11 +274,8 @@ app.controller('viewVenueController', function ($scope, venue, $log, uiGmapGoogl
                 //maybe check existing roles and take two different routes in the future
                 else {
                     //found
-                    var userId = response.data
                     uibHelper.confirmModal("User found!", "Are you sure you would like to add them to " + $scope.venue.name + " as a" + (type == "owner" ? "n " : " ") + type + "?", true)
                         .then(function (confirmed) {
-                            var userId = userId;
-                            var venueId = $scope.venue.id;
 
                             $http.post("/user/inviteRole", {
                                     email: $scope.proprietor.email,
@@ -285,8 +284,10 @@ app.controller('viewVenueController', function ($scope, venue, $log, uiGmapGoogl
                                     venue: $scope.venue
                                 })
                                 .then(function () {
+                                    var email = $scope.proprietor.email
+                                    toastr.success("Email invite sent to " + email, "Nice! ")
                                     $scope.proprietor.email = ''
-                                    toastr.success("Email invite sent to " + $scope.proprietor.email, "Nice! ")
+
                                 })
                             //IDEA: notification to inviter when/if its accepted??
                         })
@@ -300,10 +301,10 @@ app.controller('viewVenueController', function ($scope, venue, $log, uiGmapGoogl
         uibHelper.confirmModal("Remove Manager?", "Are you sure you want to remove " + user.firstName + " " + user.lastName + " as a manager of " + $scope.venue.name + "?", true)
             .then(function (confirmed) {
                 $http.post('/venue/removeManager', {
-                        params: {
-                            userId: user.id,
-                            venueId: venueId
-                        }
+
+                        userId: user.id,
+                        id: venueId
+                        
                     })
                     .then(function (response) {
                         $scope.venue.venueManagers = response.data
@@ -320,10 +321,10 @@ app.controller('viewVenueController', function ($scope, venue, $log, uiGmapGoogl
         uibHelper.confirmModal("Remove Owner?", "Are you sure you want to remove this owner?", true)
             .then(function (confirmed) {
                 $http.post('/venue/removeOwner', {
-                        params: {
-                            userId: userId,
-                            venueId: venueId
-                        }
+
+                        userId: userId,
+                        id: venueId
+                        
                     })
                     .then(function (response) {
                         $log.log(response)

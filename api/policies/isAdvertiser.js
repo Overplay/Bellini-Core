@@ -18,9 +18,14 @@ module.exports = function ( req, res, next ) {
         return next();
     }
 
+    //allow admin access
+    if (RoleCacheService.hasAdminRole(req.session.user.roles)) {
+        return next();
+    }
+
     // User is allowed, proceed to the next policy,
     // or if this is the last policy, the controller
-    if ( req.session.authenticated && !req.session.user.auth.blocked && RoleCacheService.hasRole( req.session.user.roles, "advertiser", "" ) ) {
+    if (RoleCacheService.hasRole(req.session.user.roles, "advertiser", "")) {
         return next();
     }
 

@@ -11,6 +11,7 @@
 var Promise = require('bluebird');
 var _ = require("lodash")
 var jwt = require("jwt-simple")
+var waterlock = require('waterlock')
 
 
 module.exports = require('waterlock').actions.user({
@@ -186,56 +187,56 @@ module.exports = require('waterlock').actions.user({
     //Huge security hole coal wrote - might be useful for OG's to lookup users tho 
     /*queryFirstLastEmail: function(req, res) {
 
-        var params = req.allParams();
+     var params = req.allParams();
 
-        var query = params.query;
+     var query = params.query;
 
-        var users = [];
-        
-        var chain = Promise.resolve();
+     var users = [];
 
-        chain = chain.then(function() {
-            return User.find(
-                {
-                    or: [
-                        {firstName: {'contains': query}},
-                        {lastName: {'contains': query}},
-                    ],
-                    sort: 'firstName DESC',
-                    limit: 10
-                })
-                .populate("auth")
-                .then(function (userList) {
-                    users = _.unionWith(users, userList, _.isEqual)
-                })
-                .catch(function (err) {
-                    sails.log.debug(err)
-                    return res.badRequest(err)
-                })
-        })
-        chain = chain.then(function(){
-            return Auth.find({
-                    email: {'contains': query}, sort: 'firstName DESC',
-                    sort: 'email DESC',
-                    limit: 10
-                })
-                .then(function(auths){
-                    return auths.map(function(a){
-                        return a.user;
-                    })
-                })
-                .then(function(userIDs){
-                    return User.find({id: userIDs})
-                        .populate("auth")
-                        .then(function(userList){
-                            users = _.unionWith(users, userList, _.isEqual)
-                        })
-                })
-        })
+     var chain = Promise.resolve();
 
-        chain.then(function(){
-            return res.json(users)
-        })
+     chain = chain.then(function() {
+     return User.find(
+     {
+     or: [
+     {firstName: {'contains': query}},
+     {lastName: {'contains': query}},
+     ],
+     sort: 'firstName DESC',
+     limit: 10
+     })
+     .populate("auth")
+     .then(function (userList) {
+     users = _.unionWith(users, userList, _.isEqual)
+     })
+     .catch(function (err) {
+     sails.log.debug(err)
+     return res.badRequest(err)
+     })
+     })
+     chain = chain.then(function(){
+     return Auth.find({
+     email: {'contains': query}, sort: 'firstName DESC',
+     sort: 'email DESC',
+     limit: 10
+     })
+     .then(function(auths){
+     return auths.map(function(a){
+     return a.user;
+     })
+     })
+     .then(function(userIDs){
+     return User.find({id: userIDs})
+     .populate("auth")
+     .then(function(userList){
+     users = _.unionWith(users, userList, _.isEqual)
+     })
+     })
+     })
+
+     chain.then(function(){
+     return res.json(users)
+     })
 
 
      },*/
@@ -292,8 +293,10 @@ module.exports = require('waterlock').actions.user({
         }
     },
 
+
+    //only handles manager and PO currently
     acceptRole: function (req, res) {
-        if (req.allParams().token) { //TODO token expiration and what not 
+        if (req.allParams().token) {
 
             try {
                 var decoded = jwt.decode(req.allParams().token, sails.config.jwt.secret)
@@ -327,21 +330,27 @@ module.exports = require('waterlock').actions.user({
                                 if (err)
                                     return res.serverError(err)
                                 else {
-                                    //log them in??
-                                    //TODO feedback 
-                                    return res.redirect("/auth/loginPage")
+                                    //TODO user feedback
+
+                                    //invert auth
+                                    var a = auth;
+                                    a.user = user.id;
+                                    user.auth = a;
+
+                                    //is this dangerous since the token isn't kept track of?
+                                    waterlock.cycle.loginSuccess(req, res, user)
                                 }
 
                             })
                         }
                         else //user not found hahaha fuckkkk bad token probably 
                             return res.badRequest("No user found with that email")
-                            
+
                     })
             }
             catch (err) {
                 sails.log.debug("CAUGHT: bad token req", err)
-                
+
                 return res.badRequest(err);
             }
         }
@@ -350,26 +359,24 @@ module.exports = require('waterlock').actions.user({
 
     },
 
-    addRole: function (req, res) {
+    becomeAdvertiser: function (req, res) {
 
-        var params = req.allParams();
+        if (!req.session.user)
+            return res.badRequest()
 
-        if (!params.id || !params.roleName) {
-            res.badRequest("Missing params");
-        } else {
-            User.findOne(params.id)
-                .then(function (u) {
-                    u.roles = _.union(u.roles, [RoleCacheService.roleByName(params.roleName)])
-                    u.save(function (err) {
-                        if (err)
-                            return res.serverError("Add role error");
-                        else {
-                            req.session.user = u
-                            return res.json(u)
-                        }
-                    })
+        User.findOne(req.session.user.id)
+            .then(function (u) {
+                u.roles = _.union(u.roles, [RoleCacheService.roleByName('advertiser')])
+                u.save(function (err) {
+                    if (err)
+                        return res.serverError("Add role error ")
+                    else {
+                        req.session.user = u
+                        return res.json(u)
+                    }
                 })
-        }
+            })
+    }
 
     }
 

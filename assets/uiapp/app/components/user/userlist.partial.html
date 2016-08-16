@@ -8,8 +8,8 @@
         <table class="table table-striped" ng-if="users.length">
             <thead>
             <tr>
-                <th>First Name</th>
-                <th>Last Name</th>
+                <th>Name</th>
+
                 <th>Email</th>
                 <th ng-if="!admin">Manager At</th>
                 <!--<th ng-if="admin">Created</th>-->
@@ -18,17 +18,18 @@
 
             </tr>
             </thead>
-            <tbody>
+            <tbody> <!--TODO fix view for mobile-->
             <tr ng-repeat="user in users | orderBy: 'user.lastName' | filter: searchTerm">
-                <td>{{ user.user.firstName }}</td>
-                <td>{{ user.user.lastName }}</td>
+                <td>{{ user.user.firstName }} {{ user.user.lastName }}
+                </td>
                 <td>{{ user.email }}</td>
                 <!--<td ng-if="admin">{{ user.createdAt | date }}</td>-->
                 <td ng-if="admin"><span ng-repeat="t in user.user.roleTypes">{{t}}<br></span></td>
                 <td ng-if="!admin"><span ng-repeat="venue in user.user.managedVenues">{{venue.name}}<br></span></td>
                 <td>
                     <a ui-sref="{{ admin ? 'user.editUserAdmin({ id: user.id })' : 'user.editUserOwner({ id: user.id })' }}"
-                       class="btn btn-sm btn-warning">EDIT</a></td>
+                       class="btn btn-sm btn-warning">EDIT</a>
+                </td>
             </tr>
             </tbody>
         </table>

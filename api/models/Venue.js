@@ -73,9 +73,9 @@ module.exports = {
         }
     },
 
+    //not sure if this is needed for anything? -CEG 
     beforeUpdate: function( valuesToUpdate, cb ){
-        //TODO remove managers/owners ! needs to be dropped from join table
-        sails.log.debug("In before update for venue");//, valuesToUpdate);
+        //sails.log.debug("In before update for venue");//, valuesToUpdate);
         cb();
     }
 };

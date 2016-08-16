@@ -26,10 +26,13 @@ module.exports = function (req, res, next) {
         User.findOne(req.session.user.id)
             .populate('ownedVenues')
             .then(function (user) {
-                if (_.find(user.ownedVenues, {'id': venue.id}))
-                    return next()
-                else
-                    return res.forbidden("not venue owner")
+                if (user) {
+                    if (_.find(user.ownedVenues, {'id': venue.id}))
+                        return next()
+                    else
+                        return res.forbidden("not venue owner")
+                }
+                else return res.serverError("No user found. This is extremely bad")
             })
             .catch(function (err) {
                 return res.serverError(err);

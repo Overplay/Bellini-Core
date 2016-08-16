@@ -7,15 +7,11 @@
 
 module.exports = {
 
-    //TODO more policy mapping
-
-    /*, l
+    /*
     Creates a random 6 digit code and assigned it to a new device object with the given name
     Device is not active until registered  (code is removed by entering for it) 
      */
     generateCode: function (req, res) {
-        
-
 
         var code = '';
         var codeInUse = true;
@@ -46,17 +42,16 @@ module.exports = {
 
 
         var deviceObj = req.allParams();
-        //TODO check params 
-        //expecting name, location, venue 
-        
-        //deviceObj.deviceOwner = req.session.user; //link user to device being created
+        //expecting name, location, venue
+        if (!deviceObj.name || !deviceObj.venue)
+            return res.badRequest("Missing device params")
 
         deviceObj.regCode = code;
         
 
         Device.create(deviceObj)
             .then(function (device) {
-                sails.log.debug(device, "created");
+                //sails.log.debug(device, "created");
                 return res.ok({code: device.regCode});
 
             })
