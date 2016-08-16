@@ -28,7 +28,7 @@ module.exports = require('waterlock').actions.user({
                 if (auth)
                     return res.ok('found user');
                 else
-                    return res.notFound({ "error" : 'No such user' });
+                    return res.notFound('No such user');
 
             })
             .catch(function (err) {
@@ -48,7 +48,7 @@ module.exports = require('waterlock').actions.user({
         else if (req.session && req.session.user && req.session.user.id)
             id = req.session.user.id; //otherwise use current user
         else
-            return res.badRequest({ 'error' : 'Not logged in and no given id' });
+            return res.badRequest('Not logged in and no given id');
 
         User.findOne({id: id})
             .populate("ownedVenues")
@@ -355,14 +355,14 @@ module.exports = require('waterlock').actions.user({
         var params = req.allParams();
 
         if (!params.id || !params.roleName) {
-            res.badRequest({ error : "Missing params" });
+            res.badRequest("Missing params");
         } else {
             User.findOne(params.id)
                 .then(function (u) {
                     u.roles = _.union(u.roles, [RoleCacheService.roleByName(params.roleName)])
                     u.save(function (err) {
                         if (err)
-                            return res.serverError({ error : "Add role error" })
+                            return res.serverError("Add role error");
                         else {
                             req.session.user = u
                             return res.json(u)

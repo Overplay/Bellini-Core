@@ -23,10 +23,10 @@ module.exports = {
         var params = req.allParams();
 
         if (!params.address || !params.name)
-            res.badRequest({ error : "Missing params" })
+            res.badRequest("Missing params")
 
         if (!params.id && !(req.session && req.session.user && req.session.user.id))
-            res.badRequest({ error : "No user id provided and no user logged in"});
+            res.badRequest("No user id provided and no user logged in");
 
         var id = params.id ? params.id : req.session.user.id;
 
@@ -81,7 +81,7 @@ module.exports = {
     getVenueManagers: function (req, res) {
 
         if (!req.allParams().id)
-            res.badRequest({ error : "No venue id specified" });
+            res.badRequest("No venue id specified");
         
         Venue.findOne({ id: req.allParams().id }).populate('venueManagers')
             .then( function (venue) {
@@ -116,7 +116,7 @@ module.exports = {
         var params = req.allParams();
 
         if (!params.query)
-            res.badRequest({ error : "No query provided" });
+            res.badRequest("No query provided");
 
         var query = params.query;
         var venues = [];
@@ -149,7 +149,7 @@ module.exports = {
         var params = req.allParams().params;
 
         if (!params.userId || !params.venueId)
-            res.badRequest({ error : "Missing params" });
+            res.badRequest("Missing params");
 
         //have to add proprietor.manager role to user if not already there.
         User.findOne(params.userId)
@@ -195,7 +195,7 @@ module.exports = {
         var params = req.allParams().params;
 
         if (!params.userId || !params.venueId)
-            res.badRequest({ error : "Missing params" });
+            res.badRequest("Missing params");
 
         //have to add proprietor.owner role to user if not already there.
         User.findOne(params.userId)
@@ -237,7 +237,7 @@ module.exports = {
         //params : user ID , venue ID
 
         if (!params.userId || !params.venueId)
-            res.badRequest({ error : "Missing params" });
+            res.badRequest("Missing params");
 
         //have to remove from many to many and possibly role
         User.findOne(params.userId)
