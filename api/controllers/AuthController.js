@@ -88,25 +88,6 @@ module.exports = require( 'waterlock' ).waterlocked( {
 
     },
 
-
-    /*addRole: function ( req, res ) { MOVED TO USERCONTROLLLER
-
-        var params = req.allParams();
-
-     if ( !params.id ) {
-            res.badRequest();
-        } else {
-            AdminService.changePwd( params.email, params.newpass )
-                .then( function () {
-                    return res.json( { "message": "Password changed" } );
-                } )
-                .catch( function ( err ) {
-                    return res.error( err );
-                } )
-        }
-
-     },*/
-
     addUser: function ( req, res ) {
         //sails.log.debug(req)
         var params = req.allParams();

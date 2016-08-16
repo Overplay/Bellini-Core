@@ -82,6 +82,9 @@ module.exports = {
                 else
                     return res.badRequest();
             })
+            .catch(function (err) {
+                return res.serverError(err)
+            })
     },
     
     yelpSearch: function (req, res) {
