@@ -68,7 +68,6 @@ module.exports.policies = {
         'findOne': ['sessionAuth', 'isVenueOwnerMeOrAdmin'], //tricky for manager list and whatnot
         'update':  [ 'sessionAuth', 'isAdmin' ],
         'destroy': ['sessionAuth', 'isAdmin'], //maybe me?
-        'status': ['sessionAuth'],
         'register': ['sessionAuth', 'isAdmin'], //not even used anywhere
         'addUser': true, //used in SignupApp through nucleus service
         'resetPwd': ['passwordReset'],
@@ -107,7 +106,7 @@ module.exports.policies = {
         'findByEmail': ['sessionAuth', 'isProprietorOwner'],
         'getVenues': ['sessionAuth', 'isProprietorOwner'],
         'getDevices': ['sessionAuth', 'isProprietorOwner'],
-        'getManagedDevices': ['sessionAuth', 'isDeviceManagerOrOwner'],
+        'getManagedDevices': ['sessionAuth', 'isProprietorManager'],
         'getAlist': ['sessionAuth', 'isAdvertiser'],
         'becomeAdvertiser': ['sessionAuth']
 
@@ -116,7 +115,7 @@ module.exports.policies = {
     VenueController: {
         '*': ['sessionAuth'],
         'find': ['sessionAuth', 'isVenueOwnerMeOrAdmin'],
-        'findOne': ['sessionAuth', 'isVenueOwnerMeOrAdmin'],
+        'findOne': ['sessionAuth'], //issues with this one for device population
         'update': ['sessionAuth', 'isVenueOwner'],
         'destroy': ['sessionAuth', 'isVenueOwnerMeOrAdmin'],
         'getVenueManagers': ['sessionAuth', 'isVenueOwnerMeOrAdmin'],

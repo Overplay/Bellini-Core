@@ -52,9 +52,9 @@ app.factory('navBarService', function ($log) {
                     ]
                 },
                     {
-                        label: "Devices", //might need to be modified
+                        label: "Owned Devices", //might need to be modified
                         id: "devices",
-                        items: [{label: "My Devices", link: {type: 'ui-sref', addr: 'device.list'}}
+                        items: [{label: "Owned Devices", link: {type: 'ui-sref', addr: 'device.list'}}
                         ]
                     },
                     {
@@ -90,11 +90,11 @@ app.factory('navBarService', function ($log) {
                     //     {label: "Add User", link: {type: 'ui-sref', addr: 'admin.addUser'}}
                     // ]
                     // },
-                    /*{
-                        label: "Devices", //might need to be modified
+                    {
+                        label: "Managed Devices", //might need to be modified
                         id: "devices",
                         items: [{label: "Managed Devices", link: {type: 'ui-sref', addr: 'device.managerList'}}]
-                     },*/
+                    },
                     /*{
                      label: "Organization",
                      id: "organization",
