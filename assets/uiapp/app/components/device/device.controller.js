@@ -127,9 +127,11 @@ app.controller("addDeviceAdminController", function ($scope, $state, $log, toast
 
 });
 
-app.controller("editDeviceAdminController", function ($scope, $state, $log, device, toastr, uibHelper, nucleus, venues, $http, links) {
+app.controller("editDeviceAdminController", function ($scope, $state, $log, device, toastr, uibHelper, nucleus, venues, $http, links, edit) {
     $log.debug("editDeviceAdminController starting");
 
+
+    $scope.edit = edit;
     $scope.device = device;
     $scope.deviceName = device.name;
     $scope.$parent.ui.pageTitle = "Manage Device";
@@ -198,9 +200,10 @@ app.controller("editDeviceAdminController", function ($scope, $state, $log, devi
 
 });
 
-app.controller("editDeviceOwnerController", function ($scope, $state, $log, device, toastr, uibHelper, nucleus, user, $http, links) {
+app.controller("editDeviceOwnerController", function ($scope, $state, $log, device, toastr, uibHelper, nucleus, user, $http, links, edit) {
     $log.debug("editDeviceOwnerController starting");
 
+    $scope.edit = edit;
     $scope.device = device;
     $scope.deviceName = device.name;
     $scope.$parent.ui.pageTitle = "Manage Device";

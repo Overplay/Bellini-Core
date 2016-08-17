@@ -30,7 +30,7 @@
                     </div>
                 </div>
             </uib-tab>
-            <uib-tab heading="Edit Device">
+            <uib-tab heading="Edit Device" ng-if="edit">
                 <div class="top15">
                     <div class="col-sm-12">
                         <button type="submit" ng-disabled="form.$invalid" class="btn btn-primary top15" ng-click="update()">

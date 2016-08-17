@@ -591,6 +591,9 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                             return data.data;
                         })
                 },
+                edit: function () {
+                    return true
+                },
                 venues: function ($http) {
                     return $http.get(apiPath + '/venue')
                         .then(function (data) {
@@ -621,6 +624,9 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                             return err;
                         })
                 },
+                edit: function () {
+                    return true
+                },
                 user: function (nucleus) {
                     return nucleus.getMe()
                 },
@@ -647,6 +653,9 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                         .catch(function (err) {
                             return err;
                         })
+                },
+                edit: function () {
+                    return false
                 },
                 user: function (nucleus) {
                     return nucleus.getMe()
