@@ -20,7 +20,7 @@ module.exports = require( 'waterlock' ).waterlocked( {
         if ( req.session && req.session.user )
             return res.ok(req.session.user);
         else
-            return res.forbidden({"message": "Not authorized"});
+            return res.forbidden("Not authorized");
 
     },
 

@@ -52,10 +52,15 @@
                                 <div class="col-sm-10">
                                     <div class="input-group">
                                         <input type="text" class="form-control" id="name1" name="name1"
-                                               placeholder="Venue Name"
-                                               ng-model="$parent.$parent.$parent.newManagedVenue"
+                                               placeholder="Venue Name" ng-if="admin"
+                                               ng-model="$parent.$parent.$parent.$parent.newManagedVenue"
                                                uib-typeahead="venue as venue.name + ' - ' + venue.address.street + ' ' + venue.address.city + ', ' + venue.address.state
                                                               for venue in findVenue($viewValue)"/>
+                                        <input type="text" class="form-control" id="name1" name="name1"
+                                               placeholder="Venue Name" ng-if="owner"
+                                               ng-model="$parent.$parent.$parent.$parent.newManagedVenue"
+                                               uib-typeahead="venue as venue.name + ' - ' + venue.address.street + ' ' + venue.address.city + ', ' + venue.address.state
+                                                              for venue in ownedVenues | filter:$viewValue"/>
                                         <span class="input-group-btn">
                                             <button class="btn-default btn" ng-click="addManagedVenue()"
                                                     ng-disabled="!$parent.$parent.$parent.newManagedVenue">

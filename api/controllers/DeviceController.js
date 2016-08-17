@@ -21,7 +21,7 @@ module.exports = {
          code 
          */
         if ((params.regCode === undefined)) //test other stuff too
-            return res.badRequest();
+            return res.badRequest("No registration code specified");
 
 
         var deviceObj = {};
@@ -61,7 +61,7 @@ module.exports = {
 
             })
             .catch(function (err) {
-                return res.badRequest();
+                return res.badRequest("Error registering device");
             });
     },
 
@@ -79,41 +79,25 @@ module.exports = {
             })
     },
 
-    backup: function (req, res) {
-
-        var params = req.allParams();
-
-        if (!params || !params.id || !params.backup)
-            return res.badRequest("Missing params");
-
-        Device.findOne({ id: params.id })
-            .then( function (device) {
-                if (!device) {
-                    return res.badRequest("Device not found");
-                }
-                device.deviceBackup = params.backup;
-
-                return Device.update({ id: device.id }, device)
-
-            })
-
-    },
-
-    restore: function (req, res) {
-
-        var id = req.allParams().id;
-
-        if (!id)
-            return res.badRequest("Missing device id");
-
-        Device.findOne({ id: params.id })
-            .then( function (device) {
-                if (!device)
-                    return res.badRequest("Device not found");
-
-                return res.ok(device.deviceBackup);
-            })
-    }
+    // backup: function (req, res) {
+    //
+    //     var params = req.allParams();
+    //
+    //     if (!params || !params.id || !params.backup)
+    //         return res.badRequest("Missing params");
+    //
+    //     Device.findOne({ id: params.id })
+    //         .then( function (device) {
+    //             if (!device) {
+    //                 return res.badRequest("Device not found");
+    //             }
+    //             device.deviceBackup = params.backup;
+    //
+    //             return Device.update({ id: device.id }, device)
+    //
+    //         })
+    //
+    // },
 
 
 

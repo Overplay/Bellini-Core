@@ -274,7 +274,7 @@ app.controller("editUserAdminController", function ($scope, $http, $state, $log,
 
                         userId: userId,
                         id: venueId
-                    
+
                 })
                     .then(function (response) {
                         $scope.user.user.managedVenues.splice($scope.user.user.managedVenues.indexOf(venue), 1);
@@ -293,7 +293,7 @@ app.controller("editUserAdminController", function ($scope, $http, $state, $log,
 
                         userId: userId,
                         id: venueId
-                    
+
                 })
                 .then(function (response) {
                     $scope.user.user.ownedVenues.splice($scope.user.user.ownerVenues.indexOf(venue), 1);
@@ -352,14 +352,24 @@ app.controller("editUserOwnerController", function ($scope, $http, $state, $log,
                 $scope.newManagedVenue = null;
             }
             else {
-                $http.post('/venue/addManager', {userId: user.user.id, id: $scope.newManagedVenue.id})
-                    .then( function ( u ) {
-                        toastr.success( "Manager added to venue", "Success!");
-                        $scope.user.user.managedVenues.push($scope.newManagedVenue);
+                uibHelper.confirmModal('Add Manager?', 'Make ' + $scope.user.user.firstName + ' a manager of ' + $scope.newManagedVenue.name + '?' )
+                    .then( function (confirmed) {
+                        $http.post('/venue/addManager', {
+                            params: {
+                                userId: user.user.id,
+                                venueId: $scope.newManagedVenue.id
+                            }
+                        })
+                            .then(function (u) {
+                                toastr.success("Manager added to venue", "Success!");
+                                $scope.user.user.managedVenues.push($scope.newManagedVenue);
+                                $scope.newManagedVenue = null;
+                            })
+                            .catch(function (err) {
+                                toastr.error("There was a problem adding the manager", "Error!");
+                            })
+                    }, function (rej) {
                         $scope.newManagedVenue = null;
-                    })
-                    .catch( function (err) {
-                        toastr.error( "There was a problem adding the manager", "Error!");
                     })
             }
         }
