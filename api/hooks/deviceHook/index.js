@@ -13,19 +13,19 @@ module.exports = function deviceHook(sails) {
     return {
 
         configure: function () {
-            if (!sails.config.device || !sails.config.device.hookEnabled) {
+            if (!sails.config.hooks.deviceCleaner || !sails.config.hooks.deviceCleaner.hookEnabled) {
                 sails.log.warn("There's no config file for device or its hook is disabled... ");
             }
 
-            deviceConfig = sails.config.device;
+            deviceConfig = sails.config.hooks.deviceCleaner;
         },
 
         initialize: function (cb) {
-            if (!sails.config.device || !sails.config.device.hookEnabled) {
+            if (!deviceConfig || !deviceConfig.hookEnabled) {
                 sails.log.warn("There's no config file for device or its hook is disabled... ");
                 return cb();
             }
-            timeout = sails.config.device.regCodeTimeout || (1000 * 60 * 60);
+            timeout = deviceConfig.regCodeTimeout || (1000 * 60 * 60);
             //timeout = (1000 * 60);
             cronDelay = deviceConfig.cleanDelay || (1000 * 60 * 60 * 12);
             //cronDelay = 10000;
@@ -45,6 +45,7 @@ module.exports = function deviceHook(sails) {
                 .then(function (devices) {
                     devices.forEach(function (device) {
 
+                        //should this be a chain? 
                         var ca = device["createdAt"];
                         if (Date.now() > Date.parse(ca) + timeout) {
                             sails.log.debug("TIMEDOUT", device["regCode"]);
@@ -53,7 +54,7 @@ module.exports = function deviceHook(sails) {
                                     sails.log.debug(d, "deleted");
                                 })
                                 .catch(function (err) {
-                                    sails.log.debug("big problem in device clean hook")
+                                    sails.log.debug("big problem in device clean hook", err)
 
                                 })
                         }
