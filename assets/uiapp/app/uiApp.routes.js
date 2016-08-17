@@ -267,7 +267,9 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                         {text: "Add Venue", link: "venue.adminAdd"}
                     ]
                 },
-                role: function () { return "role"; }
+                role: function () {
+                    return "admin";
+                }
             },
             templateUrl: '/uiapp/app/components/venue/viewvenue.partial.html',
             controller: 'viewVenueController'

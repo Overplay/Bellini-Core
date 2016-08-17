@@ -116,7 +116,7 @@ module.exports.policies = {
         '*': ['sessionAuth'],
         'find': ['sessionAuth', 'isVenueOwnerMeOrAdmin'],
         'findOne': ['sessionAuth'], //issues with this one for device population
-        'update': ['sessionAuth', 'isVenueOwner'],
+        'update': ['sessionAuth', 'isVenueOwnerMeOrAdmin'],
         'destroy': ['sessionAuth', 'isVenueOwnerMeOrAdmin'],
         'getVenueManagers': ['sessionAuth', 'isVenueOwnerMeOrAdmin'],
         'addManager': ['sessionAuth', 'isVenueOwnerMeOrAdmin'],
