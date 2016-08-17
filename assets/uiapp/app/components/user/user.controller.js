@@ -388,7 +388,8 @@ app.controller("addUserController", function ($scope, $state, $log, toastr, nucl
         nucleus.addUser( $scope.user.email, $scope.user.password, {
             firstName: $scope.user.firstName,
             lastName: $scope.user.lastName,
-            mobilePhone: $scope.user.mobilePhone
+                mobilePhone: $scope.user.mobilePhone,
+                roleNames: ['user']
             }, '', false)
             .then( function ( u ) {
                 toastr.success( "Account added!", "Success!" );
