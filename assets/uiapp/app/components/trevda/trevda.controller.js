@@ -13,19 +13,15 @@ app.controller("addAdvertisementController", function ($scope, $log, $http, $sta
 
     $scope.advertisement = {
         creator: user, media: {
-            sm: null,
-            md: null,
-            lg: null,
-            wide: null
+            widget: null,
+            crawler: null
         }
     };
 
 
     $scope.media = {
-        sm: null,
-        md: null,
-        lg: null,
-        wide: null
+        widget: null,
+        crawler: null
     }
 
 
@@ -78,6 +74,7 @@ app.controller("editAdvertisementController", function ($scope, $log, $http, $st
     $log.debug("editAdvertisementController starting");
 
     $scope.advertisement = advertisement;
+    $log.log($scope.advertisement)
     $scope.$parent.ui.panelHeading = $scope.advertisement.name;
     $scope.advertisementUpdate = angular.copy(advertisement);
 
@@ -89,26 +86,23 @@ app.controller("editAdvertisementController", function ($scope, $log, $http, $st
     $scope.$parent.ui.panelHeading = "";
     $scope.$parent.links = links;
 
-    $scope.mediaSizes = ['sm', 'md', 'lg', 'wide']
+    $scope.mediaSizes = ['widget', 'crawler']
     
     $scope.media = {
-        sm: null,
-        md: null,
-        lg: null,
-        wide: null
+        widget: null,
+        crawler: null
     }
 
 
     //to update the advertisement 
     $scope.update = function () {
+        $log.log($scope.advertisementUpdate)
         delete $scope.advertisementUpdate.mediaMeta
 
         if (!$scope.advertisementUpdate.media) {
             $scope.advertisementUpdate.media = {
-                sm: null,
-                md: null,
-                lg: null,
-                wide: null
+                widget: null,
+                crawler: null
             }
         }
 
@@ -156,7 +150,7 @@ app.controller("reviewAdvertisementController", function ($scope, $log, $http, a
     $scope.$parent.ui.pageTitle = "Review Advertisement";
     $scope.$parent.ui.panelHeading = ad.name;
     $scope.$parent.links = links;
-    $scope.mediaSizes = ['sm', 'md', 'lg', 'wide']
+    $scope.mediaSizes = ['widget','crawler']
 
 
     $scope.review = function (acc) {

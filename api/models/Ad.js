@@ -17,13 +17,16 @@ module.exports = {
         creator: {
             model: 'User'
         },
-        images: { //maybe turn into json with a sm, med, lg, wide etc for ids 
+        text: { //TODO limit length of strings and array
+            type: 'array',
+            defaultsTo: ['','',''] //BINDING doesn't work with string arrays - either make json obj or array of objs 
+
+        },
+        images: { //front end has to set sizes for images
             type: 'json',
             defaultsTo: {
-                sm: null,
-                md: null,
-                lg: null,
-                wide: null
+                widget: null,
+                crawler: null
             }
         },
         reviewed: {

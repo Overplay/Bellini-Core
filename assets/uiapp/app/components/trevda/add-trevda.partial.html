@@ -13,18 +13,23 @@
                        ng-model="advertisement.description"/>
             </fieldset>
 
-            <fieldset>
+            <fieldset class="form-group">
+                <h2>Crawler Text</h2>
+                <label for="c1">One</label>
+                <input id="c1" type="text" class="form-control" model="advertisement.text[0]" maxLength="80"/>
+                <label for="c2">Two</label>
+                <input id="c2" type="text" class="form-control" model="advertisement.text[1]" maxLength="80"/>
+                <label for="c3">Three</label>
+                <input id="c3" type="text" class="form-control" model="advertisement.text[2]" maxLength="80"/>
+            </fieldset>
+
+
+            <fieldset class="form-group">
                 <h2>Images</h2>
-                <img-input prompt="Small" width="800" height="600" dirty="media.sm" src-field="advertisement.images.sm"
+                <img-input prompt="Widget" width="150" height="150" dirty="media.widget" src-field="advertisement.images.widget"
                            exact></img-input>
-                <img-input prompt="Medium" width="800" height="600" dirty="media.md" src-field="advertisement.images.md"
+                <img-input prompt="Crawler" width="300" height="80" dirty="media.crawler" src-field="advertisement.images.crawler"
                            exact></img-input>
-                <img-input prompt="Large" width="800" height="600" dirty="media.lg" src-field="advertisement.images.lg"
-                           exact></img-input>
-                <img-input prompt="Wide" width="800" height="100" dirty="media.wide"
-                           src-field="advertisement.images.wide" exact></img-input>
-
-
             </fieldset>
             <!--<div class="panel panel-default">
                 <div class="panel-heading">Add Media</div>
