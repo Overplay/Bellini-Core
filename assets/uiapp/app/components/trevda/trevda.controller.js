@@ -74,13 +74,12 @@ app.controller("editAdvertisementController", function ($scope, $log, $http, $st
     $log.debug("editAdvertisementController starting");
 
     $scope.advertisement = advertisement;
-    $log.log($scope.advertisement)
+
     $scope.$parent.ui.panelHeading = $scope.advertisement.name;
     $scope.advertisementUpdate = angular.copy(advertisement);
 
     $scope.advertisement.mediaMeta = mediaMeta;
     $scope.advertisementUpdate.mediaMeta = angular.copy(mediaMeta);
-
 
     $scope.$parent.ui.pageTitle = "Manage Advertisement";
     $scope.$parent.ui.panelHeading = "";
@@ -96,7 +95,6 @@ app.controller("editAdvertisementController", function ($scope, $log, $http, $st
 
     //to update the advertisement 
     $scope.update = function () {
-        $log.log($scope.advertisementUpdate)
         delete $scope.advertisementUpdate.mediaMeta
 
         if (!$scope.advertisementUpdate.media) {

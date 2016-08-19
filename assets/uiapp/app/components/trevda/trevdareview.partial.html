@@ -15,7 +15,24 @@
                         <td></td>
                         <td>{{advertisement.description}}</td>
                     </tr>
-
+                    <tr ng-if="advertisement.text.one.length > 0">
+                        <td><b>Crawler Text One </b></td>
+                        <td></td>
+                        <td></td>
+                        <td>{{advertisement.text.one}}</td>
+                    </tr>
+                    <tr ng-if="advertisement.text.two.length > 0">
+                        <td><b>Crawler Text Two</b></td>
+                        <td></td>
+                        <td></td>
+                        <td>{{advertisement.text.two}}</td>
+                    </tr>
+                    <tr ng-if="advertisement.text.three.length > 0">
+                        <td><b>Crawler Text Three</b></td>
+                        <td></td>
+                        <td></td>
+                        <td>{{advertisement.text.three}}</td>
+                    </tr>
                     <tr>
                         <td><b>Reviewed</b></td>
                         <td>{{advertisement.reviewed}}</td>
