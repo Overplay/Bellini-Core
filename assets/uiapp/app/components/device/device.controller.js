@@ -46,6 +46,9 @@ app.controller("addDeviceController", function ($scope, $state, $log, toastr, nu
                 toastr.warning("You must add a venue before adding a device", "No Owned Venues");
                 $state.go('venue.userAdd');
             }
+        })
+        .catch( function (err) {
+            $log.debug("Error fetching owned venues")
         });
 
 
@@ -217,6 +220,9 @@ app.controller("editDeviceOwnerController", function ($scope, $state, $log, devi
     $http.get("api/v1/user/" + user.id) //nucleus.getMe doesn't populate ownedVenues (nucleus uses and auth endpoint in getMe)
         .then(function(u){
             $scope.user = u.data;
+        })
+        .catch( function (err) {
+            $log.debug("Error fetching user")
         });
 
     $scope.update = function () {
@@ -299,6 +305,9 @@ app.controller('listDeviceController', function ($scope, devices, $log, uibHelpe
                 .then(function (data) {
                     delete data.data.devices;
                     dev.venue = data.data;
+                })
+                .catch(function (err) {
+                    $log.debug(err);
                 })
         })
     }
