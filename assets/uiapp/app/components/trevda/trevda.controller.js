@@ -71,7 +71,7 @@ app.controller("manageAdvertisementController", function ($scope, $log, ads, lin
 });
 
 
-app.controller("editAdvertisementController", function ($scope, $log, $http, $stateParams, toastr, asahiService, links, advertisement, mediaMeta, uibHelper) {
+app.controller("editAdvertisementController", function ($scope, $log, $http, $stateParams, $state, toastr, asahiService, links, advertisement, mediaMeta, uibHelper) {
     $log.debug("editAdvertisementController starting");
 
     $scope.advertisement = advertisement;
@@ -164,15 +164,13 @@ app.controller("editAdvertisementController", function ($scope, $log, $http, $st
     //tODO document endpoints and policies for them :) 
 
     $scope.delete = function () {
-        uibHelper.confirmModal(q, e, true)
+        uibHelper.confirmModal("Are you sure?", "Would you really like to move this ad to the archives?", true)
             .then(function (confirmed) {
                 $http.post('ad/toggleDelete/', {id: $scope.advertisement.id})
                     .then(function (data) {
 
-                        // TODO redirect to list?
-
-                        $scope.advertisement = data.data;
-                        $scope.advertisementUpdate = angular.copy(data.data);
+                        // TODO redirect to admin list?
+                        $state.go('device.list')
                     })
             })
     }
