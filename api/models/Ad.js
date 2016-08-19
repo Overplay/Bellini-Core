@@ -33,6 +33,10 @@ module.exports = {
                 crawler: null
             }
         },
+        paused: {
+            type: 'boolean',
+            defaultsTo: false
+        },
         reviewed: {
             type: 'boolean',
             defaultsTo: false
