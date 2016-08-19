@@ -15,7 +15,8 @@ app.controller("addAdvertisementController", function ($scope, $log, $http, $sta
         creator: user, media: {
             widget: null,
             crawler: null
-        }
+        },
+        text: ['', '', '']
     };
 
 
@@ -70,7 +71,7 @@ app.controller("manageAdvertisementController", function ($scope, $log, ads, lin
 });
 
 
-app.controller("editAdvertisementController", function ($scope, $log, $http, $stateParams, toastr, asahiService, links, advertisement, mediaMeta) {
+app.controller("editAdvertisementController", function ($scope, $log, $http, $stateParams, toastr, asahiService, links, advertisement, mediaMeta, uibHelper) {
     $log.debug("editAdvertisementController starting");
 
     $scope.advertisement = advertisement;
@@ -140,6 +141,40 @@ app.controller("editAdvertisementController", function ($scope, $log, $http, $st
         })
 
 
+    }
+
+
+    $scope.pause = function () {
+        var paused = $scope.advertisement.paused;
+        var q = paused ? "Resume" : "Pause" + " Advertisement"
+        var e = paused ? "Are you sure you would like to resume to advertisement into venues?"
+            : "Are you sure you would like to pause the advertisement from being placed in venues?"
+
+        uibHelper.confirmModal(q, e, true)
+            .then(function (confirmed) {
+                $http.post('ad/pauseOrResume/', {id: $scope.advertisement.id})
+                    .then(function (data) {
+                        $scope.advertisement = data.data;
+                        $scope.advertisementUpdate = angular.copy(data.data);
+                    })
+            })
+
+    }
+
+    //tODO document endpoints and policies for them :) 
+
+    $scope.delete = function () {
+        uibHelper.confirmModal(q, e, true)
+            .then(function (confirmed) {
+                $http.post('ad/toggleDelete/', {id: $scope.advertisement.id})
+                    .then(function (data) {
+
+                        // TODO redirect to list?
+
+                        $scope.advertisement = data.data;
+                        $scope.advertisementUpdate = angular.copy(data.data);
+                    })
+            })
     }
 })
 

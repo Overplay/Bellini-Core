@@ -18,23 +18,23 @@
                                 <td></td>
                                 <td>{{advertisement.description}}</td>
                             </tr>
-                            <tr ng-if="advertisement.text.one.length > 0">
+                            <tr ng-if="advertisement.text[0].length > 0">
                                 <td><b>Crawler Text One </b></td>
                                 <td></td>
                                 <td></td>
-                                <td>{{advertisement.text.one}}</td>
+                                <td>{{advertisement.text[0]}}</td>
                             </tr>
-                            <tr ng-if="advertisement.text.two.length > 0">
+                            <tr ng-if="advertisement.text[1].length > 0">
                                 <td><b>Crawler Text Two</b></td>
                                 <td></td>
                                 <td></td>
-                                <td>{{advertisement.text.two}}</td>
+                                <td>{{advertisement.text[1]}}</td>
                             </tr>
-                            <tr ng-if="advertisement.text.three.length > 0">
+                            <tr ng-if="advertisement.text[2].length > 0">
                                 <td><b>Crawler Text Three</b></td>
                                 <td></td>
                                 <td></td>
-                                <td>{{advertisement.text.three}}</td>
+                                <td>{{advertisement.text[2]}}</td>
                             </tr>
 
                             <tr>
@@ -89,22 +89,22 @@
                             <fieldset class="form-group">
                                 <h2>Crawler Text</h2>
                                 <label for="c1">One</label>
-                                <input id="c1" type="text" class="form-control" ng-model="advertisementUpdate.text.one"
+                                <input id="c1" type="text" class="form-control" ng-model="advertisementUpdate.text[0]"
                                        maxLength="80"/>
                                 <label for="c2">Two</label>
-                                <input id="c2" type="text" class="form-control" ng-model="advertisementUpdate.text.two"
+                                <input id="c2" type="text" class="form-control" ng-model="advertisementUpdate.text[1]"
                                        maxLength="80"/>
                                 <label for="c3">Three</label>
                                 <input id="c3" type="text" class="form-control"
-                                       ng-model="advertisementUpdate.text.three"
+                                       ng-model="advertisementUpdate.text[2]"
                                        maxLength="80"/>
                             </fieldset>
 
                             <fieldset class="form-group">
                                 <h2>Images</h2>
-                                <img-input prompt="Widget" width="150" height="150" dirty="media.widget"
+                                <img-input prompt="Widget" width="256" height="256" dirty="media.widget"
                                            src-field="advertisementUpdate.mediaMeta.widget.id" exact></img-input>
-                                <img-input prompt="Crawler" width="300" height="80" dirty="media.crawler"
+                                <img-input prompt="Crawler" width="440" height="100" dirty="media.crawler"
                                            src-field="advertisementUpdate.mediaMeta.crawler.id" exact></img-input>
                             </fieldset>
                             <div class="form-actions">
@@ -112,6 +112,12 @@
                                 <button type="submit" ng-disabled="form.$invalid" class="btn btn-primary top15">
                                     Update
                                 </button>
+                                <a ng-click="delete()" class="btn btn-danger top15 pull-right" style="margin-left:10px">
+                                    Delete
+                                </a>
+                                <a ng-click="pause()" class="btn btn-warning top15 pull-right" style="margin-left:10px">
+                                    {{advertisement.paused ? "Resume" : "Pause"}}
+                                </a>
 
 
                             </div>

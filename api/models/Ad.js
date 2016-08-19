@@ -18,12 +18,8 @@ module.exports = {
             model: 'User'
         },
         text: { //TODO limit length of strings and array
-            type: 'json',
-            defaultsTo: {
-                one: '',
-                two: '',
-                three: ''
-            } //BINDING doesn't work with string arrays - either make json obj or array of objs 
+            type: 'array',
+            defaultsTo: ['', '', ''] 
 
         },
         images: { //front end has to set sizes for images
@@ -41,7 +37,19 @@ module.exports = {
             type: 'boolean',
             defaultsTo: false
         },
-        venueList: { //array of venue Ids where it has been shown
+        paused: {
+            type: 'boolean',
+            defaultsTo: false
+        },
+        deleted: {
+            type: 'boolean',
+            defaultsTo: false
+        },
+        metaData: {
+            type: 'json',
+            defaultsTo: {}
+        }
+        /*venueList: { //array of venue Ids where it has been shown
             type: 'array',
             defaultsTo: []
         },
@@ -49,7 +57,8 @@ module.exports = {
             type: 'integer',
             defaultsTo: 0
         },
-        /*screenTime: { //future hopefuls
+
+         /*screenTime: { //future hopefuls
          type: 'integer',
          defaultsTo: 0
          },

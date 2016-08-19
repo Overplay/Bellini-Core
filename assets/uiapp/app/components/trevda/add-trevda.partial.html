@@ -16,19 +16,21 @@
             <fieldset class="form-group">
                 <h2>Crawler Text</h2>
                 <label for="c1">One</label>
-                <input id="c1" type="text" class="form-control" ng-model="advertisement.text.one" maxLength="80"/>
+                <input id="c1" type="text" class="form-control" ng-model="advertisement.text[0]" maxLength="80"/>
                 <label for="c2">Two</label>
-                <input id="c2" type="text" class="form-control" ng-model="advertisement.text.two" maxLength="80"/>
+                <input id="c2" type="text" class="form-control" ng-model="advertisement.text[1]" maxLength="80"/>
                 <label for="c3">Three</label>
-                <input id="c3" type="text" class="form-control" ng-model="advertisement.text.three" maxLength="80"/>
+                <input id="c3" type="text" class="form-control" ng-model="advertisement.text[2]" maxLength="80"/>
             </fieldset>
 
 
             <fieldset class="form-group">
                 <h2>Images</h2>
-                <img-input prompt="Widget" width="150" height="150" dirty="media.widget" src-field="advertisement.images.widget"
+                <img-input prompt="Widget" width="256" height="256" dirty="media.widget"
+                           src-field="advertisement.images.widget"
                            exact></img-input>
-                <img-input prompt="Crawler" width="300" height="80" dirty="media.crawler" src-field="advertisement.images.crawler"
+                <img-input prompt="Crawler" width="440" height="100" dirty="media.crawler"
+                           src-field="advertisement.images.crawler"
                            exact></img-input>
             </fieldset>
             <!--<div class="panel panel-default">
