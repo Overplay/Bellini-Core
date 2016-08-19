@@ -10,7 +10,7 @@ var Promise = require('bluebird');
 var self = module.exports.testdata = {
 
     installTestData: true,
-    eraseOldData: false,
+    eraseOldData: true,
 
     install: function () {
 
@@ -25,10 +25,12 @@ var self = module.exports.testdata = {
             sails.log.debug("Erasing old test data installation.");
 
             var destruct = [
+                Auth.destroy({}),
                 User.destroy({}),
                 Venue.destroy({}),
                 Device.destroy({}),
-                Media.destroy({})
+                Media.destroy({}),
+                Ad.destroy({})
             ];
 
             chain = chain.then(function () {
@@ -39,24 +41,26 @@ var self = module.exports.testdata = {
             })
         }
         self.organizations.forEach(function (o) {
-            Organization.findOne(o)
-                .then(function (org) {
-                    if (org) {
-                        reject(new Error("Organization exists, skipping creation"))
-                    }
-                    else {
-                        return Organization.create(o)
-                            .then(function (o) {
-                                sails.log.debug("organization created")
-                            })
-                            .catch(function (err) {
-                                sails.log.debug("Organization Error Caught" + err)
-                            })
-                    }
-                })
-                .catch(function (err) {
-                    sails.log.debug(err);
-                })
+            chain = chain.then( function () {
+                return Organization.findOne(o)
+                    .then(function (org) {
+                        if (org) {
+                            reject(new Error("Organization exists, skipping creation"))
+                        }
+                        else {
+                            return Organization.create(o)
+                                .then(function (o) {
+                                    sails.log.debug("Organization created")
+                                })
+                                .catch(function (err) {
+                                    sails.log.debug("Organization Error Caught" + err)
+                                })
+                        }
+                    })
+                    .catch(function (err) {
+                        sails.log.debug(err);
+                    })
+            })
 
         });
 
@@ -184,9 +188,9 @@ var self = module.exports.testdata = {
                 })
             })
 
-            chain = chain.then(function () {
-                return Auth.findOne({email: ownerEmails[0]}) //dumb fix
-                    .then(function (user) {
+            // chain = chain.then(function () {
+            //     return Auth.findOne({email: ownerEmails[0]}) //dumb fix
+                    chain = chain.then(function (user) {
                         //v.venueOwners.push(user.user);
                         //sails.log.debug(venueManagers)
                         return Venue.findOne({name: v.name}) //this will work but venues could be double named (not unique)
@@ -204,11 +208,11 @@ var self = module.exports.testdata = {
                                             //sails.log(venueManagers)
                                             //sails.log(venueOwners)
                                             newV.venueOwners.add(venueOwners)
-                                            newV.save(function(err){
+                                            newV.save({ populate: false }, function(err){
                                                 if (err) sails.log.debug(err)
                                             });
                                             newV.venueManagers.add(venueManagers)
-                                            newV.save(function(err){
+                                            newV.save({ populate: false }, function(err){
                                                 if (err) sails.log.debug(err)
                                             });
 
@@ -225,7 +229,7 @@ var self = module.exports.testdata = {
                             })
 
                     })
-            })
+            // })
 
         });
 
@@ -293,6 +297,13 @@ var self = module.exports.testdata = {
 
     },
     users: [
+        {
+            firstName: 'Johnny',
+            lastName: 'McAdmin',
+            email: 'admin@test.com',
+            password: 'beerchugs',
+            roleNames: [{role: "admin", subRole: ""}, {role: "user", subRole: ""}]
+        },
         {
             firstName: 'Ryan',
             lastName: 'Smith',

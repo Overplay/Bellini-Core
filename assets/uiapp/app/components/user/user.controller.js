@@ -78,6 +78,10 @@ app.controller("editUserController", function ($scope, $log, user, toastr, nucle
                         $scope.advertiser = true;
                         toastr.success("You are now an advertiser!")
                     })
+                    .catch( function (err) {
+                        $log.log(err);
+                        toastr.error("There was a problem", "Try again later");
+                    })
             })
     }
 
