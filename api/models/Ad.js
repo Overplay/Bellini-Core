@@ -41,10 +41,6 @@ module.exports = {
             type: 'boolean',
             defaultsTo: false
         },
-        paused: {
-            type: 'boolean',
-            defaultsTo: false
-        },
         deleted: {
             type: 'boolean',
             defaultsTo: false

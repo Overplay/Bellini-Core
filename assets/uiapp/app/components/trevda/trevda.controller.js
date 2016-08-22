@@ -143,6 +143,25 @@ app.controller("editAdvertisementController", function ($scope, $log, $http, $st
 
     }
 
+    $scope.exportExcel = function () {
+        $http.get('ad/exportExcel', { params: { id : advertisement.id }, responseType: "arraybuffer" })
+            .then( function (res) {
+                $log.log(res);
+                // var anchor = angular.element('<a></a>');
+                // anchor.css({ display: 'none' });
+                // angular.element(document.body).append(anchor);
+                // anchor.attr({
+                //     href: 'data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,' + encodeURI(res.data),
+                //     target: '_blank',
+                //     download: advertisement.name + ".xlsx"
+                // })[0].click();
+
+                var blob = new Blob([res.data], { type : res.headers['Content-Type'] })
+                saveAs(blob, advertisement.name + ".xlsx");
+
+                anchor.remove();
+            })
+    }
 
     $scope.pause = function () {
         var paused = $scope.advertisement.paused;

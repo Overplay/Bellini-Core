@@ -5,7 +5,8 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
-var _ = require('lodash')
+var _ = require('lodash');
+var excel= require('node-excel-export');
 
 module.exports = {
 
@@ -106,6 +107,82 @@ module.exports = {
                     })
                 })
         }
+    },
+
+    exportExcel: function (req, res) {
+
+        var params = req.allParams();
+
+        if (!req.allParams().id)
+            return res.badRequest("Missing id");
+
+        var styles = {
+            cellLight: {
+                fill: {
+                    fgColor: {
+                        rgb: 'F0F0F0FF'
+                    }
+                }
+            },
+            cellDark: {
+                fill: {
+                    fgColor: {
+                        rgb: 'D6D6D6FF'
+                    }
+                }
+            }
+        }
+
+        Ad.findOne({ id: req.allParams().id })
+            .populate('creator')
+            .then( function (ad) {
+
+                var report = excel.buildExport(
+                    [
+                        {
+                            name: 'Advertisement Info',
+                            heading: ['a1', 'b1', 'c1'],
+                            specification: {
+                                name: {
+                                    displayName: 'Name'
+                                },
+                                description: {
+                                    displayName: 'Description'
+                                },
+                                creator: {
+                                    displayName: 'Creator'
+                                },
+                                reviewed: {
+                                    displayName: 'Reviewed'
+                                },
+                                accepted: {
+                                    displayName: 'Accepted'
+                                },
+                                paused: {
+                                    displayName: 'Paused'
+                                },
+                                deleted: {
+                                    displayName: 'Deleted'
+                                }
+                            },
+                            data: [
+                                {
+                                    name: ad.name,
+                                    description: ad.description,
+                                    creator: ad.creator.firstName + " " + ad.creator.lastName,
+                                    reviewed: ad.reviewed,
+                                    accepted: ad.accepted,
+                                    paused: ad.paused,
+                                    deleted: ad.deleted
+                                }
+                            ]
+                        }
+                    ]
+                );
+
+                res.attachment('AdReport.xlsx');
+                return res.send(200, report);
+            })
     }
 
 };

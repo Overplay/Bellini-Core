@@ -14,12 +14,12 @@
                 <td>{{advertisement.name}}</td>
                 <td>{{advertisement.description}}</td>
                 <td>{{advertisement.paused}}</td>
-                <td ng-if="!admin" width="10%"><a ui-sref="advertisement.edit({id: advertisement.id})"
+                <td ng-if="!admin"><a ui-sref="advertisement.edit({id: advertisement.id})"
                                                   class="btn btn-sm btn-warning">More Info</a></td>
-                <td><a class="btn btn-sm btn-primary">Pause</a></td>
-                <td><a class="btn btn-sm btn-danger">Delete</a></td>
+                <!--<td><a class="btn btn-sm btn-primary">Pause</a></td>-->
+                <!--<td><a class="btn btn-sm btn-danger">Delete</a></td>-->
 
-                <td ng-if="admin" width="10%"><a ui-sref="advertisement.adminReview({id: advertisement.id})"
+                <td ng-if="admin"><a ui-sref="advertisement.adminReview({id: advertisement.id})"
                                                  class="btn btn-sm btn-warning">Review</a></td>
             </tr>
             </tbody>
