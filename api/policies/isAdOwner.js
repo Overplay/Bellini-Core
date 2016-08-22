@@ -16,9 +16,9 @@ module.exports = function (req, res, next) {
 
 
     else {
-        var ad = req.allParams();
-        if (ad.creator.id == req.session.user.id)
+        var params = req.allParams();
+        if (params.ad.creator.id == req.session.user.id)
             return next()
     }
-    return res.forbidden()
+    return res.forbidden("Not owner of this ad")
 }

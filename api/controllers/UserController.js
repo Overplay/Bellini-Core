@@ -175,7 +175,7 @@ module.exports = require('waterlock').actions.user({
                 if (user) {
 
                     var ads = _.filter(user.advertisements, {deleted: false})
-                    return res.json(user.advertisements);
+                    return res.json(ads);
                 }
                 else
                     return res.badRequest();

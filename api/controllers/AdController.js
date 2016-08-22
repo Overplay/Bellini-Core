@@ -95,7 +95,7 @@ module.exports = {
         else {
             Ad.findOne(params.id)
                 .then(function (ad) {
-                    ad.paused = !ad.deleted;
+                    ad.deleted = !ad.deleted;
                     ad.save(function (err) {
                         if (err) {
                             sails.log.debug("ad save err", err)

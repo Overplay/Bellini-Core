@@ -59,7 +59,9 @@ module.exports.policies = {
         '*': true,
         'update': ['sessionAuth', 'isAdOwner'],
         'destroy': ['sessionAuth', 'isAdOwner'],
-        'review': ['sessionAuth', 'isAdmin']
+        'review': ['sessionAuth', 'isAdmin'],
+        'pauseOrResume': ['sessionAuth', 'isAdOwner'],
+        'toggleDelete': ['sessionAuth', 'isAdOwner']
     },
     
     AuthController: {

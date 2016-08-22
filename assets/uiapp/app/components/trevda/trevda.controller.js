@@ -71,7 +71,7 @@ app.controller("manageAdvertisementController", function ($scope, $log, ads, lin
 });
 
 
-app.controller("editAdvertisementController", function ($scope, $log, $http, $stateParams, $state, toastr, asahiService, links, advertisement, mediaMeta, uibHelper) {
+app.controller("editAdvertisementController", function ($scope, $log, $http, $stateParams, $state, toastr, asahiService, links, advertisement, mediaMeta, uibHelper, admin) {
     $log.debug("editAdvertisementController starting");
 
     $scope.advertisement = advertisement;
@@ -152,7 +152,7 @@ app.controller("editAdvertisementController", function ($scope, $log, $http, $st
 
         uibHelper.confirmModal(q, e, true)
             .then(function (confirmed) {
-                $http.post('ad/pauseOrResume/', {id: $scope.advertisement.id})
+                $http.post('ad/pauseOrResume/', {id: $scope.advertisement.id, ad: $scope.advertisement})
                     .then(function (data) {
                         $scope.advertisement = data.data;
                         $scope.advertisementUpdate = angular.copy(data.data);
@@ -166,29 +166,41 @@ app.controller("editAdvertisementController", function ($scope, $log, $http, $st
     $scope.delete = function () {
         uibHelper.confirmModal("Are you sure?", "Would you really like to move this ad to the archives?", true)
             .then(function (confirmed) {
-                $http.post('ad/toggleDelete/', {id: $scope.advertisement.id})
+                $http.post('ad/toggleDelete/', {id: $scope.advertisement.id, ad: $scope.advertisement})
                     .then(function (data) {
 
-                        // TODO redirect to admin list?
-                        $state.go('device.list')
+                        var state = admin ? 'adminList' : 'list'
+                        $state.go('advertisement.' + state)
                     })
             })
     }
 })
 
-app.controller("reviewAdvertisementController", function ($scope, $log, $http, ad, links, toastr) {
+app.controller("reviewAdvertisementController", function ($scope, $log, $http, ad, links, toastr, uibHelper) {
     $scope.advertisement = ad
     $scope.$parent.ui.pageTitle = "Review Advertisement";
     $scope.$parent.ui.panelHeading = ad.name;
     $scope.$parent.links = links;
     $scope.mediaSizes = ['widget','crawler']
 
+    $scope.toggleDelete = $scope.advertisement.deleted ? "Re-Enable" : 'Delete'
 
     $scope.review = function (acc) {
         $http.post("/ad/review", {id: $scope.advertisement.id, accepted: acc})
             .then(function (a) {
                 $scope.advertisement = a.data;
                 toastr.success("Advertisement " + (acc ? "accepted!" : "rejected!"), "Success")
+            })
+    }
+
+    $scope.delete = function () {
+        uibHelper.confirmModal("Are you sure?", "Would you really like toggle the status of the ad?", true)
+            .then(function (confirmed) {
+                $http.post('ad/toggleDelete/', {id: $scope.advertisement.id, ad: $scope.advertisement})
+                    .then(function (data) {
+                        $scope.advertisement = data.data;
+                        $scope.toggleDelete = $scope.advertisement.deleted ? "Re-Enable" : 'Delete'
+                    })
             })
     }
 

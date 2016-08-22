@@ -39,6 +39,12 @@
                         <td><b>Accepted</b></td>
                         <td>{{advertisement.accepted}}</td>
                     </tr>
+                    <tr>
+                        <td><b>DELETED</b></td>
+                        <td></td>
+                        <td></td>
+                        <td>{{advertisement.deleted}}</td>
+                    </tr>
 
 
                     <tr ng-if="advertisement.mediaMeta">
@@ -63,7 +69,14 @@
             <div class="text-center">
                 <button class="btn btn-md btn-success" ng-click="review(true)">Accept</button>
                 <button class="btn btn-md btn-danger" ng-click="review(false)">Reject</button>
+
+                <br>
+                <br>
+                <button ng-click="delete()" class="btn btn-danger">
+                    {{toggleDelete}}
+                </button>
             </div>
+
             <div ng-if="advertisement.accepted" class="text-center">
                 <br>
                 <b>Place in venue</b>
