@@ -10,7 +10,8 @@ module.exports = {
     attributes: {
 
         logType: {
-            type: "string"
+            type: "string",
+            enum: ['impression', 'heartbeat', 'alert', 'channel', 'placement', 'other']
         },
 
         message: {
