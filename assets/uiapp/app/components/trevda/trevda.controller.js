@@ -94,6 +94,11 @@ app.controller("editAdvertisementController", function ($scope, $log, $http, $st
     }
 
 
+    $scope.data = {
+        impressions: 1004,
+        screenTime: 4.5
+    }
+
     //to update the advertisement 
     $scope.update = function () {
         delete $scope.advertisementUpdate.mediaMeta

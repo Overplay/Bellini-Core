@@ -24,5 +24,9 @@ module.exports = {
                 res.serverError(err);
             })
     }
+
+
+    //maybe make endpoints for each type and have it sortable 
+    //like impressions could take an ad or user id and query 
 };
 
