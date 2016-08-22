@@ -64,6 +64,48 @@ module.exports = {
                     else return res.serverError("Too many or too few ads updated")
                 })
         }
+    },
+
+    pauseOrResume: function (req, res) {
+        var params = req.allParams();
+        if (!params.id) {
+            return res.badRequest("Invalid req Params")
+        }
+        else {
+            Ad.findOne(params.id)
+                .then(function (ad) {
+                    ad.paused = !ad.paused;
+                    ad.save(function (err) {
+                        if (err) {
+                            sails.log.debug("ad save err", err)
+                            return res.serverError(err)
+                        }
+                        else
+                            return res.ok(ad)
+                    })
+                })
+        }
+    },
+
+    toggleDelete: function (req, res) {
+        var params = req.allParams();
+        if (!params.id) {
+            return res.badRequest("Invalid req Params")
+        }
+        else {
+            Ad.findOne(params.id)
+                .then(function (ad) {
+                    ad.deleted = !ad.deleted;
+                    ad.save(function (err) {
+                        if (err) {
+                            sails.log.debug("ad save err", err)
+                            return res.serverError(err)
+                        }
+                        else
+                            return res.ok(ad)
+                    })
+                })
+        }
     }
 
 };

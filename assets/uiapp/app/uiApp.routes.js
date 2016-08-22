@@ -837,6 +837,35 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                             return data.data;
 
                         })
+                },
+                admin: function () {
+                    return false
+                }
+            }
+
+        })
+
+        .state('advertisement.adminEdit', {
+            url: '/admin-edit/:id',
+            templateUrl: '/uiapp/app/components/trevda/edit-trevda.partial.html',
+            data: {subTitle: "Edit Advertisement"},
+            controller: 'editAdvertisementController',
+            resolve: {
+                advertisement: function ($stateParams, $http) {
+                    return $http.get("api/v1/ad/" + $stateParams.id)
+                        .then(function (data) {
+                            return data.data;
+                        })
+                },
+                mediaMeta: function ($stateParams, $http) {
+                    return $http.get("ad/getMedia/" + $stateParams.id)
+                        .then(function (data) {
+                            return data.data;
+
+                        })
+                },
+                admin: function () {
+                    return true
                 }
             }
 

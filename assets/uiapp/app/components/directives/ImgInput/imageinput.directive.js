@@ -40,7 +40,7 @@ app.directive('imgInput', function($log, $timeout){
 
                 $log.debug("Files dropped!");
                 var fr = new FileReader();
-                var acceptedTypes = ["image/png", "image/jpeg"];
+                var acceptedTypes = ["image/png", "image/jpeg", "image/gif"]; //TODO gif???
                 var img = new Image();
 
                 img.onload = function() {

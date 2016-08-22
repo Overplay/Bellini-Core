@@ -173,7 +173,9 @@ module.exports = require('waterlock').actions.user({
             .populate("advertisements")
             .then(function (user) {
                 if (user) {
-                    return res.json(user.advertisements);
+
+                    var ads = _.filter(user.advertisements, {deleted: false})
+                    return res.json(ads);
                 }
                 else
                     return res.badRequest();
