@@ -141,16 +141,18 @@ module.exports = {
                     [
                         {
                             name: 'Advertisement Info',
-                            heading: ['a1', 'b1', 'c1'],
                             specification: {
                                 name: {
-                                    displayName: 'Name'
+                                    displayName: 'Name',
+                                    width: 120
                                 },
                                 description: {
-                                    displayName: 'Description'
+                                    displayName: 'Description',
+                                    width: 120
                                 },
                                 creator: {
-                                    displayName: 'Creator'
+                                    displayName: 'Creator',
+                                    width: 100
                                 },
                                 reviewed: {
                                     displayName: 'Reviewed'
@@ -170,10 +172,10 @@ module.exports = {
                                     name: ad.name,
                                     description: ad.description,
                                     creator: ad.creator.firstName + " " + ad.creator.lastName,
-                                    reviewed: ad.reviewed,
-                                    accepted: ad.accepted,
-                                    paused: ad.paused,
-                                    deleted: ad.deleted
+                                    reviewed: ad.reviewed ? "True" : "False",
+                                    accepted: ad.accepted ? "True" : "False",
+                                    paused: ad.paused ? "True" : "False",
+                                    deleted: ad.deleted ? "True" : "False"
                                 }
                             ]
                         }
