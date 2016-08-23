@@ -25,6 +25,7 @@ module.exports = {
             })
     },
 
+    //if device id in OGLog, include ad id? this is complicated 
     impressions: function (req, res) {
         OGLog.find({logType: 'impression'})
             .then(function(logs) {
