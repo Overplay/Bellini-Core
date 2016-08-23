@@ -1,5 +1,13 @@
 <div ng-if="advertisements">
+
+    <div class="text-center">
+        Lets make a cool graph here (Like TS)
+    </div>
+
+
     <h2 class="text-center">Your Advertisements</h2>
+
+
 
     <!--add search function??
 
@@ -7,6 +15,7 @@
     <input type="text" ng-model="selected" uib-typeahead="v.name as v for v in venueList | filter:$viewValue | limitTo:8" class="form-control">
 
     -->
+
     <div ng-repeat="ads in advertisements">
 
         <div class="col-md-6 text-center" ng-repeat="ad in ads">
@@ -24,4 +33,5 @@
             </div>
         </div>
     </div>
+
 </div>

@@ -17,14 +17,20 @@ module.exports = {
             res.badRequest("Missing message");
 
         OGLog.create(params)
-            .then( function (log) {
+            .then(function (log) {
                 res.ok();
             })
-            .catch( function (err) {
+            .catch(function (err) {
                 res.serverError(err);
             })
-    }
+    },
 
+    impressions: function (req, res) {
+        OGLog.find({logType: 'impression'})
+            .then(function(logs) {
+                
+            })
+    }
 
     //maybe make endpoints for each type and have it sortable 
     //like impressions could take an ad or user id and query 
