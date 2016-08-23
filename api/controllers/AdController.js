@@ -114,13 +114,13 @@ module.exports = {
         var params = req.allParams();
 
         if (!req.allParams().id)
-            return res.badRequest("Missing id");
+            return res.badRequest("Missing ad id");
 
         var styles = {
             headerDark: {
                 fill: {
                     fgColor: {
-                        rgb: '999999FF'
+                        rgb: 'FF999999'
                     }
                 },
                 font: {
@@ -142,7 +142,7 @@ module.exports = {
             cellLight: {
                 fill: {
                     fgColor: {
-                        rgb: 'F0F0F0FF'
+                        rgb: 'FFF0F0F0'
                     }
                 },
                 alignment: {
@@ -152,7 +152,7 @@ module.exports = {
             cellDark: {
                 fill: {
                     fgColor: {
-                        rgb: '999999FF'
+                        rgb: 'FF999999'
                     }
                 }
             }
