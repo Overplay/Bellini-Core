@@ -56,6 +56,7 @@
     - `cd` into directory then npm update 
     
 14. Run bower update in /assets for uiapp to work
+    - `npm install -g bower-npm-resolver`
     - `cd /assets && bower update`
     
 15. Add the `local.js` file to /config
