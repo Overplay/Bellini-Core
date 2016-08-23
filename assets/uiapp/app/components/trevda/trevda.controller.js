@@ -94,6 +94,11 @@ app.controller("editAdvertisementController", function ($scope, $log, $http, $st
     }
 
 
+    $scope.data = {
+        impressions: 1004,
+        screenTime: 4.5
+    }
+
     //to update the advertisement 
     $scope.update = function () {
         delete $scope.advertisementUpdate.mediaMeta
@@ -169,12 +174,17 @@ app.controller("editAdvertisementController", function ($scope, $log, $http, $st
         var e = paused ? "Are you sure you would like to resume to advertisement into venues?"
             : "Are you sure you would like to pause the advertisement from being placed in venues?"
 
+
+        var successMessage = paused ? "Advertisement will appear in venues!" : "Advertisement will no longer be placed in venues"
+
         uibHelper.confirmModal(q, e, true)
             .then(function (confirmed) {
                 $http.post('ad/pauseOrResume/', {id: $scope.advertisement.id, ad: $scope.advertisement})
                     .then(function (data) {
                         $scope.advertisement = data.data;
                         $scope.advertisementUpdate = angular.copy(data.data);
+                        toastr.success(successMessage, "Success!");
+
                     })
             })
 
@@ -190,6 +200,7 @@ app.controller("editAdvertisementController", function ($scope, $log, $http, $st
 
                         var state = admin ? 'adminList' : 'list'
                         $state.go('advertisement.' + state)
+                        toastr.success("Advertisement successfully deleted", "Success!")
                     })
             })
     }

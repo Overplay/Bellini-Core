@@ -96,6 +96,11 @@ module.exports.policies = {
         'deleteAllEntries': false
     },
 
+    OGLogController: {
+        '*': true,
+        'destroy': ['sessionAuth', 'isAdmin']
+    },
+
 
     UserController: {
         '*': true,
