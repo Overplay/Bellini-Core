@@ -117,17 +117,42 @@ module.exports = {
             return res.badRequest("Missing id");
 
         var styles = {
+            headerDark: {
+                fill: {
+                    fgColor: {
+                        rgb: '999999FF'
+                    }
+                },
+                font: {
+                    sz: "14"
+                },
+                border: {
+                    bottom: {
+                        style: 'medium',
+                        color: {
+                            rgb: "00000000"
+                        }
+                    }
+                },
+                alignment: {
+                    vertical: "center",
+                    horizontal: "center"
+                }
+            },
             cellLight: {
                 fill: {
                     fgColor: {
                         rgb: 'F0F0F0FF'
                     }
+                },
+                alignment: {
+                    wrapText: true
                 }
             },
             cellDark: {
                 fill: {
                     fgColor: {
-                        rgb: 'D6D6D6FF'
+                        rgb: '999999FF'
                     }
                 }
             }
@@ -144,27 +169,45 @@ module.exports = {
                             specification: {
                                 name: {
                                     displayName: 'Name',
-                                    width: 120
+                                    width: 120,
+                                    headerStyle: styles.headerDark,
+                                    cellStyle: styles.cellLight
                                 },
                                 description: {
                                     displayName: 'Description',
-                                    width: 120
+                                    width: 120,
+                                    headerStyle: styles.headerDark,
+                                    cellStyle: styles.cellLight
                                 },
                                 creator: {
                                     displayName: 'Creator',
-                                    width: 100
+                                    width: 100,
+                                    headerStyle: styles.headerDark,
+                                    cellStyle: styles.cellLight
                                 },
                                 reviewed: {
-                                    displayName: 'Reviewed'
+                                    displayName: 'Reviewed',
+                                    width: 80,
+                                    headerStyle: styles.headerDark,
+                                    cellStyle: styles.cellLight
                                 },
                                 accepted: {
-                                    displayName: 'Accepted'
+                                    displayName: 'Accepted',
+                                    width: 80,
+                                    headerStyle: styles.headerDark,
+                                    cellStyle: styles.cellLight
                                 },
                                 paused: {
-                                    displayName: 'Paused'
+                                    displayName: 'Paused',
+                                    width: 80,
+                                    headerStyle: styles.headerDark,
+                                    cellStyle: styles.cellLight
                                 },
                                 deleted: {
-                                    displayName: 'Deleted'
+                                    displayName: 'Deleted',
+                                    width: 80,
+                                    headerStyle: styles.headerDark,
+                                    cellStyle: styles.cellLight
                                 }
                             },
                             data: [
