@@ -74,10 +74,11 @@ app.controller("userDashController", function($scope, $log){
 
 });
 
-app.controller("adminDashController", function($scope, $log){
+app.controller("adminDashController", function ($scope, $log, ads) {
     $log.log("starting adminDashController")
     $scope.$parent.selected = "admin"
 
+    $scope.ads = ads 
 
 });
 
