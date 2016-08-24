@@ -43,7 +43,6 @@ app.controller("addAdvertisementController", function ($scope, $log, $http, $sta
         })
 
         chain.then(function () {
-            $log.log($scope.advertisement.media)
             $http.post("/ad/create", $scope.advertisement)
                 .then(function () {
                     toastr.success("Advertisement Created and submitted for review!", "Nice!")
@@ -134,7 +133,7 @@ app.controller("editAdvertisementController", function ($scope, $log, $http, $st
         })
 
         chain = chain.then(function () {
-            return $http.put("api/v1/ad/" + $scope.advertisement.id, $scope.advertisementUpdate)
+            return $http.put("ad/editAd", {id: $scope.advertisement.id, ad: $scope.advertisementUpdate})
                 .then(function (data) {
                     $scope.advertisement = data.data;
                     $scope.advertisementUpdate = angular.copy(data.data);
@@ -211,6 +210,8 @@ app.controller("reviewAdvertisementController", function ($scope, $log, $http, a
             .then(function (a) {
                 $scope.advertisement = a.data;
                 toastr.success("Advertisement " + (acc ? "accepted!" : "rejected!"), "Success")
+
+                //TODO redirect and sort 
             })
     }
 

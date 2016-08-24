@@ -912,6 +912,14 @@ app.config(function ($stateProvider, $urlRouterProvider) {
         .state('dash.admin', {
             templateUrl: '/uiapp/app/components/dash/admin-dash.partial.html',
             controller: 'adminDashController',
+            resolve: {
+                ads: function ($http) {
+                    return $http.get('/ad/forReview')
+                        .then(function (data) {
+                            return data.data
+                        })
+                }
+            }
         })
         .state('dash.advertiser', {
             templateUrl: '/uiapp/app/components/dash/ad-dash.partial.html',

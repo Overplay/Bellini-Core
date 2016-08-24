@@ -78,6 +78,19 @@ module.exports = {
          */
 
 
-    }
+    },
+
+    afterCreate: function (values, cb) {
+        //TODO send email to admin'
+        MailingService.adReviewNotification("EMAIL"); //TODO email lol
+        cb();
+    },
+
+    //TODO handle this only when a user is updating and not when admin is doing it - maybe move to controller on the updating end? idk
+    /*afterUpdate: function(values, cb){
+     //TODO send email to admin'
+     MailingService.adReviewNotification("EMAIL"); //TODO email lol
+     cb();
+     }*/
 };
 
