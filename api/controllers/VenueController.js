@@ -355,6 +355,9 @@ module.exports = {
             .then(function (venues) {
                 return res.ok(venues)
             })
+            .catch(function (err) {
+                return res.serverError(err)
+            })
     }
 };
 

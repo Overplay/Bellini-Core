@@ -160,6 +160,9 @@ module.exports = {
             .then(function (ads) {
                 return res.ok(ads)
             })
+            .catch(function (err) {
+                return res.serverError(err)
+            })
     }
 
 
