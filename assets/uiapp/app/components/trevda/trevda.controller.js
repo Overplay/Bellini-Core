@@ -196,7 +196,7 @@ app.controller("editAdvertisementController", function ($scope, $log, $http, $st
     }
 })
 
-app.controller("reviewAdvertisementController", function ($scope, $log, $http, ad, links, toastr, uibHelper) {
+app.controller("reviewAdvertisementController", function ($scope, $log, $http, $state, ad, links, toastr, uibHelper) {
     $scope.advertisement = ad
     $scope.$parent.ui.pageTitle = "Review Advertisement";
     $scope.$parent.ui.panelHeading = ad.name;
@@ -211,7 +211,7 @@ app.controller("reviewAdvertisementController", function ($scope, $log, $http, a
                 $scope.advertisement = a.data;
                 toastr.success("Advertisement " + (acc ? "accepted!" : "rejected!"), "Success")
 
-                //TODO redirect and sort 
+                $stat.go("advertisement.adminList")
             })
     }
 
