@@ -1,5 +1,6 @@
 <div class="row">
     <div class="col-sm-10 col-sm-offset-1">
+
         <uib-tabset active="active">
             <uib-tab heading="More Info">
                 <div class="top15" style="padding: 20px; border: 2px solid #cacaca; border-radius: 5px;">
@@ -75,6 +76,8 @@
                 <button ng-click="exportExcel()" class="btn btn-success top15">Export to Excel</button>
             </uib-tab>
             <uib-tab heading="Stats">
+
+
                 <div class="top15" style="padding: 20px; border: 2px solid #cacaca; border-radius: 5px;">
                     <div class="panel-body">
                         Graphs and numbers :)
@@ -109,10 +112,20 @@
                                 </tbody>
                             </table>
 
-                            a graph with the top venues would be cool
-                            & links to the venues
 
-                            lists of venues
+                            I wish these were real numbers
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <canvas id="bar" class="chart chart-bar"
+                                            chart-data="graphdata" chart-labels="labels" chart-series="series">
+                                    </canvas>
+                                </div>
+
+                            </div>
+
+                            a graph with the top venues would be cool
+                            & links to the venues or something would be cool
+
                         </div>
 
                     </div>

@@ -54,6 +54,42 @@
     font-size: 160%;
 }
 
+.dash-selector {
+    margin: 30px;
+    border-bottom: solid #018bb9 2px;
+}
+
+.dash-selection {
+    font-weight: 200;
+    list-style-type: none;
+    text-align: center;
+}
+
+.dash-selection li {
+    margin-right: 15px;
+    border: 10px;
+    display: inline;
+    font-size: 40px;
+}
+
+.dash-selection a {
+    color: #808080;
+    text-wrap: none;
+}
+
+.dash-selection a:hover {
+    color: #4f4b50;
+    text-decoration: none;
+    font-weight: 400;
+    text-wrap: none;
+}
+
+.selected-dash {
+    color: #221e23;
+    text-decoration: none;
+    font-weight: 400;
+    text-wrap: none;
+}
 
 .strike-media {
     text-decoration: line-through;

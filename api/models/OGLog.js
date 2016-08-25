@@ -19,12 +19,22 @@ module.exports = {
         },
 
         deviceUniqueId: {
-            type: "string"
+            type: 'string'
         },
-
         loggedAt: {
-            type: "datetime"
+            type: 'datetime'
         }
     }
+
+    ,
+
+    beforeUpdate: function (valuesToUpdate, cb) {
+        if (valuesToUpdate.loggedAt)
+            delete valuesToUpdate.loggedAt;
+        cb();//TODO test this doesn't remove the record or whatever
+    }
+
+    //TODO before update prevention of changing loggedAT
+    //TODO potential before create Date parsing of loggedAt
 };
 

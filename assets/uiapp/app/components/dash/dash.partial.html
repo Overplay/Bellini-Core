@@ -1,12 +1,12 @@
-<div class="jumbotron">
+<div class="dash-selector">
     <div class="text-center">
         Select the dash you wish to view
         <br>
-        <div class="btn-group">
-            <label class="btn btn-primary" ng-repeat="role in roles" ui-sref="dash.{{role.replace('.', '')}}" >
-                {{humanize(role) | capitalize}}
-            </label>
-        </div>
+        <ul class="dash-selection">
+            <li ng-repeat="role in roles" ng-class="{'selected-dash': selected==role}">
+                <a ui-sref="dash.{{role.replace('.', '')}}">{{humanize(role) | capitalize}}</a>
+            </li>
+        </ul>
         <!--<div class="btn-group">
         ng-model="dashModel" uib-btn-radio="'{{role}}'"
             <label class="btn btn-primary" ng-model="radioModel" uib-btn-radio="'Left'">Left</label>

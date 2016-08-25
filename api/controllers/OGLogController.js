@@ -33,7 +33,7 @@ module.exports = {
     impressions: function (req, res) {
         OGLog.find({logType: 'impression'})
             .then(function(logs) {
-                
+                //TODO _.filter message for ad ids or whatever 
             })
     }
 

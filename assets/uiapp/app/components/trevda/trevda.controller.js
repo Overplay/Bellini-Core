@@ -43,7 +43,6 @@ app.controller("addAdvertisementController", function ($scope, $log, $http, $sta
         })
 
         chain.then(function () {
-            $log.log($scope.advertisement.media)
             $http.post("/ad/create", $scope.advertisement)
                 .then(function () {
                     toastr.success("Advertisement Created and submitted for review!", "Nice!")
@@ -73,6 +72,16 @@ app.controller("manageAdvertisementController", function ($scope, $log, ads, lin
 
 app.controller("editAdvertisementController", function ($scope, $log, $http, $stateParams, $state, toastr, asahiService, links, advertisement, mediaMeta, uibHelper, admin) {
     $log.debug("editAdvertisementController starting");
+
+
+    $scope.labels = ['2006', '2007', '2008', '2009', '2010', '2011', '2012'];
+    $scope.series = ['Series A', 'Series B'];
+
+    $scope.graphdata = [
+        [65, 59, 80, 81, 56, 55, 40],
+        [28, 48, 40, 19, 86, 27, 90]
+    ];
+
 
     $scope.advertisement = advertisement;
 
@@ -124,7 +133,7 @@ app.controller("editAdvertisementController", function ($scope, $log, $http, $st
         })
 
         chain = chain.then(function () {
-            return $http.put("api/v1/ad/" + $scope.advertisement.id, $scope.advertisementUpdate)
+            return $http.put("ad/editAd", {id: $scope.advertisement.id, ad: $scope.advertisementUpdate})
                 .then(function (data) {
                     $scope.advertisement = data.data;
                     $scope.advertisementUpdate = angular.copy(data.data);
@@ -197,7 +206,7 @@ app.controller("editAdvertisementController", function ($scope, $log, $http, $st
     }
 })
 
-app.controller("reviewAdvertisementController", function ($scope, $log, $http, ad, links, toastr, uibHelper) {
+app.controller("reviewAdvertisementController", function ($scope, $log, $http, $state, ad, links, toastr, uibHelper) {
     $scope.advertisement = ad
     $scope.$parent.ui.pageTitle = "Review Advertisement";
     $scope.$parent.ui.panelHeading = ad.name;
@@ -211,6 +220,8 @@ app.controller("reviewAdvertisementController", function ($scope, $log, $http, a
             .then(function (a) {
                 $scope.advertisement = a.data;
                 toastr.success("Advertisement " + (acc ? "accepted!" : "rejected!"), "Success")
+
+                $stat.go("advertisement.adminList")
             })
     }
 
