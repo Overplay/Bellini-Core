@@ -82,6 +82,9 @@ app.controller("editAdvertisementController", function ($scope, $log, $http, $st
         [28, 48, 40, 19, 86, 27, 90]
     ];
 
+    $scope.opt = function () {
+        return 'reviewed'
+    }
 
     $scope.advertisement = advertisement;
 
@@ -211,7 +214,7 @@ app.controller("reviewAdvertisementController", function ($scope, $log, $http, $
                 $scope.advertisement = a.data;
                 toastr.success("Advertisement " + (acc ? "accepted!" : "rejected!"), "Success")
 
-                $stat.go("advertisement.adminList")
+                $state.go("advertisement.adminList")
             })
     }
 

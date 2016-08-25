@@ -42,7 +42,8 @@
     "waterlock-facebook-auth": "Overplay/waterlock-facebook-auth",
     "waterlock-local-auth": "Overplay/waterlock-local-auth",
     "yelp": "^1.0.1",
-    "angular-chart.js": "~1.0.2"
+    "angular-chart.js": "~1.0.2",
+    "sails-hook-blueprint-count": "0.0.3"
   },
   "devDependencies": {},
   "scripts": {

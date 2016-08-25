@@ -1,21 +1,27 @@
 <div class="row">
     <div class="col-sm-10 col-sm-offset-1">
 
-        TODO: Search function <!--TODO search-->
+        <div class="col-sm-8 col-sm-offset-2 top30" ng-show="advertisements.length">
+            <input type="text" ng-model="search.name" class="form-control" placeholder="Search advertisements...">
+        </div>
         <table class="table table-striped top15">
             <thead>
             <tr>
                 <td>Name</td>
                 <td>Description</td>
-                <td>Paused</td>
+                <td ng-if="!admin">Paused</td>
+                <td ng-if="admin">Reviewed add sort button plz</td>
                 <td></td>
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="advertisement in advertisements">
+            <tr ng-if="!admin" ng-repeat="advertisement in advertisements | filter:search">
+            <tr ng-if="admin" ng-repeat="advertisement in advertisements | orderBy:opt |filter:search">
+
                 <td>{{advertisement.name}}</td>
                 <td>{{advertisement.description}}</td>
-                <td>{{advertisement.paused}}</td>
+                <td ng-if="admin">{{advertisement.reviewed}}</td>
+                <td ng-if="!admin">{{advertisement.paused}}</td>
                 <td ng-if="!admin" width="10%"><a ui-sref="advertisement.edit({id: advertisement.id})"
                                                   class="btn btn-sm btn-warning">More Info</a></td>
                 <!--<td><a class="btn btn-sm btn-primary">Pause</a></td>

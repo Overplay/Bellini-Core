@@ -786,7 +786,7 @@ app.config(function ($stateProvider, $urlRouterProvider) {
 
                     return [
                         {text: 'All Advertisements', link: 'advertisement.adminList'},
-                        //                      {text: 'Create an Advertisement', link: 'advertisement.add'}
+                        //{text: 'Create an Advertisement', link: 'advertisement.add'}
                     ]
                 }
 
@@ -917,6 +917,24 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                     return $http.get('/ad/forReview')
                         .then(function (data) {
                             return data.data
+                        })
+                },
+                userCount: function ($http) {
+                    return $http.get('/user/count')
+                        .then(function (res) {
+                            return res.data.count
+                        })
+                },
+                deviceCount: function ($http) {
+                    return $http.get('/device/count')
+                        .then(function (res) {
+                            return res.data.count
+                        })
+                },
+                adCount: function ($http) {
+                    return $http.get('/ad/count')
+                        .then(function (res) {
+                            return res.data.count
                         })
                 }
             }

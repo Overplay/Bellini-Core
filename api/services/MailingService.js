@@ -77,11 +77,31 @@ module.exports = {
             html: html // html body
         };
 
-        mailOptions.to = 'cole.grigsby@gmail.com'//email;
-        transport.sendMail(mailOptions, mailCallback);
+
+        User.find()
+            .populate('auth')
+            .then(function (users) {
+                return _.filter(users, function (u) {
+                    return RoleCacheService.hasAdminRole(u.roles)
+                })
+            })
+            .then(function (us) {
+                var emails = "";
+                us.forEach(function (u) {
+                    emails += u.auth.email + ","
+                })
+                return emails;
+            })
+            .then(function (e) {
+                sails.log.debug(e)
+                mailOptions.to = 'cole.grigsby@gmail.com'//e; TODO
+                transport.sendMail(mailOptions, mailCallback);
+            })
+
     },
 
-    adRejectNotification: function (email, name, reason) {
+    adRejectNotification: function (userId, name, reason) {
+
         viewVars = {
             url: sails.config.mailing.login,
             name: name,
@@ -98,8 +118,16 @@ module.exports = {
             html: html // html body
         };
 
-        mailOptions.to = 'cole.grigsby@gmail.com'//TODO email;
-        transport.sendMail(mailOptions, mailCallback);
+
+        Auth.findOne({user: userId})
+            .then(function (a) {
+                if (a) {
+                    mailOptions.to = 'cole.grigsby@gmail.com'//a.email TODO
+                    transport.sendMail(mailOptions, mailCallback);
+                }
+                else return new error("Shit hit the fan")
+            })        
+        
     }
 }
 

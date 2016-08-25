@@ -156,7 +156,7 @@ module.exports = {
     ,
 
     getAccepted: function (req, res) {
-        Ad.find({reviewed: true, accepted: true})
+        Ad.find({reviewed: true, accepted: true, deleted: false})
             .then(function (ads) {
                 return res.ok(ads)
             })
