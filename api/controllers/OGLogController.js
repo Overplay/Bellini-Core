@@ -21,10 +21,10 @@ module.exports = {
             return res.badRequest("Missing logged at time");
 
         OGLog.create(params)
-            .then(function (log) {
+            .then( function (log) {
                 return res.ok();
             })
-            .catch(function (err) {
+            .catch( function (err) {
                 return res.serverError(err);
             })
     },
@@ -35,7 +35,24 @@ module.exports = {
             .then(function(logs) {
                 //TODO _.filter message for ad ids or whatever 
             })
-    }
+    },
+
+    deviceHeartbeat: function (req, res) {
+
+        if (!req.allParams().id)
+            return res.badRequest("Missing device id");
+
+        var id = req.allParams().id;
+
+        OGLog.find({logType: 'heartbeat'})
+            .sort('loggedAt DESC')
+            .then( function (logs) {
+                var venueLogs = _.filter(logs, function (o) { return o.deviceUniqueId === id });
+                return res.json(venueLogs);
+            })
+    },
+
+
 
     //maybe make endpoints for each type and have it sortable 
     //like impressions could take an ad or user id and query 
