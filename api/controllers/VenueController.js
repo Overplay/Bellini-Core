@@ -348,6 +348,13 @@ module.exports = {
         })
 
 
+    },
+
+    getMobileView: function (req, res) {
+        Venue.find({showInMobileAppMap: true})
+            .then(function (venues) {
+                return res.ok(venues)
+            })
     }
 };
 

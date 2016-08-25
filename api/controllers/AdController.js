@@ -61,7 +61,7 @@ module.exports = {
                 .then(function (updated) {
                     if (updated.length == 1) {
                         if (params.accepted == false) { //rejected by admin 
-                            MailingService.adRejectNotification("EMAIL", updated.name, "Guidelines were not met")
+                            MailingService.adRejectNotification(updated[0].creator, updated[0].name, "not meeting guidelines")
                         }
 
                         return res.json(updated[0])
@@ -152,6 +152,14 @@ module.exports = {
                 })
         }
 
+    }
+    ,
+
+    getAccepted: function (req, res) {
+        Ad.find({reviewed: true, accepted: true})
+            .then(function (ads) {
+                return res.ok(ads)
+            })
     }
 
 
