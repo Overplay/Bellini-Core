@@ -12,16 +12,20 @@ module.exports = {
         var params = req.allParams();
 
         if (!params.logType)
-            res.badRequest("Missing log type");
+            return res.badRequest("Missing log type");
         if (!params.message)
-            res.badRequest("Missing message");
+            return res.badRequest("Missing message");
+        if (!params.deviceUniqueId)
+            return res.badRequest("Missing device id");
+        if (!params.loggedAt)
+            return res.badRequest("Missing logged at time");
 
         OGLog.create(params)
             .then(function (log) {
-                res.ok();
+                return res.ok();
             })
             .catch(function (err) {
-                res.serverError(err);
+                return res.serverError(err);
             })
     },
 

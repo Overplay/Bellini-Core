@@ -16,6 +16,14 @@ module.exports = {
 
         message: {
             type: "json"
+        },
+
+        deviceUniqueId: {
+            type: "string"
+        },
+
+        loggedAt: {
+            type: "datetime"
         }
     }
 };
