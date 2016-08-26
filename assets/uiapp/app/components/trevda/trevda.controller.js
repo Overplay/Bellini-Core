@@ -63,6 +63,7 @@ app.controller("manageAdvertisementController", function ($scope, $log, ads, lin
     $scope.$parent.ui.panelHeading = '';
     $scope.$parent.links = links;
     $scope.sort = '';
+    $scope.reverse = true;
 
     $scope.toggleSort= function(sortBy){
         $scope.reverse = !$scope.reverse;
@@ -74,7 +75,7 @@ app.controller("manageAdvertisementController", function ($scope, $log, ads, lin
     $scope.advertisements = ads;
 
     $scope.admin = admin
-    
+
 });
 
 

@@ -88,13 +88,11 @@ module.exports = {
                 sails.log.debug(us)
                 var emails = "";
                 us.forEach(function (u) {
-                    sails.log.debug(u)
                     emails += u.auth.email + ","
                 })
                 return emails;
             })
             .then(function (e) {
-                sails.log.debug(e)
                 mailOptions.to = 'cole.grigsby@gmail.com'//e; TODO
                 transport.sendMail(mailOptions, mailCallback);
             })
