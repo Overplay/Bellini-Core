@@ -10,13 +10,13 @@
                 <td>Name</td>
                 <td>Description</td>
                 <td ng-if="!admin">Paused</td>
-                <td ng-if="admin">Reviewed add sort button plz</td>
+                <td ng-if="admin" ng-click="toggleSort('reviewed')">Reviewed</td>
                 <td></td>
             </tr>
             </thead>
             <tbody>
             <tr ng-if="!admin" ng-repeat="advertisement in advertisements | filter:search">
-            <tr ng-if="admin" ng-repeat="advertisement in advertisements | orderBy:opt |filter:search">
+            <tr ng-if="admin" ng-repeat="advertisement in advertisements | orderBy:sort:reverse |filter:search">
 
                 <td>{{advertisement.name}}</td>
                 <td>{{advertisement.description}}</td>

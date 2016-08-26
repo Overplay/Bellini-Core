@@ -62,10 +62,18 @@ app.controller("manageAdvertisementController", function ($scope, $log, ads, lin
     $scope.$parent.ui.pageTitle = admin ? "All Advertisements" : "Manage My Advertisements";
     $scope.$parent.ui.panelHeading = '';
     $scope.$parent.links = links;
+    $scope.sort = '';
+
+    $scope.toggleSort= function(sortBy){
+        $scope.reverse = !$scope.reverse;
+        $scope.sort = sortBy
+    }
+
+    //bulk accept reject? could be dangerous but might be nice
 
     $scope.advertisements = ads;
 
-    $scope.admin = admin //TODO search function for ads , also bulk accept/reject?
+    $scope.admin = admin
 
 });
 
@@ -82,15 +90,11 @@ app.controller("editAdvertisementController", function ($scope, $log, $http, $st
         [28, 48, 40, 19, 86, 27, 90]
     ];
 
-    $scope.opt = function () {
-        return 'reviewed'
-    }
-
     $scope.advertisement = advertisement;
 
     $scope.$parent.ui.panelHeading = $scope.advertisement.name;
     $scope.advertisementUpdate = angular.copy(advertisement);
-
+    
     $scope.advertisement.mediaMeta = mediaMeta;
     $scope.advertisementUpdate.mediaMeta = angular.copy(mediaMeta);
 

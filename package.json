@@ -7,6 +7,7 @@
     "doc": "docs"
   },
   "dependencies": {
+    "angular-chart.js": "~1.0.2",
     "bluebird": "^3.3.4",
     "connect-mongo": "0.8.2",
     "ejs": "^2.3.4",
@@ -32,6 +33,7 @@
     "rc": "^1.0.1",
     "sails": "^0.12.3",
     "sails-disk": "^0.10.9",
+    "sails-hook-blueprint-count": "0.0.3",
     "sails-mongo": "^0.12.0",
     "skipper-disk": "^0.5.4",
     "superagent": "^2.0.0-alpha.3",
@@ -41,9 +43,7 @@
     "waterlock": "waterlock/waterlock",
     "waterlock-facebook-auth": "Overplay/waterlock-facebook-auth",
     "waterlock-local-auth": "Overplay/waterlock-local-auth",
-    "yelp": "^1.0.1",
-    "angular-chart.js": "~1.0.2",
-    "sails-hook-blueprint-count": "0.0.3"
+    "yelp": "^1.0.1"
   },
   "devDependencies": {},
   "scripts": {
