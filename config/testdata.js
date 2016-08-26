@@ -30,7 +30,8 @@ var self = module.exports.testdata = {
                 Venue.destroy({}),
                 Device.destroy({}),
                 Media.destroy({}),
-                Ad.destroy({})
+                Ad.destroy({}),
+                OGLog.destroy({})
             ];
 
             chain = chain.then(function () {
@@ -294,6 +295,28 @@ var self = module.exports.testdata = {
                     sails.log.debug("Venues' devices populated");
                 })
         });
+
+        self.logs.forEach( function (log) {
+            var device = log.device;
+            delete log.device;
+
+            chain = chain.then( function () {
+                return Venue.findOne({ name: device.venue })
+                    .populate('devices')
+                    .then( function (v) {
+                        log.deviceUniqueId = _.find(v.devices, function (o) { return o.name === device.name }).id
+                    })
+                    .then( function () {
+                        return OGLog.create(log)
+                            .then( function () {
+                                sails.log.debug("Log created");
+                            })
+                            .catch( function (err) {
+                                sails.log.debug(err);
+                            })
+                    })
+            })
+        })
 
     },
     users: [
@@ -582,5 +605,27 @@ var self = module.exports.testdata = {
             creatorEmail: "elizabeth@test.com",
             description: "noooooo"
         }
+    ],
+
+    logs: [
+        {
+            logType: "heartbeat",
+            message: {
+                uptime: "32:15:08",
+                softwareVersions: {
+                    amstelBright: "1.0.0",
+                    aqui: "1.0.0",
+                    android: "MMB29M"
+                },
+                installedApps: [
+
+                ]
+            },
+            device: {
+                name: "Bar Box",
+                venue: "B Bar & Grill"
+            },
+            loggedAt: new Date().toISOString()
+        },
     ]
 };
