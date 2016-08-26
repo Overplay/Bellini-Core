@@ -74,7 +74,7 @@ app.controller("manageAdvertisementController", function ($scope, $log, ads, lin
     $scope.advertisements = ads;
 
     $scope.admin = admin
-
+    
 });
 
 

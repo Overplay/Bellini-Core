@@ -62,7 +62,6 @@ module.exports = {
     },
 
     adReviewNotification: function (email) {
-        //TODO email
         viewVars = {
             url: sails.config.mailing.login
         }
@@ -86,8 +85,10 @@ module.exports = {
                 })
             })
             .then(function (us) {
+                sails.log.debug(us)
                 var emails = "";
                 us.forEach(function (u) {
+                    sails.log.debug(u)
                     emails += u.auth.email + ","
                 })
                 return emails;
