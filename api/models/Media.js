@@ -71,10 +71,7 @@ module.exports = {
 
             var obj = this.toObject();
 
-            //This var is set in config/env files
-            if (sails.config.models.terse) {
-                delete obj.path;
-            }
+            delete obj.path;
 
             return obj;
         }
