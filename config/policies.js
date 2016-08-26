@@ -63,7 +63,8 @@ module.exports.policies = {
         'pauseOrResume': ['sessionAuth', 'isAdOwner'],
         'toggleDelete': ['sessionAuth', 'isAdOwner'],
         'forReview': ['sessionAuth', 'isAdmin'],
-        'editAd': ['sessionAuth', 'isAdOwner']
+        'editAd': ['sessionAuth', 'isAdOwner'],
+        'getAccepted': true //TODO 
     },
     
     AuthController: {
@@ -132,6 +133,7 @@ module.exports.policies = {
         'addOwner': ['sessionAuth', 'isVenueOwnerMeOrAdmin'],
         'removeManager': ['sessionAuth', 'isVenueOwnerMeOrAdmin'],
         'removeOwner': ['sessionAuth', 'isVenueOwnerMeOrAdmin'],
+        'getMobileView': true //TODO 
     },
     
 

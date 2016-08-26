@@ -61,8 +61,8 @@ module.exports = {
             Ad.update(params.id, {accepted: params.accepted, reviewed: true})
                 .then(function (updated) {
                     if (updated.length == 1) {
-                        if (params.accepted == false) { //rejected by admin
-                            MailingService.adRejectNotification("EMAIL", updated.name, "Guidelines were not met")
+                        if (params.accepted == false) { //rejected by admin 
+                            MailingService.adRejectNotification(updated[0].creator, updated[0].name, "not meeting guidelines")
                         }
 
                         return res.json(updated[0])
@@ -249,7 +249,7 @@ module.exports = {
             })
     },
 
-    //use this for when an advertiser updates ads == gets sent to admin for review
+    //use this for when an advertiser updates ads == gets sent to admin for review 
     editAd: function (req, res) {
         var params = req.allParams()
 
@@ -275,6 +275,18 @@ module.exports = {
         }
 
     }
+    ,
+
+    getAccepted: function (req, res) {
+        Ad.find({reviewed: true, accepted: true, deleted: false})
+            .then(function (ads) {
+                return res.ok(ads)
+            })
+            .catch(function (err) {
+                return res.serverError(err)
+            })
+    }
+
 
 };
 
