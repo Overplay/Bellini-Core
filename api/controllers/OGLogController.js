@@ -44,10 +44,9 @@ module.exports = {
 
         var id = req.allParams().id;
 
-        OGLog.find({logType: 'heartbeat'})
-            .sort('loggedAt DESC')
+        OGLog.find({ where: { logType: 'heartbeat'}, sort: 'loggedAt DESC'})
             .then( function (logs) {
-                var venueLogs = _.filter(logs, function (o) { return o.deviceUniqueId === id });
+                var venueLogs = _.filter(logs, function (o) { return o.deviceUniqueId == id });
                 return res.json(venueLogs);
             })
     },
