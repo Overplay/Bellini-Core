@@ -26,10 +26,11 @@ module.exports = {
     },
 
     //if device id in OGLog, include ad id? this is complicated 
+    //more in the ad controller
     impressions: function (req, res) {
         OGLog.find({logType: 'impression'})
             .then(function(logs) {
-                //TODO _.filter message for ad ids or whatever 
+                return res.ok(logs); //all logs
             })
     }
 

@@ -163,6 +163,25 @@ module.exports = {
             .catch(function (err) {
                 return res.serverError(err)
             })
+    },
+
+    //add a date filter on this or front end? 
+    impressions: function (req, res) {
+        var params = req.allParams();
+        if (!params.id){
+            return res.badRequest("No Id")
+        }
+        var id = params.id;
+        
+        OGLog.find({logType: 'impression'})
+            .then(function(logs) {
+                var adLogs = _.filter(logs, {ad: id})
+                sails.log.debug(adLogs)
+                return res.ok(adLogs)
+            })
+            .catch(function(err){
+                return res.serverError(err)
+            })
     }
 
 
