@@ -213,10 +213,16 @@ module.exports = {
         if (!params.date) {
             return res.badRequest("No date given")
         }
-        OGlog.find({loggedAt: {'>': new Date(params.date), '<': new Date(params.date)}})
+        OGLog.find({logType: 'impression', loggedAt: {'>': new Date(moment(params.date).startOf('day')), '<': new Date(moment(params.date).endOf('day'))}})
             .then(function (logs) {
-                //sort logs by adId
-                //return counts for each ad
+                if (params.id){
+                    //logs by adId TODO
+                }
+                //otherwise return counts for each all ads...um maybe not 
+                return res.ok(logs)
+            })
+            .catch(function(err){
+                return res.serverError(err)
             })
     }
 
