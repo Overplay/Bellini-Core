@@ -5,7 +5,8 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
-var _ = require('lodash')
+var _ = require('lodash');
+var excel= require('node-excel-export');
 var moment = require('moment')
 
 module.exports = {
@@ -118,6 +119,127 @@ module.exports = {
         }
     },
 
+    exportExcel: function (req, res) {
+
+        var params = req.allParams();
+
+        if (!req.allParams().id)
+            return res.badRequest("Missing ad id");
+
+        var styles = {
+            headerDark: {
+                fill: {
+                    fgColor: {
+                        rgb: 'FF999999'
+                    }
+                },
+                font: {
+                    sz: "14"
+                },
+                border: {
+                    bottom: {
+                        style: 'medium',
+                        color: {
+                            rgb: "00000000"
+                        }
+                    }
+                },
+                alignment: {
+                    vertical: "center",
+                    horizontal: "center"
+                }
+            },
+            cellLight: {
+                fill: {
+                    fgColor: {
+                        rgb: 'FFF0F0F0'
+                    }
+                },
+                alignment: {
+                    wrapText: true
+                }
+            },
+            cellDark: {
+                fill: {
+                    fgColor: {
+                        rgb: 'FF999999'
+                    }
+                }
+            }
+        }
+
+        Ad.findOne({ id: req.allParams().id })
+            .populate('creator')
+            .then( function (ad) {
+
+                var report = excel.buildExport(
+                    [
+                        {
+                            name: 'Advertisement Info',
+                            specification: {
+                                name: {
+                                    displayName: 'Name',
+                                    width: 120,
+                                    headerStyle: styles.headerDark,
+                                    cellStyle: styles.cellLight
+                                },
+                                description: {
+                                    displayName: 'Description',
+                                    width: 120,
+                                    headerStyle: styles.headerDark,
+                                    cellStyle: styles.cellLight
+                                },
+                                creator: {
+                                    displayName: 'Creator',
+                                    width: 100,
+                                    headerStyle: styles.headerDark,
+                                    cellStyle: styles.cellLight
+                                },
+                                reviewed: {
+                                    displayName: 'Reviewed',
+                                    width: 80,
+                                    headerStyle: styles.headerDark,
+                                    cellStyle: styles.cellLight
+                                },
+                                accepted: {
+                                    displayName: 'Accepted',
+                                    width: 80,
+                                    headerStyle: styles.headerDark,
+                                    cellStyle: styles.cellLight
+                                },
+                                paused: {
+                                    displayName: 'Paused',
+                                    width: 80,
+                                    headerStyle: styles.headerDark,
+                                    cellStyle: styles.cellLight
+                                },
+                                deleted: {
+                                    displayName: 'Deleted',
+                                    width: 80,
+                                    headerStyle: styles.headerDark,
+                                    cellStyle: styles.cellLight
+                                }
+                            },
+                            data: [
+                                {
+                                    name: ad.name,
+                                    description: ad.description,
+                                    creator: ad.creator.firstName + " " + ad.creator.lastName,
+                                    reviewed: ad.reviewed ? "True" : "False",
+                                    accepted: ad.accepted ? "True" : "False",
+                                    paused: ad.paused ? "True" : "False",
+                                    deleted: ad.deleted ? "True" : "False"
+                                }
+                            ]
+                        }
+                    ]
+                );
+
+                res.attachment('AdReport.xlsx');
+                return res.send(200, report);
+            })
+    },
+
     forReview: function (req, res) {
         Ad.find({where: {reviewed: false}, sort: 'createdAt ASC'})
             .then(function (ads) {
@@ -128,7 +250,7 @@ module.exports = {
             })
     },
 
-    //use this for when an advertiser updates ads == gets sent to admin for review 
+    //use this for when an advertiser updates ads == gets sent to admin for review
     editAd: function (req, res) {
         var params = req.allParams()
 

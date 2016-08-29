@@ -3,31 +3,38 @@
         <uib-tabset active="active">
             <uib-tab heading="More Info">
                 <div class="top15">
-                    <div class="panel-heading">
-                        <h3>Device Information</h3>
+                    <div class="col-sm-6 col-md-12 col-lg-6">
+                        <div class="panel-heading">
+                            <h3>Device Information</h3>
+                        </div>
+                        <div class="panel-body">
+                            <table class="table table-striped top15">
+                                <tr>
+                                    <td>Name</td>
+                                    <td ng-show="deviceName">{{deviceName}}</td>
+                                    <td ng-hide="deviceName">(Device has no name)</td>
+                                </tr>
+                                <tr>
+                                    <td>Venue</td>
+                                    <td><a ui-sref="venue.view({id: device.venue.id})">{{device.venue.name}}</a></td>
+                                </tr>
+                                <tr>
+                                    <td>Venue Address</td>
+                                    <td>
+                                        <a ng-href="http://maps.google.com/?q={{addressString(device.venue.address)}}" target="_blank">
+                                            {{addressString(device.venue.address)}}
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
                     </div>
-                    <div class="panel-body">
-                        <table class="table table-striped top15">
-                            <tr>
-                                <td>Name</td>
-                                <td ng-show="deviceName">{{deviceName}}</td>
-                                <td ng-hide="deviceName">(Device has no name)</td>
-                            </tr>
-                            <tr>
-                                <td>Venue</td>
-                                <td><a ui-sref="venue.view({id: device.venue.id})">{{device.venue.name}}</a></td>
-                            </tr>
-                            <tr>
-                                <td>Venue Address</td>
-                                <td>
-                                    <a ng-href="http://maps.google.com/?q={{addressString(device.venue.address)}}" target="_blank">
-                                        {{addressString(device.venue.address)}}
-                                    </a>
-                                </td>
-                            </tr>
+                    <div class="col-sm-6 col-md-12 col-lg-6">
+                        <div class="panel-heading">
+                            <h3>Last Heartbeat</h3>
+                        </div>
+                    </div>
 
-                        </table>
-                    </div>
                 </div>
             </uib-tab>
             <uib-tab heading="Edit Device" ng-if="edit">

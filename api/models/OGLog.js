@@ -31,7 +31,7 @@ module.exports = {
     beforeUpdate: function (valuesToUpdate, cb) {
         if (valuesToUpdate.loggedAt)
             delete valuesToUpdate.loggedAt;
-        cb();//TODO test this doesn't remove the record or whatever 
+        cb();//TODO test this doesn't remove the record or whatever
     }
 
     //TODO before update prevention of changing loggedAT

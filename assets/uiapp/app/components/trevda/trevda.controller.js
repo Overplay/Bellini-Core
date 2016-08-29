@@ -171,6 +171,16 @@ app.controller("editAdvertisementController", function ($scope, $log, $http, $st
 
     }
 
+    $scope.exportExcel = function () {
+        $http.get('ad/exportExcel', { params: { id : advertisement.id }, responseType: "arraybuffer" })
+            .then( function (res) {
+                var blob = new Blob([res.data], { type : res.headers['Content-Type'] });
+                saveAs(blob, advertisement.name + ".xlsx");
+            })
+            .catch( function (err) {
+                toastr.error("Something went wrong. Try again later.", "Error!");
+            })
+    }
 
     $scope.pause = function () {
         var paused = $scope.advertisement.paused;
