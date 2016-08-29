@@ -297,13 +297,13 @@ var self = module.exports.testdata = {
 
     },
     users: [
-        {
+        /*{
             firstName: 'Johnny',
             lastName: 'McAdmin',
             email: 'admin@test.com',
             password: 'beerchugs',
             roleNames: [{role: "admin", subRole: ""}, {role: "user", subRole: ""}]
-        },
+         },*/
         {
             firstName: 'Ryan',
             lastName: 'Smith',

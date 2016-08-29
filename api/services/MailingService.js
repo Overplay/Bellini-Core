@@ -62,7 +62,7 @@ module.exports = {
             })
             .then(function (e) {
                 sendMail(viewVars, "adreview.jade",
-                    "You have an Advertisement to review", "cole.grigsby@gmail.com")//TODO e) 
+                    "You have an Advertisement to review", e) 
             })
             .catch(function (err) {
                 sails.log.debug("Server error in mailing service", err)
@@ -83,7 +83,7 @@ module.exports = {
                 if (a) {
 
                     sendMail(viewVars, 'adrejection.jade',
-                        "You're advertisement has been reviewed", "cole.grigsby@gmail.com")//TODO a.email)
+                        "You're advertisement has been reviewed", a.email)
                 }
                 else return new error("Shit hit the fan")
             })
