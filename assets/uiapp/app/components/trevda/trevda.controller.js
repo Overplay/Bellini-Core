@@ -79,9 +79,15 @@ app.controller("manageAdvertisementController", function ($scope, $log, ads, lin
 });
 
 
-app.controller("editAdvertisementController", function ($scope, $log, $http, $stateParams, $state, toastr, asahiService, links, advertisement, mediaMeta, uibHelper, admin) {
+app.controller("editAdvertisementController", function ($scope, $log, $http, $stateParams, $state, toastr, asahiService, links, advertisement, mediaMeta, uibHelper, admin, impressions) {
     $log.debug("editAdvertisementController starting");
 
+
+    $scope.impressions = impressions;
+
+    $scope.venues = _.toArray(_.groupBy($scope.impressions, function (el) {
+        return el.venue.name;
+    })) //TODO maybe backend analytics (seperate by date and counts? )
 
     $scope.labels = ['2006', '2007', '2008', '2009', '2010', '2011', '2012'];
     $scope.series = ['Series A', 'Series B'];

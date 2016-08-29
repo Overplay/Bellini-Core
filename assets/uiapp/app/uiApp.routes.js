@@ -838,6 +838,13 @@ app.config(function ($stateProvider, $urlRouterProvider) {
 
                         })
                 },
+                impressions: function ($stateParams, $http) {
+                    return $http.get("ad/impressions/" + $stateParams.id)
+                        .then(function (data) {
+                            return data.data;
+                        })
+
+                },
                 admin: function () {
                     return false
                 }
@@ -863,6 +870,13 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                             return data.data;
 
                         })
+                },
+                impressions: function ($stateParams, $http) {
+                    return $http.get("ad/impressions/" + $stateParams.id)
+                        .then(function (data) {
+                            return data.data;
+                        })
+
                 },
                 admin: function () {
                     return true

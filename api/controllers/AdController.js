@@ -6,6 +6,7 @@
  */
 
 var _ = require('lodash')
+var moment = require('moment')
 
 module.exports = {
 
@@ -172,18 +173,55 @@ module.exports = {
             return res.badRequest("No Id")
         }
         var id = params.id;
-        
+
+        var adLogs;
+        //TODO populate venue? thatd be cool af to have that
         OGLog.find({logType: 'impression'})
             .then(function(logs) {
-                var adLogs = _.filter(logs, {ad: id})
-                sails.log.debug(adLogs)
-                return res.ok(adLogs)
+                adLogs = _.filter(logs, {message: {adId: id}})
+                async.each(adLogs, function (log, cb) {
+                        return Device.findOne(log.deviceUniqueId) //TODO this is gonna change what key is used
+                            .populate('venue')
+                            .then(function (dev) {
+                                log.venue = dev.venue;
+                                cb()
+                            })
+                            .catch(function (err) {
+                                return cb(err)
+                            })
+                    },
+                    function (err) {
+                        if (err) {
+                            return res.serverError(err)
+                        }
+                        else {
+                            return res.ok(adLogs)
+
+                        }
+
+                    })
             })
+
             .catch(function(err){
                 return res.serverError(err)
             })
+    },
+
+    //maybe an impression endpoint that does hourly counts for each ad for a certain date
+    dailyCount: function (req, res) {
+        var params = req.allParams()
+        if (!params.date) {
+            return res.badRequest("No date given")
+        }
+        OGlog.find({loggedAt: {'>': new Date(params.date), '<': new Date(params.date)}})
+            .then(function (logs) {
+                //sort logs by adId
+                //return counts for each ad
+            })
     }
 
+
+    //impression data : sort by venue and date so its easier to chart
 
 };
 

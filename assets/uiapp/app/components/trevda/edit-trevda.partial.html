@@ -82,7 +82,7 @@
                     <div class="panel-body">
                         Graphs and numbers :)
                         <div>
-                            <h2>Total Impressions: {{data.impressions}}</h2>
+                            <h2>Total Impressions: {{impressions.length}}</h2>
                         </div>
                         <div>
                             <h2>Total Screen Time: {{data.screenTime}} Hours</h2>
@@ -99,16 +99,12 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
-                                    <td>TESTING</td>
-                                    <td>Woah TODO</td>
+                                <tr ng-repeat="logs in venues">
+                                    <td>{{logs[0].venue.name}}</td>
+                                    <td>{{logs.length}}</td>
                                     <td>This isnt a number lol</td>
                                 </tr>
-                                <tr>
-                                    <td>TESTING</td>
-                                    <td>Woah TODO</td>
-                                    <td>This isnt a number lol</td>
-                                </tr>
+
                                 </tbody>
                             </table>
 

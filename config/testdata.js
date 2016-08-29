@@ -30,7 +30,8 @@ var self = module.exports.testdata = {
                 Venue.destroy({}),
                 Device.destroy({}),
                 Media.destroy({}),
-                Ad.destroy({})
+                Ad.destroy({}),
+                OGLog.destroy({})
             ];
 
             chain = chain.then(function () {
@@ -41,7 +42,7 @@ var self = module.exports.testdata = {
             })
         }
         self.organizations.forEach(function (o) {
-            chain = chain.then( function () {
+            chain = chain.then(function () {
                 return Organization.findOne(o)
                     .then(function (org) {
                         if (org) {
@@ -190,45 +191,45 @@ var self = module.exports.testdata = {
 
             // chain = chain.then(function () {
             //     return Auth.findOne({email: ownerEmails[0]}) //dumb fix
-                    chain = chain.then(function (user) {
-                        //v.venueOwners.push(user.user);
-                        //sails.log.debug(venueManagers)
-                        return Venue.findOne({name: v.name}) //this will work but venues could be double named (not unique)
-                            .then(function (ven) {
-                                //sails.log.debug(ven);
-                                if (ven) {
-                                    sails.log.debug("Venue exists")
-                                    return new Error("Venue Exists, skipping creation")
-                                }
-                                else {
-                                    return Venue.create(v)
+            chain = chain.then(function (user) {
+                //v.venueOwners.push(user.user);
+                //sails.log.debug(venueManagers)
+                return Venue.findOne({name: v.name}) //this will work but venues could be double named (not unique)
+                    .then(function (ven) {
+                        //sails.log.debug(ven);
+                        if (ven) {
+                            sails.log.debug("Venue exists")
+                            return new Error("Venue Exists, skipping creation")
+                        }
+                        else {
+                            return Venue.create(v)
 
-                                        .then(function (newV) {
-                                            //sails.log(newV)
-                                            //sails.log(venueManagers)
-                                            //sails.log(venueOwners)
-                                            newV.venueOwners.add(venueOwners)
-                                            newV.save({ populate: false }, function(err){
-                                                if (err) sails.log.debug(err)
-                                            });
-                                            newV.venueManagers.add(venueManagers)
-                                            newV.save({ populate: false }, function(err){
-                                                if (err) sails.log.debug(err)
-                                            });
+                                .then(function (newV) {
+                                    //sails.log(newV)
+                                    //sails.log(venueManagers)
+                                    //sails.log(venueOwners)
+                                    newV.venueOwners.add(venueOwners)
+                                    newV.save({populate: false}, function (err) {
+                                        if (err) sails.log.debug(err)
+                                    });
+                                    newV.venueManagers.add(venueManagers)
+                                    newV.save({populate: false}, function (err) {
+                                        if (err) sails.log.debug(err)
+                                    });
 
-                                            sails.log.debug("Venue created with name " + newV.name);
-                                        })
-                                        .catch(function (err) {
-                                            sails.log.debug(err)
-                                        })
-                                }
-
-                            })
-                            .catch(function (err) {
-                                sails.log.debug(err)
-                            })
+                                    sails.log.debug("Venue created with name " + newV.name);
+                                })
+                                .catch(function (err) {
+                                    sails.log.debug(err)
+                                })
+                        }
 
                     })
+                    .catch(function (err) {
+                        sails.log.debug(err)
+                    })
+
+            })
             // })
 
         });
@@ -295,15 +296,54 @@ var self = module.exports.testdata = {
                 })
         });
 
+        self.logs.forEach(function (log) {
+            var device = log.device;
+            delete log.device;
+
+            chain = chain.then(function () {
+                return Venue.findOne({name: device.venue})
+                    .populate('devices')
+                    .then(function (v) {
+                        log.deviceUniqueId = _.find(v.devices, function (o) {
+                            return o.name === device.name
+                        }).id
+                    })
+                    .then(function () {
+                        if (log.message.adName) {
+                            //add the time and the adId
+                            return Ad.findOne({name: log.message.adName})
+                                .then(function (ad) {
+                                    delete log.message.adName;
+                                    log.message.adId = ad.id;
+                                })
+                        }
+                        else {
+                            return;
+                        }
+
+                    })
+                    .then(function () {
+                        return OGLog.create(log)
+                            .then(function () {
+                                sails.log.debug("Log created");
+                            })
+
+                    })
+                    .catch(function (err) {
+                        sails.log.debug(err);
+                    })
+            })
+        })
+
     },
     users: [
-        /*{
+        {
             firstName: 'Johnny',
             lastName: 'McAdmin',
             email: 'admin@test.com',
             password: 'beerchugs',
             roleNames: [{role: "admin", subRole: ""}, {role: "user", subRole: ""}]
-         },*/
+        },
         {
             firstName: 'Ryan',
             lastName: 'Smith',
@@ -582,5 +622,295 @@ var self = module.exports.testdata = {
             creatorEmail: "elizabeth@test.com",
             description: "noooooo"
         }
+    ],
+
+    logs: [
+        {
+            logType: "heartbeat",
+            message: {
+                uptime: "32:15:08",
+                softwareVersions: {
+                    amstelBright: "1.0.0",
+                    aqui: "1.0.0",
+                    android: "MMB29M"
+                },
+                installedApps: []
+            },
+            device: {
+                name: "Bar Box",
+                venue: "B Bar & Grill"
+            },
+            loggedAt: new Date().toISOString()
+        },
+        {
+            logType: "impression",
+            message: {
+                adName: 'Advertisement One!',
+
+            },
+            device: {
+                name: "Bar Box",
+                venue: "B Bar & Grill"
+            },
+            loggedAt: new Date("August 29, 2016 11:13:00").toISOString()
+        }
+        ,
+        {
+            logType: "impression",
+            message: {
+                adName: 'Advertisement One!',
+
+            },
+            device: {
+                name: "Bar Box",
+                venue: "B Bar & Grill"
+            },
+            loggedAt: new Date("August 29, 2016 11:20:00").toISOString()
+        }
+        ,
+        {
+            logType: "impression",
+            message: {
+                adName: 'Advertisement One!',
+
+            },
+            device: {
+                name: "Bar Box",
+                venue: "B Bar & Grill"
+            },
+            loggedAt: new Date("August 29, 2016 11:30:00").toISOString()
+        }
+        ,
+        {
+            logType: "impression",
+            message: {
+                adName: 'Advertisement One!',
+
+            },
+            device: {
+                name: "Bar Box",
+                venue: "Not Your Average Joe's"
+            },
+            loggedAt: new Date("August 29, 2016 11:37:00").toISOString()
+        }
+        ,
+        {
+            logType: "impression",
+            message: {
+                adName: 'Advertisement One!',
+
+            },
+            device: {
+                name: "Bar Box",
+                venue: "Not Your Average Joe's"
+            },
+            loggedAt: new Date("August 29, 2016 11:40:00").toISOString()
+        },
+        {
+            logType: "impression",
+            message: {
+                adName: 'Advertisement One!',
+
+            },
+            device: {
+                name: "Bar Box",
+                venue: "B Bar & Grill"
+            },
+            loggedAt: new Date("August 29, 2016 11:13:00").toISOString()
+        }
+        ,
+        {
+            logType: "impression",
+            message: {
+                adName: 'Advertisement One!',
+
+            },
+            device: {
+                name: "Bar Box",
+                venue: "B Bar & Grill"
+            },
+            loggedAt: new Date("August 29, 2016 11:20:00").toISOString()
+        }
+        ,
+        {
+            logType: "impression",
+            message: {
+                adName: 'Advertisement One!',
+
+            },
+            device: {
+                name: "Bar Box",
+                venue: "B Bar & Grill"
+            },
+            loggedAt: new Date("August 29, 2016 11:30:00").toISOString()
+        }
+        ,
+        {
+            logType: "impression",
+            message: {
+                adName: 'Advertisement One!',
+
+            },
+            device: {
+                name: "Bar Box",
+                venue: "Not Your Average Joe's"
+            },
+            loggedAt: new Date("August 29, 2016 11:37:00").toISOString()
+        }
+        ,
+        {
+            logType: "impression",
+            message: {
+                adName: 'Advertisement Two!',
+
+            },
+            device: {
+                name: "Bar Box",
+                venue: "Not Your Average Joe's"
+            },
+            loggedAt: new Date("August 29, 2016 11:40:00").toISOString()
+        },
+        {
+            logType: "impression",
+            message: {
+                adName: 'Advertisement Two!',
+
+            },
+            device: {
+                name: "Bar Box",
+                venue: "B Bar & Grill"
+            },
+            loggedAt: new Date("August 29, 2016 11:13:00").toISOString()
+        }
+        ,
+        {
+            logType: "impression",
+            message: {
+                adName: 'Advertisement Two!',
+
+            },
+            device: {
+                name: "Bar Box",
+                venue: "B Bar & Grill"
+            },
+            loggedAt: new Date("August 29, 2016 11:20:00").toISOString()
+        }
+        ,
+        {
+            logType: "impression",
+            message: {
+                adName: 'Advertisement Two!',
+
+            },
+            device: {
+                name: "Bar Box",
+                venue: "B Bar & Grill"
+            },
+            loggedAt: new Date("August 29, 2016 11:30:00").toISOString()
+        }
+        ,
+        {
+            logType: "impression",
+            message: {
+                adName: 'Advertisement Two!',
+
+            },
+            device: {
+                name: "Bar Box",
+                venue: "Not Your Average Joe's"
+            },
+            loggedAt: new Date("August 29, 2016 11:37:00").toISOString()
+        }
+        ,
+        {
+            logType: "impression",
+            message: {
+                adName: 'Advertisement Two!',
+
+            },
+            device: {
+                name: "Bar Box",
+                venue: "Not Your Average Joe's"
+            },
+            loggedAt: new Date("August 29, 2016 11:40:00").toISOString()
+        },
+        ,
+        {
+            logType: "impression",
+            message: {
+                adName: 'Advertisement Two!',
+
+            },
+            device: {
+                name: "Bar Box",
+                venue: "B Bar & Grill"
+            },
+            loggedAt: new Date("August 29, 2016 11:13:00").toISOString()
+        }
+        ,
+        {
+            logType: "impression",
+            message: {
+                adName: 'Advertisement Two!',
+
+            },
+            device: {
+                name: "Bar Box",
+                venue: "B Bar & Grill"
+            },
+            loggedAt: new Date("August 29, 2016 11:20:00").toISOString()
+        }
+        ,
+        {
+            logType: "impression",
+            message: {
+                adName: 'Advertisement Two!',
+
+            },
+            device: {
+                name: "Bar Box",
+                venue: "B Bar & Grill"
+            },
+            loggedAt: new Date("August 29, 2016 11:30:00").toISOString()
+        }
+        ,
+        {
+            logType: "impression",
+            message: {
+                adName: 'Advertisement Two!',
+
+            },
+            device: {
+                name: "Bar Box",
+                venue: "Not Your Average Joe's"
+            },
+            loggedAt: new Date("August 29, 2016 11:37:00").toISOString()
+        }
+        ,
+        {
+            logType: "impression",
+            message: {
+                adName: 'Advertisement Two!',
+
+            },
+            device: {
+                name: "Bar Box",
+                venue: "Not Your Average Joe's"
+            },
+            loggedAt: new Date("August 29, 2016 11:40:00").toISOString()
+        },
+        {
+            logType: "impression",
+            message: {
+                adName: 'Advertisement Two!',
+
+            },
+            device: {
+                name: "Bar Box",
+                venue: "B Bar & Grill"
+            },
+            loggedAt: new Date("August 29, 2016 11:13:00").toISOString()
+        }
+
     ]
 };
