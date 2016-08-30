@@ -948,6 +948,11 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                     return $http.get("/user/getAlist").then(function (ads) {
                         return ads.data;
                     })
+                },
+                logs: function($http) {
+                    return $http.get("/ad/dailyCount?date=2016-08-29").then(function(logs){
+                        return logs.data; 
+                    })
                 }
             }
         })

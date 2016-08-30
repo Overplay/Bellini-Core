@@ -6,7 +6,7 @@
  */
 
 var _ = require('lodash');
-var excel= require('node-excel-export');
+var excel = require('node-excel-export');
 var moment = require('moment')
 
 module.exports = {
@@ -168,9 +168,9 @@ module.exports = {
             }
         }
 
-        Ad.findOne({ id: req.allParams().id })
+        Ad.findOne({id: req.allParams().id})
             .populate('creator')
-            .then( function (ad) {
+            .then(function (ad) {
 
                 var report = excel.buildExport(
                     [
@@ -291,7 +291,7 @@ module.exports = {
     //add a date filter on this or front end? 
     impressions: function (req, res) {
         var params = req.allParams();
-        if (!params.id){
+        if (!params.id) {
             return res.badRequest("No Id")
         }
         var id = params.id;
@@ -299,7 +299,7 @@ module.exports = {
         var adLogs;
         //TODO populate venue? thatd be cool af to have that
         OGLog.find({logType: 'impression'})
-            .then(function(logs) {
+            .then(function (logs) {
                 adLogs = _.filter(logs, {message: {adId: id}})
                 async.each(adLogs, function (log, cb) {
                         return Device.findOne(log.deviceUniqueId) //TODO this is gonna change what key is used
@@ -324,26 +324,48 @@ module.exports = {
                     })
             })
 
-            .catch(function(err){
+            .catch(function (err) {
                 return res.serverError(err)
             })
     },
 
     //maybe an impression endpoint that does hourly counts for each ad for a certain date
-    dailyCount: function (req, res) {
+    dailyCount: function (req, res) { // TODO only get session users ads :) 
         var params = req.allParams()
         if (!params.date) {
             return res.badRequest("No date given")
         }
-        OGLog.find({logType: 'impression', loggedAt: {'>': new Date(moment(params.date).startOf('day')), '<': new Date(moment(params.date).endOf('day'))}})
+        OGLog.find({logType: 'impression',
+            loggedAt: {
+                '>': new Date(moment(params.date).startOf('day')),
+                '<': new Date(moment(params.date).endOf('day'))
+            }
+        })
             .then(function (logs) {
-                if (params.id){
+                if (params.id) {
                     //logs by adId TODO
                 }
-                //otherwise return counts for each all ads...um maybe not 
-                return res.ok(logs)
+                //otherwise return counts for each all ads...um maybe not
+                async.each(logs, function (log, cb) {
+                    return Ad.findOne(log.message.adId)
+                        .then(function (ad) {
+                            log.adName = ad.name;
+                            cb()
+                        })
+                        .catch(function(err){
+                            cb(err)
+                        })
+                }, function (err) {
+                    if (err)
+                        return res.serverError(err)
+                    else {
+                        logs = _.groupBy(logs, 'adName')
+                        return res.ok(logs)
+                    }
+                })
             })
-            .catch(function(err){
+
+            .catch(function (err) {
                 return res.serverError(err)
             })
     }
