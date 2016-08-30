@@ -9,7 +9,7 @@ var Promise = require('bluebird');
 
 var self = module.exports.testdata = {
 
-    installTestData: true,
+    installTestData: false,
     eraseOldData: false,
 
     install: function () {
