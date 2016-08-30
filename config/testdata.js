@@ -143,14 +143,6 @@ var self = module.exports.testdata = {
 
         });
 
-        chain = chain.then(function () {
-            return User.find()
-                .populate('advertisements')
-                .then(function () {
-                    sails.log.debug("Advertisements populated");
-                })
-        });
-
 
         self.venues.forEach(function (v) {
 
