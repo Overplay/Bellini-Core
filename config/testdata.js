@@ -9,7 +9,7 @@ var Promise = require('bluebird');
 
 var self = module.exports.testdata = {
 
-    installTestData: true,
+    installTestData: false,
     eraseOldData: false,
 
     install: function () {
@@ -114,9 +114,8 @@ var self = module.exports.testdata = {
 
             chain = chain.then(function () {
                 Auth.findOne({email: creatorEmail})
-                    .populate('user')
                     .then(function (u) {
-                        a.creator = u.user.id;
+                        a.creator = u.user;
                         return Ad.findOne(a)
                             .then(function (ad) {
                                 if (ad) {
@@ -141,6 +140,14 @@ var self = module.exports.testdata = {
             })
 
 
+        });
+
+        chain = chain.then(function () {
+            return User.find()
+                .populate('advertisements')
+                .then(function () {
+                    sails.log.debug("Advertisements populated");
+                })
         });
 
 
@@ -638,7 +645,7 @@ var self = module.exports.testdata = {
         {
             logType: "impression",
             message: {
-                adName: 'New Test',
+                adName: 'Advertisement One!',
 
             },
             device: {
@@ -651,7 +658,7 @@ var self = module.exports.testdata = {
         {
             logType: "impression",
             message: {
-                adName: 'New Test',
+                adName: 'Advertisement One!',
 
             },
             device: {
@@ -664,7 +671,7 @@ var self = module.exports.testdata = {
         {
             logType: "impression",
             message: {
-                adName: 'New Test',
+                adName: 'Advertisement One!',
 
             },
             device: {
@@ -677,7 +684,7 @@ var self = module.exports.testdata = {
         {
             logType: "impression",
             message: {
-                adName: 'New Test',
+                adName: 'Advertisement One!',
 
             },
             device: {
@@ -690,7 +697,7 @@ var self = module.exports.testdata = {
         {
             logType: "impression",
             message: {
-                adName: 'New Test',
+                adName: 'Advertisement One!',
 
             },
             device: {
@@ -702,7 +709,7 @@ var self = module.exports.testdata = {
         {
             logType: "impression",
             message: {
-                adName: 'New Test',
+                adName: 'Advertisement One!',
 
             },
             device: {
@@ -715,7 +722,7 @@ var self = module.exports.testdata = {
         {
             logType: "impression",
             message: {
-                adName: 'New Test',
+                adName: 'Advertisement One!',
 
             },
             device: {
@@ -728,7 +735,7 @@ var self = module.exports.testdata = {
         {
             logType: "impression",
             message: {
-                adName: 'New Test',
+                adName: 'Advertisement One!',
 
             },
             device: {
@@ -741,7 +748,7 @@ var self = module.exports.testdata = {
         {
             logType: "impression",
             message: {
-                adName: 'New Test',
+                adName: 'Advertisement One!',
 
             },
             device: {
@@ -766,7 +773,7 @@ var self = module.exports.testdata = {
         {
             logType: "impression",
             message: {
-                adName: 'New Test',
+                adName: 'Advertisement Two!',
 
             },
             device: {
@@ -779,7 +786,7 @@ var self = module.exports.testdata = {
         {
             logType: "impression",
             message: {
-                adName: 'New Test',
+                adName: 'Advertisement Two!',
 
             },
             device: {
@@ -792,7 +799,7 @@ var self = module.exports.testdata = {
         {
             logType: "impression",
             message: {
-                adName: 'Landshark Lager',
+                adName: 'Advertisement Two!',
 
             },
             device: {
@@ -805,7 +812,7 @@ var self = module.exports.testdata = {
         {
             logType: "impression",
             message: {
-                adName: 'Landshark Lager',
+                adName: 'Advertisement Two!',
 
             },
             device: {
@@ -818,7 +825,7 @@ var self = module.exports.testdata = {
         {
             logType: "impression",
             message: {
-                adName: 'Landshark Lager',
+                adName: 'Advertisement Two!',
 
             },
             device: {
@@ -831,7 +838,7 @@ var self = module.exports.testdata = {
         {
             logType: "impression",
             message: {
-                adName: 'Landshark Lager',
+                adName: 'Advertisement Two!',
 
             },
             device: {
@@ -844,7 +851,7 @@ var self = module.exports.testdata = {
         {
             logType: "impression",
             message: {
-                adName: 'Landshark Lager',
+                adName: 'Advertisement Two!',
 
             },
             device: {
@@ -857,7 +864,7 @@ var self = module.exports.testdata = {
         {
             logType: "impression",
             message: {
-                adName: 'Landshark Lager',
+                adName: 'Advertisement Two!',
 
             },
             device: {
@@ -870,7 +877,7 @@ var self = module.exports.testdata = {
         {
             logType: "impression",
             message: {
-                adName: 'Landshark Lager',
+                adName: 'Advertisement Two!',
 
             },
             device: {
@@ -883,7 +890,7 @@ var self = module.exports.testdata = {
         {
             logType: "impression",
             message: {
-                adName: 'Landshark Lager',
+                adName: 'Advertisement Two!',
 
             },
             device: {
@@ -895,7 +902,7 @@ var self = module.exports.testdata = {
         {
             logType: "impression",
             message: {
-                adName: 'Landshark Lager',
+                adName: 'Advertisement Two!',
 
             },
             device: {
