@@ -9,7 +9,7 @@ var Promise = require('bluebird');
 
 var self = module.exports.testdata = {
 
-    installTestData: false,
+    installTestData: true,
     eraseOldData: false,
 
     install: function () {
@@ -114,8 +114,9 @@ var self = module.exports.testdata = {
 
             chain = chain.then(function () {
                 Auth.findOne({email: creatorEmail})
+                    .populate('user')
                     .then(function (u) {
-                        a.creator = u.user;
+                        a.creator = u.user.id;
                         return Ad.findOne(a)
                             .then(function (ad) {
                                 if (ad) {
@@ -645,7 +646,7 @@ var self = module.exports.testdata = {
         {
             logType: "impression",
             message: {
-                adName: 'Advertisement One!',
+                adName: 'New Test',
 
             },
             device: {
@@ -658,7 +659,7 @@ var self = module.exports.testdata = {
         {
             logType: "impression",
             message: {
-                adName: 'Advertisement One!',
+                adName: 'New Test',
 
             },
             device: {
@@ -671,7 +672,7 @@ var self = module.exports.testdata = {
         {
             logType: "impression",
             message: {
-                adName: 'Advertisement One!',
+                adName: 'New Test',
 
             },
             device: {
@@ -684,7 +685,7 @@ var self = module.exports.testdata = {
         {
             logType: "impression",
             message: {
-                adName: 'Advertisement One!',
+                adName: 'New Test',
 
             },
             device: {
@@ -697,7 +698,7 @@ var self = module.exports.testdata = {
         {
             logType: "impression",
             message: {
-                adName: 'Advertisement One!',
+                adName: 'New Test',
 
             },
             device: {
@@ -709,7 +710,7 @@ var self = module.exports.testdata = {
         {
             logType: "impression",
             message: {
-                adName: 'Advertisement One!',
+                adName: 'New Test',
 
             },
             device: {
@@ -722,7 +723,7 @@ var self = module.exports.testdata = {
         {
             logType: "impression",
             message: {
-                adName: 'Advertisement One!',
+                adName: 'New Test',
 
             },
             device: {
@@ -735,7 +736,7 @@ var self = module.exports.testdata = {
         {
             logType: "impression",
             message: {
-                adName: 'Advertisement One!',
+                adName: 'New Test',
 
             },
             device: {
@@ -748,136 +749,7 @@ var self = module.exports.testdata = {
         {
             logType: "impression",
             message: {
-                adName: 'Advertisement One!',
-
-            },
-            device: {
-                name: "Bar Box",
-                venue: "Not Your Average Joe's"
-            },
-            loggedAt: new Date("August 29, 2016 11:37:00").toISOString()
-        }
-        ,
-        {
-            logType: "impression",
-            message: {
-                adName: 'Advertisement Two!',
-
-            },
-            device: {
-                name: "Bar Box",
-                venue: "Not Your Average Joe's"
-            },
-            loggedAt: new Date("August 29, 2016 11:40:00").toISOString()
-        },
-        {
-            logType: "impression",
-            message: {
-                adName: 'Advertisement Two!',
-
-            },
-            device: {
-                name: "Bar Box",
-                venue: "B Bar & Grill"
-            },
-            loggedAt: new Date("August 29, 2016 11:13:00").toISOString()
-        }
-        ,
-        {
-            logType: "impression",
-            message: {
-                adName: 'Advertisement Two!',
-
-            },
-            device: {
-                name: "Bar Box",
-                venue: "B Bar & Grill"
-            },
-            loggedAt: new Date("August 29, 2016 11:20:00").toISOString()
-        }
-        ,
-        {
-            logType: "impression",
-            message: {
-                adName: 'Advertisement Two!',
-
-            },
-            device: {
-                name: "Bar Box",
-                venue: "B Bar & Grill"
-            },
-            loggedAt: new Date("August 29, 2016 11:30:00").toISOString()
-        }
-        ,
-        {
-            logType: "impression",
-            message: {
-                adName: 'Advertisement Two!',
-
-            },
-            device: {
-                name: "Bar Box",
-                venue: "Not Your Average Joe's"
-            },
-            loggedAt: new Date("August 29, 2016 11:37:00").toISOString()
-        }
-        ,
-        {
-            logType: "impression",
-            message: {
-                adName: 'Advertisement Two!',
-
-            },
-            device: {
-                name: "Bar Box",
-                venue: "Not Your Average Joe's"
-            },
-            loggedAt: new Date("August 29, 2016 11:40:00").toISOString()
-        },
-        ,
-        {
-            logType: "impression",
-            message: {
-                adName: 'Advertisement Two!',
-
-            },
-            device: {
-                name: "Bar Box",
-                venue: "B Bar & Grill"
-            },
-            loggedAt: new Date("August 29, 2016 11:13:00").toISOString()
-        }
-        ,
-        {
-            logType: "impression",
-            message: {
-                adName: 'Advertisement Two!',
-
-            },
-            device: {
-                name: "Bar Box",
-                venue: "B Bar & Grill"
-            },
-            loggedAt: new Date("August 29, 2016 11:20:00").toISOString()
-        }
-        ,
-        {
-            logType: "impression",
-            message: {
-                adName: 'Advertisement Two!',
-
-            },
-            device: {
-                name: "Bar Box",
-                venue: "B Bar & Grill"
-            },
-            loggedAt: new Date("August 29, 2016 11:30:00").toISOString()
-        }
-        ,
-        {
-            logType: "impression",
-            message: {
-                adName: 'Advertisement Two!',
+                adName: 'New Test',
 
             },
             device: {
@@ -902,7 +774,136 @@ var self = module.exports.testdata = {
         {
             logType: "impression",
             message: {
-                adName: 'Advertisement Two!',
+                adName: 'New Test',
+
+            },
+            device: {
+                name: "Bar Box",
+                venue: "B Bar & Grill"
+            },
+            loggedAt: new Date("August 29, 2016 11:13:00").toISOString()
+        }
+        ,
+        {
+            logType: "impression",
+            message: {
+                adName: 'New Test',
+
+            },
+            device: {
+                name: "Bar Box",
+                venue: "B Bar & Grill"
+            },
+            loggedAt: new Date("August 29, 2016 11:20:00").toISOString()
+        }
+        ,
+        {
+            logType: "impression",
+            message: {
+                adName: 'Landshark Lager',
+
+            },
+            device: {
+                name: "Bar Box",
+                venue: "B Bar & Grill"
+            },
+            loggedAt: new Date("August 29, 2016 11:30:00").toISOString()
+        }
+        ,
+        {
+            logType: "impression",
+            message: {
+                adName: 'Landshark Lager',
+
+            },
+            device: {
+                name: "Bar Box",
+                venue: "Not Your Average Joe's"
+            },
+            loggedAt: new Date("August 29, 2016 11:37:00").toISOString()
+        }
+        ,
+        {
+            logType: "impression",
+            message: {
+                adName: 'Landshark Lager',
+
+            },
+            device: {
+                name: "Bar Box",
+                venue: "Not Your Average Joe's"
+            },
+            loggedAt: new Date("August 29, 2016 11:40:00").toISOString()
+        },
+        ,
+        {
+            logType: "impression",
+            message: {
+                adName: 'Landshark Lager',
+
+            },
+            device: {
+                name: "Bar Box",
+                venue: "B Bar & Grill"
+            },
+            loggedAt: new Date("August 29, 2016 11:13:00").toISOString()
+        }
+        ,
+        {
+            logType: "impression",
+            message: {
+                adName: 'Landshark Lager',
+
+            },
+            device: {
+                name: "Bar Box",
+                venue: "B Bar & Grill"
+            },
+            loggedAt: new Date("August 29, 2016 11:20:00").toISOString()
+        }
+        ,
+        {
+            logType: "impression",
+            message: {
+                adName: 'Landshark Lager',
+
+            },
+            device: {
+                name: "Bar Box",
+                venue: "B Bar & Grill"
+            },
+            loggedAt: new Date("August 29, 2016 11:30:00").toISOString()
+        }
+        ,
+        {
+            logType: "impression",
+            message: {
+                adName: 'Landshark Lager',
+
+            },
+            device: {
+                name: "Bar Box",
+                venue: "Not Your Average Joe's"
+            },
+            loggedAt: new Date("August 29, 2016 11:37:00").toISOString()
+        }
+        ,
+        {
+            logType: "impression",
+            message: {
+                adName: 'Landshark Lager',
+
+            },
+            device: {
+                name: "Bar Box",
+                venue: "Not Your Average Joe's"
+            },
+            loggedAt: new Date("August 29, 2016 11:40:00").toISOString()
+        },
+        {
+            logType: "impression",
+            message: {
+                adName: 'Landshark Lager',
 
             },
             device: {
