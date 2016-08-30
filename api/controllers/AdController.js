@@ -25,7 +25,7 @@ module.exports = {
         Ad.findOne(req.allParams().id)
             .then(function (a) {
 
-                var media = a.media;
+                var media = a.advert.media;
                 _.forEach(media, function (val, key) {
                     if (val != null) {
                         chain = chain.then(function () {

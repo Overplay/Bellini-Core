@@ -831,13 +831,7 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                             return data.data;
                         })
                 },
-                mediaMeta: function ($stateParams, $http) {
-                    return $http.get("ad/getMedia/" + $stateParams.id)
-                        .then(function (data) {
-                            return data.data;
 
-                        })
-                },
                 impressions: function ($stateParams, $http) {
                     return $http.get("ad/impressions/" + $stateParams.id)
                         .then(function (data) {
@@ -862,13 +856,6 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                     return $http.get("api/v1/ad/" + $stateParams.id)
                         .then(function (data) {
                             return data.data;
-                        })
-                },
-                mediaMeta: function ($stateParams, $http) {
-                    return $http.get("ad/getMedia/" + $stateParams.id)
-                        .then(function (data) {
-                            return data.data;
-
                         })
                 },
                 impressions: function ($stateParams, $http) {

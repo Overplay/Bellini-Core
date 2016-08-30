@@ -12,11 +12,16 @@ app.controller("addAdvertisementController", function ($scope, $log, $http, $sta
     $scope.$parent.links = links;
 
     $scope.advertisement = {
-        creator: user, media: {
-            widget: null,
-            crawler: null
-        },
-        text: ['', '', '']
+        creator: user.id,
+        advert: {
+            type: '2g3s', //in the future this will be variable and alter the view
+            text: ['', '', ''],
+            media: {
+                widget: null,
+                crawler: null
+            }
+        }
+
     };
 
 
@@ -35,7 +40,7 @@ app.controller("addAdvertisementController", function ($scope, $log, $http, $sta
                 chain = chain.then(function () {
                     return asahiService.uploadMedia(val)
                         .then(function (data) {
-                            $scope.advertisement.media[key] = data.data.id;
+                            $scope.advertisement.advert.media[key] = data.data.id;
                         })
                 })
             }
@@ -79,7 +84,7 @@ app.controller("manageAdvertisementController", function ($scope, $log, ads, lin
 });
 
 
-app.controller("editAdvertisementController", function ($scope, $log, $http, $stateParams, $state, toastr, asahiService, links, advertisement, mediaMeta, uibHelper, admin, impressions) {
+app.controller("editAdvertisementController", function ($scope, $log, $http, $stateParams, $state, toastr, asahiService, links, advertisement, uibHelper, admin, impressions) {
     $log.debug("editAdvertisementController starting");
 
 
@@ -102,8 +107,6 @@ app.controller("editAdvertisementController", function ($scope, $log, $http, $st
     $scope.$parent.ui.panelHeading = $scope.advertisement.name;
     $scope.advertisementUpdate = angular.copy(advertisement);
     
-    $scope.advertisement.mediaMeta = mediaMeta;
-    $scope.advertisementUpdate.mediaMeta = angular.copy(mediaMeta);
 
     $scope.$parent.ui.pageTitle = "Manage Advertisement";
     $scope.$parent.ui.panelHeading = "";
@@ -124,10 +127,9 @@ app.controller("editAdvertisementController", function ($scope, $log, $http, $st
 
     //to update the advertisement 
     $scope.update = function () {
-        delete $scope.advertisementUpdate.mediaMeta
 
-        if (!$scope.advertisementUpdate.media) {
-            $scope.advertisementUpdate.media = {
+        if (!$scope.advertisementUpdate.advert.media) {
+            $scope.advertisementUpdate.advert.media = {
                 widget: null,
                 crawler: null
             }
@@ -139,7 +141,7 @@ app.controller("editAdvertisementController", function ($scope, $log, $http, $st
                 chain = chain.then(function () {
                     return asahiService.uploadMedia(val)
                         .then(function (data) {
-                            $scope.advertisementUpdate.media[key] = data.data.id;
+                            $scope.advertisementUpdate.advert.media[key] = data.data.id;
                         })
                 })
             }
@@ -159,14 +161,6 @@ app.controller("editAdvertisementController", function ($scope, $log, $http, $st
 
 
         });
-        //update the media associated with the ad
-        chain = chain.then(function () {
-            return $http.get("ad/getMedia/" + $stateParams.id)
-                .then(function (data) {
-                    $scope.advertisement.mediaMeta = data.data;
-                    $scope.advertisementUpdate.mediaMeta = angular.copy(data.data);
-                })
-        })
 
 
     }

@@ -25,23 +25,23 @@
                                 <td></td>
                                 <td>{{advertisement.paused}}</td>
                             </tr>
-                            <tr ng-if="advertisement.text[0].length > 0">
+                            <tr ng-if="advertisement.advert.text[0].length > 0">
                                 <td><b>Crawler Text One </b></td>
                                 <td></td>
                                 <td></td>
-                                <td>{{advertisement.text[0]}}</td>
+                                <td>{{advertisement.advert.text[0]}}</td>
                             </tr>
-                            <tr ng-if="advertisement.text[1].length > 0">
+                            <tr ng-if="advertisement.advert.text[1].length > 0">
                                 <td><b>Crawler Text Two</b></td>
                                 <td></td>
                                 <td></td>
-                                <td>{{advertisement.text[1]}}</td>
+                                <td>{{advertisement.advert.text[1]}}</td>
                             </tr>
-                            <tr ng-if="advertisement.text[2].length > 0">
+                            <tr ng-if="advertisement.advert.text[2].length > 0">
                                 <td><b>Crawler Text Three</b></td>
                                 <td></td>
                                 <td></td>
-                                <td>{{advertisement.text[2]}}</td>
+                                <td>{{advertisement.advert.text[2]}}</td>
                             </tr>
 
                             <tr>
@@ -52,21 +52,19 @@
                             </tr>
 
 
-                            <tr ng-if="advertisement.mediaMeta">
+                            <tr ng-if="advertisement.advert.media">
                                 <td><b>Media</b></td>
-                                <td></td>
                                 <td></td>
                                 <td></td>
 
                             </tr>
                             <!--TODO small medium and large-->
-                            <tr ng-repeat="size in mediaSizes" ng-if="advertisement.mediaMeta[size]">
+                            <tr ng-repeat="size in mediaSizes" ng-if="advertisement.advert.media[size]">
                                 <td></td>
                                 <td><b>{{size}}</b></td>
-                                <td>{{advertisement.mediaMeta[size].updatedAt | date:'medium'}}</td>
-                                <td><a href="media/download/{{advertisement.mediaMeta[size].id}}"><img
+                                <td><a href="media/download/{{advertisement.advert.media[size]}}"><img
                                         class="media-prev"
-                                        ng-src="media/download/{{advertisement.mediaMeta[size].id}}"/></a>
+                                        ng-src="media/download/{{advertisement.advert.media[size]}}"/></a>
                                 </td>
                             </tr>
                             </tbody>
@@ -146,20 +144,21 @@
                             <fieldset class="form-group">
                                 <h2>Crawler Texts</h2>
                                 <p>Enter up to three scrolling text items.</p>
-                                <input id="c1" type="text" class="form-control" ng-model="advertisementUpdate.text[0]"
+                                <input id="c1" type="text" class="form-control"
+                                       ng-model="advertisementUpdate.advert.text[0]"
                                        maxLength="80"/>
                                 <br><input id="c2" type="text" class="form-control"
-                                           ng-model="advertisementUpdate.text[1]" maxLength="80"/>
+                                           ng-model="advertisementUpdate.advert.text[1]" maxLength="80"/>
                                 <br><input id="c3" type="text" class="form-control"
-                                           ng-model="advertisementUpdate.text[2]" maxLength="80"/>
+                                           ng-model="advertisementUpdate.advert.text[2]" maxLength="80"/>
                             </fieldset>
 
                             <fieldset class="form-group">
                                 <h2>Images</h2>
                                 <img-input prompt="Widget" width="256" height="256" dirty="media.widget"
-                                           src-field="advertisementUpdate.mediaMeta.widget.id" exact></img-input>
+                                           src-field="advertisementUpdate.advert.media.widget" exact></img-input>
                                 <img-input prompt="Crawler" width="440" height="100" dirty="media.crawler"
-                                           src-field="advertisementUpdate.mediaMeta.crawler.id" exact></img-input>
+                                           src-field="advertisementUpdate.advert.media.crawler" exact></img-input>
                             </fieldset>
                             <div class="form-actions">
 
