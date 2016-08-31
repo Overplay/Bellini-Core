@@ -22,6 +22,8 @@ module.exports = {
         if (!params.loggedAt)
             return res.badRequest("Missing logged at time");
 
+        params.loggedAt = new Date(params.loggedAt)
+
         OGLog.create(params)
             .then( function (log) {
                 return res.ok();
