@@ -10,6 +10,7 @@ module.exports = {
     upload: function (req, res) {
 
         var params = req.allParams();
+        var chain = Promise.resolve();
 
         if (!params.logType)
             return res.badRequest("Missing log type");
@@ -20,13 +21,23 @@ module.exports = {
         if (!params.loggedAt)
             return res.badRequest("Missing logged at time");
 
-        OGLog.create(params)
-            .then( function (log) {
-                return res.ok();
-            })
+        chain = chain.then( function () {
+            return OGLog.create(params)
+                .then( function (log) {
+                    if (log.logType == "alert") {
+                        return TwilioService.sendText('+13033249551', "RED ALERT!!!!");
+                    }
+                })
+
+        })
+
+        chain = chain.then( function () {
+            return res.ok();
+        })
             .catch( function (err) {
-                return res.serverError(err);
-            })
+            return res.serverError(err);
+        })
+
     },
 
     //if device id in OGLog, include ad id? this is complicated 
