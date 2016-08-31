@@ -11,7 +11,6 @@ module.exports = {
 
         var params = req.allParams();
 
-        sails.log.debug(params)
 
         if (!params.logType)
             return res.badRequest("Missing log type");
@@ -23,9 +22,11 @@ module.exports = {
             return res.badRequest("Missing logged at time");
 
         params.loggedAt = new Date(params.loggedAt)
+        sails.log.debug(params)
 
         OGLog.create(params)
             .then( function (log) {
+                sails.log.debug(log)
                 return res.ok();
             })
             .catch( function (err) {
