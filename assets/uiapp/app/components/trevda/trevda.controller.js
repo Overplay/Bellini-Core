@@ -116,7 +116,8 @@ app.controller("editAdvertisementController", function ($scope, $log, $http, $st
                     display: true,
                     ticks: {
                         beginAtZero: true
-                    }
+                    },
+                   // scaleSteps : 1 TODO 
                 }
             ],
             xAxes: [{
@@ -159,7 +160,7 @@ app.controller("editAdvertisementController", function ($scope, $log, $http, $st
 
 
     $scope.data = {
-        impressions: 1004,
+        impressions: $scope.logs.length,
         screenTime: 4.5
     }
 
