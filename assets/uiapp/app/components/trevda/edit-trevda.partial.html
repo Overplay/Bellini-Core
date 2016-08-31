@@ -78,7 +78,6 @@
 
                 <div class="top15" style="padding: 20px; border: 2px solid #cacaca; border-radius: 5px;">
                     <div class="panel-body">
-                        Graphs and numbers :)
                         <div>
                             <h2>Total Impressions: {{impressions.length}}</h2>
                         </div>
@@ -100,7 +99,7 @@
                                 <tr ng-repeat="logs in venues">
                                     <td>{{logs[0].venue.name}}</td>
                                     <td>{{logs.length}}</td>
-                                    <td>This isnt a number lol</td>
+                                    <td>{{logs.length * .5 / 60}} Hours</td>
                                 </tr>
 
                                 </tbody>
@@ -110,8 +109,9 @@
                             I wish these were real numbers
                             <div class="row">
                                 <div class="col-md-12">
-                                    <canvas id="bar" class="chart chart-bar"
-                                            chart-data="graphdata" chart-labels="labels" chart-series="series">
+                                    <canvas id="bar" class="chart chart-line"
+                                            chart-data="graphdata" chart-labels="labels" chart-series="series"
+                                            chart-options="options">
                                     </canvas>
                                 </div>
 

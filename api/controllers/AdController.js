@@ -288,7 +288,7 @@ module.exports = {
             })
     },
 
-    //add a date filter on this or front end? 
+    //TODO add a date filter on this or front end?
     impressions: function (req, res) {
         var params = req.allParams();
         if (!params.id) {
@@ -297,7 +297,6 @@ module.exports = {
         var id = params.id;
 
         var adLogs;
-        //TODO populate venue? thatd be cool af to have that
         OGLog.find({logType: 'impression'})
             .then(function (logs) {
                 adLogs = _.filter(logs, {message: {adId: id}})
@@ -335,15 +334,18 @@ module.exports = {
         if (!params.date) {
             return res.badRequest("No date given")
         }
-        OGLog.find({logType: 'impression',
+        var query = {
+            logType: 'impression',
             loggedAt: {
                 '>': new Date(moment(params.date).startOf('day')),
                 '<': new Date(moment(params.date).endOf('day'))
             }
-        })
+        }
+        OGLog.find(query)
             .then(function (logs) {
                 if (params.id) {
                     //logs by adId TODO
+                    logs = _.filter(logs, {message: {adId: params.id}})
                 }
                 //otherwise return counts for each all ads...um maybe not
                 async.each(logs, function (log, cb) {

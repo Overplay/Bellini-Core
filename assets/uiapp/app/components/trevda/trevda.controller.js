@@ -84,8 +84,10 @@ app.controller("manageAdvertisementController", function ($scope, $log, ads, lin
 });
 
 
-app.controller("editAdvertisementController", function ($scope, $log, $http, $stateParams, $state, toastr, asahiService, links, advertisement, uibHelper, admin, impressions) {
+app.controller("editAdvertisementController", function ($scope, $log, $http, $stateParams, $state, toastr, asahiService, links, advertisement, uibHelper, admin, impressions, logs) {
     $log.debug("editAdvertisementController starting");
+    $scope.advertisement = advertisement;
+
 
 
     $scope.impressions = impressions;
@@ -94,15 +96,51 @@ app.controller("editAdvertisementController", function ($scope, $log, $http, $st
         return el.venue.name;
     })) //TODO maybe backend analytics (seperate by date and counts? )
 
-    $scope.labels = ['2006', '2007', '2008', '2009', '2010', '2011', '2012'];
-    $scope.series = ['Series A', 'Series B'];
 
+    $scope.logs = logs;
+
+    //take the current date, split up the times and groupby function to round hours! ?
+
+    $scope.hourly = _.groupBy($scope.logs[$scope.advertisement.name], function (log) {
+        //$log.log(moment())
+        return new Date(log.loggedAt).getHours()
+    })
+
+    $log.log($scope.hourly)
+
+
+    $scope.options = {
+        scales: {
+            yAxes: [
+                {
+                    display: true,
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }
+            ],
+            xAxes: [{
+                barPercentage: .4
+            }]
+        }
+    }
+
+
+    //bar for top 10 performing ads?
+    $scope.labels = _.keys($scope.hourly); //hours
+    $log.log($scope.labels)
+
+    //this week vs last week
+    //$scope.series = ['Series A', 'Series B'];
+    
     $scope.graphdata = [
-        [65, 59, 80, 81, 56, 55, 40],
-        [28, 48, 40, 19, 86, 27, 90]
+        _.map(_.toArray($scope.hourly), function (val) {
+            return val.length
+        })
     ];
 
-    $scope.advertisement = advertisement;
+    //TODO sort by hours shown? 
+
 
     $scope.$parent.ui.panelHeading = $scope.advertisement.name;
     $scope.advertisementUpdate = angular.copy(advertisement);

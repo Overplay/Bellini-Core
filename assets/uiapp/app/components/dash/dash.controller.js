@@ -81,7 +81,8 @@ app.controller("adminDashController", function ($scope, $log, ads, userCount, de
     $scope.deviceCount = deviceCount;
     $scope.adCount = adCount;
 
-    $scope.ads = ads 
+    $scope.ads = ads
+
 
 });
 
@@ -91,6 +92,24 @@ app.controller("adDashController", function($scope, $log, ads, logs){
     $scope.$parent.selected = "advertiser"
 
     $scope.logs = logs
+
+    $scope.options = {
+        scales: {
+            yAxes: [
+                {
+                    display: true,
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }
+            ],
+            xAxes: [{
+                barPercentage: .4
+            }]
+        }
+    }
+
+    //TODO link the bars to the more info of ad? 
 
     //bar for top 10 performing ads?
     $scope.labels = _.keys(logs);
