@@ -59,6 +59,14 @@ module.exports = {
     },
 
 
+    getAll: function (req, res) {
+        OGLog.find()
+            .then(function (logs) {
+                return res.ok(logs)
+            })
+    }
+
+
 
     //maybe make endpoints for each type and have it sortable 
     //like impressions could take an ad or user id and query 
