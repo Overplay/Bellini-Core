@@ -11,6 +11,8 @@ module.exports = {
 
         var params = req.allParams();
 
+        sails.log.debug(params)
+
         if (!params.logType)
             return res.badRequest("Missing log type");
         if (!params.message)
