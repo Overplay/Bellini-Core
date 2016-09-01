@@ -87,11 +87,22 @@ app.controller("adminDashController", function ($scope, $log, ads, userCount, de
 });
 
 
-app.controller("adDashController", function($scope, $log, ads, logs){
+app.controller("adDashController", function($scope, $log, ads, logsToday, logsYesterday){
     $log.log("starting adDashController")
     $scope.$parent.selected = "advertiser"
 
-    $scope.logs = logs
+    $scope.logsToday = logsToday
+    $scope.logsYesterday = logsYesterday
+
+        //TODO
+    $log.log($scope.logs = _.mergeWith($scope.logsYesterday, $scope.logsToday, function(obj, obj2){
+        $log.log(obj, obj2)
+
+        obj = obj ? obj : []
+        obj2 = obj2 ? obj2 : []
+        return [obj, obj2]
+    }))
+
 
     $scope.options = {
         scales: {
@@ -99,7 +110,8 @@ app.controller("adDashController", function($scope, $log, ads, logs){
                 {
                     display: true,
                     ticks: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        
                     }
                 }
             ],
@@ -112,14 +124,17 @@ app.controller("adDashController", function($scope, $log, ads, logs){
     //TODO link the bars to the more info of ad? 
 
     //bar for top 10 performing ads?
-    $scope.labels = _.keys(logs);
+    $scope.labels = _.keys($scope.logs);
 
     //this week vs last week
-    //$scope.series = ['Series A', 'Series B'];
+    $scope.series = ["Yesterday's Impressions","Today's Impressions"];
 
     //impression count for now? 
     $scope.data = [
-        _.map(logs, function(val){
+        _.map($scope.logsYesterday, function(val){
+            return val.length
+        }),
+        _.map($scope.logsToday, function(val){
             return val.length
         })
     ];

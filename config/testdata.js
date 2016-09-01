@@ -5,11 +5,11 @@
 //Note: test data will be duplicated if being run on a cluster! 
 
 var Promise = require('bluebird');
-var adName = 'Advertisement Three!';
-var adDate = 'August 31'; //TODO 
+var adName = 'tester2';
+var adDate = 'August 31'; //TODO
 var self = module.exports.testdata = {
 
-    installTestData: false,
+    installTestData: true,
     eraseOldData: false,
 
     install: function () {
@@ -647,7 +647,7 @@ var self = module.exports.testdata = {
                 name: "Bar Box",
                 venue: "B Bar & Grill"
             },
-            loggedAt: new Date("August 29, 2016 12:13:00").toISOString()
+            loggedAt: new Date(adDate + ", 2016 12:13:00").toISOString()
         }
         ,
         {
@@ -660,7 +660,7 @@ var self = module.exports.testdata = {
                 name: "Bar Box",
                 venue: "B Bar & Grill"
             },
-            loggedAt: new Date("August 29, 2016 12:20:00").toISOString()
+            loggedAt: new Date(adDate + ", 2016 12:20:00").toISOString()
         }
         ,
         {
@@ -673,7 +673,7 @@ var self = module.exports.testdata = {
                 name: "Bar Box",
                 venue: "B Bar & Grill"
             },
-            loggedAt: new Date("August 29, 2016 11:30:00").toISOString()
+            loggedAt: new Date(adDate + ", 2016 11:30:00").toISOString()
         }
         ,
         {
@@ -686,7 +686,7 @@ var self = module.exports.testdata = {
                 name: "Bar Box",
                 venue: "Not Your Average Joe's"
             },
-            loggedAt: new Date("August 29, 2016 11:37:00").toISOString()
+            loggedAt: new Date(adDate + ", 2016 11:37:00").toISOString()
         }
         ,
         {
@@ -699,7 +699,7 @@ var self = module.exports.testdata = {
                 name: "Bar Box",
                 venue: "Not Your Average Joe's"
             },
-            loggedAt: new Date("August 29, 2016 21:40:00").toISOString()
+            loggedAt: new Date(adDate + ", 2016 21:40:00").toISOString()
         },
         {
             logType: "impression",
@@ -711,7 +711,7 @@ var self = module.exports.testdata = {
                 name: "Bar Box",
                 venue: "B Bar & Grill"
             },
-            loggedAt: new Date("August 29, 2016 22:13:00").toISOString()
+            loggedAt: new Date(adDate + ", 2016 22:13:00").toISOString()
         }
         ,
         {
@@ -724,7 +724,7 @@ var self = module.exports.testdata = {
                 name: "Bar Box",
                 venue: "B Bar & Grill"
             },
-            loggedAt: new Date("August 29, 2016 21:20:00").toISOString()
+            loggedAt: new Date(adDate + ", 2016 21:20:00").toISOString()
         }
         ,
         {
@@ -737,7 +737,7 @@ var self = module.exports.testdata = {
                 name: "Bar Box",
                 venue: "B Bar & Grill"
             },
-            loggedAt: new Date("August 29, 2016 19:30:00").toISOString()
+            loggedAt: new Date(adDate + ", 2016 19:30:00").toISOString()
         }
         ,
         {
@@ -750,7 +750,7 @@ var self = module.exports.testdata = {
                 name: "Bar Box",
                 venue: "Not Your Average Joe's"
             },
-            loggedAt: new Date("August 29, 2016 18:37:00").toISOString()
+            loggedAt: new Date(adDate + ", 2016 18:37:00").toISOString()
         }
         ,
         {
@@ -763,7 +763,7 @@ var self = module.exports.testdata = {
                 name: "Bar Box",
                 venue: "Not Your Average Joe's"
             },
-            loggedAt: new Date("August 29, 2016 13:40:00").toISOString()
+            loggedAt: new Date(adDate + ", 2016 13:40:00").toISOString()
         },
         {
             logType: "impression",
@@ -775,7 +775,7 @@ var self = module.exports.testdata = {
                 name: "Bar Box",
                 venue: "B Bar & Grill"
             },
-            loggedAt: new Date("August 29, 2016 16:13:00").toISOString()
+            loggedAt: new Date(adDate + ", 2016 16:13:00").toISOString()
         }
         ,
         {
@@ -788,7 +788,7 @@ var self = module.exports.testdata = {
                 name: "Bar Box",
                 venue: "B Bar & Grill"
             },
-            loggedAt: new Date("August 29, 2016 16:20:00").toISOString()
+            loggedAt: new Date(adDate + ", 2016 16:20:00").toISOString()
         }
         ,
         {
@@ -801,7 +801,7 @@ var self = module.exports.testdata = {
                 name: "Bar Box",
                 venue: "B Bar & Grill"
             },
-            loggedAt: new Date("August 29, 2016 16:30:00").toISOString()
+            loggedAt: new Date(adDate + ", 2016 16:30:00").toISOString()
         }
         ,
         {
@@ -814,7 +814,7 @@ var self = module.exports.testdata = {
                 name: "Bar Box",
                 venue: "Not Your Average Joe's"
             },
-            loggedAt: new Date("August 29, 2016 21:37:00").toISOString()
+            loggedAt: new Date(adDate + ", 2016 21:37:00").toISOString()
         }
         ,
         {
@@ -827,9 +827,9 @@ var self = module.exports.testdata = {
                 name: "Bar Box",
                 venue: "Not Your Average Joe's"
             },
-            loggedAt: new Date("August 29, 2016 21:40:00").toISOString()
+            loggedAt: new Date(adDate + ", 2016 21:40:00").toISOString()
         },
-        ,
+        
         {
             logType: "impression",
             message: {
@@ -840,7 +840,7 @@ var self = module.exports.testdata = {
                 name: "Bar Box",
                 venue: "B Bar & Grill"
             },
-            loggedAt: new Date("August 29, 2016 22:13:00").toISOString()
+            loggedAt: new Date(adDate + ", 2016 22:13:00").toISOString()
         }
         ,
         {
@@ -853,7 +853,7 @@ var self = module.exports.testdata = {
                 name: "Bar Box",
                 venue: "B Bar & Grill"
             },
-            loggedAt: new Date("August 29, 2016 20:20:00").toISOString()
+            loggedAt: new Date(adDate + ", 2016 20:20:00").toISOString()
         }
         ,
         {
@@ -866,7 +866,7 @@ var self = module.exports.testdata = {
                 name: "Bar Box",
                 venue: "B Bar & Grill"
             },
-            loggedAt: new Date("August 29, 2016 18:30:00").toISOString()
+            loggedAt: new Date(adDate + ", 2016 18:30:00").toISOString()
         }
         ,
         {
@@ -879,7 +879,7 @@ var self = module.exports.testdata = {
                 name: "Bar Box",
                 venue: "Not Your Average Joe's"
             },
-            loggedAt: new Date("August 29, 2016 17:37:00").toISOString()
+            loggedAt: new Date(adDate + ", 2016 17:37:00").toISOString()
         }
         ,
         {
@@ -892,7 +892,7 @@ var self = module.exports.testdata = {
                 name: "Bar Box",
                 venue: "Not Your Average Joe's"
             },
-            loggedAt: new Date("August 29, 2016 17:40:00").toISOString()
+            loggedAt: new Date(adDate + ", 2016 17:40:00").toISOString()
         },
         {
             logType: "impression",
@@ -905,6 +905,30 @@ var self = module.exports.testdata = {
                 venue: "B Bar & Grill"
             },
             loggedAt: new Date(adDate + ", 2016 13:13:00").toISOString()
+        },
+        {
+            logType: "impression",
+            message: {
+                adName: adName,
+
+            },
+            device: {
+                name: "Bar Box",
+                venue: "B Bar & Grill"
+            },
+            loggedAt: new Date(adDate + ", 2016 1:13:00").toISOString()
+        },
+        {
+            logType: "impression",
+            message: {
+                adName: adName,
+
+            },
+            device: {
+                name: "Bar Box",
+                venue: "B Bar & Grill"
+            },
+            loggedAt: new Date(adDate + ", 2016 0:13:00").toISOString()
         }
 
     ]

@@ -337,8 +337,8 @@ module.exports = {
         var query = {
             logType: 'impression',
             loggedAt: {
-                '>': new Date(moment(params.date).startOf('day')),
-                '<': new Date(moment(params.date).endOf('day'))
+                '>': new Date(moment(params.date, "YYYY-MM-DD").startOf('day')),
+                '<': new Date(moment(params.date, "YYYY-MM-DD").endOf('day'))
             }
         }
         OGLog.find(query)
@@ -362,6 +362,7 @@ module.exports = {
                         return res.serverError(err)
                     else {
                         logs = _.groupBy(logs, 'adName')
+                        sails.log.debug(logs)
                         return res.ok(logs)
                     }
                 })

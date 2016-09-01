@@ -96,30 +96,48 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr ng-repeat="logs in venues">
-                                    <td>{{logs[0].venue.name}}</td>
-                                    <td>{{logs.length}}</td>
-                                    <td>{{logs.length * .5 / 60}} Hours</td>
+                                <tr ng-repeat="l in venues">
+                                    <td>{{l[0].venue.name}}</td>
+                                    <td>{{l.length}}</td>
+                                    <td>{{l.length * .5 / 60}} Hours</td>
                                 </tr>
 
                                 </tbody>
                             </table>
 
-
-                            I wish these were real numbers
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <canvas id="bar" class="chart chart-line"
-                                            chart-data="graphdata" chart-labels="labels" chart-series="series"
-                                            chart-options="options">
-                                    </canvas>
+                            <div >
+                                <div class="text-center">
+                                    Hourly Impressions
                                 </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <canvas id="bar" class="chart chart-line"
+                                                chart-data="graphdata" chart-labels="labels" chart-series="series"
+                                                chart-options="options">
+                                        </canvas>
+                                    </div>
 
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-3"></div>
+                                    <div class="col-md-6">
+                                        <p class="input-group">
+                                        <input type="text" class="form-control" uib-datepicker-popup="{{format}}"
+                                               ng-model="dt.date" is-open="datePopup.opened"
+                                               datepicker-options="dateOptions"
+                                               ng-required="true" close-text="Close"
+                                               alt-input-formats="altInputFormats" ng-change="newDate()"/>
+                                         <span class="input-group-btn">
+                                      <button type="button" class="btn btn-default" ng-click="open()"><i
+                                              class="glyphicon glyphicon-calendar"></i></button>
+                                         </span>
+                                        </p>
+                                    </div>
+                                    <div class="col-md-3"></div>
+
+                                </div>
                             </div>
 
-                            line graph for daily impressions ?
-                            a graph with the top venues would be cool
-                            & links to the venues or something would be cool
 
                         </div>
 

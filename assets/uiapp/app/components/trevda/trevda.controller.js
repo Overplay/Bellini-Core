@@ -4,6 +4,7 @@
  */
 
 
+
 app.controller("addAdvertisementController", function ($scope, $log, $http, $state, user, asahiService, links, toastr) {
     $log.debug("addAdvertisementController starting");
 
@@ -70,7 +71,7 @@ app.controller("manageAdvertisementController", function ($scope, $log, ads, lin
     $scope.sort = '';
     $scope.reverse = true;
 
-    $scope.toggleSort= function(sortBy){
+    $scope.toggleSort = function (sortBy) {
         $scope.reverse = !$scope.reverse;
         $scope.sort = sortBy
     }
@@ -84,10 +85,80 @@ app.controller("manageAdvertisementController", function ($scope, $log, ads, lin
 });
 
 
+
 app.controller("editAdvertisementController", function ($scope, $log, $http, $stateParams, $state, toastr, asahiService, links, advertisement, uibHelper, admin, impressions, logs) {
     $log.debug("editAdvertisementController starting");
     $scope.advertisement = advertisement;
 
+    $scope.datePopup = {opened: false}
+    $scope.open = function () {
+        $scope.datePopup.opened = true;
+    }
+    $scope.dt = {date: new Date()};
+
+
+    $scope.format = 'shortDate'
+    $scope.dateOptions = {maxDate: new Date()}
+    $scope.logs = logs;
+    //todo arrows?
+    $scope.newDate = function () {
+        $log.log("New DATE! ", moment($scope.dt.date).format("YYYY-MM-DD"))
+        //request new info for graph
+        var d = moment($scope.dt.date).format("YYYY-MM-DD")
+        $http.get("/ad/dailyCount?date=" + d + "&id=" + $stateParams.id)
+            .then(function (logs) {
+                $scope.logs = logs.data;
+                $scope.initGraph()
+            })
+    }
+
+    $scope.initGraph = function () {
+
+        $scope.allHours = {
+            0: [], 1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [],
+            9: [], 10: [], 11: [], 12: [], 13: [], 14: [], 15: [], 16: [], 17: [], 18: [], 19: [], 20: [],
+            21: [], 22: [], 23: []
+        }
+
+
+        $scope.hourly = _.merge($scope.allHours, _.groupBy($scope.logs[$scope.advertisement.name], function (log) {
+            //$log.log(moment())
+            return new Date(log.loggedAt).getHours()
+
+        }));
+
+        //$log.log($scope.hourly)
+        ////TODO ad comparisons by hour? change date, show all hours of the day?
+        /*$scope.labels = _.map(_.keys($scope.hourly), function(hours){
+         var suffix = hours > 11 ? 'pm' : 'am'
+         hours = (hours) % 12
+         if (hours == 0) hours = 12;
+         return hours + suffix //TODO make sure this works lol
+         }); //hours
+         */
+        $scope.labels = ['12am', '1am', '2am', '3am', '4am', '5am', '6am', '7am', '8am', '9am', '10am', '11am', '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm', '8pm', '9pm', '10pm', '11pm']
+        /*
+         var suffix = hours > 11 ? 'pm' : 'am'
+         hours = (hours) % 12
+         if (hours == 0) hours = 12;
+         return hours + suffix //TODO make sure this works lol
+         */
+        //$log.log($scope.labels)
+
+        //this week vs last week
+        $scope.series = ['Hourly Impressions'];
+
+        $scope.graphdata = [ //TODO fill in the gaps?
+            _.map(_.toArray($scope.hourly), function (val) {
+                return val.length
+            })
+        ];
+        //if (!$scope.graphdata[0].length)
+        //   $scope.graphdata = [[0, 0, 0]] //zeroes across the board!
+        //$log.log($scope.graphdata)
+
+    }
+    $scope.initGraph();
 
 
     $scope.impressions = impressions;
@@ -97,16 +168,7 @@ app.controller("editAdvertisementController", function ($scope, $log, $http, $st
     })) //TODO maybe backend analytics (seperate by date and counts? )
 
 
-    $scope.logs = logs;
-
     //take the current date, split up the times and groupby function to round hours! ?
-
-    $scope.hourly = _.groupBy($scope.logs[$scope.advertisement.name], function (log) {
-        //$log.log(moment())
-        return new Date(log.loggedAt).getHours()
-    })
-
-    $log.log($scope.hourly)
 
 
     $scope.options = {
@@ -115,44 +177,33 @@ app.controller("editAdvertisementController", function ($scope, $log, $http, $st
                 {
                     display: true,
                     ticks: {
-                        beginAtZero: true
-                    },
-                   // scaleSteps : 1 TODO 
+                        stepSize: 1,
+                        beginAtZero: true //UGH
+                    }
+
+
                 }
             ],
-            xAxes: [{
+            /*xAxes: [{
                 barPercentage: .4
-            }]
+            }]*/
         }
     }
 
 
-    //bar for top 10 performing ads?
-    $scope.labels = _.keys($scope.hourly); //hours
-    $log.log($scope.labels)
-
-    //this week vs last week
-    //$scope.series = ['Series A', 'Series B'];
-    
-    $scope.graphdata = [
-        _.map(_.toArray($scope.hourly), function (val) {
-            return val.length
-        })
-    ];
-
-    //TODO sort by hours shown? 
+    //TODO sort by hours shown?
 
 
     $scope.$parent.ui.panelHeading = $scope.advertisement.name;
     $scope.advertisementUpdate = angular.copy(advertisement);
-    
+
 
     $scope.$parent.ui.pageTitle = "Manage Advertisement";
     $scope.$parent.ui.panelHeading = "";
     $scope.$parent.links = links;
 
     $scope.mediaSizes = ['widget', 'crawler']
-    
+
     $scope.media = {
         widget: null,
         crawler: null
@@ -205,12 +256,12 @@ app.controller("editAdvertisementController", function ($scope, $log, $http, $st
     }
 
     $scope.exportExcel = function () {
-        $http.get('ad/exportExcel', { params: { id : advertisement.id }, responseType: "arraybuffer" })
-            .then( function (res) {
-                var blob = new Blob([res.data], { type : res.headers['Content-Type'] });
+        $http.get('ad/exportExcel', {params: {id: advertisement.id}, responseType: "arraybuffer"})
+            .then(function (res) {
+                var blob = new Blob([res.data], {type: res.headers['Content-Type']});
                 saveAs(blob, advertisement.name + ".xlsx");
             })
-            .catch( function (err) {
+            .catch(function (err) {
                 toastr.error("Something went wrong. Try again later.", "Error!");
             })
     }
@@ -258,7 +309,7 @@ app.controller("reviewAdvertisementController", function ($scope, $log, $http, $
     $scope.$parent.ui.pageTitle = "Review Advertisement";
     $scope.$parent.ui.panelHeading = ad.name;
     $scope.$parent.links = links;
-    $scope.mediaSizes = ['widget','crawler']
+    $scope.mediaSizes = ['widget', 'crawler']
 
     $scope.toggleDelete = $scope.advertisement.deleted ? "Re-Enable" : 'Delete'
 
