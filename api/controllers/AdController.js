@@ -167,7 +167,7 @@ module.exports = {
         }
 
         Ad.findOne({id: req.allParams().id})
-            .populate('creator')
+            // .populate('creator')
             .then(function (ad) {
 
                 var report = excel.buildExport(
@@ -187,12 +187,12 @@ module.exports = {
                                     headerStyle: styles.headerDark,
                                     cellStyle: styles.cellLight
                                 },
-                                creator: {
-                                    displayName: 'Creator',
-                                    width: 100,
-                                    headerStyle: styles.headerDark,
-                                    cellStyle: styles.cellLight
-                                },
+                                // creator: {
+                                //     displayName: 'Creator',
+                                //     width: 100,
+                                //     headerStyle: styles.headerDark,
+                                //     cellStyle: styles.cellLight
+                                // },
                                 reviewed: {
                                     displayName: 'Reviewed',
                                     width: 80,
@@ -222,7 +222,7 @@ module.exports = {
                                 {
                                     name: ad.name,
                                     description: ad.description,
-                                    creator: ad.creator.firstName + " " + ad.creator.lastName,
+                                    // creator: ad.creator.firstName + " " + ad.creator.lastName,
                                     reviewed: ad.reviewed ? "True" : "False",
                                     accepted: ad.accepted ? "True" : "False",
                                     paused: ad.paused ? "True" : "False",
@@ -335,8 +335,8 @@ module.exports = {
         var query = {
             logType: 'impression',
             loggedAt: {
-                '>': new Date(moment(params.date).startOf('day')),
-                '<': new Date(moment(params.date).endOf('day'))
+                '>': moment(new Date(params.date)).startOf('day').toDate(),
+                '<': moment(new Date(params.date)).endOf('day').toDate()
             }
         }
         OGLog.find(query)

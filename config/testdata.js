@@ -115,7 +115,7 @@ var self = module.exports.testdata = {
             chain = chain.then(function () {
                 return Auth.findOne({email: creatorEmail})
                     .then(function (u) {
-                        a.creator = u.user.id;
+                        a.creator = u.user;
                         return Ad.findOne(a)
                             .then(function (ad) {
                                 if (ad) {

@@ -21,6 +21,11 @@ module.exports = {
             return res.badRequest("Missing device ID");
         if (!params.payload)
             return res.badRequest("Missing message body");
+        // if (!params.jwt)
+        //     return res.badRequest("Missing JWT");
+
+        if (!isNaN(params.destination) && params.destination.charAt(0) !== '+')
+            return res.badRequest("Invalid destination");
 
         if (params.destination.length == 10)
             params.destination = "+1" + params.destination;
