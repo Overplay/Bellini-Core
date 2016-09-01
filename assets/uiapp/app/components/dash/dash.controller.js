@@ -121,6 +121,7 @@ app.controller("adDashController", function($scope, $log, ads, logsToday, logsYe
         }
     }
 
+    //TODO show graph if any ads exist, even with [0,0] impressions ?
     //TODO link the bars to the more info of ad? 
 
     //bar for top 10 performing ads?
@@ -132,10 +133,10 @@ app.controller("adDashController", function($scope, $log, ads, logsToday, logsYe
     //impression count for now? 
     $scope.data = [
         _.map($scope.logsYesterday, function(val){
-            return val.length
+            return val[0].length
         }),
-        _.map($scope.logsToday, function(val){
-            return val.length
+        _.map($scope.logsYesterday, function(val){
+            return val[1].length
         })
     ];
 
