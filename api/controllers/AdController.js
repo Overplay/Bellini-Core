@@ -6,7 +6,8 @@
  */
 
 var _ = require('lodash');
-var excel= require('node-excel-export');
+var excel = require('node-excel-export');
+var moment = require('moment')
 
 module.exports = {
 
@@ -24,7 +25,7 @@ module.exports = {
         Ad.findOne(req.allParams().id)
             .then(function (a) {
 
-                var media = a.media;
+                var media = a.advert.media;
                 _.forEach(media, function (val, key) {
                     if (val != null) {
                         chain = chain.then(function () {
@@ -167,9 +168,9 @@ module.exports = {
             }
         }
 
-        Ad.findOne({ id: req.allParams().id })
+        Ad.findOne({id: req.allParams().id})
             .populate('creator')
-            .then( function (ad) {
+            .then(function (ad) {
 
                 var report = excel.buildExport(
                     [
@@ -249,7 +250,7 @@ module.exports = {
             })
     },
 
-    //use this for when an advertiser updates ads == gets sent to admin for review 
+    //use this for when an advertiser updates ads == gets sent to admin for review
     editAd: function (req, res) {
         var params = req.allParams()
 
@@ -285,8 +286,94 @@ module.exports = {
             .catch(function (err) {
                 return res.serverError(err)
             })
+    },
+
+    //TODO add a date filter on this or front end?
+    impressions: function (req, res) {
+        var params = req.allParams();
+        if (!params.id) {
+            return res.badRequest("No Id")
+        }
+        var id = params.id;
+
+        var adLogs;
+        OGLog.find({logType: 'impression'})
+            .then(function (logs) {
+                adLogs = _.filter(logs, {message: {adId: id}})
+                async.each(adLogs, function (log, cb) {
+                        return Device.findOne(log.deviceUniqueId) //TODO this is gonna change what key is used
+                            .populate('venue')
+                            .then(function (dev) {
+                                log.venue = dev.venue;
+                                cb()
+                            })
+                            .catch(function (err) {
+                                return cb(err)
+                            })
+                    },
+                    function (err) {
+                        if (err) {
+                            return res.serverError(err)
+                        }
+                        else {
+                            return res.ok(adLogs)
+
+                        }
+
+                    })
+            })
+
+            .catch(function (err) {
+                return res.serverError(err)
+            })
+    },
+
+    //maybe an impression endpoint that does hourly counts for each ad for a certain date
+    dailyCount: function (req, res) { // TODO only get session users ads :)
+        var params = req.allParams()
+        if (!params.date) {
+            return res.badRequest("No date given")
+        }
+        var query = {
+            logType: 'impression',
+            loggedAt: {
+                '>': new Date(moment(params.date).startOf('day')),
+                '<': new Date(moment(params.date).endOf('day'))
+            }
+        }
+        OGLog.find(query)
+            .then(function (logs) {
+                if (params.id) {
+                    //logs by adId TODO
+                    logs = _.filter(logs, {message: {adId: params.id}})
+                }
+                //otherwise return counts for each all ads...um maybe not
+                async.each(logs, function (log, cb) {
+                    return Ad.findOne(log.message.adId)
+                        .then(function (ad) {
+                            log.adName = ad.name;
+                            cb()
+                        })
+                        .catch(function(err){
+                            cb(err)
+                        })
+                }, function (err) {
+                    if (err)
+                        return res.serverError(err)
+                    else {
+                        logs = _.groupBy(logs, 'adName')
+                        return res.ok(logs)
+                    }
+                })
+            })
+
+            .catch(function (err) {
+                return res.serverError(err)
+            })
     }
 
+
+    //impression data : sort by venue and date so its easier to chart
 
 };
 

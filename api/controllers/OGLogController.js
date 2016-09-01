@@ -21,6 +21,9 @@ module.exports = {
         if (!params.loggedAt)
             return res.badRequest("Missing logged at time");
 
+        params.loggedAt = new Date(params.loggedAt)
+        sails.log.debug(params)
+
         chain = chain.then( function () {
             return OGLog.create(params)
                 .then( function (log) {
@@ -35,23 +38,16 @@ module.exports = {
             return res.ok();
         })
             .catch( function (err) {
-            return res.serverError(err);
-        })
-
+                return res.serverError(err);
+            })
     },
 
     //if device id in OGLog, include ad id? this is complicated 
+    //more in the ad controller
     impressions: function (req, res) {
-
-        if (!req.allParams().id)
-            return res.badRequest("Missing ad id");
-
-        var id = req.allParams().id;
-
         OGLog.find({where: { logType: 'impression'}, sort: 'loggedAt DESC' })
             .then(function(logs) {
-                var impressions = _.filter(logs, function (o) { return o.message.adId == id });
-                return res.json(impressions);
+                return res.ok(logs); //all logs
             })
     },
 
@@ -68,6 +64,14 @@ module.exports = {
                 return res.json(venueLogs);
             })
     },
+
+
+    getAll: function (req, res) {
+        OGLog.find()
+            .then(function (logs) {
+                return res.ok(logs)
+            })
+    }
 
 
 

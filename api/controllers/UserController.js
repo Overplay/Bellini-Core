@@ -169,13 +169,12 @@ module.exports = require('waterlock').actions.user({
         else
             return res.badRequest('Not logged in and no given id')
 
-        User.findOne({id: id})
-            .populate("advertisements")
-            .then(function (user) {
-                if (user) {
+        Ad.find({creator: id})
+            .then(function (ads) {
+                if (ads) {
 
-                    var ads = _.filter(user.advertisements, {deleted: false})
-                    return res.json(ads);
+                    var adverts = _.filter(ads, {deleted: false})
+                    return res.json(adverts);
                 }
                 else
                     return res.badRequest();

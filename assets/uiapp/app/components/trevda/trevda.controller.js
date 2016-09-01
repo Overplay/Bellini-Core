@@ -12,11 +12,16 @@ app.controller("addAdvertisementController", function ($scope, $log, $http, $sta
     $scope.$parent.links = links;
 
     $scope.advertisement = {
-        creator: user, media: {
-            widget: null,
-            crawler: null
-        },
-        text: ['', '', '']
+        creator: user.id,
+        advert: {
+            type: '2g3s', //in the future this will be variable and alter the view
+            text: ['', '', ''],
+            media: {
+                widget: null,
+                crawler: null
+            }
+        }
+
     };
 
 
@@ -35,7 +40,7 @@ app.controller("addAdvertisementController", function ($scope, $log, $http, $sta
                 chain = chain.then(function () {
                     return asahiService.uploadMedia(val)
                         .then(function (data) {
-                            $scope.advertisement.media[key] = data.data.id;
+                            $scope.advertisement.advert.media[key] = data.data.id;
                         })
                 })
             }
@@ -63,6 +68,7 @@ app.controller("manageAdvertisementController", function ($scope, $log, ads, lin
     $scope.$parent.ui.panelHeading = '';
     $scope.$parent.links = links;
     $scope.sort = '';
+    $scope.reverse = true;
 
     $scope.toggleSort= function(sortBy){
         $scope.reverse = !$scope.reverse;
@@ -78,25 +84,68 @@ app.controller("manageAdvertisementController", function ($scope, $log, ads, lin
 });
 
 
-app.controller("editAdvertisementController", function ($scope, $log, $http, $stateParams, $state, toastr, asahiService, links, advertisement, mediaMeta, uibHelper, admin) {
+app.controller("editAdvertisementController", function ($scope, $log, $http, $stateParams, $state, toastr, asahiService, links, advertisement, uibHelper, admin, impressions, logs) {
     $log.debug("editAdvertisementController starting");
+    $scope.advertisement = advertisement;
 
 
-    $scope.labels = ['2006', '2007', '2008', '2009', '2010', '2011', '2012'];
-    $scope.series = ['Series A', 'Series B'];
 
+    $scope.impressions = impressions;
+
+    $scope.venues = _.toArray(_.groupBy($scope.impressions, function (el) {
+        return el.venue.name;
+    })) //TODO maybe backend analytics (seperate by date and counts? )
+
+
+    $scope.logs = logs;
+
+    //take the current date, split up the times and groupby function to round hours! ?
+
+    $scope.hourly = _.groupBy($scope.logs[$scope.advertisement.name], function (log) {
+        //$log.log(moment())
+        return new Date(log.loggedAt).getHours()
+    })
+
+    $log.log($scope.hourly)
+
+
+    $scope.options = {
+        scales: {
+            yAxes: [
+                {
+                    display: true,
+                    ticks: {
+                        beginAtZero: true
+                    },
+                   // scaleSteps : 1 TODO 
+                }
+            ],
+            xAxes: [{
+                barPercentage: .4
+            }]
+        }
+    }
+
+
+    //bar for top 10 performing ads?
+    $scope.labels = _.keys($scope.hourly); //hours
+    $log.log($scope.labels)
+
+    //this week vs last week
+    //$scope.series = ['Series A', 'Series B'];
+    
     $scope.graphdata = [
-        [65, 59, 80, 81, 56, 55, 40],
-        [28, 48, 40, 19, 86, 27, 90]
+        _.map(_.toArray($scope.hourly), function (val) {
+            return val.length
+        })
     ];
 
-    $scope.advertisement = advertisement;
+    //TODO sort by hours shown? 
+
 
     $scope.$parent.ui.panelHeading = $scope.advertisement.name;
     $scope.advertisementUpdate = angular.copy(advertisement);
     
-    $scope.advertisement.mediaMeta = mediaMeta;
-    $scope.advertisementUpdate.mediaMeta = angular.copy(mediaMeta);
 
     $scope.$parent.ui.pageTitle = "Manage Advertisement";
     $scope.$parent.ui.panelHeading = "";
@@ -111,16 +160,15 @@ app.controller("editAdvertisementController", function ($scope, $log, $http, $st
 
 
     $scope.data = {
-        impressions: 1004,
+        impressions: $scope.logs.length,
         screenTime: 4.5
     }
 
     //to update the advertisement 
     $scope.update = function () {
-        delete $scope.advertisementUpdate.mediaMeta
 
-        if (!$scope.advertisementUpdate.media) {
-            $scope.advertisementUpdate.media = {
+        if (!$scope.advertisementUpdate.advert.media) {
+            $scope.advertisementUpdate.advert.media = {
                 widget: null,
                 crawler: null
             }
@@ -132,7 +180,7 @@ app.controller("editAdvertisementController", function ($scope, $log, $http, $st
                 chain = chain.then(function () {
                     return asahiService.uploadMedia(val)
                         .then(function (data) {
-                            $scope.advertisementUpdate.media[key] = data.data.id;
+                            $scope.advertisementUpdate.advert.media[key] = data.data.id;
                         })
                 })
             }
@@ -152,14 +200,6 @@ app.controller("editAdvertisementController", function ($scope, $log, $http, $st
 
 
         });
-        //update the media associated with the ad
-        chain = chain.then(function () {
-            return $http.get("ad/getMedia/" + $stateParams.id)
-                .then(function (data) {
-                    $scope.advertisement.mediaMeta = data.data;
-                    $scope.advertisementUpdate.mediaMeta = angular.copy(data.data);
-                })
-        })
 
 
     }

@@ -16,50 +16,23 @@
             <fieldset class="form-group">
                 <h2>Crawler Texts</h2>
                 <p>Enter up to three scrolling text items.</p>
-                <input id="c1" type="text" class="form-control" ng-model="advertisement.text[0]" maxLength="80"/>
-                <br><input id="c2" type="text" class="form-control" ng-model="advertisement.text[1]" maxLength="80"/>
-                <br><input id="c3" type="text" class="form-control" ng-model="advertisement.text[2]" maxLength="80"/>
+                <input id="c1" type="text" class="form-control" ng-model="advertisement.advert.text[0]" maxLength="80"/>
+                <br><input id="c2" type="text" class="form-control" ng-model="advertisement.advert.text[1]"
+                           maxLength="80"/>
+                <br><input id="c3" type="text" class="form-control" ng-model="advertisement.advert.text[2]"
+                           maxLength="80"/>
             </fieldset>
 
 
             <fieldset class="form-group">
                 <h2>Images</h2>
                 <img-input prompt="Widget" width="256" height="256" dirty="media.widget"
-                           src-field="advertisement.images.widget"
+                           src-field="advertisement.advert.media.widget"
                            exact></img-input>
                 <img-input prompt="Crawler" width="440" height="100" dirty="media.crawler"
-                           src-field="advertisement.images.crawler"
+                           src-field="advertisement.advert.media.crawler"
                            exact></img-input>
             </fieldset>
-            <!--<div class="panel panel-default">
-                <div class="panel-heading">Add Media</div>
-                <div class="panel-body">
-                    <div class="row">
-                        <div class="dz" drag-and-drop on-drop="addFilesToUpload">
-                            <p> DROP FILES HERE </p>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div ng-show="filesToUpload.length>0">
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">
-                                        Files to Create Media From
-                                    </div>
-                                    <div class="panel-body">
-                                        <ul>
-                                            <li ng-repeat="f in filesToUpload track by $index">{{f.name}}
-                                                <button type="button" ng-click="removeUpload($index)">Remove</button>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>-->
 
             <div class="form-actions">
 

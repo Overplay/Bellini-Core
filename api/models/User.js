@@ -95,11 +95,7 @@ module.exports = {
         organization: { //only for proprietors 
             model: 'Organization'
         },
-
-        advertisements: {
-            collection: 'Ad',
-            via: 'creator'
-        },
+        
 
         toJSON: function() {
 

@@ -7,13 +7,14 @@
         <div class="col-md-3"></div>
         <div class="col-md-6">
             <canvas id="bar" class="chart chart-bar"
-                    chart-data="data" chart-labels="labels" chart-series="series">
+                    chart-data="data" chart-labels="labels"
+                    chart-series="series" chart-options="options">
             </canvas>
         </div>
         <div class="col-md-3"></div>
 
     </div>
-    <div class="row">
+    <!--<div class="row">
         <div class="col-md-3"></div>
         <div class="col-md-6">
             <canvas id="doughnut" class="chart chart-doughnut"
@@ -22,7 +23,7 @@
         </div>
         <div class="col-md-3"></div>
 
-    </div>
+    </div>-->
 
 
     <h2 class="text-center">Your Advertisements</h2>
@@ -45,7 +46,7 @@
                 </div>
                 <div>
                     <img height="150" width="150" class="dash-logo"
-                         ng-src="{{ad.media.widget ? 'media/download/' + ad.media.widget : 'images/default-ad.jpg'}}"/>
+                         ng-src="{{ad.advert.media.widget ? 'media/download/' + ad.advert.media.widget : 'images/default-ad.jpg'}}"/>
                 </div>
                 <br>
 

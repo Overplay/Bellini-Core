@@ -19,21 +19,10 @@ module.exports = {
             venue: venue.name,
             role: role
         };
-        viewVars.url = inviteUrl(sails.config.mailing.inviteUrl, email, venue, role, sails.config.mailing.inviteSub)
-
-        //awful path imo. also needs to be fixed in waterlock local auth 
-        var templatePath = path.normalize(__dirname + "../../../views/emails/inviteemail.jade"); 
-        var html = jade.renderFile(templatePath, viewVars);
-        
-        var mailOptions = {
-            from: "no-reply@ourglass.tv", // sender address
-            subject: "You have been invited to Ourglass!",
-            text: html, // plaintext body
-            html: html // html body
-        };
-
-        mailOptions.to = email;
-        transport.sendMail(mailOptions, mailCallback);
+        viewVars.url = inviteUrl(sails.config.mailing.inviteUrl,
+            email, venue, role, sails.config.mailing.inviteSub)
+        sendMail(viewVars, "inviteemail.jade",
+            "You have been invited to Ourglass!", email)
     },
 
     inviteRole: function (email, name, venue, role) {
@@ -43,40 +32,18 @@ module.exports = {
             venue: venue.name,
             role: role
         };
-        viewVars.url = inviteUrl(sails.config.mailing.inviteRoleUrl, email, venue, role, sails.config.mailing.roleSub)
-        var templatePath = path.normalize(__dirname + "../../../views/emails/inviterole.jade");
-        var html = jade.renderFile(templatePath, viewVars);
+        viewVars.url = inviteUrl(sails.config.mailing.inviteRoleUrl,
+            email, venue, role, sails.config.mailing.roleSub)
 
-        var mailOptions = {
-            from: "no-reply@ourglass.tv", // sender address
-            subject: "You have been invited to manage a venue",
-            text: html, // plaintext body
-            html: html // html body
-        };
-
-        mailOptions.to = email;
-        //front end assumes email sends without issues, might need to handle this at some point
-        transport.sendMail(mailOptions, mailCallback);
-
+        sendMail(viewVars, "inviterole.jade",
+            "You have been invited to manage a venue", email)
 
     },
 
     adReviewNotification: function (email) {
-        //TODO email
-        viewVars = {
+        var viewVars = {
             url: sails.config.mailing.login
         }
-
-        var templatePath = path.normalize(__dirname + "../../../views/emails/adreview.jade");
-        var html = jade.renderFile(templatePath, viewVars);
-
-        var mailOptions = {
-            from: "no-reply@ourglass.tv", // sender address
-            subject: "You have an Advertisement to review",
-            text: html, // plaintext body
-            html: html // html body
-        };
-
 
         User.find()
             .populate('auth')
@@ -86,6 +53,7 @@ module.exports = {
                 })
             })
             .then(function (us) {
+                //sails.log.debug(us)
                 var emails = "";
                 us.forEach(function (u) {
                     emails += u.auth.email + ","
@@ -93,42 +61,53 @@ module.exports = {
                 return emails;
             })
             .then(function (e) {
-                sails.log.debug(e)
-                mailOptions.to = 'cole.grigsby@gmail.com'//e; TODO
-                transport.sendMail(mailOptions, mailCallback);
+                sendMail(viewVars, "adreview.jade",
+                    "You have an Advertisement to review", e) 
+            })
+            .catch(function (err) {
+                sails.log.debug("Server error in mailing service", err)
             })
 
     },
 
     adRejectNotification: function (userId, name, reason) {
 
-        viewVars = {
+        var viewVars = {
             url: sails.config.mailing.login,
             name: name,
             reason: reason
-        }
-
-        var templatePath = path.normalize(__dirname + "../../../views/emails/adrejection.jade");
-        var html = jade.renderFile(templatePath, viewVars);
-
-        var mailOptions = {
-            from: "no-reply@ourglass.tv", // sender address
-            subject: "You're advertisement has been reviewed",
-            text: html, // plaintext body
-            html: html // html body
         };
-
 
         Auth.findOne({user: userId})
             .then(function (a) {
                 if (a) {
-                    mailOptions.to = 'cole.grigsby@gmail.com'//a.email TODO
-                    transport.sendMail(mailOptions, mailCallback);
+
+                    sendMail(viewVars, 'adrejection.jade',
+                        "You're advertisement has been reviewed", a.email)
                 }
                 else return new error("Shit hit the fan")
-            })        
+            })
+            .catch(function (err) {
+                sails.log.debug("Server error in mailing service", err)
+            })
         
     }
+}
+
+var sendMail = function (viewVars, template, subject, mailTo) {
+    var templatePath = path.normalize(__dirname + "../../../views/emails/" + template);
+    var html = jade.renderFile(templatePath, viewVars);
+
+    var mailOptions = {
+        from: "no-reply@ourglass.tv", // sender address
+        subject: subject,
+        text: html, // plaintext body
+        html: html, // html body
+        to: mailTo
+    };
+
+    transport.sendMail(mailOptions, mailCallback);
+
 }
 
 var mailCallback = function (error, info) {

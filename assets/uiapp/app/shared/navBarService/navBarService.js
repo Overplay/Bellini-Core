@@ -32,7 +32,7 @@ app.factory('navBarService', function ($log) {
                     {
                         label: "Advertisements",
                         id: "trevda",
-                        items: [{label: "Ads", link: {type: 'ui-sref', addr: 'advertisement.adminList'}}]
+                        items: [{label: "All Advertisements", link: {type: 'ui-sref', addr: 'advertisement.adminList'}}]
                     }
                 ],
                 right: [{
@@ -52,7 +52,7 @@ app.factory('navBarService', function ($log) {
                     ]
                 },
                     {
-                        label: "Owned Devices", //might need to be modified
+                        label: "Devices", //might need to be modified
                         id: "devices",
                         items: [{label: "Owned Devices", link: {type: 'ui-sref', addr: 'device.list'}}
                         ]
@@ -91,7 +91,7 @@ app.factory('navBarService', function ($log) {
                     // ]
                     // },
                     {
-                        label: "Managed Devices", //might need to be modified
+                        label: "Devices", //might need to be modified
                         id: "devices",
                         items: [{label: "Managed Devices", link: {type: 'ui-sref', addr: 'device.managerList'}}]
                     },
@@ -178,7 +178,7 @@ app.factory('navBarService', function ($log) {
                         id: "ads",
                         items: [
                             {
-                                label: 'manage', link: {type: 'ui-sref', addr: 'advertisement.list'}
+                                label: 'My Advertisements', link: {type: 'ui-sref', addr: 'advertisement.list'}
                             }
                         ]
                     }]

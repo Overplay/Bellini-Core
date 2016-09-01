@@ -5,11 +5,11 @@
 //Note: test data will be duplicated if being run on a cluster! 
 
 var Promise = require('bluebird');
-
-
+var adName = 'Advertisement Three!';
+var adDate = 'August 31'; //TODO
 var self = module.exports.testdata = {
 
-    installTestData: true,
+    installTestData: false,
     eraseOldData: false,
 
     install: function () {
@@ -42,7 +42,7 @@ var self = module.exports.testdata = {
             })
         }
         self.organizations.forEach(function (o) {
-            chain = chain.then( function () {
+            chain = chain.then(function () {
                 return Organization.findOne(o)
                     .then(function (org) {
                         if (org) {
@@ -115,7 +115,7 @@ var self = module.exports.testdata = {
             chain = chain.then(function () {
                 Auth.findOne({email: creatorEmail})
                     .then(function (u) {
-                        a.creator = u.user;
+                        a.creator = u.user.id;
                         return Ad.findOne(a)
                             .then(function (ad) {
                                 if (ad) {
@@ -123,6 +123,7 @@ var self = module.exports.testdata = {
                                     return new Error("Ad already in system")
                                 }
                                 else {
+                                    a.advert = {type: '2g3s', media: {crawler: '', widget: ''}, text: ['', '', '']}
                                     return Ad.create(a)
                                         .then(function () {
                                             sails.log.debug("Ad created for " + creatorEmail);
@@ -142,13 +143,7 @@ var self = module.exports.testdata = {
 
         });
 
-        chain = chain.then(function () {
-            return User.find()
-                .populate('advertisements')
-                .then(function () {
-                    sails.log.debug("Advertisements populated");
-                })
-        });
+
 
 
         self.venues.forEach(function (v) {
@@ -191,45 +186,45 @@ var self = module.exports.testdata = {
 
             // chain = chain.then(function () {
             //     return Auth.findOne({email: ownerEmails[0]}) //dumb fix
-                    chain = chain.then(function (user) {
-                        //v.venueOwners.push(user.user);
-                        //sails.log.debug(venueManagers)
-                        return Venue.findOne({name: v.name}) //this will work but venues could be double named (not unique)
-                            .then(function (ven) {
-                                //sails.log.debug(ven);
-                                if (ven) {
-                                    sails.log.debug("Venue exists")
-                                    return new Error("Venue Exists, skipping creation")
-                                }
-                                else {
-                                    return Venue.create(v)
+            chain = chain.then(function (user) {
+                //v.venueOwners.push(user.user);
+                //sails.log.debug(venueManagers)
+                return Venue.findOne({name: v.name}) //this will work but venues could be double named (not unique)
+                    .then(function (ven) {
+                        //sails.log.debug(ven);
+                        if (ven) {
+                            sails.log.debug("Venue exists")
+                            return new Error("Venue Exists, skipping creation")
+                        }
+                        else {
+                            return Venue.create(v)
 
-                                        .then(function (newV) {
-                                            //sails.log(newV)
-                                            //sails.log(venueManagers)
-                                            //sails.log(venueOwners)
-                                            newV.venueOwners.add(venueOwners)
-                                            newV.save({ populate: false }, function(err){
-                                                if (err) sails.log.debug(err)
-                                            });
-                                            newV.venueManagers.add(venueManagers)
-                                            newV.save({ populate: false }, function(err){
-                                                if (err) sails.log.debug(err)
-                                            });
+                                .then(function (newV) {
+                                    //sails.log(newV)
+                                    //sails.log(venueManagers)
+                                    //sails.log(venueOwners)
+                                    newV.venueOwners.add(venueOwners)
+                                    newV.save({populate: false}, function (err) {
+                                        if (err) sails.log.debug(err)
+                                    });
+                                    newV.venueManagers.add(venueManagers)
+                                    newV.save({populate: false}, function (err) {
+                                        if (err) sails.log.debug(err)
+                                    });
 
-                                            sails.log.debug("Venue created with name " + newV.name);
-                                        })
-                                        .catch(function (err) {
-                                            sails.log.debug(err)
-                                        })
-                                }
-
-                            })
-                            .catch(function (err) {
-                                sails.log.debug(err)
-                            })
+                                    sails.log.debug("Venue created with name " + newV.name);
+                                })
+                                .catch(function (err) {
+                                    sails.log.debug(err)
+                                })
+                        }
 
                     })
+                    .catch(function (err) {
+                        sails.log.debug(err)
+                    })
+
+            })
             // })
 
         });
@@ -296,24 +291,41 @@ var self = module.exports.testdata = {
                 })
         });
 
-        self.logs.forEach( function (log) {
+        self.logs.forEach(function (log) {
             var device = log.device;
             delete log.device;
 
-            chain = chain.then( function () {
-                return Venue.findOne({ name: device.venue })
+            chain = chain.then(function () {
+                return Venue.findOne({name: device.venue})
                     .populate('devices')
-                    .then( function (v) {
-                        log.deviceUniqueId = _.find(v.devices, function (o) { return o.name === device.name }).id
+                    .then(function (v) {
+                        log.deviceUniqueId = _.find(v.devices, function (o) {
+                            return o.name === device.name
+                        }).id
                     })
-                    .then( function () {
+                    .then(function () {
+                        if (log.message.adName) {
+                            //add the time and the adId
+                            return Ad.findOne({name: log.message.adName})
+                                .then(function (ad) {
+                                    delete log.message.adName;
+                                    log.message.adId = ad.id;
+                                })
+                        }
+                        else {
+                            return;
+                        }
+
+                    })
+                    .then(function () {
                         return OGLog.create(log)
-                            .then( function () {
+                            .then(function () {
                                 sails.log.debug("Log created");
                             })
-                            .catch( function (err) {
-                                sails.log.debug(err);
-                            })
+
+                    })
+                    .catch(function (err) {
+                        sails.log.debug(err);
                     })
             })
         })
@@ -617,9 +629,7 @@ var self = module.exports.testdata = {
                     aqui: "1.0.0",
                     android: "MMB29M"
                 },
-                installedApps: [
-
-                ]
+                installedApps: []
             },
             device: {
                 name: "Bar Box",
@@ -627,5 +637,275 @@ var self = module.exports.testdata = {
             },
             loggedAt: new Date().toISOString()
         },
+        {
+            logType: "impression",
+            message: {
+                adName: adName
+
+            },
+            device: {
+                name: "Bar Box",
+                venue: "B Bar & Grill"
+            },
+            loggedAt: new Date("August 29, 2016 12:13:00").toISOString()
+        }
+        ,
+        {
+            logType: "impression",
+            message: {
+                adName: adName
+
+            },
+            device: {
+                name: "Bar Box",
+                venue: "B Bar & Grill"
+            },
+            loggedAt: new Date("August 29, 2016 12:20:00").toISOString()
+        }
+        ,
+        {
+            logType: "impression",
+            message: {
+                adName: adName
+
+            },
+            device: {
+                name: "Bar Box",
+                venue: "B Bar & Grill"
+            },
+            loggedAt: new Date("August 29, 2016 11:30:00").toISOString()
+        }
+        ,
+        {
+            logType: "impression",
+            message: {
+                adName: adName
+
+            },
+            device: {
+                name: "Bar Box",
+                venue: "Not Your Average Joe's"
+            },
+            loggedAt: new Date("August 29, 2016 11:37:00").toISOString()
+        }
+        ,
+        {
+            logType: "impression",
+            message: {
+                adName: adName
+
+            },
+            device: {
+                name: "Bar Box",
+                venue: "Not Your Average Joe's"
+            },
+            loggedAt: new Date("August 29, 2016 21:40:00").toISOString()
+        },
+        {
+            logType: "impression",
+            message: {
+                adName: adName,
+
+            },
+            device: {
+                name: "Bar Box",
+                venue: "B Bar & Grill"
+            },
+            loggedAt: new Date("August 29, 2016 22:13:00").toISOString()
+        }
+        ,
+        {
+            logType: "impression",
+            message: {
+                adName: adName,
+
+            },
+            device: {
+                name: "Bar Box",
+                venue: "B Bar & Grill"
+            },
+            loggedAt: new Date("August 29, 2016 21:20:00").toISOString()
+        }
+        ,
+        {
+            logType: "impression",
+            message: {
+                adName: adName,
+
+            },
+            device: {
+                name: "Bar Box",
+                venue: "B Bar & Grill"
+            },
+            loggedAt: new Date("August 29, 2016 19:30:00").toISOString()
+        }
+        ,
+        {
+            logType: "impression",
+            message: {
+                adName: adName,
+
+            },
+            device: {
+                name: "Bar Box",
+                venue: "Not Your Average Joe's"
+            },
+            loggedAt: new Date("August 29, 2016 18:37:00").toISOString()
+        }
+        ,
+        {
+            logType: "impression",
+            message: {
+                adName: adName,
+
+            },
+            device: {
+                name: "Bar Box",
+                venue: "Not Your Average Joe's"
+            },
+            loggedAt: new Date("August 29, 2016 13:40:00").toISOString()
+        },
+        {
+            logType: "impression",
+            message: {
+                adName: adName,
+
+            },
+            device: {
+                name: "Bar Box",
+                venue: "B Bar & Grill"
+            },
+            loggedAt: new Date("August 29, 2016 16:13:00").toISOString()
+        }
+        ,
+        {
+            logType: "impression",
+            message: {
+                adName: adName,
+
+            },
+            device: {
+                name: "Bar Box",
+                venue: "B Bar & Grill"
+            },
+            loggedAt: new Date("August 29, 2016 16:20:00").toISOString()
+        }
+        ,
+        {
+            logType: "impression",
+            message: {
+                adName: adName,
+
+            },
+            device: {
+                name: "Bar Box",
+                venue: "B Bar & Grill"
+            },
+            loggedAt: new Date("August 29, 2016 16:30:00").toISOString()
+        }
+        ,
+        {
+            logType: "impression",
+            message: {
+                adName: adName,
+
+            },
+            device: {
+                name: "Bar Box",
+                venue: "Not Your Average Joe's"
+            },
+            loggedAt: new Date("August 29, 2016 21:37:00").toISOString()
+        }
+        ,
+        {
+            logType: "impression",
+            message: {
+                adName: adName,
+
+            },
+            device: {
+                name: "Bar Box",
+                venue: "Not Your Average Joe's"
+            },
+            loggedAt: new Date("August 29, 2016 21:40:00").toISOString()
+        },
+        ,
+        {
+            logType: "impression",
+            message: {
+                adName: adName,
+
+            },
+            device: {
+                name: "Bar Box",
+                venue: "B Bar & Grill"
+            },
+            loggedAt: new Date("August 29, 2016 22:13:00").toISOString()
+        }
+        ,
+        {
+            logType: "impression",
+            message: {
+                adName: adName,
+
+            },
+            device: {
+                name: "Bar Box",
+                venue: "B Bar & Grill"
+            },
+            loggedAt: new Date("August 29, 2016 20:20:00").toISOString()
+        }
+        ,
+        {
+            logType: "impression",
+            message: {
+                adName: adName,
+
+            },
+            device: {
+                name: "Bar Box",
+                venue: "B Bar & Grill"
+            },
+            loggedAt: new Date("August 29, 2016 18:30:00").toISOString()
+        }
+        ,
+        {
+            logType: "impression",
+            message: {
+                adName: adName,
+
+            },
+            device: {
+                name: "Bar Box",
+                venue: "Not Your Average Joe's"
+            },
+            loggedAt: new Date("August 29, 2016 17:37:00").toISOString()
+        }
+        ,
+        {
+            logType: "impression",
+            message: {
+                adName: adName,
+
+            },
+            device: {
+                name: "Bar Box",
+                venue: "Not Your Average Joe's"
+            },
+            loggedAt: new Date("August 29, 2016 17:40:00").toISOString()
+        },
+        {
+            logType: "impression",
+            message: {
+                adName: adName,
+
+            },
+            device: {
+                name: "Bar Box",
+                venue: "B Bar & Grill"
+            },
+            loggedAt: new Date(adDate + ", 2016 13:13:00").toISOString()
+        }
+
     ]
 };

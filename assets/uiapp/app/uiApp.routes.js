@@ -2,7 +2,6 @@
  * Created by mkahn on 4/6/16.
  */
 
-
 app.config(function ($stateProvider, $urlRouterProvider) {
 
     console.debug("Loading routes");
@@ -843,15 +842,29 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                             return data.data;
                         })
                 },
-                mediaMeta: function ($stateParams, $http) {
-                    return $http.get("ad/getMedia/" + $stateParams.id)
+
+                impressions: function ($stateParams, $http) {
+                    return $http.get("ad/impressions/" + $stateParams.id)
                         .then(function (data) {
                             return data.data;
-
                         })
+
                 },
                 admin: function () {
                     return false
+                },
+                logs: function ($http, $stateParams, $log) {
+                    //var moment = require('moment')
+                    //var date = moment().format('YYYY-MM-DD')  moment doesnt work here wtf
+                    //todo bower install moment if i wanna use it 
+                    var date = new Date();
+                    var day = date.getDate();
+                    var monthIndex = date.getMonth();
+                    var year = date.getFullYear();
+                    var d = year + '-' + (monthIndex + 1) + '-' + '29'
+                    return $http.get("/ad/dailyCount?date=" + d + "&id=" + $stateParams.id).then(function (logs) {
+                        return logs.data;
+                    })
                 }
             }
 
@@ -869,12 +882,12 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                             return data.data;
                         })
                 },
-                mediaMeta: function ($stateParams, $http) {
-                    return $http.get("ad/getMedia/" + $stateParams.id)
+                impressions: function ($stateParams, $http) {
+                    return $http.get("ad/impressions/" + $stateParams.id)
                         .then(function (data) {
                             return data.data;
-
                         })
+
                 },
                 admin: function () {
                     return true
@@ -958,6 +971,16 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 ads: function ($http) {
                     return $http.get("/user/getAlist").then(function (ads) {
                         return ads.data;
+                    })
+                },
+                logs: function ($http) {//TODO user id for this too
+                    var date = new Date();
+                    var day = date.getDate();
+                    var monthIndex = date.getMonth();
+                    var year = date.getFullYear();
+                    var d = year + '-' + (monthIndex + 1) + '-' + '29'
+                    return $http.get("/ad/dailyCount?date=" + d).then(function (logs) {
+                        return logs.data; 
                     })
                 }
             }

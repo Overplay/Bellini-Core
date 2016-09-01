@@ -14,21 +14,25 @@ module.exports = {
         description: {
             type: 'string'
         },
-        creator: {
-            model: 'User'
+        creator: { //TODO just user ID now ***
+            type: 'string'
         },
-        text: { //TODO limit length of strings and array
-            type: 'array',
-            defaultsTo: ['', '', ''] 
-
-        },
-        images: { //front end has to set sizes for images
+        advert: {
             type: 'json',
-            defaultsTo: {
+            required: true
+        },
+
+        /*
+         advert: {
+         type: '2g3s
+         text: ['','',''],
+         media: {
                 widget: null,
                 crawler: null
             }
-        },
+         },
+         */
+
         paused: {
             type: 'boolean',
             defaultsTo: false
@@ -49,29 +53,6 @@ module.exports = {
             type: 'json',
             defaultsTo: {}
         }
-        /*venueList: { //array of venue Ids where it has been shown
-            type: 'array',
-            defaultsTo: []
-        },
-        timesShown: {
-            type: 'integer',
-            defaultsTo: 0
-        },
-
-         /*screenTime: { //future hopefuls
-         type: 'integer',
-         defaultsTo: 0
-         },
-         metadata: {
-         type: 'json',
-         defaultsTo: {}       
-
-         },
-         reviewed: {
-         type:boolean,
-         defaultsTo: false
-         }
-         */
 
 
     },
