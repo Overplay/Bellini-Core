@@ -1,5 +1,5 @@
 /**
- * Created by ryanhartzell on 8/31/16.
+ * Created by eadams on 10/22/15.
  */
 var util = require('util');
 var verror = require('verror');
@@ -11,17 +11,15 @@ var twilioSettings = {};
 /**
  * Add the config to config/local.js
  *
- *   notification: {
- *     twilio: {
- *       startupDelay: 10000 // In milliseconds
- *       , loopRestartOnSuccessDelay: (1000 * 60 * 0.5) // In milliseconds
- *       , loopRestartOnFailDelay: (1000 * 60 * 0.5) // In milliseconds
- *       , sweepThresholdHours: 1 //(1/30.0) // In hours
- *       , accountSid: ''
- *       , authToken: ''
- *       , from: "+14089164024"
+ *   twilio: {
+ *     startupDelay: 10000 // In milliseconds
+ *     , loopRestartOnSuccessDelay: (1000 * 60 * 0.5) // In milliseconds
+ *     , loopRestartOnFailDelay: (1000 * 60 * 0.5) // In milliseconds
+ *     , sweepThresholdHours: 1 //(1/30.0) // In hours
+ *     , accountSid: ''
+ *     , authToken: ''
+ *     , from: "+14089164024"
  *
- *     }
  *   }
  *
  */

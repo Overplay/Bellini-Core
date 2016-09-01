@@ -21,8 +21,8 @@ module.exports = {
         if (!params.loggedAt)
             return res.badRequest("Missing logged at time");
 
-        params.loggedAt = new Date(params.loggedAt)
-        sails.log.debug(params)
+        params.loggedAt = new Date(params.loggedAt);
+        sails.log.debug(params);
 
         chain = chain.then( function () {
             return OGLog.create(params)

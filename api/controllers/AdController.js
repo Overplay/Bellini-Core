@@ -121,8 +121,6 @@ module.exports = {
 
     exportExcel: function (req, res) {
 
-        var params = req.allParams();
-
         if (!req.allParams().id)
             return res.badRequest("Missing ad id");
 

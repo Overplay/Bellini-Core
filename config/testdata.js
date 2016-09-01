@@ -9,8 +9,8 @@ var adName = 'Advertisement Three!';
 var adDate = 'August 31'; //TODO
 var self = module.exports.testdata = {
 
-    installTestData: false,
-    eraseOldData: false,
+    installTestData: true,
+    eraseOldData: true,
 
     install: function () {
 
@@ -113,7 +113,7 @@ var self = module.exports.testdata = {
             delete a.creatorEmail;
 
             chain = chain.then(function () {
-                Auth.findOne({email: creatorEmail})
+                return Auth.findOne({email: creatorEmail})
                     .then(function (u) {
                         a.creator = u.user.id;
                         return Ad.findOne(a)
@@ -829,7 +829,6 @@ var self = module.exports.testdata = {
             },
             loggedAt: new Date("August 29, 2016 21:40:00").toISOString()
         },
-        ,
         {
             logType: "impression",
             message: {
