@@ -95,9 +95,7 @@ module.exports = {
 }
 
 var sendMail = function (viewVars, template, subject, mailTo) {
-    var templatePath = path.normalize(__dirname + "../../../views/emails/" + template);
-    sails.log.debug(templatePath)
-    sails.log.debug(__dirname)
+    var templatePath = path.normalize(__dirname + "/../../views/emails/" + template);
     var html = jade.renderFile(templatePath, viewVars);
 
     var mailOptions = {
