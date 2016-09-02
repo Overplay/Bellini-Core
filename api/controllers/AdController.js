@@ -98,19 +98,19 @@ module.exports = {
         }
     },
 
-    toggleDelete: function (req, res) {
+    setDelete: function (req, res) {
         var params = req.allParams();
-        if (!params.id) {
-            return res.badRequest("Invalid req Params")
+        if (!params.id || typeof params.delete == 'undefined') {
+            return res.badRequest({error: "Invalid req Params"})
         }
         else {
             Ad.findOne(params.id)
                 .then(function (ad) {
-                    ad.deleted = !ad.deleted;
+                    ad.deleted = params.delete;
                     ad.save(function (err) {
                         if (err) {
                             sails.log.debug("ad save err", err)
-                            return res.serverError(err)
+                            return res.serverError({error: err})
                         }
                         else
                             return res.ok(ad)
@@ -341,20 +341,34 @@ module.exports = {
                 '<': new Date(moment(params.date, "YYYY-MM-DD").endOf('day'))
             }
         }
+
+        
         OGLog.find(query)
             .then(function (logs) {
                 if (params.id) {
                     //logs by adId TODO
                     logs = _.filter(logs, {message: {adId: params.id}})
                 }
-                //otherwise return counts for each all ads...um maybe not
+                else {
+                    Ad.find({creator: req.session.user.id}) //TODO this is bad
+                        .then(function(ads) {
+                            var ids = _.map(ads, 'id')
+                            logs = _.filter(logs, function(l){
+                                return _.findIndex(ids, function(id){
+                                    return id == l.message.adId
+                                })
+                            })
+                        })
+
+                }
+
                 async.each(logs, function (log, cb) {
                     return Ad.findOne(log.message.adId)
                         .then(function (ad) {
                             log.adName = ad.name;
                             cb()
                         })
-                        .catch(function(err){
+                        .catch(function (err) {
                             cb(err)
                         })
                 }, function (err) {
@@ -362,7 +376,6 @@ module.exports = {
                         return res.serverError(err)
                     else {
                         logs = _.groupBy(logs, 'adName')
-                        sails.log.debug(logs)
                         return res.ok(logs)
                     }
                 })
@@ -371,10 +384,26 @@ module.exports = {
             .catch(function (err) {
                 return res.serverError(err)
             })
+    },
+
+    forDevice: function(req, res) {
+        var params = req.allParams()
+
+        if (!params.deviceId){
+            //deal with this
+            return res.badRequest({error: "No device id"})
+        }
+        //TODO figure out criteria for ads to return
+
+        Ad.find({reviewed: true, accepted: true, deleted: false})
+            .then(function (ads) {
+                return res.ok(ads)
+            })
+            .catch(function (err) {
+                return res.serverError({error: err})
+            })
     }
 
-
-    //impression data : sort by venue and date so its easier to chart
 
 };
 
