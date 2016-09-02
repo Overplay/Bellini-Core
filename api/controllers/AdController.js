@@ -354,9 +354,9 @@ module.exports = {
                         .then(function(ads) {
                             var ids = _.map(ads, 'id')
                             logs = _.filter(logs, function(l){
-                                return _.findIndex(ids, function(id){
+                                return (_.findIndex(ids, function(id){
                                     return id == l.message.adId
-                                })
+                                }) > -1)
                             })
                         })
 
