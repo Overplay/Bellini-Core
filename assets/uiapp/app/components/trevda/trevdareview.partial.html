@@ -6,57 +6,53 @@
                     <tr>
                         <td><b>Name</b></td>
                         <td></td>
-                        <td></td>
                         <td>{{advertisement.name}}</td>
                     </tr>
                     <tr>
                         <td><b>Description</b></td>
-                        <td></td>
                         <td></td>
                         <td>{{advertisement.description}}</td>
                     </tr>
                     <tr ng-if="advertisement.advert.text[0].length > 0">
                         <td><b>Crawler Text One </b></td>
                         <td></td>
-                        <td></td>
                         <td>{{advertisement.advert.text[0]}}</td>
                     </tr>
                     <tr ng-if="advertisement.advert.text[1].length > 0">
                         <td><b>Crawler Text Two</b></td>
-                        <td></td>
                         <td></td>
                         <td>{{advertisement.advert.text[1]}}</td>
                     </tr>
                     <tr ng-if="advertisement.advert.text[2].length > 0">
                         <td><b>Crawler Text Three</b></td>
                         <td></td>
-                        <td></td>
                         <td>{{advertisement.advert.text[2]}}</td>
                     </tr>
                     <tr>
                         <td><b>Reviewed</b></td>
-                        <td>{{advertisement.reviewed}}</td>
+                        <td></td>
+                        <td>{{advertisement.reviewed ? "Yes" : "No"}}</td>
+                        </tr>
+                    <tr>
                         <td><b>Accepted</b></td>
-                        <td>{{advertisement.accepted}}</td>
+                        <td></td>
+                        <td>{{advertisement.accepted ? "Yes" : "No"}}</td>
                     </tr>
                     <tr>
                         <td><b>DELETED</b></td>
-                        <td></td>
                         <td></td>
                         <td>{{advertisement.deleted}}</td>
                     </tr>
 
 
                     <tr ng-if="advertisement.advert.media">
-                        <td>Media</td>
-                        <td></td>
+                        <td><b>Media</b></td>
                         <td></td>
                         <td></td>
 
                     </tr>
                     <tr ng-repeat="size in mediaSizes" ng-if="advertisement.advert.media[size]">
                         <td><b>{{size}}</b></td>
-                        <td></td>
                         <td></td>
 
                         <td><a href="media/download/{{advertisement.advert.media[size]}}"><img

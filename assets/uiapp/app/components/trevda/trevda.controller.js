@@ -62,7 +62,7 @@ app.controller("addAdvertisementController", function ($scope, $log, $http, $sta
 });
 
 //list ads for the user 
-app.controller("manageAdvertisementController", function ($scope, $log, ads, links, admin) {
+app.controller("manageAdvertisementController", function ($scope, $log, $http, toastr, ads, links, admin) {
     $log.debug("manageAdvertisementController starting");
 
     $scope.$parent.ui.pageTitle = admin ? "All Advertisements" : "Manage My Advertisements";
@@ -82,8 +82,22 @@ app.controller("manageAdvertisementController", function ($scope, $log, ads, lin
 
     $scope.admin = admin
 
-});
+    $scope.pause = function (advertisement) {
+        var paused = advertisement.paused;
 
+        var successMessage = paused ? "Advertisement will appear in venues!" : "Advertisement will no longer be placed in venues"
+
+        $http.post('ad/pauseOrResume/', {id: advertisement.id, ad: advertisement})
+            .then(function (data) {
+                advertisement = data.data;
+                _.find($scope.advertisements, {'id': advertisement.id}).paused = advertisement.paused
+                toastr.success(successMessage, "Success!");
+
+            })
+
+    }
+
+});
 
 
 app.controller("editAdvertisementController", function ($scope, $log, $http, $stateParams, $state, toastr, asahiService, links, advertisement, uibHelper, admin, impressions, logs) {
@@ -185,8 +199,8 @@ app.controller("editAdvertisementController", function ($scope, $log, $http, $st
                 }
             ],
             /*xAxes: [{
-                barPercentage: .4
-            }]*/
+             barPercentage: .4
+             }]*/
         }
     }
 
@@ -293,7 +307,11 @@ app.controller("editAdvertisementController", function ($scope, $log, $http, $st
     $scope.delete = function () {
         uibHelper.confirmModal("Are you sure?", "Would you really like to move this ad to the archives?", true)
             .then(function (confirmed) {
-                $http.post('ad/toggleDelete/', {id: $scope.advertisement.id, ad: $scope.advertisement})
+                $http.post('ad/setDelete/', {
+                        id: $scope.advertisement.id,
+                        ad: $scope.advertisement,
+                        delete: !$scope.advertisement.deleted
+                    })
                     .then(function (data) {
 
                         var state = admin ? 'adminList' : 'list'
@@ -326,7 +344,11 @@ app.controller("reviewAdvertisementController", function ($scope, $log, $http, $
     $scope.delete = function () {
         uibHelper.confirmModal("Are you sure?", "Would you really like toggle the status of the ad?", true)
             .then(function (confirmed) {
-                $http.post('ad/toggleDelete/', {id: $scope.advertisement.id, ad: $scope.advertisement})
+                $http.post('ad/setDelete/', {
+                        id: $scope.advertisement.id,
+                        ad: $scope.advertisement,
+                        delete: !$scope.advertisement.deleted
+                    })
                     .then(function (data) {
                         $scope.advertisement = data.data;
                         $scope.toggleDelete = $scope.advertisement.deleted ? "Re-Enable" : 'Delete'

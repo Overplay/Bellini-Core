@@ -10,7 +10,7 @@
             <fieldset class="form-group">
                 <label for="desc">Description</label>
                 <input type="text" class="form-control" id="desc"
-                       ng-model="advertisement.description"/>
+                       ng-model="advertisement.description" required/>
             </fieldset>
 
             <fieldset class="form-group">
@@ -36,7 +36,7 @@
 
             <div class="form-actions">
 
-                <button type="submit" ng-disabled="form.$invalid" class="btn btn-primary top15">
+                <button type="submit" ng-disabled="form.$invalid || !media.widget || !media.crawler" class="btn btn-primary top15">
                     Create
                 </button>
 

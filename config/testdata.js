@@ -5,11 +5,11 @@
 //Note: test data will be duplicated if being run on a cluster! 
 
 var Promise = require('bluebird');
-var adName = 'tester2';
-var adDate = 'August 31'; //TODO
+var adName = 'Landshark';
+var adDate = 'September 2'; //TODO
 var self = module.exports.testdata = {
 
-    installTestData: true,
+    installTestData: false,
     eraseOldData: false,
 
     install: function () {

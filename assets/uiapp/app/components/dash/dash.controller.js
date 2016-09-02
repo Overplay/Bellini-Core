@@ -93,15 +93,28 @@ app.controller("adDashController", function($scope, $log, ads, logsToday, logsYe
 
     $scope.logsToday = logsToday
     $scope.logsYesterday = logsYesterday
-
+    $log.log($scope.logsToday)
         //TODO
-    $log.log($scope.logs = _.mergeWith($scope.logsYesterday, $scope.logsToday, function(obj, obj2){
+    /*$log.log($scope.logs = _.mergeWith($scope.logsYesterday, $scope.logsToday, function(obj, obj2, key){
         $log.log(obj, obj2)
 
-        obj = obj ? obj : []
-        obj2 = obj2 ? obj2 : []
+        obj = obj.length ? obj : []
+        obj2 = obj2.length ? obj2 : []
+        $log.log(key)
         return [obj, obj2]
-    }))
+    }))*/
+
+    $scope.keys = _.keys($scope.logsYesterday)
+
+    _.join($scope.keys, _.keys($scope.logsToday))
+
+    $log.log($scope.keys)
+
+    $scope.logs = {}
+    _.forEach($scope.keys, function(key){
+        $scope.logs[key] = [$scope.logsYesterday[key] || [], $scope.logsToday[key] || []]
+    })
+
 
 
     $scope.options = {
@@ -111,7 +124,7 @@ app.controller("adDashController", function($scope, $log, ads, logsToday, logsYe
                     display: true,
                     ticks: {
                         beginAtZero: true,
-                        
+                        //TODO handle small amounts 
                     }
                 }
             ],
@@ -132,10 +145,10 @@ app.controller("adDashController", function($scope, $log, ads, logsToday, logsYe
 
     //impression count for now? 
     $scope.data = [
-        _.map($scope.logsYesterday, function(val){
+        _.map($scope.logs, function(val){
             return val[0].length
         }),
-        _.map($scope.logsYesterday, function(val){
+        _.map($scope.logs, function(val){
             return val[1].length
         })
     ];
@@ -143,7 +156,6 @@ app.controller("adDashController", function($scope, $log, ads, logsToday, logsYe
 
     var a = angular.copy(ads)
 
-    //todo handle images for dash
     $scope.advertisements = []
     while (a.length) {
         $scope.advertisements.push(a.splice(0,2))

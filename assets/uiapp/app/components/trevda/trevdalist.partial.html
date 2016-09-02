@@ -9,11 +9,15 @@
             <tr>
                 <td>Name</td>
                 <td>Description</td>
-                <td ng-if="!admin">Paused</td>
-                <td ng-if="admin" ng-click="toggleSort('reviewed')"
+
+                <td ng-click="toggleSort('reviewed')"
                     ng-class="{headerSortUp: reverse, headerSortDown: !reverse}">Reviewed
                 </td>
+                <td>Pause</td>
+
                 <td></td>
+                <td ng-if="admin"></td>
+
             </tr>
             </thead>
             <tbody>
@@ -21,15 +25,22 @@
 
                 <td>{{advertisement.name}}</td>
                 <td>{{advertisement.description}}</td>
-                <td ng-if="admin">{{advertisement.reviewed}}</td>
-                <td ng-if="!admin">{{advertisement.paused}}</td>
-                <td ng-if="!admin" width="10%"><a ui-sref="advertisement.edit({id: advertisement.id})"
-                                                  class="btn btn-sm btn-warning">More Info</a></td>
+                <td>{{advertisement.reviewed ? "Yes!" : "Not Yet!"}}</td>
+                <td>
+                    <button class="btn btn-sm btn-default" ng-click="pause(advertisement)">
+                        <span class="glyphicon"
+                              ng-class="{'glyphicon-play': advertisement.paused, 'glyphicon-pause': !advertisement.paused}"></span>
+                        {{advertisement.paused ? "Resume" : "Pause"}}
+                    </button>
+                </td>
+                <td width="10%"><a ui-sref="advertisement.edit({id: advertisement.id})"
+                                   class="btn btn-sm btn-success">More Info</a></td>
                 <!--<td><a class="btn btn-sm btn-primary">Pause</a></td>-->
                 <!--<td><a class="btn btn-sm btn-danger">Delete</a></td>-->
 
                 <td ng-if="admin" width="10%"><a ui-sref="advertisement.adminReview({id: advertisement.id})"
                                                  class="btn btn-sm btn-warning">Review</a></td>
+
             </tr>
             </tbody>
         </table>
