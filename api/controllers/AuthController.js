@@ -20,7 +20,7 @@ module.exports = require( 'waterlock' ).waterlocked( {
         if ( req.session && req.session.user )
             return res.ok(req.session.user);
         else
-            return res.forbidden("Not authorized");
+            return res.forbidden({error: "Not authorized"});
 
     },
 
@@ -52,7 +52,7 @@ module.exports = require( 'waterlock' ).waterlocked( {
 
         if ( params.newpass === undefined ) {
             // Must have a password or this is a waste of time
-            res.badRequest("No new password specified");
+            res.badRequest({error: "No new password specified"});
 
         } else if ( params.email ) {
 
@@ -62,14 +62,14 @@ module.exports = require( 'waterlock' ).waterlocked( {
                     return res.json( { "message": "Password changed" } );
                 } )
                 .catch( function ( err ) {
-                    return res.error( err );
+                    return res.error( {error: err } );
                 } )
 
         } else if ( params.resetToken ) {
 
             // Attempt at token based reset. Let's make sure they are really cool
             if ( params.resetToken != req.session.resetToken.token ) {
-                return res.forbidden("Reset token does not match");
+                return res.forbidden({error: "Reset token does not match"});
             }
 
             AdminService.changePwd( { resetToken: params.resetToken, password: params.newpass } )
@@ -77,7 +77,7 @@ module.exports = require( 'waterlock' ).waterlocked( {
                     return res.ok({"message": "Password changed"});
                 } )
                 .catch( function ( err ) {
-                    return res.error( err );
+                    return res.error( {error: err});
                 } )
 
 
@@ -123,7 +123,7 @@ module.exports = require( 'waterlock' ).waterlocked( {
                             messages[e.rule] = e.message;
                         })
                     })
-                    return res.badRequest(messages)//{'message': 'Adding user failed'});
+                    return res.badRequest({error: messages})//{'message': 'Adding user failed'});
                 }
                 else
                     return res.badRequest({'message': err.message})
@@ -143,13 +143,13 @@ module.exports = require( 'waterlock' ).waterlocked( {
                 var _reqTime = Date.now();
                 // If token is expired
                 if (decoded.exp <= _reqTime)
-                    return res.forbidden('Your token is expired.');
+                    return res.forbidden({error: 'Your token is expired.'});
                 // If token is early
                 if (_reqTime <= decoded.nbf)
-                    return res.forbidden('This token is early.');
+                    return res.forbidden({error: 'This token is early.'});
                 // If the subject doesn't match
                 if (sails.config.mailing.inviteSub !== decoded.sub)
-                    return res.forbidden('This token cannot be used for this request.');
+                    return res.forbidden({error: 'This token cannot be used for this request.'});
 
                 var auth = {
                     email: decoded.email

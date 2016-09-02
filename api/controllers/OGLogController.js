@@ -13,13 +13,13 @@ module.exports = {
 
 
         if (!params.logType)
-            return res.badRequest("Missing log type");
+            return res.badRequest({error: "Missing log type"});
         if (!params.message)
-            return res.badRequest("Missing message");
+            return res.badRequest({error: "Missing message"});
         if (!params.deviceUniqueId)
-            return res.badRequest("Missing device id");
+            return res.badRequest({error: "Missing device id"});
         if (!params.loggedAt)
-            return res.badRequest("Missing logged at time");
+            return res.badRequest({error: "Missing logged at time"});
 
         params.loggedAt = new Date(params.loggedAt)
         sails.log.debug(params)
@@ -30,7 +30,7 @@ module.exports = {
                 return res.ok();
             })
             .catch( function (err) {
-                return res.serverError(err);
+                return res.serverError({error: err});
             })
     },
 
@@ -46,7 +46,7 @@ module.exports = {
     deviceHeartbeat: function (req, res) {
 
         if (!req.allParams().id)
-            return res.badRequest("Missing device id");
+            return res.badRequest({error: "Missing device id"});
 
         var id = req.allParams().id;
 

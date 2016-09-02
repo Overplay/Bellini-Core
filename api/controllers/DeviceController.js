@@ -21,7 +21,7 @@ module.exports = {
          code 
          */
         if ((params.regCode === undefined)) //test other stuff too
-            return res.badRequest("No registration code specified");
+            return res.badRequest({error: "No registration code specified"});
 
 
         var deviceObj = {};
@@ -61,7 +61,7 @@ module.exports = {
 
             })
             .catch(function (err) {
-                return res.badRequest("Error registering device");
+                return res.badRequest({error: "Error registering device"});
             });
     },
 
@@ -75,7 +75,7 @@ module.exports = {
                 return res.ok(dev)
             })
             .catch(function(err){
-                sails.log.debug(err)
+                sails.log.debug({error: err})
             })
     },
 
