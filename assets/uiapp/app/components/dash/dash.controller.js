@@ -93,16 +93,7 @@ app.controller("adDashController", function($scope, $log, ads, logsToday, logsYe
 
     $scope.logsToday = logsToday
     $scope.logsYesterday = logsYesterday
-    $log.log($scope.logsToday)
-        //TODO
-    /*$log.log($scope.logs = _.mergeWith($scope.logsYesterday, $scope.logsToday, function(obj, obj2, key){
-        $log.log(obj, obj2)
-
-        obj = obj.length ? obj : []
-        obj2 = obj2.length ? obj2 : []
-        $log.log(key)
-        return [obj, obj2]
-    }))*/
+    //TODO potentially return 0s with all ads without logs so graph still shows
 
     $scope.keys = _.keys($scope.logsYesterday)
 
@@ -124,7 +115,7 @@ app.controller("adDashController", function($scope, $log, ads, logsToday, logsYe
                     display: true,
                     ticks: {
                         beginAtZero: true,
-                        //TODO handle small amounts 
+                        //TODO handle small scales (all zeroes)
                     }
                 }
             ],
