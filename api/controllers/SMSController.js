@@ -16,16 +16,16 @@ module.exports = {
         var params = req.allParams();
 
         if (!params.destination)
-            return res.badRequest("Missing destination phone number");
+            return res.badRequest({ "error" : "Missing destination phone number" });
         if (!params.deviceId)
-            return res.badRequest("Missing device ID");
+            return res.badRequest({ "error" : "Missing device ID" });
         if (!params.payload)
-            return res.badRequest("Missing message body");
+            return res.badRequest({ "error" : "Missing message body" });
         // if (!params.jwt)
         //     return res.badRequest("Missing JWT");
 
-        if (!isNaN(params.destination) && params.destination.charAt(0) !== '+')
-            return res.badRequest("Invalid destination");
+        if (isNaN(params.destination) && params.destination.charAt(0) !== '+')
+            return res.badRequest({ "error" : "Invalid destination" });
 
         if (params.destination.length == 10)
             params.destination = "+1" + params.destination;

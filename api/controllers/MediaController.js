@@ -85,7 +85,7 @@ module.exports = {
 
             // If no files were uploaded, respond with an error.
             else if ( (uploadedFiles === undefined) || (uploadedFiles.length === 0) ) {
-                res.badRequest( 'No file(s) uploaded.' );
+                res.badRequest({ "error" :  'No file(s) uploaded.' });
             }
 
             else {

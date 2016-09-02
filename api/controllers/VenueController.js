@@ -23,10 +23,10 @@ module.exports = {
         var params = req.allParams();
 
         if (!params.address || !params.name)
-            res.badRequest("Missing params")
+            res.badRequest({ "error" : "Missing params" })
 
         if (!params.id && !(req.session && req.session.user && req.session.user.id))
-            res.badRequest("No user id provided and no user logged in");
+            res.badRequest({ "error" : "No user id provided and no user logged in" });
 
         var id = params.id ? params.id : req.session.user.id;
 
@@ -85,7 +85,7 @@ module.exports = {
     getVenueManagers: function (req, res) {
 
         if (!req.allParams().id)
-            res.badRequest("No venue id specified");
+            res.badRequest({ "error" : "No venue id specified" });
 
         Venue.findOne({ id: req.allParams().id }).populate('venueManagers')
             .then( function (venue) {
@@ -122,7 +122,7 @@ module.exports = {
         var params = req.allParams();
 
         if (!params.query)
-            res.badRequest("No query provided");
+            res.badRequest({ "error" : "No query provided" });
 
         var query = params.query;
         var venues = [];
@@ -155,7 +155,7 @@ module.exports = {
         var params = req.allParams();
 
         if (!params.id)
-            res.badRequest("Missing params");
+            res.badRequest({ "error" : "Missing params" });
 
         //have to add proprietor.manager role to user if not already there.
         User.findOne(params.userId)
@@ -188,7 +188,7 @@ module.exports = {
                     }
                 }
                 else
-                    return res.badRequest("invalid user id")
+                    return res.badRequest({ "error" : "invalid user id" })
             })
     },
 
@@ -201,7 +201,7 @@ module.exports = {
         var params = req.allParams();
 
         if (!params.id)
-            res.badRequest("Missing params");
+            res.badRequest({ "error" : "Missing params" });
 
         //have to add proprietor.owner role to user if not already there.
         User.findOne(params.userId)
@@ -234,7 +234,7 @@ module.exports = {
                     }
                 }
                 else
-                    return res.badRequest("invalid user id")
+                    return res.badRequest({ "error" : "invalid user id" })
             })
     },
 
@@ -243,7 +243,7 @@ module.exports = {
         //params : user ID , venue ID is id
 
         if (!params.id)
-            res.badRequest("Missing params");
+            res.badRequest({ "error" : "Missing params" });
 
         //have to remove from many to many and possibly role
         User.findOne(params.userId)
@@ -274,7 +274,7 @@ module.exports = {
                 }
 
                 else
-                    return res.badRequest("invalid user id")
+                    return res.badRequest({ "error" : "invalid user id" })
             })
 
 
@@ -284,11 +284,11 @@ module.exports = {
         //params : user ID , venue ID
 
         if (!params.id)
-            res.badRequest("Missing params");
+            res.badRequest({ "error" : "Missing params" });
 
         //prevent self removal from venue owner
         if (params.userId == req.session.user.id) {
-            return res.badRequest("Cannot remove self from owning venue")
+            return res.badRequest({ "error" : "Cannot remove self from owning venue" })
         }
 
         var chain = Promise.resolve()
@@ -300,11 +300,11 @@ module.exports = {
                 .then(function (v) {
                     if (v) {
                         if (v.venueOwners.length < 2)
-                            return res.badRequest("Venue only has one owner. Cannot remove them")
+                            return res.badRequest({ "error" : "Venue only has one owner. Cannot remove them" })
                     }
 
                     else
-                        return res.badRequest("Venue does not exist ")
+                        return res.badRequest({ "error" : "Venue does not exist" })
                 })
 
         })
@@ -340,7 +340,7 @@ module.exports = {
                         }
 
                         else
-                            return res.badRequest("invalid user id")
+                            return res.badRequest({ "error" : "invalid user id" })
                     })
             }
 

@@ -27,9 +27,9 @@ module.exports = require('waterlock').actions.user({
         Auth.findOne({email: req.query.email})
             .then(function (auth) {
                 if (auth)
-                    return res.ok('found user');
+                    return res.ok();
                 else
-                    return res.notFound('No such user');
+                    return res.notFound({ "error" : 'No such user' });
 
             })
             .catch(function (err) {
@@ -49,7 +49,7 @@ module.exports = require('waterlock').actions.user({
         else if (req.session && req.session.user && req.session.user.id)
             id = req.session.user.id; //otherwise use current user
         else
-            return res.badRequest('Not logged in and no given id');
+            return res.badRequest({ "error" : 'Not logged in and no given id' });
 
         User.findOne({id: id})
             .populate("ownedVenues")
@@ -77,7 +77,7 @@ module.exports = require('waterlock').actions.user({
 
                 }
                 else
-                    return res.badRequest();
+                    return res.badRequest({ "error" : "User not found" });
             })
 
             .catch(function (err) {
@@ -95,7 +95,7 @@ module.exports = require('waterlock').actions.user({
         else if (req.session && req.session.user && req.session.user.id)
             id = req.session.user.id; //otherwise use current user
         else
-            return res.badRequest('Not logged in and no given id')
+            return res.badRequest({ "error" : 'Not logged in and no given id' })
 
         User.findOne({id: id})
             .populate("managedVenues")
@@ -123,7 +123,7 @@ module.exports = require('waterlock').actions.user({
 
                 }
                 else
-                    return res.badRequest();
+                    return res.badRequest({ "error" : "User not found" });
             })
 
             .catch(function (err) {
@@ -141,7 +141,7 @@ module.exports = require('waterlock').actions.user({
         else if (req.session && req.session.user.id)
             id = req.session.user.id;
         else
-            return res.badRequest('Not logged in and no given id')
+            return res.badRequest({ "error" : 'Not logged in and no given id' })
 
         User.findOne({id: id})
             .populate("ownedVenues")
@@ -167,7 +167,7 @@ module.exports = require('waterlock').actions.user({
         else if (req.session && req.session.user.id)
             id = req.session.user.id;
         else
-            return res.badRequest('Not logged in and no given id')
+            return res.badRequest({ "error" : 'Not logged in and no given id' })
 
         Ad.find({creator: id})
             .then(function (ads) {
@@ -247,7 +247,7 @@ module.exports = require('waterlock').actions.user({
         var params = req.allParams();
 
         if (!params.email) {
-            res.badRequest("No email provided");
+            res.badRequest({ "error" : "No email provided" });
         } else {
             Auth.findOne({email: params.email})
                 .populate("user")
@@ -258,7 +258,7 @@ module.exports = require('waterlock').actions.user({
                     }
                     else {
                         //failure
-                        return res.json({message: "Not found"})
+                        return res.json(500, {"error": "Not found"})
                     }
                 })
         }
@@ -304,13 +304,13 @@ module.exports = require('waterlock').actions.user({
                 var _reqTime = Date.now();
                 // If token is expired
                 if (decoded.exp <= _reqTime)
-                    return res.forbidden('Your token is expired.');
+                    return res.forbidden({ "error" : 'Your token is expired.' });
                 // If token is early
                 if (_reqTime <= decoded.nbf)
-                    return res.forbidden('This token is early.');
+                    return res.forbidden({ "error" : 'This token is early.' });
                 // If the subject doesn't match
                 if (sails.config.mailing.roleSub !== decoded.sub)
-                    return res.forbidden('This token cannot be used for this request.');
+                    return res.forbidden({ "error" : 'This token cannot be used for this request.' });
 
                 //token passes 
                 Auth.findOne({email: decoded.email})
@@ -345,7 +345,7 @@ module.exports = require('waterlock').actions.user({
                             })
                         }
                         else //user not found hahaha fuckkkk bad token probably 
-                            return res.badRequest("No user found with that email")
+                            return res.badRequest({ "error" : "No user found with that email" })
 
                     })
             }
@@ -370,7 +370,7 @@ module.exports = require('waterlock').actions.user({
                 u.roles = _.union(u.roles, [RoleCacheService.roleByName('advertiser')])
                 u.save(function (err) {
                     if (err)
-                        return res.serverError("Add role error ")
+                        return res.serverError({ "error" : "Add role error" });
                     else {
                         req.session.user = u
                         return res.json(u)
