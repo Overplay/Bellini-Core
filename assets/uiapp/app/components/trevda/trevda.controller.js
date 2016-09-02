@@ -332,12 +332,15 @@ app.controller("reviewAdvertisementController", function ($scope, $log, $http, $
     $scope.toggleDelete = $scope.advertisement.deleted ? "Re-Enable" : 'Delete'
 
     $scope.review = function (acc) {
-        $http.post("/ad/review", {id: $scope.advertisement.id, accepted: acc})
-            .then(function (a) {
-                $scope.advertisement = a.data;
-                toastr.success("Advertisement " + (acc ? "accepted!" : "rejected!"), "Success")
+        uibHelper.confirmModal("Are you sure?", "Do you really want to " +( acc ? "accept" : "reject") + " this advertisement?")
+            .then(function(confirmed){
+                $http.post("/ad/review", {id: $scope.advertisement.id, accepted: acc})
+                    .then(function (a) {
+                        $scope.advertisement = a.data;
+                        toastr.success("Advertisement " + (acc ? "accepted!" : "rejected!"), "Success")
 
-                $state.go("advertisement.adminList")
+                        $state.go("advertisement.adminList")
+                    })
             })
     }
 
