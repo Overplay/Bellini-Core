@@ -95,7 +95,7 @@ module.exports = require( 'waterlock' ).waterlocked( {
 
         //handle no password if facebook this is ugly 
         if (( params.email === undefined) || (params.password === undefined) || (params.user === undefined) || (params.password === '' && !params.facebookId))
-            return res.badRequest({'message': "Missing email, password or user object"});
+            return res.badRequest({error: "Missing email, password or user object"});
 
         //HUGE security hole if someone tries to add themselves as an OG 
         if (params.user.roleNames) {
@@ -126,7 +126,7 @@ module.exports = require( 'waterlock' ).waterlocked( {
                     return res.badRequest({error: messages})//{'message': 'Adding user failed'});
                 }
                 else
-                    return res.badRequest({'message': err.message})
+                    return res.badRequest({error: err.message})
             })
 
 

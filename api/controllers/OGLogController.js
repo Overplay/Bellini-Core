@@ -56,6 +56,9 @@ module.exports = {
                 var venueLogs = _.filter(logs, function (o) { return o.deviceUniqueId === id });
                 return res.json(venueLogs);
             })
+            .catch(function(err){
+                return res.serverError({error: err})
+            })
     },
 
 
