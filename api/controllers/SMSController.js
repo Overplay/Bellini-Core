@@ -14,6 +14,7 @@ module.exports = {
    */
     notify: function (req, res) {
         var params = req.allParams();
+        var num;
 
         if (!params.destination)
             return res.badRequest({ "error" : "Missing destination phone number" });
@@ -30,12 +31,26 @@ module.exports = {
         if (params.destination.length == 10)
             params.destination = "+1" + params.destination;
 
-        return TwilioService.sendText(params.destination, params.payload)
-            .then( function (message) {
-                return res.ok();
+        Device.findOne(params.deviceId)
+            .populate('venue')
+            .then( function (dev) {
+                if (!dev)
+                    return res.error({ 'error' : 'Device not found' });
+                else {
+                    var textHistory = dev.venue.textHistory;
+                    textHistory.push(Date.now());
+                    num = textHistory.length;
+                    return Venue.update(dev.venue.id, { textHistory: textHistory })
+                }
             })
-            .catch( function (err) {
-                return res.serverError(err);
+            .then( function () {
+                return TwilioService.sendText(params.destination, params.payload)
+                    .then( function (message) {
+                        return res.ok({ "message" : num + " messages sent in the last minute"});
+                    })
+                    .catch( function (err) {
+                        return res.serverError(err);
+                    })
             })
 
     }

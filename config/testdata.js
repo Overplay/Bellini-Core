@@ -9,7 +9,7 @@ var adName = 'Advertisement Three!';
 var adDate = 'August 31'; //TODO
 var self = module.exports.testdata = {
 
-    installTestData: false,
+    installTestData: true,
     eraseOldData: false,
 
     install: function () {
@@ -90,7 +90,7 @@ var self = module.exports.testdata = {
                 return Auth.findOne({email: email})
                     .then(function (a) {
                         if (a) {
-                            sails.log.debug("User exists")
+                            sails.log.debug("User exists");
                             return new Error("user already in system")
                         }
                         else {
