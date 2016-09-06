@@ -87,19 +87,17 @@ app.controller("adminDashController", function ($scope, $log, ads, userCount, de
 });
 
 
-app.controller("adDashController", function($scope, $log, ads, logsToday, logsYesterday){
+app.controller("adDashController", function($scope, $log, ads, logsToday, logsYesterday, weekly){
     $log.log("starting adDashController")
     $scope.$parent.selected = "advertiser"
 
     $scope.logsToday = logsToday
     $scope.logsYesterday = logsYesterday
     //TODO potentially return 0s with all ads without logs so graph still shows
+    
 
-    $scope.keys = _.keys($scope.logsYesterday)
+    $scope.keys = _.union(_.keys($scope.logsYesterday), _.keys($scope.logsToday))
 
-    _.join($scope.keys, _.keys($scope.logsToday))
-
-    $log.log($scope.keys)
 
     $scope.logs = {}
     _.forEach($scope.keys, function(key){
@@ -108,7 +106,7 @@ app.controller("adDashController", function($scope, $log, ads, logsToday, logsYe
 
 
 
-    $scope.options = {
+    $scope.barOptions = {
         scales: {
             yAxes: [
                 {
@@ -129,13 +127,15 @@ app.controller("adDashController", function($scope, $log, ads, logsToday, logsYe
     //TODO link the bars to the more info of ad? 
 
     //bar for top 10 performing ads?
-    $scope.labels = _.keys($scope.logs);
+    $scope.barLabels = _.keys($scope.logs);
+    if(!$scope.barLabels.length)
+        $scope.barLabels = ["No Data"]
 
     //this week vs last week
-    $scope.series = ["Yesterday's Impressions","Today's Impressions"];
+    $scope.barSeries = ["Yesterday's Impressions","Today's Impressions"];
 
     //impression count for now? 
-    $scope.data = [
+    $scope.barData = [
         _.map($scope.logs, function(val){
             return val[0].length
         }),
@@ -143,6 +143,28 @@ app.controller("adDashController", function($scope, $log, ads, logsToday, logsYe
             return val[1].length
         })
     ];
+
+    if (!$scope.barData[0].length && !$scope.barData[1].length) {
+        $scope.barData[0] = [0]
+        $scope.barData[1] = [0]
+    }
+    
+    $scope.weeklyData = [weekly]
+
+
+
+    var day = moment().subtract(7, 'days')
+    $scope.weeklyLabels = _.times(6, function(num){
+        return day.add(1, 'days').format('dddd')
+    })
+    $scope.weeklyLabels[6] = "Today"
+
+
+    $scope.weeklyOptions = {
+        elements: { line: {tension: 0 } },
+
+    }
+    $scope.weeklySeries = ["Total Impressions"]
 
 
     var a = angular.copy(ads)

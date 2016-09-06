@@ -7,13 +7,13 @@
         <table class="table table-striped top15">
             <thead>
             <tr>
-                <td>Name</td>
-                <td>Description</td>
+                <td><b>Name</b></td>
+                <td><b>Description</b></td>
 
                 <td ng-click="toggleSort('reviewed')"
-                    ng-class="{headerSortUp: reverse, headerSortDown: !reverse}">Reviewed
+                    ng-class="{headerSortUp: reverse, headerSortDown: !reverse}"><b>Reviewed</b>
                 </td>
-                <td>Pause</td>
+                <td><b>Pause</b></td>
 
                 <td></td>
                 <td ng-if="admin"></td>
@@ -26,8 +26,8 @@
                 <td>{{advertisement.name}}</td>
                 <td>{{advertisement.description}}</td>
                 <td>{{advertisement.reviewed ? "Yes!" : "Not Yet!"}}</td>
-                <td>
-                    <button class="btn btn-sm btn-default" ng-click="pause(advertisement)">
+                <td style="width:20%;">
+                    <button style="width:100%" class="btn btn-sm btn-default" ng-click="pause(advertisement)">
                         <span class="glyphicon"
                               ng-class="{'glyphicon-play': advertisement.paused, 'glyphicon-pause': !advertisement.paused}"></span>
                         {{advertisement.paused ? "Resume" : "Pause"}}

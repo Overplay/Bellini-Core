@@ -136,8 +136,8 @@ app.controller("editAdvertisementController", function ($scope, $log, $http, $st
 
 
         $scope.hourly = _.merge($scope.allHours, _.groupBy($scope.logs[$scope.advertisement.name], function (log) {
-            //$log.log(moment())
-            return new Date(log.loggedAt).getHours()
+            //$log.log(log.loggedAt)
+            return moment(log.loggedAt).hours() //TODO fix this somehow
 
         }));
 
@@ -186,12 +186,13 @@ app.controller("editAdvertisementController", function ($scope, $log, $http, $st
 
 
     $scope.options = {
+        elements: { line: {tension: 0 } },
         scales: {
             yAxes: [
                 {
                     display: true,
                     ticks: {
-                        stepSize: 1,
+                        //stepSize: 1,
                         beginAtZero: true //UGH
                     }
 

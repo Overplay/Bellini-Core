@@ -342,7 +342,7 @@ module.exports = {
             }
         }
 
-        
+
         OGLog.find(query)
             .then(function (logs) {
                 if (params.id) {
@@ -351,16 +351,17 @@ module.exports = {
                 }
                 else {
                     Ad.find({creator: req.session.user.id}) //TODO this is bad
-                        .then(function(ads) {
+                        .then(function (ads) {
                             var ids = _.map(ads, 'id')
-                            logs = _.filter(logs, function(l){
-                                return (_.findIndex(ids, function(id){
+                            logs = _.filter(logs, function (l) {
+                                return (_.findIndex(ids, function (id) {
                                     return id == l.message.adId
                                 }) > -1)
                             })
                         })
 
                 }
+
 
                 async.each(logs, function (log, cb) {
                     return Ad.findOne(log.message.adId)
@@ -386,10 +387,63 @@ module.exports = {
             })
     },
 
-    forDevice: function(req, res) {
+
+    //it might be cool to sort by ad name by day but thats complex
+    weeklyImpressions: function (req, res) {
+        //get weeky impressions for all user ads
+        //sum?
+        var params = req.allParams()
+        var logs = []
+        var impressions = [0, 0, 0, 0, 0, 0]
+        async.each([6, 5, 4, 3, 2, 1, 0],
+            function (num, cb) {
+                var query = {
+                    logType: 'impression',
+                    loggedAt: {
+                        '>': new Date(moment().subtract(num, 'days').startOf('day')),
+                        '<': new Date(moment().subtract(num, 'days').endOf('day'))
+                    }
+                };
+
+                
+                OGLog.find(query)
+                    .then(function (logs) {
+                        if (params.id) {
+                            logs = _.filter(logs, {message: {adId: params.id}})
+                        }
+                        else {
+                            Ad.find({creator: req.session.user.id}) //TODO this is bad
+                                .then(function (ads) {
+                                    var ids = _.map(ads, 'id')
+                                    logs = _.filter(logs, function (l) {
+                                        return (_.findIndex(ids, function (id) {
+                                            return id == l.message.adId
+                                        }) > -1)
+                                    })
+                                })
+
+                        }
+                        impressions[6 - num] = logs.length;
+                        cb();
+                    })
+            },
+            function (err) {
+                if (err)
+                    return res.serverError({error: err})
+                else {
+                    return res.ok(impressions)
+                }
+
+
+            }
+        )
+
+
+    },
+    forDevice: function (req, res) {
         var params = req.allParams()
 
-        if (!params.deviceId){
+        if (!params.deviceId) {
             //deal with this
             return res.badRequest({error: "No device id"})
         }

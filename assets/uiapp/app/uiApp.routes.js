@@ -979,13 +979,18 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                     return $http.get("/ad/dailyCount?date=" + d).then(function (logs) {
                         return logs.data;
                     })
-
+//could use nucleus.getMe for the user id for the query. tough with session stuff though 
 
                 },
                 logsYesterday: function ($http) {
                     var d = moment().subtract(1, 'day').format("YYYY-MM-DD")
                     return $http.get("/ad/dailyCount?date=" + d).then(function (logs) {
                         return logs.data;
+                    })
+                },
+                weekly: function($http){
+                    return $http.get("ad/weeklyImpressions").then(function(data){
+                        return data.data; 
                     })
                 }
             }

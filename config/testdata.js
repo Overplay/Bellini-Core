@@ -3,10 +3,10 @@
  */
 
 //Note: test data will be duplicated if being run on a cluster! 
-
+var moment = require('moment')
 var Promise = require('bluebird');
 var adName = 'Landshark';
-var adDate = 'September 2'; //TODO
+var adDate = 'September 6'; //TODO
 var self = module.exports.testdata = {
 
     installTestData: false,
@@ -142,8 +142,6 @@ var self = module.exports.testdata = {
 
 
         });
-
-
 
 
         self.venues.forEach(function (v) {
@@ -329,6 +327,54 @@ var self = module.exports.testdata = {
                     })
             })
         })
+
+        chain = chain.then(function () {
+            sails.config.testdata.generateLogs();
+        })
+
+    },
+    generateLogs: function () {
+        sails.log.debug("generating hahahahaha fuck")
+        var logs = []
+        Device.find()
+            .then(function (devices) {
+                return Ad.find()
+                    .then(function (ads) {
+                        async.each(ads,
+                            function (ad, cb) {
+                                sails.log.debug(ad.name)
+                                var log = {
+                                    logType: 'impression',
+                                    message: {
+                                        adId: ad.id
+                                    }
+                                }
+                                var times = _.random(1000)
+                                var chain = Promise.resolve()
+                                _.times(times, function () {
+                                    //generate log with random device
+                                    log.deviceUniqueId = devices[_.random(devices.length -1)].id
+                                    log.loggedAt = new Date(moment().hours(_.random(23)))//.add(1, 'days')) //TODO randomize hours
+                                    //sails.log.debug(log.loggedAt)
+                                    logs.push(log)
+                                })
+                                cb();
+                            },
+                            function (err) {
+                                if (err)
+                                    sails.log.debug("fuck", err)
+                                else{
+                                    //sails.log.debug(logs.length)
+                                    OGLog.create(logs).then(function(l){})//sails.log.debug(l)})
+                                }
+                            })
+                    })
+            })
+            .catch(function (err) {
+                sails.log.debug(err)
+            })
+
+        //setTimeout(sails.config.testdata.generateLogs, 10000000);
 
     },
     users: [
@@ -829,7 +875,7 @@ var self = module.exports.testdata = {
             },
             loggedAt: new Date(adDate + ", 2016 21:40:00").toISOString()
         },
-        
+
         {
             logType: "impression",
             message: {
