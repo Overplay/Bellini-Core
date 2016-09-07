@@ -10,7 +10,7 @@ module.exports = {
     upload: function (req, res) {
 
         var params = req.allParams();
-
+        var chain = Promise.resolve();
 
         if (!params.logType)
             return res.badRequest({error: "Missing log type"});
@@ -21,14 +21,22 @@ module.exports = {
         if (!params.loggedAt)
             return res.badRequest({error: "Missing logged at time"});
 
-        params.loggedAt = new Date(params.loggedAt)
-        sails.log.debug(params)
+        params.loggedAt = new Date(params.loggedAt);
+        sails.log.debug(params);
 
-        OGLog.create(params)
-            .then( function (log) {
-                sails.log.debug(log)
-                return res.ok();
-            })
+        chain = chain.then( function () {
+            return OGLog.create(params)
+                .then( function (log) {
+                    if (log.logType == "alert") {
+                        return TwilioService.sendText('+13033249551', "RED ALERT!!!!");
+                    }
+                })
+
+        })
+
+        chain = chain.then( function () {
+            return res.ok();
+        })
             .catch( function (err) {
                 return res.serverError({error: err});
             })
@@ -37,7 +45,7 @@ module.exports = {
     //if device id in OGLog, include ad id? this is complicated 
     //more in the ad controller
     impressions: function (req, res) {
-        OGLog.find({logType: 'impression'})
+        OGLog.find({where: { logType: 'impression'}, sort: 'loggedAt DESC' })
             .then(function(logs) {
                 return res.ok(logs); //all logs
             })
@@ -50,10 +58,9 @@ module.exports = {
 
         var id = req.allParams().id;
 
-        OGLog.find({logType: 'heartbeat'})
-            .sort('loggedAt DESC')
+        OGLog.find({ where: { logType: 'heartbeat'}, sort: 'loggedAt DESC'})
             .then( function (logs) {
-                var venueLogs = _.filter(logs, function (o) { return o.deviceUniqueId === id });
+                var venueLogs = _.filter(logs, function (o) { return o.deviceUniqueId == id });
                 return res.json(venueLogs);
             })
             .catch(function(err){

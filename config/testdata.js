@@ -90,7 +90,7 @@ var self = module.exports.testdata = {
                 return Auth.findOne({email: email})
                     .then(function (a) {
                         if (a) {
-                            sails.log.debug("User exists")
+                            sails.log.debug("User exists");
                             return new Error("user already in system")
                         }
                         else {
@@ -113,9 +113,9 @@ var self = module.exports.testdata = {
             delete a.creatorEmail;
 
             chain = chain.then(function () {
-                Auth.findOne({email: creatorEmail})
+                return Auth.findOne({email: creatorEmail})
                     .then(function (u) {
-                        a.creator = u.user.id;
+                        a.creator = u.user;
                         return Ad.findOne(a)
                             .then(function (ad) {
                                 if (ad) {
@@ -525,7 +525,7 @@ var self = module.exports.testdata = {
             lastName: 'Salas',
             email: 'elizabeth@test.com',
             password: 'pa$$word',
-            roleNames: [{role: "proprietor", subRole: "owner"}, {role: "user", subRole: ""}],
+            roleNames: [{role: "proprietor", subRole: "owner"}, {role: "user", subRole: ""}, {role: "advertiser", subRole: ""}],
             organizationEmail: "dr@test.com"
         },
         {
@@ -979,4 +979,3 @@ var self = module.exports.testdata = {
 
     ]
 };
-

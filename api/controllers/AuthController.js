@@ -82,7 +82,7 @@ module.exports = require( 'waterlock' ).waterlocked( {
 
 
         } else {
-            res.badRequest("Neither email nor reset token specified");
+            res.badRequest({ error : "Neither email nor reset token specified" });
         }
 
 

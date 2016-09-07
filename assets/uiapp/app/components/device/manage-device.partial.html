@@ -31,7 +31,40 @@
                     </div>
                     <div class="col-sm-6 col-md-12 col-lg-6">
                         <div class="panel-heading">
-                            <h3>Last Heartbeat</h3>
+                            <h3>Heartbeat</h3>
+                        </div>
+                        <div class="panel-body">
+                            <h4 ng-if="!heartbeats.length">No Heartbeat Found</h4>
+                            <div ng-if="heartbeats.length">
+                                <form name="heartbeatSelector">
+                                    <select name="select" id="hbSelect" class="form-control"
+                                            ng-options="heartbeat.loggedAt | date:'MMM d, yyyy - H:mm:ss' for heartbeat in heartbeats"
+                                            ng-model="selectedHeartbeat"></select>
+                                </form>
+                                <table class="table table-striped top15" ng-if="heartbeats">
+                                    <tr>
+                                        <td>Device ID</td>
+                                        <td>{{ selectedHeartbeat.deviceUniqueId }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Uptime</td>
+                                        <td>{{ selectedHeartbeat.message.uptime }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Software Revisions</td>
+                                        <td>Amstel Bright:<br>{{ selectedHeartbeat.message.softwareVersions.amstelBright }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td>Aqui:<br>{{ selectedHeartbeat.message.softwareVersions.aqui }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td>OS:<br>{{ selectedHeartbeat.message.softwareVersions.android }}</td>
+                                    </tr>
+                                </table>
+                            </div>
+
                         </div>
                     </div>
 

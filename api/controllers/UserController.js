@@ -27,7 +27,7 @@ module.exports = require('waterlock').actions.user({
         Auth.findOne({email: req.query.email})
             .then(function (auth) {
                 if (auth)
-                    return res.ok('found user');
+                    return res.ok();
                 else
                     return res.notFound({error: 'No such user'});
 
@@ -258,7 +258,7 @@ module.exports = require('waterlock').actions.user({
                     }
                     else {
                         //failure
-                        return res.json({message: "Not found"})
+                        return res.json(500, {"error": "Not found"})
                     }
                 })
         }
@@ -345,7 +345,7 @@ module.exports = require('waterlock').actions.user({
                             })
                         }
                         else //user not found hahaha fuckkkk bad token probably 
-                            return res.badRequest("No user found with that email")
+                            return res.badRequest({ error : "No user found with that email" })
 
                     })
             }

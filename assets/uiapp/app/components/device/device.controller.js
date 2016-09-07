@@ -203,7 +203,7 @@ app.controller("editDeviceAdminController", function ($scope, $state, $log, devi
 
 });
 
-app.controller("editDeviceOwnerController", function ($scope, $state, $log, device, toastr, uibHelper, nucleus, user, $http, links, edit) {
+app.controller("editDeviceOwnerController", function ($scope, $state, $log, device, toastr, uibHelper, nucleus, user, $http, links, edit, heartbeat) {
     $log.debug("editDeviceOwnerController starting");
 
     $scope.edit = edit;
@@ -216,6 +216,8 @@ app.controller("editDeviceOwnerController", function ($scope, $state, $log, devi
     $scope.setForm = function (form) {
         $scope.form = form;
     };
+    $scope.heartbeats = heartbeat;
+    $scope.selectedHeartbeat = $scope.heartbeats[0];
 
     $http.get("api/v1/user/" + user.id) //nucleus.getMe doesn't populate ownedVenues (nucleus uses and auth endpoint in getMe)
         .then(function(u){

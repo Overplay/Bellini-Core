@@ -70,6 +70,11 @@ module.exports = {
 
         organization: {
             model: 'Organization'
+        },
+
+        textHistory: {
+            type: 'array',
+            defaultsTo: []
         }
     },
 

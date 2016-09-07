@@ -104,6 +104,10 @@ module.exports.policies = {
         'destroy': ['sessionAuth', 'isAdmin']
     },
 
+    SMSController: {
+        '*': true,
+        'notify': ['limitSMS']
+    },
 
     UserController: {
         '*': true,

@@ -626,6 +626,12 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                         {link: 'device.adminList', text: 'All Devices'},
                         {link: 'device.adminAdd', text: 'Add Device'}
                     ]
+                },
+                heartbeat: function ($http, $stateParams) {
+                    $http.get('/OGLog/deviceHeartbeat', { params : { id : $stateParams.id }})
+                        .then( function (log) {
+                            return log;
+                        })
                 }
             }
         })
@@ -656,6 +662,12 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                         {link: 'device.list', text: 'My Devices'},
                         {link: 'device.add', text: 'Add Device'}
                     ]
+                },
+                heartbeat: function ($http, $stateParams) {
+                    return $http.get('/OGLog/deviceHeartbeat', { params: { id : $stateParams.id }})
+                        .then( function (data) {
+                            return data.data;
+                        })
                 }
             }
         })
