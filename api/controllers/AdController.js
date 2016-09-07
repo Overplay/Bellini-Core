@@ -149,7 +149,12 @@ module.exports = {
                 fill: {
                     fgColor: { rgb: 'FFF0F0F0' }
                 },
-                alignment: { wrapText: true }
+                alignment: { wrapText: false }
+            },
+            cellDate: {
+                fill: { fgColor: { rgb: 'FFF0F0F0' }},
+                alignment: { wrapText: false },
+                numFmt: "MM/DD/YY H:MM:SS"
             },
             cellDark: {
                 fill: {
@@ -168,75 +173,114 @@ module.exports = {
                         return OGLog.find({ logType: "impression" })
                             .sort('loggedAt DESC')
                             .then( function (logs) {
-                                impressions = _.filter(logs, function (o) { return o.message.adId == id })
+                                impressions = _.filter(logs, { message: { adId: id }});
+                                return impressions;
                             })
-
                     }
                 })
-        })
+        });
 
         chain = chain.then( function () {
-            var report = excel.buildExport(
-                [{
-                    name: 'Advertisement Info',
-                    specification: {
-                        name: {
-                            displayName: 'Name',
-                            width: 120,
-                            headerStyle: styles.headerDark,
-                            cellStyle: styles.cellLight
-                        },
-                        description: {
-                            displayName: 'Description',
-                            width: 120,
-                            headerStyle: styles.headerDark,
-                            cellStyle: styles.cellLight
-                        },
-                        reviewed: {
-                            displayName: 'Reviewed',
-                            width: 80,
-                            headerStyle: styles.headerDark,
-                            cellStyle: styles.cellLight
-                        },
-                        accepted: {
-                            displayName: 'Accepted',
-                            width: 80,
-                            headerStyle: styles.headerDark,
-                            cellStyle: styles.cellLight
-                        },
-                        paused: {
-                            displayName: 'Paused',
-                            width: 80,
-                            headerStyle: styles.headerDark,
-                            cellStyle: styles.cellLight
-                        },
-                        deleted: {
-                            displayName: 'Deleted',
-                            width: 80,
-                            headerStyle: styles.headerDark,
-                            cellStyle: styles.cellLight
-                        }
+            if (impressions) {
+                async.each(impressions, function (log, cb) {
+                        return Device.findOne(log.deviceUniqueId) //TODO this is gonna change what key is used
+                            .populate('venue')
+                            .then(function (dev) {
+                                var venue = dev.venue;
+                                var addr = venue.address;
+                                log.venue = venue.name +
+                                    " (" + addr.street +
+                                    (addr.street2 ? " " + addr.street2 : "") +
+                                    " " + addr.city +
+                                    ", " + addr.state +
+                                    " " + addr.zip + ")";
+                                cb()
+                            })
+                            .catch(function (err) {
+                                return cb(err)
+                            })
                     },
-                    data: [{
-                        name: ad.name,
-                        description: ad.description,
-                        // creator: ad.creator.firstName + " " + ad.creator.lastName,
-                        reviewed: ad.reviewed ? "True" : "False",
-                        accepted: ad.accepted ? "True" : "False",
-                        paused: ad.paused ? "True" : "False",
-                        deleted: ad.deleted ? "True" : "False"
-                    }]
-                },
-                {
-                    name: 'Impressions',
-                    specification: {
+                    function (err) {
+                        if (err) {
+                            return res.serverError(err)
+                        }
+                        else {
+                            var report = excel.buildExport(
+                                [{
+                                    name: 'Advertisement Info',
+                                    specification: {
+                                        name: {
+                                            displayName: 'Name',
+                                            width: 120,
+                                            headerStyle: styles.headerDark,
+                                            cellStyle: styles.cellLight
+                                        },
+                                        description: {
+                                            displayName: 'Description',
+                                            width: 120,
+                                            headerStyle: styles.headerDark,
+                                            cellStyle: styles.cellLight
+                                        },
+                                        reviewed: {
+                                            displayName: 'Reviewed',
+                                            width: 80,
+                                            headerStyle: styles.headerDark,
+                                            cellStyle: styles.cellLight
+                                        },
+                                        accepted: {
+                                            displayName: 'Accepted',
+                                            width: 80,
+                                            headerStyle: styles.headerDark,
+                                            cellStyle: styles.cellLight
+                                        },
+                                        paused: {
+                                            displayName: 'Paused',
+                                            width: 80,
+                                            headerStyle: styles.headerDark,
+                                            cellStyle: styles.cellLight
+                                        },
+                                        deleted: {
+                                            displayName: 'Deleted',
+                                            width: 80,
+                                            headerStyle: styles.headerDark,
+                                            cellStyle: styles.cellLight
+                                        }
+                                    },
+                                    data: [{
+                                        name: ad.name,
+                                        description: ad.description,
+                                        // creator: ad.creator.firstName + " " + ad.creator.lastName,
+                                        reviewed: ad.reviewed ? "True" : "False",
+                                        accepted: ad.accepted ? "True" : "False",
+                                        paused: ad.paused ? "True" : "False",
+                                        deleted: ad.deleted ? "True" : "False"
+                                    }]
+                                },
+                                    {
+                                        name: 'Impressions',
+                                        specification: {
+                                            venue: {
+                                                displayName: "Venue",
+                                                width: 200,
+                                                headerStyle: styles.headerDark,
+                                                cellStyle: styles.cellLight
+                                            },
+                                            loggedAt: {
+                                                displayName: "Time Shown",
+                                                width: 160,
+                                                headerStyle: styles.headerDark,
+                                                cellStyle: styles.cellDate
+                                            }
+                                        },
+                                        data: impressions
+                                    }]
+                            );
 
-                    }
-                }]
-            );
-
-            res.attachment('AdReport.xlsx');
-            return res.send(200, report);
+                            res.attachment('AdReport.xlsx');
+                            return res.send(200, report);
+                        }
+                    })
+            }
         })
     },
 

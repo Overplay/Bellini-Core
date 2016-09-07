@@ -15,8 +15,8 @@ module.exports = function limitSMS (req, res, next) {
                 var textHistory = _.filter(device.venue.textHistory, function (o) { return o > (Date.now() - (60 * 1000)) });
                 Venue.update(device.venue.id, { textHistory: textHistory })
                     .then( function (v) {
-                        if (textHistory.length > 9)
-                            return res.forbidden({ "error" : "Text limit reached" })
+                        if (textHistory.length >= 10)
+                            return res.forbidden({ "error" : "Text limit reached" });
                         else
                             next();
                     })
