@@ -87,12 +87,12 @@ app.controller("adminDashController", function ($scope, $log, ads, userCount, de
 });
 
 
-app.controller("adDashController", function($scope, $log, ads, $http){
+app.controller("adDashController", function($scope, $log, ads, $http, logsToday, logsYesterday){
     $log.log("starting adDashController")
     $scope.$parent.selected = "advertiser"
 
-    //$scope.logsToday = logsToday
-    //$scope.logsYesterday = logsYesterday
+    $scope.logsToday = logsToday
+    $scope.logsYesterday = logsYesterday
     //TODO potentially return 0s with all ads without logs so graph still shows
     /*$scope.logsToday = [0]
     $scope.logsYesterday = [0]

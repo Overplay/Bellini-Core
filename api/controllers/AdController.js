@@ -123,7 +123,6 @@ module.exports = {
         
         if (!req.allParams().id)
             return res.badRequest({error: "Missing ad id"});
-            return res.badRequest({ "error" : "Missing ad id" });
 
         var id = req.allParams().id;
         var chain = Promise.resolve();
