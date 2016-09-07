@@ -9,7 +9,7 @@ var adName = 'Advertisement One!';
 var adDate = 'September 7'; //TODO
 var self = module.exports.testdata = {
 
-    installTestData: true,
+    installTestData: false,
     eraseOldData: false,
 
     install: function () {
@@ -329,8 +329,7 @@ var self = module.exports.testdata = {
         })
 
         chain = chain.then(function () {
-            OGLog.destroy({logType: 'impression'})
-                .then(function(){sails.config.testdata.generateLogs();}) 
+            sails.config.testdata.generateLogs();
             
         })
 
