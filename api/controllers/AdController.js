@@ -535,6 +535,10 @@ module.exports = {
                         .then(function(logs){
                             var e2 = new Date().getTime()
                             sails.log.debug("what time", (e2-end))
+                            return Promise.resolve()
+                        })
+                        .catch(function(err){
+                            return res.serverError({error: err})
                         })
                     sails.log.debug("Exec Time " + (end - start))
                     return res.ok(impressions)
