@@ -988,11 +988,11 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                         return logs.data;
                     })
                 },
-                weekly: function($http){
+                /*weekly: function($http){
                     return $http.get("ad/weeklyImpressions").then(function(data){
                         return data.data; 
                     })
-                }
+                }*/
             }
         })
 

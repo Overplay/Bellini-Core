@@ -5,8 +5,8 @@
 //Note: test data will be duplicated if being run on a cluster! 
 var moment = require('moment')
 var Promise = require('bluebird');
-var adName = 'Landshark';
-var adDate = 'September 6'; //TODO
+var adName = 'Advertisement One!';
+var adDate = 'September 7'; //TODO
 var self = module.exports.testdata = {
 
     installTestData: false,
@@ -349,14 +349,14 @@ var self = module.exports.testdata = {
                                         adId: ad.id
                                     }
                                 }
-                                var times = _.random(1000)
+                                var times = _.random(100)
                                 var chain = Promise.resolve()
                                 _.times(times, function () {
                                     //generate log with random device
                                     log.deviceUniqueId = devices[_.random(devices.length -1)].id
-                                    log.loggedAt = new Date(moment().hours(_.random(23)))//.add(1, 'days')) //TODO randomize hours
+                                    log.loggedAt = new Date(moment().hours(_.random(23))).toISOString()//.add(1, 'days')) //TODO randomize hours
                                     //sails.log.debug(log.loggedAt)
-                                    logs.push(log)
+                                    OGLog.create(log)//.then(function(l){sails.log.debug(l)})
                                 })
                                 cb();
                             },
@@ -364,8 +364,8 @@ var self = module.exports.testdata = {
                                 if (err)
                                     sails.log.debug("fuck", err)
                                 else{
-                                    //sails.log.debug(logs.length)
-                                    OGLog.create(logs).then(function(l){})//sails.log.debug(l)})
+                                    sails.log.debug("Done")
+                                    //OGLog.create(logs).then(function(l){sails.log.debug(l)})
                                 }
                             })
                     })

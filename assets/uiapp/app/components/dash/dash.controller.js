@@ -87,14 +87,23 @@ app.controller("adminDashController", function ($scope, $log, ads, userCount, de
 });
 
 
-app.controller("adDashController", function($scope, $log, ads, logsToday, logsYesterday, weekly){
+app.controller("adDashController", function($scope, $log, ads, $http){
     $log.log("starting adDashController")
     $scope.$parent.selected = "advertiser"
 
-    $scope.logsToday = logsToday
-    $scope.logsYesterday = logsYesterday
+    //$scope.logsToday = logsToday
+    //$scope.logsYesterday = logsYesterday
     //TODO potentially return 0s with all ads without logs so graph still shows
-    
+    /*$scope.logsToday = [0]
+    $scope.logsYesterday = [0]
+    var d = moment().format("YYYY-MM-DD")
+     $http.get("/ad/dailyCount?date=" + d).then(function (logs) {
+        $scope.logsToday = [logs.data]
+    })
+    $http.get("/ad/dailyCount?date=" + moment().subtract(1, 'day').format("YYYY-MM-DD")).then(function (logs) {
+        $scope.logsYesterday = [logs.data]
+
+    })*/
 
     $scope.keys = _.union(_.keys($scope.logsYesterday), _.keys($scope.logsToday))
 
@@ -129,7 +138,7 @@ app.controller("adDashController", function($scope, $log, ads, logsToday, logsYe
     //bar for top 10 performing ads?
     $scope.barLabels = _.keys($scope.logs);
     if(!$scope.barLabels.length)
-        $scope.barLabels = ["No Data"]
+        $scope.barLabels = [""]
 
     //this week vs last week
     $scope.barSeries = ["Yesterday's Impressions","Today's Impressions"];
@@ -148,9 +157,16 @@ app.controller("adDashController", function($scope, $log, ads, logsToday, logsYe
         $scope.barData[0] = [0]
         $scope.barData[1] = [0]
     }
-    
-    $scope.weeklyData = [weekly]
 
+    //$scope.weeklyData = weekly
+
+    $scope.weeklyData = [[0,0,0,0,0,0,0]]
+
+
+    //loads page while querying - might speed things up a little?
+    $http.get("ad/weeklyImpressions").then(function(data) {
+        $scope.weeklyData = [data.data]
+    })
 
 
     var day = moment().subtract(7, 'days')
@@ -162,6 +178,17 @@ app.controller("adDashController", function($scope, $log, ads, logsToday, logsYe
 
     $scope.weeklyOptions = {
         elements: { line: {tension: 0 } },
+        scales: {
+            yAxes: [
+                {
+                    display: true,
+                    ticks: {
+                        beginAtZero: true,
+                        //TODO handle small scales (all zeroes)
+                    }
+                }
+            ]
+        }
 
     }
     $scope.weeklySeries = ["Total Impressions"]

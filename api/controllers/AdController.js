@@ -328,8 +328,11 @@ module.exports = {
             })
     },
 
+    //TODO lots of impressions = long load time 
     //maybe an impression endpoint that does hourly counts for each ad for a certain date
     dailyCount: function (req, res) { // TODO only get session users ads :) 
+        var start = new Date().getTime()
+        
         var params = req.allParams()
         if (!params.date) {
             return res.badRequest({error: "No date given"})
@@ -346,7 +349,6 @@ module.exports = {
         OGLog.find(query)
             .then(function (logs) {
                 if (params.id) {
-                    //logs by adId TODO
                     logs = _.filter(logs, {message: {adId: params.id}})
                 }
                 else {
@@ -377,6 +379,9 @@ module.exports = {
                         return res.serverError({error: err})
                     else {
                         logs = _.groupBy(logs, 'adName')
+                        
+                        var end = new Date().getTime()
+                        sails.log.debug("Daily count time " + (end - start))
                         return res.ok(logs)
                     }
                 })
@@ -389,12 +394,47 @@ module.exports = {
 
 
     //it might be cool to sort by ad name by day but thats complex
-    weeklyImpressions: function (req, res) {
-        //get weeky impressions for all user ads
-        //sum?
-        var params = req.allParams()
+    weeklyImpressions: function (req, res) { //takes hella long to query ugh 
+        var start = new Date().getTime()
         var logs = []
         var impressions = [0, 0, 0, 0, 0, 0]
+
+       /*var query = {
+            logType: 'impression',
+            loggedAt: {
+                '>': new Date(moment().subtract(0, 'days').startOf('day')),
+                '<': new Date(moment().endOf('day'))
+            }
+        };
+        var start = new Date().getTime();
+        OGLog.find(query)
+            .then(function(logs){
+                var other = new Date().getTime();
+                sails.log.debug("query time " + (other - start))
+                    return Ad.find({creator: req.session.user.id}) //TODO this is bad
+                        .then(function (ads) {
+
+                            var ids = _.map(ads, 'id')
+                            logs = _.filter(logs, function (l) {
+                                return (_.findIndex(ids, function (id) {
+                                    return id == l.message.adId
+                                }) > -1)
+                            })
+                            var grouped = _.groupBy(logs, function(log){
+                                return moment(log.loggedAt).format("YYYY-MM-DD")
+                            })
+                            sails.log.debug(_.keys(grouped))
+                            var counts = _.map(grouped, function(g){
+                                return g.length
+                            })
+                            sails.log.debug(counts)
+
+                            return res.ok(counts)
+                        })
+            })*/
+
+
+
         async.each([6, 5, 4, 3, 2, 1, 0],
             function (num, cb) {
                 var query = {
@@ -405,32 +445,50 @@ module.exports = {
                     }
                 };
 
-                
+                var start = new Date().getTime()
+
                 OGLog.find(query)
                     .then(function (logs) {
-                        if (params.id) {
-                            logs = _.filter(logs, {message: {adId: params.id}})
-                        }
-                        else {
-                            Ad.find({creator: req.session.user.id}) //TODO this is bad
-                                .then(function (ads) {
-                                    var ids = _.map(ads, 'id')
-                                    logs = _.filter(logs, function (l) {
-                                        return (_.findIndex(ids, function (id) {
-                                            return id == l.message.adId
-                                        }) > -1)
-                                    })
+                        var other = new Date().getTime()
+                        sails.log.debug("Query time = " + (other - start))
+                        return Ad.find({creator: req.session.user.id}) //TODO this is bad
+                            .then(function (ads) {
+                                
+                                var ids = _.map(ads, 'id')
+                                logs = _.filter(logs, function (l) {
+                                    return (_.findIndex(ids, function (id) {
+                                        return id == l.message.adId
+                                    }) > -1)
                                 })
 
-                        }
-                        impressions[6 - num] = logs.length;
-                        cb();
+                                impressions[6 - num] = logs.length;
+                                var end = new Date().getTime()
+                                sails.log.debug("inner inner Exec Time " + (end - other))
+
+                                sails.log.debug("inner Exec Time " + (end - start))
+                                cb();
+                                
+                            })
+                        
+                    })
+                    .catch(function(err){
+                        cb(err)
                     })
             },
             function (err) {
                 if (err)
                     return res.serverError({error: err})
                 else {
+                    var end = new Date().getTime()
+                    OGLog.find({logType: 'impression', loggedAt: {
+                            '>': new Date(moment().subtract(7, 'days').startOf('day')),
+                            '<': new Date(moment().subtract(0, 'days').endOf('day'))
+                        }})
+                        .then(function(logs){
+                            var e2 = new Date().getTime()
+                            sails.log.debug("what time", (e2-end))
+                        })
+                    sails.log.debug("Exec Time " + (end - start))
                     return res.ok(impressions)
                 }
 
