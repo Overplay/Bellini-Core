@@ -49,7 +49,7 @@ module.exports = {
         deviceObj.regCode = code;
         
 
-        Device.create(deviceObj)
+        return Device.create(deviceObj)
             .then(function (device) {
                 //sails.log.debug(device, "created");
                 return res.ok({code: device.regCode});

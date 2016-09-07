@@ -24,7 +24,7 @@ module.exports = require('waterlock').actions.user({
     //searches if the email is in use
     hasAccount: function (req, res) {
 
-        Auth.findOne({email: req.query.email})
+        return Auth.findOne({email: req.query.email})
             .then(function (auth) {
                 if (auth)
                     return res.ok();
@@ -51,7 +51,7 @@ module.exports = require('waterlock').actions.user({
         else
             return res.badRequest({ "error" : 'Not logged in and no given id' });
 
-        User.findOne({id: id})
+        return User.findOne({id: id})
             .populate("ownedVenues")
             .then(function (user) {
                 if (user) {
@@ -59,7 +59,6 @@ module.exports = require('waterlock').actions.user({
                     var devices = [];
 
                     var chain = Promise.resolve()
-
 
                     user.ownedVenues.forEach(function (venue) {
                         chain = chain.then(function () {
@@ -97,7 +96,7 @@ module.exports = require('waterlock').actions.user({
         else
             return res.badRequest({ "error" : 'Not logged in and no given id' })
 
-        User.findOne({id: id})
+        return User.findOne({id: id})
             .populate("managedVenues")
             .then(function (user) {
                 if (user) {
@@ -121,6 +120,8 @@ module.exports = require('waterlock').actions.user({
                         return res.json(devices)
                     })
 
+                    return chain;
+
                 }
                 else
                     return res.badRequest({ "error" : "User not found" });
@@ -143,7 +144,7 @@ module.exports = require('waterlock').actions.user({
         else
             return res.badRequest({ "error" : 'Not logged in and no given id' })
 
-        User.findOne({id: id})
+        return User.findOne({id: id})
             .populate("ownedVenues")
             .populate("managedVenues")
             .then(function (user) {
@@ -169,7 +170,7 @@ module.exports = require('waterlock').actions.user({
         else
             return res.badRequest({ "error" : 'Not logged in and no given id' })
 
-        Ad.find({creator: id})
+        return Ad.find({creator: id})
             .then(function (ads) {
                 if (ads) {
 
@@ -249,7 +250,7 @@ module.exports = require('waterlock').actions.user({
         if (!params.email) {
             res.badRequest({ "error" : "No email provided" });
         } else {
-            Auth.findOne({email: params.email})
+            return Auth.findOne({email: params.email})
                 .populate("user")
                 .then(function (auth) {
                     if (auth) {
@@ -313,7 +314,7 @@ module.exports = require('waterlock').actions.user({
                     return res.forbidden({ "error" : 'This token cannot be used for this request.' });
 
                 //token passes 
-                Auth.findOne({email: decoded.email})
+                return Auth.findOne({email: decoded.email})
                     .populate("user")
                     .then(function (auth) {
                         if (auth) {
@@ -365,7 +366,7 @@ module.exports = require('waterlock').actions.user({
         if (!req.session.user)
             return res.badRequest()
 
-        User.findOne(req.session.user.id)
+        return User.findOne(req.session.user.id)
             .then(function (u) {
                 u.roles = _.union(u.roles, [RoleCacheService.roleByName('advertiser')])
                 u.save(function (err) {

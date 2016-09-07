@@ -52,7 +52,7 @@ module.exports = {
 
         var newVenue = req.allParams();
 
-        User.findOne({id: req.session.user.id})
+        return User.findOne({id: req.session.user.id})
             .populate('auth')
             .then( function (user) {
                 if (user) {
@@ -64,7 +64,7 @@ module.exports = {
                         user.auth = auth; //save turns auth into an id
                         req.session.user = user;
                         sails.log.debug(req.session.user)
-                        Venue.create(newVenue)
+                        return Venue.create(newVenue)
                             .then(function (v) {
                                 //TODO test venue owners
                                 v.venueOwners.add(req.session.user);
@@ -87,7 +87,7 @@ module.exports = {
         if (!req.allParams().id)
             res.badRequest({ "error" : "No venue id specified" });
 
-        Venue.findOne({ id: req.allParams().id }).populate('venueManagers')
+        return Venue.findOne({ id: req.allParams().id }).populate('venueManagers')
             .then( function (venue) {
                 if (venue) {
                     return res.ok(venue.venueManagers);
@@ -101,7 +101,7 @@ module.exports = {
     },
     
     yelpSearch: function (req, res) {
-        yelp.search(req.allParams())
+        return yelp.search(req.allParams())
             .then(function (data) {
                 res.ok(data);
             })
@@ -111,7 +111,7 @@ module.exports = {
     },
 
     yelpBusiness: function (req, res) {
-        yelp.business(req.allParams().yelpId)
+        return yelp.business(req.allParams().yelpId)
             .then(function (data) {
                 res.ok(data);
             })
@@ -148,6 +148,8 @@ module.exports = {
                 })
         })
 
+        return chain;
+
     },
 
     addManager: function (req, res) {
@@ -158,7 +160,7 @@ module.exports = {
             res.badRequest({ "error" : "Missing params" });
 
         //have to add proprietor.manager role to user if not already there.
-        User.findOne(params.userId)
+        return User.findOne(params.userId)
             .populate("managedVenues")
             .populate("ownedVenues")
             .then(function (user) {
@@ -178,7 +180,7 @@ module.exports = {
                         user.save(function (err) {
                             if (err)
                                 sails.log.debug(err)
-                            Venue.findOne(params.id)
+                            return Venue.findOne(params.id)
                                 .populate("venueManagers")
                                 .then(function (venue) {
                                     return res.ok(venue.venueManagers)
@@ -204,7 +206,7 @@ module.exports = {
             res.badRequest({ "error" : "Missing params" });
 
         //have to add proprietor.owner role to user if not already there.
-        User.findOne(params.userId)
+        return User.findOne(params.userId)
             .populate("managedVenues")
             .populate("ownedVenues")
             .then(function (user) {
@@ -224,7 +226,7 @@ module.exports = {
                         user.save(function (err) {
                             if (err)
                                 sails.log.debug(err)
-                            Venue.findOne(params.id)
+                            return Venue.findOne(params.id)
                                 .populate("venueOwners")
                                 .then(function (venue) {
                                     return res.ok(venue.venueOwners)
@@ -246,7 +248,7 @@ module.exports = {
             res.badRequest({ "error" : "Missing params" });
 
         //have to remove from many to many and possibly role
-        User.findOne(params.userId)
+        return User.findOne(params.userId)
             .populate("managedVenues")
             .populate("ownedVenues")
             .then(function (user) {
@@ -264,7 +266,7 @@ module.exports = {
                     user.save(function (err) {
                         if (err)
                             sails.log.debug(err)
-                        Venue.findOne(params.id)
+                        return Venue.findOne(params.id)
                             .populate("venueManagers")
                             .then(function (venue) {
                                 return res.ok(venue.venueManagers)
@@ -330,7 +332,7 @@ module.exports = {
                             user.save(function (err) {
                                 if (err)
                                     sails.log.debug(err)
-                                Venue.findOne(params.id)
+                                return Venue.findOne(params.id)
                                     .populate("venueOwners")
                                     .then(function (venue) {
                                         return res.ok(venue.venueOwners)
@@ -347,11 +349,13 @@ module.exports = {
 
         })
 
+        return chain;
+
 
     },
 
     getMobileView: function (req, res) {
-        Venue.find({showInMobileAppMap: true})
+        return Venue.find({showInMobileAppMap: true})
             .then(function (venues) {
                 return res.ok(venues)
             })

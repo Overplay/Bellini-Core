@@ -7,7 +7,7 @@
 
 var _ = require('lodash');
 var excel = require('node-excel-export');
-var moment = require('moment')
+var moment = require('moment');
 
 module.exports = {
 
@@ -22,7 +22,7 @@ module.exports = {
         }
         var chain = Promise.resolve();
 
-        Ad.findOne(req.allParams().id)
+        return Ad.findOne(req.allParams().id)
             .then(function (a) {
 
                 var media = a.advert.media;
@@ -42,6 +42,8 @@ module.exports = {
                     //sails.log.debug(media)
                     return res.ok(media);
                 });
+
+                return chain;
             })
             .catch(function (err) {
                 //something bad
@@ -59,7 +61,7 @@ module.exports = {
             return res.badRequest({ "error" : "Invalid req params " })
         }
         else {
-            Ad.update(params.id, {accepted: params.accepted, reviewed: true})
+            return Ad.update(params.id, {accepted: params.accepted, reviewed: true})
                 .then(function (updated) {
                     if (updated.length == 1) {
                         if (params.accepted == false) { //rejected by admin 
@@ -83,7 +85,7 @@ module.exports = {
             return res.badRequest({ "error" : "Invalid req Params" })
         }
         else {
-            Ad.findOne(params.id)
+            return Ad.findOne(params.id)
                 .then(function (ad) {
                     ad.paused = !ad.paused;
                     ad.save(function (err) {
@@ -104,7 +106,7 @@ module.exports = {
             return res.badRequest({ "error" : "Invalid req Params" })
         }
         else {
-            Ad.findOne(params.id)
+            return Ad.findOne(params.id)
                 .then(function (ad) {
                     ad.deleted = !ad.deleted;
                     ad.save(function (err) {
@@ -154,7 +156,7 @@ module.exports = {
             cellDate: {
                 fill: { fgColor: { rgb: 'FFF0F0F0' }},
                 alignment: { wrapText: false },
-                numFmt: "MM/DD/YY H:MM:SS"
+                numFmt: "mmm d, yyyy - h:mm AM/PM"
             },
             cellDark: {
                 fill: {
@@ -282,10 +284,12 @@ module.exports = {
                     })
             }
         })
+
+        return chain;
     },
 
     forReview: function (req, res) {
-        Ad.find({where: {reviewed: false}, sort: 'createdAt ASC'})
+        return Ad.find({where: {reviewed: false}, sort: 'createdAt ASC'})
             .then(function (ads) {
                 return res.ok(ads)
             })
@@ -304,7 +308,7 @@ module.exports = {
         else {
             params.ad.reviewed = false;
             params.ad.accepted = false;
-            Ad.update(params.ad.id, params.ad)
+            return Ad.update(params.ad.id, params.ad)
                 .then(function (ads) {
                     if (ads.length > 1) {
                         return res.serverError({ "error" : "no freaking way. multiple ads updated" })
@@ -323,7 +327,7 @@ module.exports = {
     ,
 
     getAccepted: function (req, res) {
-        Ad.find({reviewed: true, accepted: true, deleted: false})
+        return Ad.find({reviewed: true, accepted: true, deleted: false})
             .then(function (ads) {
                 return res.ok(ads)
             })
@@ -341,7 +345,7 @@ module.exports = {
         var id = params.id;
 
         var adLogs;
-        OGLog.find({logType: 'impression'})
+        return OGLog.find({logType: 'impression'})
             .then(function (logs) {
                 adLogs = _.filter(logs, {message: {adId: id}})
                 async.each(adLogs, function (log, cb) {
@@ -385,7 +389,7 @@ module.exports = {
                 '<': moment(new Date(params.date)).endOf('day').toDate()
             }
         }
-        OGLog.find(query)
+        return OGLog.find(query)
             .then(function (logs) {
                 if (params.id) {
                     //logs by adId TODO
