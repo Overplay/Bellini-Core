@@ -396,7 +396,7 @@ module.exports = {
                     logs = _.filter(logs, {message: {adId: params.id}})
                 }
                 else {
-                    Ad.find({creator: req.session.user.id}) //TODO this is bad
+                    return Ad.find({creator: req.session.user.id}) //TODO this is bad
                         .then(function (ads) {
                             var ids = _.map(ads, 'id')
                             logs = _.filter(logs, function (l) {
@@ -405,6 +405,10 @@ module.exports = {
                                 }) > -1)
                             })
                         })
+                        .catch(function(err){
+                            return res.serverError({error: err})
+                        })
+                    
 
                 }
 
