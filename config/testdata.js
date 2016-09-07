@@ -9,7 +9,7 @@ var adName = 'Advertisement One!';
 var adDate = 'September 7'; //TODO
 var self = module.exports.testdata = {
 
-    installTestData: false,
+    installTestData: true,
     eraseOldData: false,
 
     install: function () {
@@ -356,7 +356,7 @@ var self = module.exports.testdata = {
                                     log.deviceUniqueId = devices[_.random(devices.length -1)].id
                                     log.loggedAt = new Date(moment().hours(_.random(23))).toISOString()//.add(1, 'days')) //TODO randomize hours
                                     //sails.log.debug(log.loggedAt)
-                                    OGLog.create(log)//.then(function(l){sails.log.debug(l)})
+                                    OGLog.create(log).then(function(l){})
                                 })
                                 cb();
                             },

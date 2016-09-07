@@ -344,7 +344,7 @@ module.exports = {
         OGLog.find({logType: 'impression'})
             .then(function (logs) {
                 adLogs = _.filter(logs, {message: {adId: id}})
-                async.each(adLogs, function (log, cb) {
+                return async.each(adLogs, function (log, cb) {
                         return Device.findOne(log.deviceUniqueId) //TODO this is gonna change what key is used
                             .populate('venue')
                             .then(function (dev) {
@@ -491,7 +491,7 @@ module.exports = {
 
                 var start = new Date().getTime()
 
-                OGLog.find(query)
+                return OGLog.find(query)
                     .then(function (logs) {
                         var other = new Date().getTime()
                         sails.log.debug("Query time = " + (other - start))
