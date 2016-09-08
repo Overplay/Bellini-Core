@@ -454,7 +454,7 @@ module.exports = {
     weeklyImpressions: function (req, res) { //takes hella long to query ugh 
         var start = new Date().getTime()
         var logs = []
-        var impressions = [0, 0, 0, 0, 0, 0]
+        var impressions = [0, 0, 0, 0, 0, 0, 0]
 
        /*var query = {
             logType: 'impression',
@@ -502,6 +502,8 @@ module.exports = {
                     }
                 };
 
+
+                sails.log.debug(query)
                 var start = new Date().getTime()
 
                 return OGLog.find(query)
@@ -550,6 +552,9 @@ module.exports = {
                             return res.serverError({error: err})
                         })
                     sails.log.debug("Exec Time " + (end - start))
+
+                    sails.log.debug(impressions)
+
                     return res.ok(impressions)
                 }
 
