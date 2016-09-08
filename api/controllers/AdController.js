@@ -336,35 +336,44 @@ module.exports = {
     impressions: function (req, res) {
         var params = req.allParams();
         if (!params.id) {
-            return res.badRequest({error: "No Id"})
+            return res.badRequest({error: "No Id provided"})
         }
         var id = params.id;
 
-        var adLogs;
-        OGLog.find({logType: 'impression'})
-            .then(function (logs) {
-                adLogs = _.filter(logs, {message: {adId: id}})
-                return async.each(adLogs, function (log, cb) {
-                        return Device.findOne(log.deviceUniqueId) //TODO this is gonna change what key is used
-                            .populate('venue')
-                            .then(function (dev) {
-                                log.venue = dev.venue;
-                                cb()
-                            })
-                            .catch(function (err) {
-                                return cb(err)
-                            })
-                    },
-                    function (err) {
-                        if (err) {
-                            return res.serverError({error: err})
-                        }
-                        else {
-                            return res.ok(adLogs)
+        Ad.findOne(id)
+            .then(function(ad){
+                if (!ad){
+                    res.notFound({error: "Ad Id does not exist"})
+                }
+                else {
+                    var adLogs;
+                    return OGLog.find({logType: 'impression'})
+                        .then(function (logs) {
+                            adLogs = _.filter(logs, {message: {adId: id}})
+                            return async.each(adLogs, function (log, cb) {
+                                    return Device.findOne(log.deviceUniqueId) //TODO this is gonna change what key is used
+                                        .populate('venue')
+                                        .then(function (dev) {
+                                            log.venue = dev.venue;
+                                            cb()
+                                        })
+                                        .catch(function (err) {
+                                            return cb(err)
+                                        })
+                                },
+                                function (err) {
+                                    if (err) {
+                                        return res.serverError({error: err})
+                                    }
+                                    else {
+                                        return res.ok(adLogs)
 
-                        }
+                                    }
 
-                    })
+                                })
+                        })
+
+                }
             })
 
             .catch(function (err) {
@@ -550,6 +559,58 @@ module.exports = {
 
 
     },
+
+    //TODO impressions for an ad given a certain time period
+    timeSpanImpressions: function(req, res){
+        var params = req.allParams();
+        
+        if (!params.id || !params.start || !params.end){
+            return res.badRequest({error: "Missing params"})
+        }
+        
+        Ad.findOne(params.id)
+            .then(function(ad){
+                if (!ad)
+                    return res.notFound({error: "Bad ad ID "})
+                var start = new Date(moment(params.start, "YYYY-MM-DD"))
+                var end = new Date(moment(params.end, "YYYY-MM-DD"))
+                sails.log.debug(start, end, (start-end))
+                
+                if ((start - end) > 0)
+                    return res.badRequest({error: "dates are not right"})
+                var query = {
+                    logType: 'impression',
+                    loggedAt: {
+                        '>': start,
+                        '<': end
+                    }
+                }
+                OGLog.find(query)
+                    .then(function(logs){
+                        logs = _.filter(logs, {message: {adId: params.id}})
+                        var grouped = _.groupBy(logs, function(log){
+                            return moment(log.loggedAt).format("YYYY-MM-DD")
+                        })
+                        
+                        var counts = {}
+                        _.times((moment(end).diff(moment(start), 'days')) +1, function(num){
+                            var date = moment(start).add(num, 'days').format("YYYY-MM-DD")
+                            counts[date] = grouped[date] ? grouped[date].length : 0
+                        })
+                        //sails.log.debug(counts)
+
+                        return res.ok(counts)
+                    })
+                    .catch(function(err){
+                        return res.serverError({error: err})
+                    })
+            })
+            .catch(function(err){
+                return res.serverError({error: err})
+            })
+        
+    },
+    
     forDevice: function (req, res) {
         var params = req.allParams()
 

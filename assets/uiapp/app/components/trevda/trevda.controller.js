@@ -100,93 +100,100 @@ app.controller("manageAdvertisementController", function ($scope, $log, $http, t
 });
 
 
-app.controller("editAdvertisementController", function ($scope, $log, $http, $stateParams, $state, toastr, asahiService, links, advertisement, uibHelper, admin, impressions, logs) {
+app.controller("editAdvertisementController", function ($scope, $log, $http, $stateParams, $state, toastr, asahiService, links, advertisement, uibHelper, admin) {
     $log.debug("editAdvertisementController starting");
     $scope.advertisement = advertisement;
 
-    $scope.datePopup = {opened: false}
-    $scope.open = function () {
-        $scope.datePopup.opened = true;
+    $scope.impressionsLoading = true;
+    $http.get("ad/impressions/" + $stateParams.id)
+        .then(function (data) {
+            $scope.impressions = data.data;
+            $scope.venues = _.toArray(_.groupBy($scope.impressions, function (el) {
+                return el.venue.name;
+            }))
+            $scope.impressionsLoading = false;
+        })
+
+    $scope.datePopup = {daily: false, start: false, end: false}
+    $scope.open = function (toOpen) {
+        $scope.datePopup[toOpen] = true;
     }
-    $scope.dt = {date: new Date()};
+    $scope.dt = {daily: new Date(), start: new Date(moment().subtract(7, 'days')), end: new Date()};
 
-
+    $scope.loadingDaily = true;
+    $scope.loadingTimeSpan = true;
     $scope.format = 'shortDate'
     $scope.dateOptions = {maxDate: new Date()}
-    $scope.logs = logs;
-    //todo arrows?
+    $scope.startOptions = {maxDate: $scope.dt.end}
+
+
+    //TODO maybe loading symbols for every req
+    $scope.newTimeSpan = function () {
+        var st = moment($scope.dt.start);
+        var e = moment($scope.dt.end);
+        if (st.isAfter(e)) {
+            st = moment(e).subtract(7, 'days')
+            $scope.dt.start = new Date(st)
+        }
+        //check dates? 
+        $http.get("/ad/timeSpanImpressions?start=" + st.format("YYYY-MM-DD") + "&end=" + e.format("YYYY-MM-DD") + "&id=" + $stateParams.id)
+            .then(function (logs) {
+                $scope.timeSpanLogs = logs.data;
+                $log.log(logs.data)
+                $scope.initTimeSpanGraph();
+                $scope.loadingTimeSpan = false;
+            })
+    }
+    $scope.newTimeSpan();
+
     $scope.newDate = function () {
-        $log.log("New DATE! ", moment($scope.dt.date).format("YYYY-MM-DD"))
+
+
         //request new info for graph
-        var d = moment($scope.dt.date).format("YYYY-MM-DD")
+        var d = moment($scope.dt.daily).format("YYYY-MM-DD")
         $http.get("/ad/dailyCount?date=" + d + "&id=" + $stateParams.id)
             .then(function (logs) {
                 $scope.logs = logs.data;
-                $scope.initGraph()
+                $scope.initHourlyGraph();
+                $scope.loadingDaily = false;
             })
     }
+    $scope.newDate();
 
-    $scope.initGraph = function () {
+    $scope.initHourlyGraph = function () {
 
         $scope.allHours = {
             0: [], 1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [],
             9: [], 10: [], 11: [], 12: [], 13: [], 14: [], 15: [], 16: [], 17: [], 18: [], 19: [], 20: [],
             21: [], 22: [], 23: []
         }
-
-
         $scope.hourly = _.merge($scope.allHours, _.groupBy($scope.logs[$scope.advertisement.name], function (log) {
             //$log.log(log.loggedAt)
             return moment(log.loggedAt).hours() //TODO fix this somehow
 
         }));
-
-        //$log.log($scope.hourly)
-        ////TODO ad comparisons by hour? change date, show all hours of the day?
-        /*$scope.labels = _.map(_.keys($scope.hourly), function(hours){
-         var suffix = hours > 11 ? 'pm' : 'am'
-         hours = (hours) % 12
-         if (hours == 0) hours = 12;
-         return hours + suffix //TODO make sure this works lol
-         }); //hours
-         */
         $scope.labels = ['12am', '1am', '2am', '3am', '4am', '5am', '6am', '7am', '8am', '9am', '10am', '11am', '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm', '8pm', '9pm', '10pm', '11pm']
-        /*
-         var suffix = hours > 11 ? 'pm' : 'am'
-         hours = (hours) % 12
-         if (hours == 0) hours = 12;
-         return hours + suffix //TODO make sure this works lol
-         */
-        //$log.log($scope.labels)
-
-        //this week vs last week
         $scope.series = ['Hourly Impressions'];
-
         $scope.graphdata = [ //TODO fill in the gaps?
             _.map(_.toArray($scope.hourly), function (val) {
                 return val.length
             })
         ];
-        //if (!$scope.graphdata[0].length)
-        //   $scope.graphdata = [[0, 0, 0]] //zeroes across the board!
-        //$log.log($scope.graphdata)
-
+        
     }
-    $scope.initGraph();
 
-
-    $scope.impressions = impressions;
-
-    $scope.venues = _.toArray(_.groupBy($scope.impressions, function (el) {
-        return el.venue.name;
-    })) //TODO maybe backend analytics (seperate by date and counts? )
+    $scope.initTimeSpanGraph = function () {
+        $scope.timeSpanLabels = _.keys($scope.timeSpanLogs)
+        $scope.timeData = [_.values($scope.timeSpanLogs)] //TODO iteration order is not guranteed...
+        $scope.timeSeries = ["Daily Impressions"]
+    }
 
 
     //take the current date, split up the times and groupby function to round hours! ?
 
 
     $scope.options = {
-        elements: { line: {tension: 0 } },
+        elements: {line: {tension: 0}},
         scales: {
             yAxes: [
                 {
@@ -205,9 +212,7 @@ app.controller("editAdvertisementController", function ($scope, $log, $http, $st
         }
     }
 
-
-    //TODO sort by hours shown?
-
+    
 
     $scope.$parent.ui.panelHeading = $scope.advertisement.name;
     $scope.advertisementUpdate = angular.copy(advertisement);
@@ -226,7 +231,7 @@ app.controller("editAdvertisementController", function ($scope, $log, $http, $st
 
 
     $scope.data = {
-        impressions: $scope.logs.length,
+        impressions: 0,
         screenTime: 4.5
     }
 
@@ -333,8 +338,8 @@ app.controller("reviewAdvertisementController", function ($scope, $log, $http, $
     $scope.toggleDelete = $scope.advertisement.deleted ? "Re-Enable" : 'Delete'
 
     $scope.review = function (acc) {
-        uibHelper.confirmModal("Are you sure?", "Do you really want to " +( acc ? "accept" : "reject") + " this advertisement?")
-            .then(function(confirmed){
+        uibHelper.confirmModal("Are you sure?", "Do you really want to " + ( acc ? "accept" : "reject") + " this advertisement?")
+            .then(function (confirmed) {
                 $http.post("/ad/review", {id: $scope.advertisement.id, accepted: acc})
                     .then(function (a) {
                         $scope.advertisement = a.data;

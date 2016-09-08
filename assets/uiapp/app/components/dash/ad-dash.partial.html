@@ -1,10 +1,16 @@
 <div ng-if="advertisements">
 
 
-    <div class="row"> <!--TODO graph heights -->
+    <div class="row"> <!--TODO graph heights & loading symbol?-->
         <div class="col-md-6">
             <div class="text-center">
-                Impressions by Advertisemnt
+                <h4>Impressions by Advertisemnt</h4>
+            </div>
+            <div ng-show="loadingDaily" class="text-center">
+                <br>
+                <h5>Loading...</h5>
+                <br>
+                <i class="fa fa-spinner fa-spin fa-pulse fa-fw"></i>
             </div>
             <canvas id="bar" class="chart chart-bar"
                     chart-data="barData" chart-labels="barLabels"
@@ -13,7 +19,13 @@
         </div>
         <div class="col-md-6">
             <div class="text-center">
-                Past Week Total Impressions
+                <h4>Past Week Total Impressions</h4>
+            </div>
+            <div ng-show="loadingWeekly" class="text-center">
+                <br>
+                <h5>Loading...</h5>
+                <br>
+                <i class="fa fa-spinner fa-spin fa-pulse fa-fw"></i>
             </div>
             <canvas id="line" class="chart chart-line"
                     chart-data="weeklyData" chart-labels="weeklyLabels"
