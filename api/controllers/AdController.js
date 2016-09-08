@@ -348,27 +348,32 @@ module.exports = {
         return OGLog.find({logType: 'impression'})
             .then(function (logs) {
                 adLogs = _.filter(logs, {message: {adId: id}})
-                return async.each(adLogs, function (log, cb) {
-                        return Device.findOne(log.deviceUniqueId) //TODO this is gonna change what key is used
-                            .populate('venue')
-                            .then(function (dev) {
-                                log.venue = dev.venue;
-                                cb()
-                            })
-                            .catch(function (err) {
-                                return cb(err)
-                            })
-                    },
-                    function (err) {
-                        if (err) {
-                            return res.serverError({error: err})
-                        }
-                        else {
-                            return res.ok(adLogs)
+                if (adLogs) {
+                    return async.each(adLogs, function (log, cb) {
+                            return Device.findOne(log.deviceUniqueId) //TODO this is gonna change what key is used
+                                .populate('venue')
+                                .then(function (dev) {
+                                    log.venue = dev.venue;
+                                    cb()
+                                })
+                                .catch(function (err) {
+                                    return cb(err)
+                                })
+                        },
+                        function (err) {
+                            if (err) {
+                                return res.serverError({error: err})
+                            }
+                            else {
+                                return res.ok(adLogs)
 
-                        }
+                            }
 
-                    })
+                        })
+                }
+                else
+                    return res.notFound();
+
             })
 
             .catch(function (err) {
