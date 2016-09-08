@@ -21,7 +21,7 @@ module.exports = {
          code 
          */
         if ((params.regCode === undefined)) //test other stuff too
-            return res.badRequest({ "error" : "No registration code specified" });
+            return res.badRequest({error: "No registration code specified"});
 
 
         var deviceObj = {};
@@ -54,14 +54,16 @@ module.exports = {
                 }
 
             }).then(function (devices) {
-                if (devices.length != 1) //should never find and update more than one device
+                if (devices.length != 1) { //should never find and update more than one device
                     sails.log.debug("NOT GOOD UPDATE :(");
+                    return res.serverError({error: "Too many or too few devices updated"})
+                }
                 sails.log.debug(devices, "updated/registered");
                 return res.ok(devices[0]);
 
             })
             .catch(function (err) {
-                return res.badRequest({ "error" : "Error registering device" });
+                return res.serverError({error: err});
             });
     },
 
@@ -75,7 +77,7 @@ module.exports = {
                 return res.ok(dev)
             })
             .catch(function(err){
-                sails.log.debug(err)
+                sails.log.debug({error: err})
             })
     },
 

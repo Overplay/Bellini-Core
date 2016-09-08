@@ -3,13 +3,13 @@
  */
 
 //Note: test data will be duplicated if being run on a cluster! 
-
+var moment = require('moment')
 var Promise = require('bluebird');
-var adName = 'Advertisement Three!';
-var adDate = 'August 31'; //TODO
+var adName = 'Advertisement One!';
+var adDate = 'September 7'; //TODO
 var self = module.exports.testdata = {
 
-    installTestData: true,
+    installTestData: false,
     eraseOldData: false,
 
     install: function () {
@@ -142,8 +142,6 @@ var self = module.exports.testdata = {
 
 
         });
-
-
 
 
         self.venues.forEach(function (v) {
@@ -329,6 +327,55 @@ var self = module.exports.testdata = {
                     })
             })
         })
+
+        chain = chain.then(function () {
+            sails.config.testdata.generateLogs();
+            
+        })
+
+    },
+    generateLogs: function () {
+        sails.log.debug("generating hahahahaha fuck")
+        var logs = []
+        Device.find()
+            .then(function (devices) {
+                return Ad.find()
+                    .then(function (ads) {
+                        async.each(ads,
+                            function (ad, cb) {
+                                sails.log.debug(ad.name)
+                                var log = {
+                                    logType: 'impression',
+                                    message: {
+                                        adId: ad.id
+                                    }
+                                }
+                                var times = _.random(100)
+                                var chain = Promise.resolve()
+                                _.times(times, function () {
+                                    //generate log with random device
+                                    log.deviceUniqueId = devices[_.random(devices.length -1)].id
+                                    log.loggedAt = new Date(moment().hours(_.random(23))).toISOString()//.add(1, 'days')) //TODO randomize hours
+                                    //sails.log.debug(log.loggedAt)
+                                    OGLog.create(log).then(function(l){})
+                                })
+                                cb();
+                            },
+                            function (err) {
+                                if (err)
+                                    sails.log.debug("fuck", err)
+                                else{
+                                    sails.log.debug("Done")
+                                    //OGLog.create(logs).then(function(l){sails.log.debug(l)})
+                                }
+                            })
+                    })
+            })
+            .catch(function (err) {
+                sails.log.debug(err)
+            })
+
+        //setTimeout(sails.config.testdata.generateLogs, 10000000);
 
     },
     users: [
@@ -647,7 +694,7 @@ var self = module.exports.testdata = {
                 name: "Bar Box",
                 venue: "B Bar & Grill"
             },
-            loggedAt: new Date("August 29, 2016 12:13:00").toISOString()
+            loggedAt: new Date(adDate + ", 2016 12:13:00").toISOString()
         }
         ,
         {
@@ -660,7 +707,7 @@ var self = module.exports.testdata = {
                 name: "Bar Box",
                 venue: "B Bar & Grill"
             },
-            loggedAt: new Date("August 29, 2016 12:20:00").toISOString()
+            loggedAt: new Date(adDate + ", 2016 12:20:00").toISOString()
         }
         ,
         {
@@ -673,7 +720,7 @@ var self = module.exports.testdata = {
                 name: "Bar Box",
                 venue: "B Bar & Grill"
             },
-            loggedAt: new Date("August 29, 2016 11:30:00").toISOString()
+            loggedAt: new Date(adDate + ", 2016 11:30:00").toISOString()
         }
         ,
         {
@@ -686,7 +733,7 @@ var self = module.exports.testdata = {
                 name: "Bar Box",
                 venue: "Not Your Average Joe's"
             },
-            loggedAt: new Date("August 29, 2016 11:37:00").toISOString()
+            loggedAt: new Date(adDate + ", 2016 11:37:00").toISOString()
         }
         ,
         {
@@ -699,7 +746,7 @@ var self = module.exports.testdata = {
                 name: "Bar Box",
                 venue: "Not Your Average Joe's"
             },
-            loggedAt: new Date("August 29, 2016 21:40:00").toISOString()
+            loggedAt: new Date(adDate + ", 2016 21:40:00").toISOString()
         },
         {
             logType: "impression",
@@ -711,7 +758,7 @@ var self = module.exports.testdata = {
                 name: "Bar Box",
                 venue: "B Bar & Grill"
             },
-            loggedAt: new Date("August 29, 2016 22:13:00").toISOString()
+            loggedAt: new Date(adDate + ", 2016 22:13:00").toISOString()
         }
         ,
         {
@@ -724,7 +771,7 @@ var self = module.exports.testdata = {
                 name: "Bar Box",
                 venue: "B Bar & Grill"
             },
-            loggedAt: new Date("August 29, 2016 21:20:00").toISOString()
+            loggedAt: new Date(adDate + ", 2016 21:20:00").toISOString()
         }
         ,
         {
@@ -737,7 +784,7 @@ var self = module.exports.testdata = {
                 name: "Bar Box",
                 venue: "B Bar & Grill"
             },
-            loggedAt: new Date("August 29, 2016 19:30:00").toISOString()
+            loggedAt: new Date(adDate + ", 2016 19:30:00").toISOString()
         }
         ,
         {
@@ -750,7 +797,7 @@ var self = module.exports.testdata = {
                 name: "Bar Box",
                 venue: "Not Your Average Joe's"
             },
-            loggedAt: new Date("August 29, 2016 18:37:00").toISOString()
+            loggedAt: new Date(adDate + ", 2016 18:37:00").toISOString()
         }
         ,
         {
@@ -763,7 +810,7 @@ var self = module.exports.testdata = {
                 name: "Bar Box",
                 venue: "Not Your Average Joe's"
             },
-            loggedAt: new Date("August 29, 2016 13:40:00").toISOString()
+            loggedAt: new Date(adDate + ", 2016 13:40:00").toISOString()
         },
         {
             logType: "impression",
@@ -775,7 +822,7 @@ var self = module.exports.testdata = {
                 name: "Bar Box",
                 venue: "B Bar & Grill"
             },
-            loggedAt: new Date("August 29, 2016 16:13:00").toISOString()
+            loggedAt: new Date(adDate + ", 2016 16:13:00").toISOString()
         }
         ,
         {
@@ -788,7 +835,7 @@ var self = module.exports.testdata = {
                 name: "Bar Box",
                 venue: "B Bar & Grill"
             },
-            loggedAt: new Date("August 29, 2016 16:20:00").toISOString()
+            loggedAt: new Date(adDate + ", 2016 16:20:00").toISOString()
         }
         ,
         {
@@ -801,7 +848,7 @@ var self = module.exports.testdata = {
                 name: "Bar Box",
                 venue: "B Bar & Grill"
             },
-            loggedAt: new Date("August 29, 2016 16:30:00").toISOString()
+            loggedAt: new Date(adDate + ", 2016 16:30:00").toISOString()
         }
         ,
         {
@@ -814,7 +861,7 @@ var self = module.exports.testdata = {
                 name: "Bar Box",
                 venue: "Not Your Average Joe's"
             },
-            loggedAt: new Date("August 29, 2016 21:37:00").toISOString()
+            loggedAt: new Date(adDate + ", 2016 21:37:00").toISOString()
         }
         ,
         {
@@ -827,8 +874,9 @@ var self = module.exports.testdata = {
                 name: "Bar Box",
                 venue: "Not Your Average Joe's"
             },
-            loggedAt: new Date("August 29, 2016 21:40:00").toISOString()
+            loggedAt: new Date(adDate + ", 2016 21:40:00").toISOString()
         },
+
         {
             logType: "impression",
             message: {
@@ -839,7 +887,7 @@ var self = module.exports.testdata = {
                 name: "Bar Box",
                 venue: "B Bar & Grill"
             },
-            loggedAt: new Date("August 29, 2016 22:13:00").toISOString()
+            loggedAt: new Date(adDate + ", 2016 22:13:00").toISOString()
         }
         ,
         {
@@ -852,7 +900,7 @@ var self = module.exports.testdata = {
                 name: "Bar Box",
                 venue: "B Bar & Grill"
             },
-            loggedAt: new Date("August 29, 2016 20:20:00").toISOString()
+            loggedAt: new Date(adDate + ", 2016 20:20:00").toISOString()
         }
         ,
         {
@@ -865,7 +913,7 @@ var self = module.exports.testdata = {
                 name: "Bar Box",
                 venue: "B Bar & Grill"
             },
-            loggedAt: new Date("August 29, 2016 18:30:00").toISOString()
+            loggedAt: new Date(adDate + ", 2016 18:30:00").toISOString()
         }
         ,
         {
@@ -878,7 +926,7 @@ var self = module.exports.testdata = {
                 name: "Bar Box",
                 venue: "Not Your Average Joe's"
             },
-            loggedAt: new Date("August 29, 2016 17:37:00").toISOString()
+            loggedAt: new Date(adDate + ", 2016 17:37:00").toISOString()
         }
         ,
         {
@@ -891,7 +939,7 @@ var self = module.exports.testdata = {
                 name: "Bar Box",
                 venue: "Not Your Average Joe's"
             },
-            loggedAt: new Date("August 29, 2016 17:40:00").toISOString()
+            loggedAt: new Date(adDate + ", 2016 17:40:00").toISOString()
         },
         {
             logType: "impression",
@@ -904,6 +952,30 @@ var self = module.exports.testdata = {
                 venue: "B Bar & Grill"
             },
             loggedAt: new Date(adDate + ", 2016 13:13:00").toISOString()
+        },
+        {
+            logType: "impression",
+            message: {
+                adName: adName,
+
+            },
+            device: {
+                name: "Bar Box",
+                venue: "B Bar & Grill"
+            },
+            loggedAt: new Date(adDate + ", 2016 1:13:00").toISOString()
+        },
+        {
+            logType: "impression",
+            message: {
+                adName: adName,
+
+            },
+            device: {
+                name: "Bar Box",
+                venue: "B Bar & Grill"
+            },
+            loggedAt: new Date(adDate + ", 2016 0:13:00").toISOString()
         }
 
     ]

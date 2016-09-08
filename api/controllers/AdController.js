@@ -18,7 +18,7 @@ module.exports = {
     getMedia: function (req, res) {
 
         if (!req.allParams().id) {
-            return res.badRequest({ "error" : "no id" });
+            return res.badRequest({error: "no id"});
         }
         var chain = Promise.resolve();
 
@@ -47,8 +47,8 @@ module.exports = {
             })
             .catch(function (err) {
                 //something bad
-                sails.log.debug(err);
-                res.serverError(err);
+                sails.log.debug({error: err});
+                res.serverError({error: err});
             })
 
     },
@@ -58,7 +58,7 @@ module.exports = {
         var params = req.allParams();
 
         if (typeof params.accepted == 'undefined' || !params.id) {
-            return res.badRequest({ "error" : "Invalid req params " })
+            return res.badRequest({error: "Invalid req params"})
         }
         else {
             return Ad.update(params.id, {accepted: params.accepted, reviewed: true})
@@ -74,7 +74,7 @@ module.exports = {
                 })
                 .catch(function (err) {
                     sails.log.debug(err)
-                    return res.serverError(err)
+                    return res.serverError({error: err})
                 })
         }
     },
@@ -91,7 +91,7 @@ module.exports = {
                     ad.save(function (err) {
                         if (err) {
                             sails.log.debug("ad save err", err)
-                            return res.serverError(err)
+                            return res.serverError({error: err})
                         }
                         else
                             return res.ok(ad)
@@ -100,19 +100,19 @@ module.exports = {
         }
     },
 
-    toggleDelete: function (req, res) {
+    setDelete: function (req, res) {
         var params = req.allParams();
-        if (!params.id) {
-            return res.badRequest({ "error" : "Invalid req Params" })
+        if (!params.id || typeof params.delete == 'undefined') {
+            return res.badRequest({error: "Invalid req Params"})
         }
         else {
             return Ad.findOne(params.id)
                 .then(function (ad) {
-                    ad.deleted = !ad.deleted;
+                    ad.deleted = params.delete;
                     ad.save(function (err) {
                         if (err) {
                             sails.log.debug("ad save err", err)
-                            return res.serverError(err)
+                            return res.serverError({error: err})
                         }
                         else
                             return res.ok(ad)
@@ -124,7 +124,7 @@ module.exports = {
     exportExcel: function (req, res) {
 
         if (!req.allParams().id)
-            return res.badRequest({ "error" : "Missing ad id" });
+            return res.badRequest({error: "Missing ad id"});
 
         var id = req.allParams().id;
         var chain = Promise.resolve();
@@ -294,7 +294,7 @@ module.exports = {
                 return res.ok(ads)
             })
             .catch(function (err) {
-                return res.serverError(err)
+                return res.serverError({error: err})
             })
     },
 
@@ -303,7 +303,7 @@ module.exports = {
         var params = req.allParams()
 
         if (!params.ad) {
-            return res.badRequest({ "error" : "no ad given for updated"})
+            return res.badRequest({error: "no ad given for updated"})
         }
         else {
             params.ad.reviewed = false;
@@ -311,7 +311,7 @@ module.exports = {
             return Ad.update(params.ad.id, params.ad)
                 .then(function (ads) {
                     if (ads.length > 1) {
-                        return res.serverError({ "error" : "no freaking way. multiple ads updated" })
+                        return res.serverError({error: "no freaking way. multiple ads updated"})
                     }
                     else {
                         MailingService.adReviewNotification("TODO EMAIL")
@@ -319,7 +319,7 @@ module.exports = {
                     }
                 })
                 .catch(function (err) {
-                    return res.serverError(err)
+                    return res.serverError({error: err})
                 })
         }
 
@@ -332,7 +332,7 @@ module.exports = {
                 return res.ok(ads)
             })
             .catch(function (err) {
-                return res.serverError(err)
+                return res.serverError({error: err})
             })
     },
 
@@ -340,7 +340,7 @@ module.exports = {
     impressions: function (req, res) {
         var params = req.allParams();
         if (!params.id) {
-            return res.badRequest({ "error" : "No Id" })
+            return res.badRequest({error: "No Id"})
         }
         var id = params.id;
 
@@ -348,7 +348,7 @@ module.exports = {
         return OGLog.find({logType: 'impression'})
             .then(function (logs) {
                 adLogs = _.filter(logs, {message: {adId: id}})
-                async.each(adLogs, function (log, cb) {
+                return async.each(adLogs, function (log, cb) {
                         return Device.findOne(log.deviceUniqueId) //TODO this is gonna change what key is used
                             .populate('venue')
                             .then(function (dev) {
@@ -361,7 +361,7 @@ module.exports = {
                     },
                     function (err) {
                         if (err) {
-                            return res.serverError(err)
+                            return res.serverError({error: err})
                         }
                         else {
                             return res.ok(adLogs)
@@ -372,56 +372,204 @@ module.exports = {
             })
 
             .catch(function (err) {
-                return res.serverError(err)
+                return res.serverError({error: err})
             })
     },
 
+    //TODO lots of impressions = long load time
     //maybe an impression endpoint that does hourly counts for each ad for a certain date
     dailyCount: function (req, res) { // TODO only get session users ads :)
+        var start = new Date().getTime()
+
         var params = req.allParams()
         if (!params.date) {
-            return res.badRequest({ "error" : "No date given" })
+            return res.badRequest({error: "No date given"})
         }
         var query = {
             logType: 'impression',
             loggedAt: {
-                '>': moment(new Date(params.date)).startOf('day').toDate(),
-                '<': moment(new Date(params.date)).endOf('day').toDate()
+                '>': new Date(moment(params.date, "YYYY-MM-DD").startOf('day')),
+                '<': new Date(moment(params.date, "YYYY-MM-DD").endOf('day'))
             }
         }
         return OGLog.find(query)
             .then(function (logs) {
                 if (params.id) {
-                    //logs by adId TODO
                     logs = _.filter(logs, {message: {adId: params.id}})
                 }
-                //otherwise return counts for each all ads...um maybe not
+                else {
+                    Ad.find({creator: req.session.user.id}) //TODO this is bad
+                        .then(function (ads) {
+                            var ids = _.map(ads, 'id')
+                            logs = _.filter(logs, function (l) {
+                                return (_.findIndex(ids, function (id) {
+                                    return id == l.message.adId
+                                }) > -1)
+                            })
+                        })
+                        .catch(function(err){
+                            return res.serverError({error: err})
+                        })
+
+
+                }
+
+
                 async.each(logs, function (log, cb) {
                     return Ad.findOne(log.message.adId)
                         .then(function (ad) {
                             log.adName = ad.name;
                             cb()
                         })
-                        .catch(function(err){
+                        .catch(function (err) {
                             cb(err)
                         })
                 }, function (err) {
                     if (err)
-                        return res.serverError(err)
+                        return res.serverError({error: err})
                     else {
                         logs = _.groupBy(logs, 'adName')
+
+                        var end = new Date().getTime()
+                        sails.log.debug("Daily count time " + (end - start))
                         return res.ok(logs)
                     }
                 })
             })
 
             .catch(function (err) {
-                return res.serverError(err)
+                return res.serverError({error: err})
+            })
+    },
+
+
+    //it might be cool to sort by ad name by day but thats complex
+    weeklyImpressions: function (req, res) { //takes hella long to query ugh
+        var start = new Date().getTime()
+        var logs = []
+        var impressions = [0, 0, 0, 0, 0, 0]
+
+       /*var query = {
+            logType: 'impression',
+            loggedAt: {
+                '>': new Date(moment().subtract(0, 'days').startOf('day')),
+                '<': new Date(moment().endOf('day'))
+            }
+        };
+        var start = new Date().getTime();
+        OGLog.find(query)
+            .then(function(logs){
+                var other = new Date().getTime();
+                sails.log.debug("query time " + (other - start))
+                    return Ad.find({creator: req.session.user.id}) //TODO this is bad
+                        .then(function (ads) {
+
+                            var ids = _.map(ads, 'id')
+                            logs = _.filter(logs, function (l) {
+                                return (_.findIndex(ids, function (id) {
+                                    return id == l.message.adId
+                                }) > -1)
+                            })
+                            var grouped = _.groupBy(logs, function(log){
+                                return moment(log.loggedAt).format("YYYY-MM-DD")
+                            })
+                            sails.log.debug(_.keys(grouped))
+                            var counts = _.map(grouped, function(g){
+                                return g.length
+                            })
+                            sails.log.debug(counts)
+
+                            return res.ok(counts)
+                        })
+            })*/
+
+
+
+        async.each([6, 5, 4, 3, 2, 1, 0],
+            function (num, cb) {
+                var query = {
+                    logType: 'impression',
+                    loggedAt: {
+                        '>': new Date(moment().subtract(num, 'days').startOf('day')),
+                        '<': new Date(moment().subtract(num, 'days').endOf('day'))
+                    }
+                };
+
+                var start = new Date().getTime()
+
+                return OGLog.find(query)
+                    .then(function (logs) {
+                        var other = new Date().getTime()
+                        sails.log.debug("Query time = " + (other - start))
+                        return Ad.find({creator: req.session.user.id}) //TODO this is bad
+                            .then(function (ads) {
+
+                                var ids = _.map(ads, 'id')
+                                logs = _.filter(logs, function (l) {
+                                    return (_.findIndex(ids, function (id) {
+                                        return id == l.message.adId
+                                    }) > -1)
+                                })
+
+                                impressions[6 - num] = logs.length;
+                                var end = new Date().getTime()
+                                sails.log.debug("inner inner Exec Time " + (end - other))
+
+                                sails.log.debug("inner Exec Time " + (end - start))
+                                cb();
+
+                            })
+
+                    })
+                    .catch(function(err){
+                        cb(err)
+                    })
+            },
+            function (err) {
+                if (err)
+                    return res.serverError({error: err})
+                else {
+                    var end = new Date().getTime()
+                    OGLog.find({logType: 'impression', loggedAt: {
+                            '>': new Date(moment().subtract(7, 'days').startOf('day')),
+                            '<': new Date(moment().subtract(0, 'days').endOf('day'))
+                        }})
+                        .then(function(logs){
+                            var e2 = new Date().getTime()
+                            sails.log.debug("what time", (e2-end))
+                            return Promise.resolve()
+                        })
+                        .catch(function(err){
+                            return res.serverError({error: err})
+                        })
+                    sails.log.debug("Exec Time " + (end - start))
+                    return res.ok(impressions)
+                }
+
+
+            }
+        )
+
+
+    },
+    forDevice: function (req, res) {
+        var params = req.allParams()
+
+        if (!params.deviceId) {
+            //deal with this
+            return res.badRequest({error: "No device id"})
+        }
+        //TODO figure out criteria for ads to return
+
+        Ad.find({reviewed: true, accepted: true, deleted: false})
+            .then(function (ads) {
+                return res.ok(ads)
+            })
+            .catch(function (err) {
+                return res.serverError({error: err})
             })
     }
 
-
-    //impression data : sort by venue and date so its easier to chart
 
 };
 

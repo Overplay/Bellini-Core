@@ -61,7 +61,7 @@ module.exports.policies = {
         'destroy': ['sessionAuth', 'isAdOwner'],
         'review': ['sessionAuth', 'isAdmin'],
         'pauseOrResume': ['sessionAuth', 'isAdOwner'],
-        'toggleDelete': ['sessionAuth', 'isAdOwner'],
+        'setDelete': ['sessionAuth', 'isAdOwner'],
         'forReview': ['sessionAuth', 'isAdmin'],
         'editAd': ['sessionAuth', 'isAdOwner'],
         'getAccepted': true //TODO 

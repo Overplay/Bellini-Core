@@ -1,19 +1,29 @@
 <div ng-if="advertisements">
 
-    <div class="text-center">
-        Lets make a cool graph here (Like TS)
-    </div>
-    <div class="row">
-        <div class="col-md-3"></div>
+
+    <div class="row"> <!--TODO graph heights -->
         <div class="col-md-6">
+            <div class="text-center">
+                Impressions by Advertisemnt
+            </div>
             <canvas id="bar" class="chart chart-bar"
-                    chart-data="data" chart-labels="labels"
-                    chart-series="series" chart-options="options">
+                    chart-data="barData" chart-labels="barLabels"
+                    chart-series="barSeries" chart-options="barOptions">
             </canvas>
         </div>
-        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            <div class="text-center">
+                Past Week Total Impressions
+            </div>
+            <canvas id="line" class="chart chart-line"
+                    chart-data="weeklyData" chart-labels="weeklyLabels"
+                    chart-series="weeklySeries" chart-options="weeklyOptions">
+            </canvas>
+        </div>
 
     </div>
+
+
     <!--<div class="row">
         <div class="col-md-3"></div>
         <div class="col-md-6">

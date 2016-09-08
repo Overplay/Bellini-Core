@@ -13,13 +13,13 @@ module.exports = {
         var chain = Promise.resolve();
 
         if (!params.logType)
-            return res.badRequest({ "error" : "Missing log type" });
+            return res.badRequest({error: "Missing log type"});
         if (!params.message)
-            return res.badRequest({ "error" : "Missing message" });
+            return res.badRequest({error: "Missing message"});
         if (!params.deviceUniqueId)
-            return res.badRequest({ "error" : "Missing device id" });
+            return res.badRequest({error: "Missing device id"});
         if (!params.loggedAt)
-            return res.badRequest({ "error" : "Missing logged at time" });
+            return res.badRequest({error: "Missing logged at time"});
 
         params.loggedAt = new Date(params.loggedAt);
         sails.log.debug(params);
@@ -38,7 +38,7 @@ module.exports = {
             return res.ok();
         })
             .catch( function (err) {
-                return res.serverError(err);
+                return res.serverError({error: err});
             })
 
         return chain;
@@ -56,7 +56,7 @@ module.exports = {
     deviceHeartbeat: function (req, res) {
 
         if (!req.allParams().id)
-            return res.badRequest({ "error" : "Missing device id" });
+            return res.badRequest({error: "Missing device id"});
 
         var id = req.allParams().id;
 
@@ -64,6 +64,9 @@ module.exports = {
             .then( function (logs) {
                 var venueLogs = _.filter(logs, function (o) { return o.deviceUniqueId == id });
                 return res.json(venueLogs);
+            })
+            .catch(function(err){
+                return res.serverError({error: err})
             })
     },
 
@@ -73,7 +76,6 @@ module.exports = {
                 return res.ok(logs)
             })
     }
-
 
 
     //maybe make endpoints for each type and have it sortable 

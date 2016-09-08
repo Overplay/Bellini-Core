@@ -80,12 +80,12 @@ module.exports = {
 
             if ( err ) {
                 sails.log.error( "Media upload error: " + util.inspect( err ) );
-                res.serverError( err );
+                res.serverError( {error: err} );
             }
 
             // If no files were uploaded, respond with an error.
             else if ( (uploadedFiles === undefined) || (uploadedFiles.length === 0) ) {
-                res.badRequest({ "error" :  'No file(s) uploaded.' });
+                res.badRequest( {error: 'No file(s) uploaded.'} );
             }
 
             else {
@@ -129,7 +129,7 @@ module.exports = {
                     .catch(
                         function ( err ) {
                             sails.log.error( "Media.create (error): " + util.inspect( err ) );
-                            res.serverError( err );
+                            res.serverError( {error: err} );
                         } );
 
             }
