@@ -27,7 +27,7 @@ module.exports = require( 'waterlock' ).waterlocked( {
     // Show the login page from a template
     loginPage: function ( req, res ) {
 
-        res.view('users/login' + ThemeService.getTheme());
+        return res.view('users/login' + ThemeService.getTheme());
 
     },
 

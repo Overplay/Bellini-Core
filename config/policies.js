@@ -101,12 +101,13 @@ module.exports.policies = {
 
     OGLogController: {
         '*': true,
-        'destroy': ['sessionAuth', 'isAdmin']
+        'destroy': ['sessionAuth', 'isAdmin'],
+        'upload': ['tempAuth']
     },
 
     SMSController: {
         '*': true,
-        'notify': ['limitSMS']
+        'notify': ['limitSMS', 'tempAuth']
     },
 
     UserController: {

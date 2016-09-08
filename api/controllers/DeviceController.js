@@ -34,7 +34,7 @@ module.exports = {
 
         //sails.log.debug(deviceObj, "searching ");
 
-        Device.findOne(deviceObj)
+        return Device.findOne(deviceObj)
             .then(function (device) {
 
                 //check if device exists
@@ -71,7 +71,7 @@ module.exports = {
     //creates a test device for demo purposes 
     testDevice: function(req, res) {
         //sails.log.debug(req.allParams());
-        Device.create(req.allParams())
+        return Device.create(req.allParams())
             .then(function(dev){
                 //sails.log.debug(dev)
                 return res.ok(dev)

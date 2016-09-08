@@ -7,7 +7,7 @@
 
 var _ = require('lodash');
 var excel = require('node-excel-export');
-var moment = require('moment')
+var moment = require('moment');
 
 module.exports = {
 
@@ -22,7 +22,7 @@ module.exports = {
         }
         var chain = Promise.resolve();
 
-        Ad.findOne(req.allParams().id)
+        return Ad.findOne(req.allParams().id)
             .then(function (a) {
 
                 var media = a.advert.media;
@@ -42,6 +42,8 @@ module.exports = {
                     //sails.log.debug(media)
                     return res.ok(media);
                 });
+
+                return chain;
             })
             .catch(function (err) {
                 //something bad
@@ -59,7 +61,7 @@ module.exports = {
             return res.badRequest({error: "Invalid req params"})
         }
         else {
-            Ad.update(params.id, {accepted: params.accepted, reviewed: true})
+            return Ad.update(params.id, {accepted: params.accepted, reviewed: true})
                 .then(function (updated) {
                     if (updated.length == 1) {
                         if (params.accepted == false) { //rejected by admin 
@@ -68,7 +70,7 @@ module.exports = {
 
                         return res.json(updated[0])
                     }
-                    else return res.serverError({error: "Too many or too few ads updated"})
+                    else return res.serverError({ "error" : "Too many or too few ads updated"})
                 })
                 .catch(function (err) {
                     sails.log.debug(err)
@@ -80,10 +82,10 @@ module.exports = {
     pauseOrResume: function (req, res) {
         var params = req.allParams();
         if (!params.id) {
-            return res.badRequest({error: "Invalid req Params"})
+            return res.badRequest({ "error" : "Invalid req Params" })
         }
         else {
-            Ad.findOne(params.id)
+            return Ad.findOne(params.id)
                 .then(function (ad) {
                     ad.paused = !ad.paused;
                     ad.save(function (err) {
@@ -104,7 +106,7 @@ module.exports = {
             return res.badRequest({error: "Invalid req Params"})
         }
         else {
-            Ad.findOne(params.id)
+            return Ad.findOne(params.id)
                 .then(function (ad) {
                     ad.deleted = params.delete;
                     ad.save(function (err) {
@@ -120,7 +122,7 @@ module.exports = {
     },
 
     exportExcel: function (req, res) {
-        
+
         if (!req.allParams().id)
             return res.badRequest({error: "Missing ad id"});
 
@@ -154,7 +156,7 @@ module.exports = {
             cellDate: {
                 fill: { fgColor: { rgb: 'FFF0F0F0' }},
                 alignment: { wrapText: false },
-                numFmt: "MM/DD/YY H:MM:SS"
+                numFmt: "mmm d, yyyy - h:mm AM/PM"
             },
             cellDark: {
                 fill: {
@@ -282,10 +284,12 @@ module.exports = {
                     })
             }
         })
+
+        return chain;
     },
 
     forReview: function (req, res) {
-        Ad.find({where: {reviewed: false}, sort: 'createdAt ASC'})
+        return Ad.find({where: {reviewed: false}, sort: 'createdAt ASC'})
             .then(function (ads) {
                 return res.ok(ads)
             })
@@ -304,7 +308,7 @@ module.exports = {
         else {
             params.ad.reviewed = false;
             params.ad.accepted = false;
-            Ad.update(params.ad.id, params.ad)
+            return Ad.update(params.ad.id, params.ad)
                 .then(function (ads) {
                     if (ads.length > 1) {
                         return res.serverError({error: "no freaking way. multiple ads updated"})
@@ -323,7 +327,7 @@ module.exports = {
     ,
 
     getAccepted: function (req, res) {
-        Ad.find({reviewed: true, accepted: true, deleted: false})
+        return Ad.find({reviewed: true, accepted: true, deleted: false})
             .then(function (ads) {
                 return res.ok(ads)
             })
@@ -381,11 +385,11 @@ module.exports = {
             })
     },
 
-    //TODO lots of impressions = long load time 
+    //TODO lots of impressions = long load time
     //maybe an impression endpoint that does hourly counts for each ad for a certain date
-    dailyCount: function (req, res) { // TODO only get session users ads :) 
+    dailyCount: function (req, res) { // TODO only get session users ads :)
         var start = new Date().getTime()
-        
+
         var params = req.allParams()
         if (!params.date) {
             return res.badRequest({error: "No date given"})
@@ -397,9 +401,7 @@ module.exports = {
                 '<': new Date(moment(params.date, "YYYY-MM-DD").endOf('day'))
             }
         }
-
-
-        OGLog.find(query)
+        return OGLog.find(query)
             .then(function (logs) {
                 if (params.id) {
                     logs = _.filter(logs, {message: {adId: params.id}})
@@ -417,7 +419,7 @@ module.exports = {
                         .catch(function(err){
                             return res.serverError({error: err})
                         })
-                    
+
 
                 }
 
@@ -438,7 +440,7 @@ module.exports = {
                         return res.serverError({error: err})
                     else {
                         logs = _.groupBy(logs, 'adName')
-                        
+
                         var end = new Date().getTime()
                         sails.log.debug("Daily count time " + (end - start))
                         return res.ok(logs)
@@ -453,7 +455,7 @@ module.exports = {
 
 
     //it might be cool to sort by ad name by day but thats complex
-    weeklyImpressions: function (req, res) { //takes hella long to query ugh 
+    weeklyImpressions: function (req, res) { //takes hella long to query ugh
         var start = new Date().getTime()
         var logs = []
         var impressions = [0, 0, 0, 0, 0, 0, 0]
@@ -513,7 +515,7 @@ module.exports = {
                         sails.log.debug("Query time = " + (other - start))
                         return Ad.find({creator: req.session.user.id}) //TODO this is bad
                             .then(function (ads) {
-                                
+
                                 var ids = _.map(ads, 'id')
                                 logs = _.filter(logs, function (l) {
                                     return (_.findIndex(ids, function (id) {
@@ -527,9 +529,9 @@ module.exports = {
 
                                 sails.log.debug("inner Exec Time " + (end - start))
                                 cb();
-                                
+
                             })
-                        
+
                     })
                     .catch(function(err){
                         cb(err)
@@ -553,9 +555,7 @@ module.exports = {
                             return res.serverError({error: err})
                         })
                     sails.log.debug("Exec Time " + (end - start))
-
-                    sails.log.debug(impressions)
-
+                    
                     return res.ok(impressions)
                 }
 

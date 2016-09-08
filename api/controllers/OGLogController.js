@@ -28,11 +28,11 @@ module.exports = {
             return OGLog.create(params)
                 .then( function (log) {
                     if (log.logType == "alert") {
-                        return TwilioService.sendText('+13033249551', "RED ALERT!!!!");
+                        // return TwilioService.sendText('+13033249551', "RED ALERT!!!!");
                     }
                 })
 
-        })
+        });
 
         chain = chain.then( function () {
             return res.ok();
@@ -40,12 +40,14 @@ module.exports = {
             .catch( function (err) {
                 return res.serverError({error: err});
             })
+
+        return chain;
     },
 
     //if device id in OGLog, include ad id? this is complicated 
     //more in the ad controller
     impressions: function (req, res) {
-        OGLog.find({where: { logType: 'impression'}, sort: 'loggedAt DESC' })
+        return OGLog.find({where: { logType: 'impression'}, sort: 'loggedAt DESC' })
             .then(function(logs) {
                 return res.ok(logs); //all logs
             })
@@ -58,7 +60,7 @@ module.exports = {
 
         var id = req.allParams().id;
 
-        OGLog.find({ where: { logType: 'heartbeat'}, sort: 'loggedAt DESC'})
+        return OGLog.find({ where: { logType: 'heartbeat'}, sort: 'loggedAt DESC'})
             .then( function (logs) {
                 var venueLogs = _.filter(logs, function (o) { return o.deviceUniqueId == id });
                 return res.json(venueLogs);
@@ -68,9 +70,8 @@ module.exports = {
             })
     },
 
-
     getAll: function (req, res) {
-        OGLog.find()
+        return OGLog.find()
             .then(function (logs) {
                 return res.ok(logs)
             })
