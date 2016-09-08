@@ -425,6 +425,8 @@ module.exports = {
                 async.each(logs, function (log, cb) {
                     return Ad.findOne(log.message.adId)
                         .then(function (ad) {
+                            if(!ad)
+                                sails.log.debug(log)
                             log.adName = ad.name;
                             cb()
                         })
@@ -577,8 +579,8 @@ module.exports = {
             .then(function(ad){
                 if (!ad)
                     return res.notFound({error: "Bad ad ID "})
-                var start = new Date(moment(params.start, "YYYY-MM-DD"))
-                var end = new Date(moment(params.end, "YYYY-MM-DD"))
+                var start = new Date(moment(params.start, "YYYY-MM-DD").startOf('day'))
+                var end = new Date(moment(params.end, "YYYY-MM-DD").endOf('day'))
                 sails.log.debug(start, end, (start-end))
                 
                 if ((start - end) > 0)
@@ -596,7 +598,6 @@ module.exports = {
                         var grouped = _.groupBy(logs, function(log){
                             return moment(log.loggedAt).format("YYYY-MM-DD")
                         })
-                        
                         var counts = {}
                         _.times((moment(end).diff(moment(start), 'days')) +1, function(num){
                             var date = moment(start).add(num, 'days').format("YYYY-MM-DD")

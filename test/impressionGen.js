@@ -10,7 +10,6 @@ request
 .get(baseURL + '/api/v1/device')
 .end(function(err, res){
     var devices = res.body;
-    console.log(devices)
     request
         .get(baseURL + '/api/v1/ad')
         .end(function(err, res){
@@ -30,7 +29,7 @@ request
                         log.deviceUniqueId = devices[_.random(devices.length -1)].id
                         log.loggedAt = new Date(moment().hours(_.random(23))).toISOString()//.add(1, 'days')) //TODO randomize hours
                         request
-                            .post('http://localhost:1337/api/v1/oglog')
+                            .post(baseURL + '/api/v1/oglog')
                             .send(log)
                             .end(function(err, res){
                                 //console.log(res.body)
