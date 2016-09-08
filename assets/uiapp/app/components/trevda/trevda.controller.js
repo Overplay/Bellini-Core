@@ -127,7 +127,6 @@ app.controller("editAdvertisementController", function ($scope, $log, $http, $st
     $scope.startOptions = {maxDate: $scope.dt.end}
 
 
-    //TODO maybe loading symbols for every req
     $scope.newTimeSpan = function () {
         var st = moment($scope.dt.start);
         var e = moment($scope.dt.end);

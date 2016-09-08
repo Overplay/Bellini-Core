@@ -505,7 +505,6 @@ module.exports = {
                 };
 
 
-                sails.log.debug(query)
                 var start = new Date().getTime()
 
                 return OGLog.find(query)
@@ -581,8 +580,7 @@ module.exports = {
                     return res.notFound({error: "Bad ad ID "})
                 var start = new Date(moment(params.start, "YYYY-MM-DD").startOf('day'))
                 var end = new Date(moment(params.end, "YYYY-MM-DD").endOf('day'))
-                sails.log.debug(start, end, (start-end))
-                
+
                 if ((start - end) > 0)
                     return res.badRequest({error: "dates are not right"})
                 var query = {
