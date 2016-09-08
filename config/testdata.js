@@ -9,8 +9,8 @@ var adName = 'Advertisement One!';
 var adDate = 'September 7'; //TODO
 var self = module.exports.testdata = {
 
-    installTestData: false,
-    eraseOldData: false,
+    installTestData: true,
+    eraseOldData: true,
 
     install: function () {
 

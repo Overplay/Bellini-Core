@@ -62,6 +62,10 @@
                                         <td></td>
                                         <td>OS:<br>{{ selectedHeartbeat.message.softwareVersions.android }}</td>
                                     </tr>
+                                    <tr ng-repeat="app in selectedHeartbeat.message.installedApps">
+                                        <td>{{ $first ? "Installed Apps" : "" }}</td>
+                                        <td>{{ app }}</td>
+                                    </tr>
                                 </table>
                             </div>
 

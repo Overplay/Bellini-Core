@@ -35,24 +35,25 @@ module.exports = {
             .populate('venue')
             .then( function (dev) {
                 if (!dev)
-                    return res.error({ 'error' : 'Device not found' });
+                    return res.notFound({ error : 'Device not found' });
+                else if (!dev.venue)
+                    return res.badRequest({ error : 'Device does not have an associated venue' });
                 else {
                     var textHistory = dev.venue.textHistory;
                     textHistory.push(Date.now());
                     num = textHistory.length;
                     return Venue.update(dev.venue.id, { textHistory: textHistory })
+                        .then( function () {
+                            return TwilioService.sendText(params.destination, params.payload)
+                                .then( function (message) {
+                                    return res.ok({ message : num + " messages sent in the last minute"});
+                                })
+                                .catch( function (err) {
+                                    return res.serverError({ error: err });
+                                })
+                        })
                 }
             })
-            .then( function () {
-                return TwilioService.sendText(params.destination, params.payload)
-                    .then( function (message) {
-                        return res.ok({ "message" : num + " messages sent in the last minute"});
-                    })
-                    .catch( function (err) {
-                        return res.serverError(err);
-                    })
-            })
-
     }
 };
 

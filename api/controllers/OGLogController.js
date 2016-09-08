@@ -28,7 +28,7 @@ module.exports = {
             return OGLog.create(params)
                 .then( function (log) {
                     if (log.logType == "alert") {
-                        return TwilioService.sendText('+13033249551', "RED ALERT!!!!");
+                        // return TwilioService.sendText('+13033249551', "RED ALERT!!!!");
                     }
                 })
 
