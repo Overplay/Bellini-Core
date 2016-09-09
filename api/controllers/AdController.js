@@ -592,7 +592,7 @@ module.exports = {
                         '<': end
                     }
                 }
-                OGLog.find(query)
+                return OGLog.find(query)
                     .then(function(logs){
                         logs = _.filter(logs, {message: {adId: params.id}})
                         var grouped = _.groupBy(logs, function(log){
@@ -607,9 +607,7 @@ module.exports = {
 
                         return res.ok(counts)
                     })
-                    .catch(function(err){
-                        return res.serverError({error: err})
-                    })
+                    
             })
             .catch(function(err){
                 return res.serverError({error: err})
