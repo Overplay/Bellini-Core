@@ -6,8 +6,8 @@ var moment = require('moment');
 var _ = require('lodash');
 var async = require('async');
 
-// var baseURL = "http://localhost:1337";
-var baseURL = "http://104.131.145.36"
+var baseURL = "http://localhost:1337";
+// var baseURL = "http://104.131.145.36"
 
 request
     .get(baseURL + '/api/v1/device')
@@ -41,7 +41,7 @@ request
                     var sec = (dur.seconds() < 10 ? "0" : "") + dur.seconds();
                     log.message.uptime = hours + ":" + min + ":" + sec;
                     request
-                        .post('http://104.131.145.36/api/v1/oglog')
+                        .post('http://localhost:1337/api/v1/oglog')
                         .send(log)
                         .end(function(err, res){
                             //console.log(res.body)
