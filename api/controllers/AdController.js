@@ -431,14 +431,16 @@ module.exports = {
                
             })
             .then(function(logs){
-                async.each(logs, function (log, cb) {
+                return async.each(logs, function (log, cb) {
                     return Ad.findOne(log.message.adId)
                         .then(function (ad) {
-                            if(!ad)
+                            if(!ad) {
                                 sails.log.debug(log)
+                                return res.notFound({error: "Bad ad ID attached to log" + log})
+                            }
                             log.adName = ad.name;
-                            cb()
-                            return null;
+                            return cb()
+                            
                         })
                         .catch(function (err) {
                             cb(err)
