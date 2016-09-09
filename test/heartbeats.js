@@ -6,8 +6,8 @@ var moment = require('moment');
 var _ = require('lodash');
 var async = require('async');
 
-var baseURL = "http://localhost:1337";
-//var baseURL = "http://104.131.145.36"
+// var baseURL = "http://localhost:1337";
+var baseURL = "http://104.131.145.36"
 
 request
     .get(baseURL + '/api/v1/device')
@@ -34,14 +34,14 @@ request
                 _.times(times, function () {
                     //generate log with random device
                     log.deviceUniqueId = dev.id;
-                    log.loggedAt = new Date(moment().hours(_.random(23)).subtract(_.random(3), "days").toISOString()); //TODO randomize hours
+                    log.loggedAt = new Date(moment().hours(_.random(23)).minutes(_.random(59)).seconds(_.random(59)).subtract(_.random(3), "days").toISOString()); //TODO randomize hours
                     var dur = moment.duration(_.random(259200000));
                     var hours = (dur.hours() < 10 ? "0" : "") + dur.hours();
                     var min = (dur.minutes() < 10 ? "0" : "") + dur.minutes();
                     var sec = (dur.seconds() < 10 ? "0" : "") + dur.seconds();
                     log.message.uptime = hours + ":" + min + ":" + sec;
                     request
-                        .post('http://localhost:1337/api/v1/oglog')
+                        .post('http://104.131.145.36/api/v1/oglog')
                         .send(log)
                         .end(function(err, res){
                             //console.log(res.body)
