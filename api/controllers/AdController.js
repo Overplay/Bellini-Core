@@ -431,7 +431,7 @@ module.exports = {
                
             })
             .then(function(logs){
-                return async.each(logs, function (log, cb) {
+                async.each(logs, function (log, cb) {
                     return Ad.findOne(log.message.adId)
                         .then(function (ad) {
                             if(!ad) {
@@ -456,6 +456,7 @@ module.exports = {
                         return res.ok(logs)
                     }
                 })
+                return null;
             })
 
             .catch(function (err) {
