@@ -3,8 +3,8 @@ var moment = require('moment');
 var _ = require('lodash');
 var async = require('async');
 
-//var baseURL = "http://localhost:1337";
-var baseURL = "http://104.131.145.36"
+var baseURL = "http://localhost:1337";
+//var baseURL = "http://104.131.145.36"
 
 request
 .get(baseURL + '/api/v1/device')
@@ -27,7 +27,7 @@ request
                     _.times(times, function () {
                         //generate log with random device
                         log.deviceUniqueId = devices[_.random(devices.length -1)].id
-                        log.loggedAt = new Date(moment().hours(_.random(23))).toISOString()//.add(1, 'days')) //TODO randomize hours
+                        log.loggedAt = new Date(moment().subtract(3, 'days').hours(_.random(23))).toISOString()//.add(1, 'days')) //TODO randomize hours
                         request
                             .post(baseURL + '/api/v1/oglog')
                             .send(log)

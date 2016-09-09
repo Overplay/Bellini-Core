@@ -390,7 +390,7 @@ module.exports = {
     //TODO lots of impressions = long load time
     //maybe an impression endpoint that does hourly counts for each ad for a certain date
     dailyCount: function (req, res) { // TODO only get session users ads :)
-        var start = new Date().getTime()
+        //var start = new Date().getTime()
 
         var params = req.allParams()
         if (!params.date) {
@@ -417,7 +417,7 @@ module.exports = {
                                 return (_.findIndex(ids, function (id) {
                                     return id == l.message.adId
                                 }) > -1)
-                            })
+                            });
                             return logs;
                         })
                         .catch(function(err){
@@ -451,11 +451,11 @@ module.exports = {
                     else {
                         logs = _.groupBy(logs, 'adName')
 
-                        var end = new Date().getTime()
-                        sails.log.debug("Daily count time " + (end - start))
+                        //var end = new Date().getTime()
+                        //sails.log.debug("Daily count time " + (end - start))
                         return res.ok(logs)
                     }
-                })
+                });
                 return null;
             })
 
@@ -471,43 +471,6 @@ module.exports = {
         var start = new Date().getTime()
         var logs = []
         var impressions = [0, 0, 0, 0, 0, 0, 0]
-
-       /*var query = {
-            logType: 'impression',
-            loggedAt: {
-                '>': new Date(moment().subtract(0, 'days').startOf('day')),
-                '<': new Date(moment().endOf('day'))
-            }
-        };
-        var start = new Date().getTime();
-        OGLog.find(query)
-            .then(function(logs){
-                var other = new Date().getTime();
-                sails.log.debug("query time " + (other - start))
-                    return Ad.find({creator: req.session.user.id}) //TODO this is bad
-                        .then(function (ads) {
-
-                            var ids = _.map(ads, 'id')
-                            logs = _.filter(logs, function (l) {
-                                return (_.findIndex(ids, function (id) {
-                                    return id == l.message.adId
-                                }) > -1)
-                            })
-                            var grouped = _.groupBy(logs, function(log){
-                                return moment(log.loggedAt).format("YYYY-MM-DD")
-                            })
-                            sails.log.debug(_.keys(grouped))
-                            var counts = _.map(grouped, function(g){
-                                return g.length
-                            })
-                            sails.log.debug(counts)
-
-                            return res.ok(counts)
-                        })
-            })*/
-
-
-
         async.each([6, 5, 4, 3, 2, 1, 0],
             function (num, cb) {
                 var query = {
@@ -519,12 +482,12 @@ module.exports = {
                 };
 
 
-                var start = new Date().getTime()
+                //var start = new Date().getTime()
 
                 return OGLog.find(query)
                     .then(function (logs) {
-                        var other = new Date().getTime()
-                        sails.log.debug("Query time = " + (other - start))
+                        //var other = new Date().getTime()
+                        //sails.log.debug("Query time = " + (other - start))
                         return Ad.find({creator: req.session.user.id}) //TODO this is bad
                             .then(function (ads) {
 
@@ -537,10 +500,10 @@ module.exports = {
 
 
                                 impressions[6 - num] = logs.length;
-                                var end = new Date().getTime()
-                                sails.log.debug("inner inner Exec Time " + (end - other))
+                                //var end = new Date().getTime()
+                                //sails.log.debug("inner inner Exec Time " + (end - other))
 
-                                sails.log.debug("inner Exec Time " + (end - start))
+                                //sails.log.debug("inner Exec Time " + (end - start))
                                 cb();
                                 return null; 
                             })
@@ -556,7 +519,7 @@ module.exports = {
                 else {
                     var end = new Date().getTime()
 
-                    sails.log.debug("Exec Time " + (end - start))
+                    //sails.log.debug("Exec Time " + (end - start))
                     
                     return res.ok(impressions)
                 }
@@ -603,11 +566,10 @@ module.exports = {
                             var date = moment(start).add(num, 'days').format("YYYY-MM-DD")
                             counts[date] = grouped[date] ? grouped[date].length : 0
                         })
-                        //sails.log.debug(counts)
 
                         return res.ok(counts)
                     })
-                    
+
             })
             .catch(function(err){
                 return res.serverError({error: err})

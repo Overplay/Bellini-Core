@@ -400,7 +400,7 @@ app.controller("addUserController", function ($scope, $state, $log, toastr, nucl
                 $state.go('user.editUserAdmin', { id: u.auth.id } );
             } )
             .catch( function ( err ) {
-                toastr.error( "Something went wrong", "Damn!" );
+                toastr.error( err.data.error, "Uh Oh!" );
             });
     }
 

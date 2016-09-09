@@ -1,4 +1,10 @@
-<div ng-if="advertisements">
+<div ng-if="!advertisements.length" class="text-center">
+    <h2>No Advertisements to show</h2>
+    <a class="btn  btn-success" ui-sref="advertisement.add"><h4>Create One!</h4></a>
+</div>
+
+
+<div ng-if="advertisements.length">
 
 
     <div class="row"> <!--TODO graph heights & loading symbol?-->
