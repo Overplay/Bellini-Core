@@ -354,12 +354,13 @@ module.exports = {
                     return OGLog.find({logType: 'impression'})
                         .then(function (logs) {
                             adLogs = _.filter(logs, {message: {adId: id}})
-                            return async.each(adLogs, function (log, cb) {
+                            async.each(adLogs, function (log, cb) {
                                     return Device.findOne(log.deviceUniqueId) //TODO this is gonna change what key is used
                                         .populate('venue')
                                         .then(function (dev) {
                                             log.venue = dev.venue;
                                             cb()
+                                            return null; 
                                         })
                                         .catch(function (err) {
                                             return cb(err)
@@ -375,6 +376,7 @@ module.exports = {
                                     }
 
                                 })
+                            return null; 
                         })
 
                 }
@@ -405,9 +407,10 @@ module.exports = {
             .then(function (logs) {
                 if (params.id) {
                     logs = _.filter(logs, {message: {adId: params.id}})
+                    return logs
                 }
                 else {
-                    Ad.find({creator: req.session.user.id}) //TODO this is bad
+                    return Ad.find({creator: req.session.user.id}) //TODO this is bad
                         .then(function (ads) {
                             var ids = _.map(ads, 'id')
                             logs = _.filter(logs, function (l) {
@@ -415,6 +418,7 @@ module.exports = {
                                     return id == l.message.adId
                                 }) > -1)
                             })
+                            return logs;
                         })
                         .catch(function(err){
                             return res.serverError({error: err})
@@ -424,6 +428,9 @@ module.exports = {
                 }
 
 
+               
+            })
+            .then(function(logs){
                 async.each(logs, function (log, cb) {
                     return Ad.findOne(log.message.adId)
                         .then(function (ad) {
@@ -431,6 +438,7 @@ module.exports = {
                                 sails.log.debug(log)
                             log.adName = ad.name;
                             cb()
+                            return null;
                         })
                         .catch(function (err) {
                             cb(err)
@@ -452,6 +460,7 @@ module.exports = {
                 return res.serverError({error: err})
             })
     },
+    
 
 
     //it might be cool to sort by ad name by day but thats complex
@@ -523,15 +532,16 @@ module.exports = {
                                     }) > -1)
                                 })
 
+
                                 impressions[6 - num] = logs.length;
                                 var end = new Date().getTime()
                                 sails.log.debug("inner inner Exec Time " + (end - other))
 
                                 sails.log.debug("inner Exec Time " + (end - start))
                                 cb();
-
+                                return null; 
                             })
-
+                        
                     })
                     .catch(function(err){
                         cb(err)
@@ -542,18 +552,7 @@ module.exports = {
                     return res.serverError({error: err})
                 else {
                     var end = new Date().getTime()
-                    OGLog.find({logType: 'impression', loggedAt: {
-                            '>': new Date(moment().subtract(7, 'days').startOf('day')),
-                            '<': new Date(moment().subtract(0, 'days').endOf('day'))
-                        }})
-                        .then(function(logs){
-                            var e2 = new Date().getTime()
-                            sails.log.debug("what time", (e2-end))
-                            return Promise.resolve()
-                        })
-                        .catch(function(err){
-                            return res.serverError({error: err})
-                        })
+
                     sails.log.debug("Exec Time " + (end - start))
                     
                     return res.ok(impressions)
