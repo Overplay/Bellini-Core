@@ -138,7 +138,6 @@ app.controller("editAdvertisementController", function ($scope, $log, $http, $st
         $http.get("/ad/timeSpanImpressions?start=" + st.format("YYYY-MM-DD") + "&end=" + e.format("YYYY-MM-DD") + "&id=" + $stateParams.id)
             .then(function (logs) {
                 $scope.timeSpanLogs = logs.data;
-                $log.log(logs.data)
                 $scope.initTimeSpanGraph();
                 $scope.loadingTimeSpan = false;
             })

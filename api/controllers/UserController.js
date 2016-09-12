@@ -381,6 +381,23 @@ module.exports = require('waterlock').actions.user({
             .catch(function(err){
                 return res.serverError({error: err})
             })
+    },
+
+    getRoles: function (req, res){
+        //policies will prevent calls other than GET and with valid JWT /auth to use this
+
+        //ask how to get user id, in jwt im assuming
+
+        User.find(id)
+            .then(function(user){
+                if (!user){
+                    return res.notFound({error: "User not found"})
+                }
+                else {
+                    var roles = RoleCacheService.getAllRolesAsStringArray(user.roles)
+                    return res.ok({roles: roles})
+                }
+            })
     }
 
 });

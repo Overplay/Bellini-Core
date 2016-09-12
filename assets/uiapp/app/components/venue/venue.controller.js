@@ -250,7 +250,7 @@ app.controller('viewVenueController', function ($scope, venue, $log, uiGmapGoogl
 
         $http.post("/user/findByEmail", {email: $scope.proprietor.email})
             .then(function (response) {
-                $log.log(response)
+                //$log.log(response)
                 if (response.data.error) {
                     //not found
                     uibHelper.confirmModal("Invite to Ourglass?", "We couldn't find a user with the email: " + $scope.proprietor.email + "\n Would you like us to send them an email invite to Ourglass?", true)
