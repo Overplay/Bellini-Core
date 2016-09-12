@@ -259,7 +259,7 @@ module.exports = require('waterlock').actions.user({
                     }
                     else {
                         //failure
-                        return res.json(500, {"error": "Not found"})
+                        return res.json({"error": "a user does not exist with this email"})
                     }
                 })
         }
