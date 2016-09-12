@@ -53,10 +53,10 @@ module.exports = {
                 })
             })
             .then(function (us) {
-                sails.log.debug(us)
+                //sails.log.debug(us)
                 var emails = "";
                 us.forEach(function (u) {
-                    sails.log.debug(u)
+                    //sails.log.debug(u)
                     emails += u.auth.email + ","
                 })
                 return emails;

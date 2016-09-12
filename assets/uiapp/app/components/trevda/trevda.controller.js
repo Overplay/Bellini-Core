@@ -130,7 +130,7 @@ app.controller("editAdvertisementController", function ($scope, $log, $http, $st
     $scope.newTimeSpan = function () {
         var st = moment($scope.dt.start);
         var e = moment($scope.dt.end);
-        if (st.isAfter(e)) {
+        if (st.isSameOrAfter(e)) {
             st = moment(e).subtract(7, 'days')
             $scope.dt.start = new Date(st)
         }
