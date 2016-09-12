@@ -40,7 +40,7 @@ module.exports = {
 
     },
 
-    adReviewNotification: function (email) {
+    adReviewNotification: function () {
         var viewVars = {
             url: sails.config.mailing.login
         }
@@ -53,7 +53,7 @@ module.exports = {
                 })
             })
             .then(function (us) {
-                //sails.log.debug(us)
+                sails.log.debug(us)
                 var emails = "";
                 us.forEach(function (u) {
                     emails += u.auth.email + ","

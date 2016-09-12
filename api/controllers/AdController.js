@@ -314,7 +314,7 @@ module.exports = {
                         return res.serverError({error: "no freaking way. multiple ads updated"})
                     }
                     else {
-                        MailingService.adReviewNotification("TODO EMAIL")
+                        MailingService.adReviewNotification()
                         return res.ok(ads[0])
                     }
                 })
