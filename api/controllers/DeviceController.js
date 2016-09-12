@@ -101,6 +101,29 @@ module.exports = {
     //
     // },
 
+    getUserRolesForDevice: function(req, res) {
+        //assumes jwt in authorization header
+
+        var token = req.header; //TODO
+
+        //decode the token, get the user, check if the device is part of the user's venues
+
+        var userId = ''; //TODO check
+
+        var params = req.allParams();
+
+        if (!params.id)
+            return res.badRequest({error: "No device ID provided"})
+
+        var deviceId = params.id;
+
+
+        //compare venue of device with users!
+        //managed versus owner, send roles 
+
+
+    }
+
 
 
 

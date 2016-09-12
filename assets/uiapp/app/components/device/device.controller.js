@@ -243,7 +243,7 @@ app.controller("editDeviceOwnerController", function ($scope, $state, $log, devi
 
 
     // Cole's code for deleting device
-    //TODO test
+    //TODO test only allow owner 
     $scope.deleteDevice = function () {
 
         uibHelper.confirmModal("Delete Device?", "Are you sure you want to delete device " + $scope.device.name, true)
