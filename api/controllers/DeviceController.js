@@ -102,13 +102,21 @@ module.exports = {
     // },
 
     getUserRolesForDevice: function(req, res) {
-        //assumes jwt in authorization header
 
-        var token = req.header; //TODO
+        var userId = '';
 
-        //decode the token, get the user, check if the device is part of the user's venues
+        var token = waterlock._utils.getAccessToken(req) //token is already validated by policy
+        token = waterlock.jwt.decode(token, waterlock.config.jsonWebTokens.secret);
+        waterlock.validator.findUserFromToken(token, function(err, user){
+            if(err){
+                return res.badRequest({error: err});
+            }
+            sails.log.debug(user)
+            if (!user)
+                return res.badRequest({error: "User not found from token"})
+            userId = user.id
+        });
 
-        var userId = ''; //TODO check
 
         var params = req.allParams();
 
@@ -118,8 +126,35 @@ module.exports = {
         var deviceId = params.id;
 
 
-        //compare venue of device with users!
-        //managed versus owner, send roles 
+        var roles = []
+        Device.findOne(deviceId)
+            .then(function(d){
+                if (!d)
+                    return res.notFound({error: "Invalid Device ID"})
+                else {
+                    return User.findOne(userId)
+                        .populate('managedVenues')
+                        .populate('ownedVenues')
+                        .then(function(user){
+                            if (!user)
+                                return res.notFound({error: "User ID not found"})
+                            else {
+                                //check for admin, owner, manager, user is universal
+                                if (_.findIndex(user.managedVenues, {id: d.venue}) > -1) //Assuming user has roles
+                                    roles.push({name: 'proprietor.manager', id: RoleCacheService.roleByName('proprietor.manager')})
+                                if (_.findIndex(user.ownedVenues, {id: d.venue}) > -1)
+                                    roles.push({name: 'proprietor.owner', id: RoleCacheService.roleByName('proprietor.owner')})
+                                if (RoleCacheService.hasAdminRole(user.roles))
+                                    roles.push({name: 'admin', id: RoleCacheService.roleByName('admin')})
+                                return res.ok({roles: roles})
+                            }
+                        })
+                }
+            })
+            .catch(function(err){
+                return res.serverError({error: err})
+            })
+
 
 
     }

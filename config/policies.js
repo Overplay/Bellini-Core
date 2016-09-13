@@ -90,6 +90,7 @@ module.exports.policies = {
         'registerDevice': ['sessionAuth'],
         'testDevice': ['sessionAuth'],
         //backup and restore todo
+        'getUserRolesForDevice': ['GETOnly', 'hasJsonWebToken'],
 
     },
 
