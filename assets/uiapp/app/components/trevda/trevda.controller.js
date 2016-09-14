@@ -82,6 +82,8 @@ app.controller("manageAdvertisementController", function ($scope, $log, $http, t
 
     $scope.admin = admin
 
+    $scope.infoLink = ($scope.admin ? "advertisement.adminEdit" : "advertisement.edit" )+ "({id: advertisement.id})"
+
     $scope.pause = function (advertisement) {
         var paused = advertisement.paused;
 
