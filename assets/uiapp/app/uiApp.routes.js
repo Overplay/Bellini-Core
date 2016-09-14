@@ -628,9 +628,9 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                     ]
                 },
                 heartbeat: function ($http, $stateParams) {
-                    $http.get('/OGLog/deviceHeartbeat', { params : { id : $stateParams.id }})
-                        .then( function (log) {
-                            return log;
+                    return $http.get('/OGLog/deviceHeartbeat', { params: { id : $stateParams.id }})
+                        .then( function (data) {
+                            return data.data;
                         })
                 }
             }
