@@ -130,7 +130,7 @@ app.controller("addDeviceAdminController", function ($scope, $state, $log, toast
 
 });
 
-app.controller("editDeviceAdminController", function ($scope, $state, $log, device, toastr, uibHelper, nucleus, venues, $http, links, edit) {
+app.controller("editDeviceAdminController", function ($scope, $state, $log, device, toastr, uibHelper, nucleus, venues, $http, links, edit, heartbeat) {
     $log.debug("editDeviceAdminController starting");
 
 
@@ -144,6 +144,8 @@ app.controller("editDeviceAdminController", function ($scope, $state, $log, devi
     $scope.setForm = function (form) {
         $scope.form = form;
     };
+    $scope.heartbeats = heartbeat;
+    $scope.selectedHeartbeat = heartbeat[0];
 
     $scope.update = function () {
         //post to an update with $scope.device
