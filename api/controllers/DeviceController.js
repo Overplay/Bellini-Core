@@ -45,7 +45,8 @@ module.exports = {
                         params.regCode = ''; //clear registration code 
 
                         //TODO JSONWebToken into apiToken field
-                        //params.apiToken = '';
+                        params.apiToken = APITokenService.createToken(device.id);
+                        
                         //TODO MAC Address -- done on android device :) - will act as UUID 
                         params.wifiMacAddress = 'FETCH FROM ANDROID'; //in req? 
 
@@ -157,6 +158,29 @@ module.exports = {
 
 
 
+    },
+    
+    verifyRequest: function(req, res){
+
+        
+        var token = req.allParams().token; //haha hopefully 
+        
+        APITokenService.validateToken(token, function(err, decoded){
+            if (err){
+                return res.badRequest(err)
+            }
+            else {
+                //check the device id? 
+                return res.ok({token: decoded})
+            }
+        })
+        //send the token to Validate token 
+        //validate the token thats sent with the request and tell AJPGS its cool 
+        
+        //return the device json so that the api can use it 
+        return res.ok();
+        
+        
     }
 
 

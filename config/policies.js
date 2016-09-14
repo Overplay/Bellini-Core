@@ -91,6 +91,7 @@ module.exports.policies = {
         'testDevice': ['sessionAuth'],
         //backup and restore todo
         'getUserRolesForDevice': ['GETOnly', 'hasJsonWebToken'],
+        'verifyRequest': ['hasSameIP']
 
     },
 

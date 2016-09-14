@@ -174,7 +174,7 @@ module.exports = require('waterlock').waterlocked({
 
             if (params.email) {
 
-                Auth.findOneByEmail(params.email)
+                return Auth.findOneByEmail(params.email)
                     .then(function (authObj) {
                         authObj.password = params.password;
                         return authObj.save()
@@ -191,7 +191,7 @@ module.exports = require('waterlock').waterlocked({
 
                 // Token is stored on the Auth resetToken.token
 
-                Auth.findOne({"resetToken.token": params.token})
+                return Auth.findOne({"resetToken.token": params.token})
                     .then(function (authObj) {
                         authObj.password = params.password;
                         authObj.save()
@@ -204,6 +204,8 @@ module.exports = require('waterlock').waterlocked({
                     .catch(reject);
 
             }
+            
+            return null; //fixes promise handler warning  
 
 
         });
