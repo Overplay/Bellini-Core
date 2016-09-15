@@ -181,6 +181,8 @@ module.exports = {
 
         var token = req.allParams().token; //haha hopefully 
 
+        
+        sails.log.debug(token)
         APITokenService.validateToken(token, function (err, decoded) {
             if (err) {
                 return res.badRequest(err)
