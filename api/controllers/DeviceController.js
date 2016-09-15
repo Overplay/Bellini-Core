@@ -178,7 +178,6 @@ module.exports = {
 
     verifyRequest: function (req, res) {
 
-        sails.log.debug(req.data, req.allParams())
 
         var token = req.allParams().token; //haha hopefully 
 
