@@ -77,6 +77,9 @@ module.exports = {
             .then(function (dev) {
                 //sails.log.debug(dev)
                 dev.apiToken = APITokenService.createToken(dev.id);
+
+                sails.log.debug(dev.apiToken)
+
                 return Device.update(dev.id, dev)
                     .then(function (dev) {
                         return res.ok(dev)
