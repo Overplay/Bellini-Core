@@ -8,9 +8,9 @@
 module.exports = {
 
     /*
-        given an activation code, registerDevice searches for a device with this code
-        if it exists, it removes the code, and updates the device information so that it is active
-        if it does not exist, the code was incorrect / a user never started the registration proc for it
+     given an activation code, registerDevice searches for a device with this code
+     if it exists, it removes the code, and updates the device information so that it is active
+     if it does not exist, the code was incorrect / a user never started the registration proc for it
      */
     registerDevice: function (req, res) {
         //get code
@@ -46,7 +46,7 @@ module.exports = {
 
                         //TODO JSONWebToken into apiToken field
                         params.apiToken = APITokenService.createToken(device.id);
-                        
+
                         //TODO MAC Address -- done on android device :) - will act as UUID 
                         params.wifiMacAddress = 'FETCH FROM ANDROID'; //in req? 
 
@@ -70,22 +70,22 @@ module.exports = {
 
     //TODO remove once production
     //creates a test device for demo purposes 
-    testDevice: function(req, res) {
+    testDevice: function (req, res) {
         //sails.log.debug(req.allParams());
         var params = req.allParams()
         return Device.create(params)
-            .then(function(dev){
+            .then(function (dev) {
                 //sails.log.debug(dev)
                 dev.apiToken = APITokenService.createToken(device.id);
-                dev.save(function(err){
-                    if (err){
-                        return res.serverError({error: err})
-                    }
-                    return res.ok(dev)
+                return Device.update(dev.id, dev)
+                    .then(function (dev) {
+                        return res.ok(dev)
 
-                })
+                    })
+
+
             })
-            .catch(function(err){
+            .catch(function (err) {
                 sails.log.debug({error: err})
             })
     },
@@ -110,14 +110,14 @@ module.exports = {
     //
     // },
 
-    getUserRolesForDevice: function(req, res) {
+    getUserRolesForDevice: function (req, res) {
 
         var userId = '';
 
         var token = waterlock._utils.getAccessToken(req) //token is already validated by policy
         token = waterlock.jwt.decode(token, waterlock.config.jsonWebTokens.secret);
-        waterlock.validator.findUserFromToken(token, function(err, user){
-            if(err){
+        waterlock.validator.findUserFromToken(token, function (err, user) {
+            if (err) {
                 return res.badRequest({error: err});
             }
             sails.log.debug(user)
@@ -137,22 +137,28 @@ module.exports = {
 
         var roles = []
         Device.findOne(deviceId)
-            .then(function(d){
+            .then(function (d) {
                 if (!d)
                     return res.notFound({error: "Invalid Device ID"})
                 else {
                     return User.findOne(userId)
                         .populate('managedVenues')
                         .populate('ownedVenues')
-                        .then(function(user){
+                        .then(function (user) {
                             if (!user)
                                 return res.notFound({error: "User ID not found"})
                             else {
                                 //check for admin, owner, manager, user is universal
                                 if (_.findIndex(user.managedVenues, {id: d.venue}) > -1) //Assuming user has roles
-                                    roles.push({name: 'proprietor.manager', id: RoleCacheService.roleByName('proprietor.manager')})
+                                    roles.push({
+                                        name: 'proprietor.manager',
+                                        id: RoleCacheService.roleByName('proprietor.manager')
+                                    })
                                 if (_.findIndex(user.ownedVenues, {id: d.venue}) > -1)
-                                    roles.push({name: 'proprietor.owner', id: RoleCacheService.roleByName('proprietor.owner')})
+                                    roles.push({
+                                        name: 'proprietor.owner',
+                                        id: RoleCacheService.roleByName('proprietor.owner')
+                                    })
                                 if (RoleCacheService.hasAdminRole(user.roles))
                                     roles.push({name: 'admin', id: RoleCacheService.roleByName('admin')})
                                 return res.ok({roles: roles})
@@ -160,21 +166,20 @@ module.exports = {
                         })
                 }
             })
-            .catch(function(err){
+            .catch(function (err) {
                 return res.serverError({error: err})
             })
 
 
-
     },
-    
-    verifyRequest: function(req, res){
 
-        
+    verifyRequest: function (req, res) {
+
+
         var token = req.allParams().token; //haha hopefully 
-        
-        APITokenService.validateToken(token, function(err, decoded){
-            if (err){
+
+        APITokenService.validateToken(token, function (err, decoded) {
+            if (err) {
                 return res.badRequest(err)
             }
             else {
@@ -184,14 +189,12 @@ module.exports = {
         })
         //send the token to Validate token 
         //validate the token thats sent with the request and tell AJPGS its cool 
-        
+
         //return the device json so that the api can use it 
         return res.ok();
-        
-        
+
+
     }
-
-
 
 
 };
