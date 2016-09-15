@@ -73,11 +73,17 @@ module.exports = {
     testDevice: function(req, res) {
         //sails.log.debug(req.allParams());
         var params = req.allParams()
-        params.apiToken = APITokenService.createToken(device.id);
         return Device.create(params)
             .then(function(dev){
                 //sails.log.debug(dev)
-                return res.ok(dev)
+                dev.apiToken = APITokenService.createToken(device.id);
+                dev.save(function(err){
+                    if (err){
+                        return res.serverError({error: err})
+                    }
+                    return res.ok(dev)
+
+                })
             })
             .catch(function(err){
                 sails.log.debug({error: err})
