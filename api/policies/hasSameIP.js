@@ -16,23 +16,6 @@ module.exports = function (req, res, next) {
         return next();
     }
     else {*/
-    //maybe just change this to a config ip and check request ip
-        require('dns').lookup(require('os').hostname(), function (err, add, fam) {
-            sails.log.debug(add)
-            if (add.substr(0, 7) == "::ffff:") {
-                add = add.substr(7)
-            }
-            var ip = req.ip;
-            sails.log.debug(ip)
-            if (req.ip.substr(0, 7) == "::ffff:") { //dealing with ipv6 
-                ip = req.ip.substr(7)
-            }            
-            sails.log.debug(ip)
-
-            sails.log.debug(add == ip, req.headers.host, req.host)
-        })
-    
-    //}
-
+    sails.log.debug(req.host == sails.config.localIp)
     next();
 }
