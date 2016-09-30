@@ -179,7 +179,7 @@ module.exports = {
     verifyRequest: function (req, res) {
 
 
-        var token = req.allParams().token; //haha hopefully 
+        var token = req.allParams().token;
 
         if (!token) {
             return res.badRequest({error: "No Token provided"})
