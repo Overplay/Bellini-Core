@@ -119,6 +119,7 @@
     - `pm2 install auto-reload-pm2`
         - it is on the npm registry and will install automatically!
     - NOTE: May need to be configured based on process name. look at the README
+    - now works for multiple procs 
 
 20. Generate a Startup Script
     - `pm2 startup ubuntu`
