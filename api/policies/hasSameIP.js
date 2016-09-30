@@ -7,7 +7,7 @@
  * @docs        :: http://waterlock.ninja/documentation
  */
 
-
+//configuring the localIP will allow us to run AJPGS on its own server and set the address here 
 module.exports = function (req, res, next) {
 
 
@@ -17,5 +17,9 @@ module.exports = function (req, res, next) {
     }
     else {*/
     sails.log.debug(req.host == sails.config.localIp)
-    next();
+    if (req.host == sails.config.localIp)
+        next();
+    //}
+
+    return res.forbidden({error: "Incorrect request IP"})
 }
