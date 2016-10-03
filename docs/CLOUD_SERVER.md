@@ -54,12 +54,15 @@
         - create a text file in `/etc/nginx/sites-available` with the below
 
             `upstream sails_server {
-                    server 127.0.0.1:1337;
-                    keepalive 64;
-            }
-            server {
+                server 127.0.0.1:1337;
+                keepalive 64;
+             }
+
+
+             server {
                 listen          80;
                 server_name     asahi;
+
                 location / {
                     proxy_pass http://sails_server;
                     proxy_http_version 1.1;
@@ -67,8 +70,17 @@
                     proxy_set_header Connection 'upgrade';
                     proxy_set_header Host $host;
                     proxy_cache_bypass $http_upgrade;
-                 }
-            }`
+                    error_page 502 /502.html;
+
+                }
+
+                location /502.html {
+                    internal;
+                    root /opt/asahi/views/errors;
+                }
+
+
+             }`
 
         - sym link this file (`ln -s`) into `/etc/nginx/sites-enabled and` `rm default`
         - `sudo nginx -s reload`
