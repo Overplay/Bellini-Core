@@ -11,6 +11,7 @@
 var wl = require('waterlock-local-auth')
 var jwt = require('jwt-simple')
 
+var waterlock = require("waterlock")
 
 module.exports = require( 'waterlock' ).waterlocked( {
 
@@ -198,5 +199,14 @@ module.exports = require( 'waterlock' ).waterlocked( {
         return res.view('users/validationOk' + ThemeService.getTheme());
     }
 
+    
+    , 
+    
+    testLogin: function(req, res){
+        sails.log.debug(waterlock.actions.waterlocked())
+        waterlock.actions.waterlocked().login(req,res)
+        
+        //res.redirect('/ui')
+    }
 
 } );

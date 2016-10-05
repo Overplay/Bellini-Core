@@ -42,9 +42,9 @@
     "url": "^0.11.0",
     "util": "^0.10.3",
     "verror": "^1.6.1",
-    "waterlock": "waterlock/waterlock",
-    "waterlock-facebook-auth": "Overplay/waterlock-facebook-auth",
-    "waterlock-local-auth": "Overplay/waterlock-local-auth",
+    "waterlock": "colegrigsby/waterlock",
+    "waterlock-facebook-auth": "colegrigsby/waterlock-facebook-auth",
+    "waterlock-local-auth": "colegrigsby/waterlock-local-auth-1",
     "yelp": "^1.0.1"
   },
   "devDependencies": {},
