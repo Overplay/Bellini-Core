@@ -340,7 +340,7 @@ module.exports = require('waterlock').actions.user({
                                     user.auth = a;
 
                                     //is this dangerous since the token isn't kept track of?
-                                    waterlock.cycle.loginSuccess(req, res, user)
+                                    waterlock.cycle.loginSuccess(req, res, user, '/ui')
                                 }
 
                             })
