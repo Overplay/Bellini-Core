@@ -26,17 +26,25 @@ module.exports = {
 
     validateToken: function(token, cb){
 
-        var decoded = jwt.decode(token, sails.config.AJPGSsecurity.secret)
-        var _reqTime = Date.now()
         
-        if (_reqTime <= decoded.nbf)
-           cb({error: "This token is early"})
-        if (sails.config.AJPGSsecurity.subject !== decoded.sub)
-            cb({error: "Invalid token for this request "})
-        if (sails.config.AJPGSsecurity.audience !== decoded.aud)
-            rcb({error: "Invalid token for this request "})
-        
-        cb(null, token);
+        try {
+            var decoded = jwt.decode(token, sails.config.AJPGSsecurity.secret)
+
+            var _reqTime = Date.now()
+
+            if (_reqTime <= decoded.nbf)
+                cb({error: "This token is early"})
+            if (sails.config.AJPGSsecurity.subject !== decoded.sub)
+                cb({error: "Invalid token for this request "})
+            if (sails.config.AJPGSsecurity.audience !== decoded.aud)
+                cb({error: "Invalid token for this request "})
+
+            cb(null, token);
+        }
+        catch(e){
+            cb({error: "invalid token"})
+        }
+
 
     }
 }
