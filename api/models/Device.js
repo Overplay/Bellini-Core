@@ -67,6 +67,14 @@ module.exports = {
             defaultsTo: {}
         },
 
+        lineupID: {
+            type: 'string'
+        },
+
+        lineupName: {
+            type: 'string'
+        },
+
 
         toJSON: function () {
             var obj = this.toObject();

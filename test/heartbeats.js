@@ -7,7 +7,7 @@ var _ = require('lodash');
 var async = require('async');
 
 var baseURL = "http://localhost:1337";
-// var baseURL = "http://104.131.145.36"
+// var baseURL = "http://104.131.145.36";
 
 request
     .get(baseURL + '/api/v1/device')
