@@ -398,6 +398,17 @@ module.exports = require('waterlock').actions.user({
                     return res.ok({roles: roles})
                 }
             })
+    },
+
+    inviteNewUser: function(req, res) {
+        var params = req.allParams();
+        if (!params.email){
+            return res.badRequest({error: "No Email specified"})
+        }
+        else {
+            MailingService.inviteNewUser(params.email);
+            return res.ok(); 
+        }
     }
 
 });
