@@ -24,6 +24,10 @@ module.exports = {
         sendMail(viewVars, "inviteemail.jade",
             "You have been invited to Ourglass!", email)
     },
+    
+    inviteNewUser: function(email){
+        sendMail({url: sails.config.mailing.inviteUrl}, "invitenewuser.jade", "You have been invited to Ourglass!", email)
+    },
 
     inviteRole: function (email, name, venue, role) {
 
