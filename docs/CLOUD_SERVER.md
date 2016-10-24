@@ -115,8 +115,11 @@
 19. Start `auto-reload-pm2`  (as asahi user) 
     - `pm2 install auto-reload-pm2`
         - it is on the npm registry and will install automatically! 
-
-20. Checkout http://104.131.145.36/ and see how it looks! 
+20. Generate a Startup Script
+    - `pm2 startup ubuntu`
+    - run the command
+    - `pm2 save` to save the processes
+21. Checkout http://104.131.145.36/ and see how it looks!
 
 
 

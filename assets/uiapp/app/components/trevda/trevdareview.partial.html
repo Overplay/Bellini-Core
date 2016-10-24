@@ -13,21 +13,7 @@
                         <td></td>
                         <td>{{advertisement.description}}</td>
                     </tr>
-                    <tr ng-if="advertisement.advert.text[0].length > 0">
-                        <td><b>Crawler Text One </b></td>
-                        <td></td>
-                        <td>{{advertisement.advert.text[0]}}</td>
-                    </tr>
-                    <tr ng-if="advertisement.advert.text[1].length > 0">
-                        <td><b>Crawler Text Two</b></td>
-                        <td></td>
-                        <td>{{advertisement.advert.text[1]}}</td>
-                    </tr>
-                    <tr ng-if="advertisement.advert.text[2].length > 0">
-                        <td><b>Crawler Text Three</b></td>
-                        <td></td>
-                        <td>{{advertisement.advert.text[2]}}</td>
-                    </tr>
+
                     <tr>
                         <td><b>Reviewed</b></td>
                         <td></td>
@@ -39,7 +25,7 @@
                         <td>{{advertisement.accepted ? "Yes" : "No"}}</td>
                     </tr>
                     <tr>
-                        <td><b>DELETED</b></td>
+                        <td><b>Deleted</b></td>
                         <td></td>
                         <td>{{advertisement.deleted}}</td>
                     </tr>
@@ -52,13 +38,28 @@
 
                     </tr>
                     <tr ng-repeat="size in mediaSizes" ng-if="advertisement.advert.media[size]">
-                        <td><b>{{size}}</b></td>
+                        <td><b>{{size | capitalize}}</b></td>
                         <td></td>
 
                         <td><a href="media/download/{{advertisement.advert.media[size]}}"><img
                                 class="media-prev"
                                 ng-src="media/download/{{advertisement.advert.media[size]}}"/></a>
                         </td>
+                    </tr>
+                    <tr>
+                        <td><b>Crawler Text One </b></td>
+                        <td></td>
+                        <td>{{advertisement.advert.text[0]  || "[not used]"}}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Crawler Text Two</b></td>
+                        <td></td>
+                        <td>{{advertisement.advert.text[1] || "[not used]"}}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Crawler Text Three</b></td>
+                        <td></td>
+                        <td>{{advertisement.advert.text[2]  || "[not used]"}}</td>
                     </tr>
                 </table>
             </div>

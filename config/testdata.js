@@ -329,7 +329,7 @@ var self = module.exports.testdata = {
         })
 
         chain = chain.then(function () {
-            sails.config.testdata.generateLogs();
+            //sails.config.testdata.generateLogs();
             
         })
 

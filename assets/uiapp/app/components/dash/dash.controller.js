@@ -3,14 +3,12 @@
  */
 
 
-
-
-app.controller("dashController", function ($scope, $log, user, $state) {
+app.controller("dashController", function ($scope, $log, user, $state, $filter) {
     $log.log("starting dashController")
 
     // $log.log(user)
     
-    $scope.roles = user.roleTypes;
+    $scope.roles = $filter('orderBy')(user.roleTypes); //TODO sort these
 
     $scope.humanize = function(role){
         var sub = role.split('.');
@@ -25,7 +23,7 @@ app.controller("dashController", function ($scope, $log, user, $state) {
     $log.log($scope.selected)
 
 
-    $state.go("dash." +$scope.roles[0].replace('.', ''))
+    $state.go("dash." +$scope.selected.replace('.', ''))
 
     //TODO default dash view? change button style?
     //highlight current view button
@@ -87,12 +85,89 @@ app.controller("adminDashController", function ($scope, $log, ads, userCount, de
 });
 
 
-app.controller("adDashController", function($scope, $log, ads, $http, logsToday, logsYesterday){
+app.controller("adDashController", function($scope, $log, ads, $http, $q){
     $log.log("starting adDashController")
     $scope.$parent.selected = "advertiser"
 
-    $scope.logsToday = logsToday
-    $scope.logsYesterday = logsYesterday
+
+    $scope.loadingWeekly = true;
+    $scope.loadingDaily = true;
+
+    var promises = []
+    _.forEach([0,1],
+        function(num, cb){
+            var d = moment().subtract(num, 'days').format("YYYY-MM-DD")
+            promises.push($http.get("/ad/dailyCount?date=" + d).then(function (logs) {
+                if (num == 0){
+                    $scope.logsToday = logs.data
+                }
+                else{
+                    $scope.logsYesterday = logs.data
+                }
+
+            }))
+        })
+
+    $q.all(promises)
+        .then(function(){
+            $scope.keys = _.union(_.keys($scope.logsYesterday), _.keys($scope.logsToday))
+
+            $scope.loadingDaily = false;
+
+            $scope.logs = {}
+            _.forEach($scope.keys, function(key){
+                $scope.logs[key] = [$scope.logsYesterday[key] || [], $scope.logsToday[key] || []]
+            })
+
+
+
+            $scope.barOptions = {
+                scales: {
+                    yAxes: [
+                        {
+                            display: true,
+                            ticks: {
+                                beginAtZero: true,
+                                //TODO handle small scales (all zeroes)
+                            }
+                        }
+                    ],
+                    xAxes: [{
+                        barPercentage: .4
+                    }]
+                }
+            }
+
+            //TODO show graph if any ads exist, even with [0,0] impressions ?
+            //TODO link the bars to the more info of ad?
+
+            //bar for top 10 performing ads?
+            $scope.barLabels = _.keys($scope.logs);
+            if(!$scope.barLabels.length)
+                $scope.barLabels = [""]
+
+            //this week vs last week
+            $scope.barSeries = ["Yesterday's Impressions","Today's Impressions"];
+
+            //impression count for now?
+            $scope.barData = [
+                _.map($scope.logs, function(val){
+                    return val[0].length
+                }),
+                _.map($scope.logs, function(val){
+                    return val[1].length
+                })
+            ];
+
+            if (!$scope.barData[0].length && !$scope.barData[1].length) {
+                $scope.barData[0] = [0]
+                $scope.barData[1] = [0]
+            }
+
+        })
+
+   // $scope.logsToday = logsToday
+    //$scope.logsYesterday = logsYesterday
     //TODO potentially return 0s with all ads without logs so graph still shows
     /*$scope.logsToday = [0]
     $scope.logsYesterday = [0]
@@ -105,67 +180,16 @@ app.controller("adDashController", function($scope, $log, ads, $http, logsToday,
 
     })*/
 
-    $scope.keys = _.union(_.keys($scope.logsYesterday), _.keys($scope.logsToday))
 
-
-    $scope.logs = {}
-    _.forEach($scope.keys, function(key){
-        $scope.logs[key] = [$scope.logsYesterday[key] || [], $scope.logsToday[key] || []]
-    })
-
-
-
-    $scope.barOptions = {
-        scales: {
-            yAxes: [
-                {
-                    display: true,
-                    ticks: {
-                        beginAtZero: true,
-                        //TODO handle small scales (all zeroes)
-                    }
-                }
-            ],
-            xAxes: [{
-                barPercentage: .4
-            }]
-        }
-    }
-
-    //TODO show graph if any ads exist, even with [0,0] impressions ?
-    //TODO link the bars to the more info of ad? 
-
-    //bar for top 10 performing ads?
-    $scope.barLabels = _.keys($scope.logs);
-    if(!$scope.barLabels.length)
-        $scope.barLabels = [""]
-
-    //this week vs last week
-    $scope.barSeries = ["Yesterday's Impressions","Today's Impressions"];
-
-    //impression count for now? 
-    $scope.barData = [
-        _.map($scope.logs, function(val){
-            return val[0].length
-        }),
-        _.map($scope.logs, function(val){
-            return val[1].length
-        })
-    ];
-
-    if (!$scope.barData[0].length && !$scope.barData[1].length) {
-        $scope.barData[0] = [0]
-        $scope.barData[1] = [0]
-    }
 
     //$scope.weeklyData = weekly
 
-    $scope.weeklyData = [[0,0,0,0,0,0,0]]
-
+    //$scope.weeklyData = [[0,0,0,0,0,0,0]]
 
     //loads page while querying - might speed things up a little?
     $http.get("ad/weeklyImpressions").then(function(data) {
         $scope.weeklyData = [data.data]
+        $scope.loadingWeekly = false; 
     })
 
 

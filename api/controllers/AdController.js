@@ -314,7 +314,7 @@ module.exports = {
                         return res.serverError({error: "no freaking way. multiple ads updated"})
                     }
                     else {
-                        MailingService.adReviewNotification("TODO EMAIL")
+                        MailingService.adReviewNotification()
                         return res.ok(ads[0])
                     }
                 })
@@ -340,40 +340,46 @@ module.exports = {
     impressions: function (req, res) {
         var params = req.allParams();
         if (!params.id) {
-            return res.badRequest({error: "No Id"})
+            return res.badRequest({error: "No Id provided"})
         }
         var id = params.id;
 
-        var adLogs;
-        return OGLog.find({logType: 'impression'})
-            .then(function (logs) {
-                adLogs = _.filter(logs, {message: {adId: id}})
-                if (adLogs) {
-                    return async.each(adLogs, function (log, cb) {
-                            return Device.findOne(log.deviceUniqueId) //TODO this is gonna change what key is used
-                                .populate('venue')
-                                .then(function (dev) {
-                                    log.venue = dev.venue;
-                                    cb()
-                                })
-                                .catch(function (err) {
-                                    return cb(err)
-                                })
-                        },
-                        function (err) {
-                            if (err) {
-                                return res.serverError({error: err})
-                            }
-                            else {
-                                return res.ok(adLogs)
-
-                            }
-
-                        })
+        Ad.findOne(id)
+            .then(function(ad){
+                if (!ad){
+                    res.notFound({error: "Ad Id does not exist"})
                 }
-                else
-                    return res.notFound();
+                else {
+                    var adLogs;
+                    return OGLog.find({logType: 'impression'})
+                        .then(function (logs) {
+                            adLogs = _.filter(logs, {message: {adId: id}})
+                            async.each(adLogs, function (log, cb) {
+                                    return Device.findOne(log.deviceUniqueId) //TODO this is gonna change what key is used
+                                        .populate('venue')
+                                        .then(function (dev) {
+                                            log.venue = dev.venue;
+                                            cb()
+                                            return null; 
+                                        })
+                                        .catch(function (err) {
+                                            return cb(err)
+                                        })
+                                },
+                                function (err) {
+                                    if (err) {
+                                        return res.serverError({error: err})
+                                    }
+                                    else {
+                                        return res.ok(adLogs)
 
+                                    }
+
+                                })
+                            return null; 
+                        })
+
+                }
             })
 
             .catch(function (err) {
@@ -384,7 +390,7 @@ module.exports = {
     //TODO lots of impressions = long load time
     //maybe an impression endpoint that does hourly counts for each ad for a certain date
     dailyCount: function (req, res) { // TODO only get session users ads :)
-        var start = new Date().getTime()
+        //var start = new Date().getTime()
 
         var params = req.allParams()
         if (!params.date) {
@@ -401,16 +407,18 @@ module.exports = {
             .then(function (logs) {
                 if (params.id) {
                     logs = _.filter(logs, {message: {adId: params.id}})
+                    return logs
                 }
                 else {
-                    Ad.find({creator: req.session.user.id}) //TODO this is bad
+                    return Ad.find({creator: req.session.user.id}) //TODO this is bad
                         .then(function (ads) {
                             var ids = _.map(ads, 'id')
                             logs = _.filter(logs, function (l) {
                                 return (_.findIndex(ids, function (id) {
                                     return id == l.message.adId
                                 }) > -1)
-                            })
+                            });
+                            return logs;
                         })
                         .catch(function(err){
                             return res.serverError({error: err})
@@ -420,11 +428,19 @@ module.exports = {
                 }
 
 
+               
+            })
+            .then(function(logs){
                 async.each(logs, function (log, cb) {
                     return Ad.findOne(log.message.adId)
                         .then(function (ad) {
+                            if(!ad) {
+                                sails.log.debug(log)
+                                return res.notFound({error: "Bad ad ID attached to log" + log})
+                            }
                             log.adName = ad.name;
-                            cb()
+                            return cb()
+                            
                         })
                         .catch(function (err) {
                             cb(err)
@@ -435,61 +451,26 @@ module.exports = {
                     else {
                         logs = _.groupBy(logs, 'adName')
 
-                        var end = new Date().getTime()
-                        sails.log.debug("Daily count time " + (end - start))
+                        //var end = new Date().getTime()
+                        //sails.log.debug("Daily count time " + (end - start))
                         return res.ok(logs)
                     }
-                })
+                });
+                return null;
             })
 
             .catch(function (err) {
                 return res.serverError({error: err})
             })
     },
+    
 
 
     //it might be cool to sort by ad name by day but thats complex
     weeklyImpressions: function (req, res) { //takes hella long to query ugh
         var start = new Date().getTime()
         var logs = []
-        var impressions = [0, 0, 0, 0, 0, 0]
-
-       /*var query = {
-            logType: 'impression',
-            loggedAt: {
-                '>': new Date(moment().subtract(0, 'days').startOf('day')),
-                '<': new Date(moment().endOf('day'))
-            }
-        };
-        var start = new Date().getTime();
-        OGLog.find(query)
-            .then(function(logs){
-                var other = new Date().getTime();
-                sails.log.debug("query time " + (other - start))
-                    return Ad.find({creator: req.session.user.id}) //TODO this is bad
-                        .then(function (ads) {
-
-                            var ids = _.map(ads, 'id')
-                            logs = _.filter(logs, function (l) {
-                                return (_.findIndex(ids, function (id) {
-                                    return id == l.message.adId
-                                }) > -1)
-                            })
-                            var grouped = _.groupBy(logs, function(log){
-                                return moment(log.loggedAt).format("YYYY-MM-DD")
-                            })
-                            sails.log.debug(_.keys(grouped))
-                            var counts = _.map(grouped, function(g){
-                                return g.length
-                            })
-                            sails.log.debug(counts)
-
-                            return res.ok(counts)
-                        })
-            })*/
-
-
-
+        var impressions = [0, 0, 0, 0, 0, 0, 0]
         async.each([6, 5, 4, 3, 2, 1, 0],
             function (num, cb) {
                 var query = {
@@ -500,12 +481,13 @@ module.exports = {
                     }
                 };
 
-                var start = new Date().getTime()
+
+                //var start = new Date().getTime()
 
                 return OGLog.find(query)
                     .then(function (logs) {
-                        var other = new Date().getTime()
-                        sails.log.debug("Query time = " + (other - start))
+                        //var other = new Date().getTime()
+                        //sails.log.debug("Query time = " + (other - start))
                         return Ad.find({creator: req.session.user.id}) //TODO this is bad
                             .then(function (ads) {
 
@@ -516,15 +498,16 @@ module.exports = {
                                     }) > -1)
                                 })
 
+
                                 impressions[6 - num] = logs.length;
-                                var end = new Date().getTime()
-                                sails.log.debug("inner inner Exec Time " + (end - other))
+                                //var end = new Date().getTime()
+                                //sails.log.debug("inner inner Exec Time " + (end - other))
 
-                                sails.log.debug("inner Exec Time " + (end - start))
+                                //sails.log.debug("inner Exec Time " + (end - start))
                                 cb();
-
+                                return null; 
                             })
-
+                        
                     })
                     .catch(function(err){
                         cb(err)
@@ -535,19 +518,9 @@ module.exports = {
                     return res.serverError({error: err})
                 else {
                     var end = new Date().getTime()
-                    OGLog.find({logType: 'impression', loggedAt: {
-                            '>': new Date(moment().subtract(7, 'days').startOf('day')),
-                            '<': new Date(moment().subtract(0, 'days').endOf('day'))
-                        }})
-                        .then(function(logs){
-                            var e2 = new Date().getTime()
-                            sails.log.debug("what time", (e2-end))
-                            return Promise.resolve()
-                        })
-                        .catch(function(err){
-                            return res.serverError({error: err})
-                        })
-                    sails.log.debug("Exec Time " + (end - start))
+
+                    //sails.log.debug("Exec Time " + (end - start))
+                    
                     return res.ok(impressions)
                 }
 
@@ -557,6 +530,53 @@ module.exports = {
 
 
     },
+
+    //TODO impressions for an ad given a certain time period
+    timeSpanImpressions: function(req, res){
+        var params = req.allParams();
+        
+        if (!params.id || !params.start || !params.end){
+            return res.badRequest({error: "Missing params"})
+        }
+        
+        Ad.findOne(params.id)
+            .then(function(ad){
+                if (!ad)
+                    return res.notFound({error: "Bad ad ID "})
+                var start = new Date(moment(params.start, "YYYY-MM-DD").startOf('day'))
+                var end = new Date(moment(params.end, "YYYY-MM-DD").endOf('day'))
+
+                if ((start - end) > 0)
+                    return res.badRequest({error: "dates are not right"})
+                var query = {
+                    logType: 'impression',
+                    loggedAt: {
+                        '>': start,
+                        '<': end
+                    }
+                }
+                return OGLog.find(query)
+                    .then(function(logs){
+                        logs = _.filter(logs, {message: {adId: params.id}})
+                        var grouped = _.groupBy(logs, function(log){
+                            return moment(log.loggedAt).format("YYYY-MM-DD")
+                        })
+                        var counts = {}
+                        _.times((moment(end).diff(moment(start), 'days')) +1, function(num){
+                            var date = moment(start).add(num, 'days').format("YYYY-MM-DD")
+                            counts[date] = grouped[date] ? grouped[date].length : 0
+                        })
+
+                        return res.ok(counts)
+                    })
+
+            })
+            .catch(function(err){
+                return res.serverError({error: err})
+            })
+        
+    },
+    
     forDevice: function (req, res) {
         var params = req.allParams()
 

@@ -863,22 +863,23 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                         })
                 },
 
-                impressions: function ($stateParams, $http) {
+                /*impressions: function ($stateParams, $http) {
                     return $http.get("ad/impressions/" + $stateParams.id)
                         .then(function (data) {
                             return data.data;
                         })
 
                 },
+                */
                 admin: function () {
                     return false
                 },
-                logs: function ($http, $stateParams) {
+                /*logs: function ($http, $stateParams) {
                     var d = moment().format("YYYY-MM-DD")
                     return $http.get("/ad/dailyCount?date=" + d + "&id=" + $stateParams.id).then(function (logs) {
                         return logs.data;
                     })
-                }
+                }*/
             }
 
         })
@@ -986,7 +987,7 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                         return ads.data;
                     })
                 },
-                logsToday: function ($http) {//TODO user id for this too
+                /*logsToday: function ($http) {//TODO user id for this too
                     var d = moment().format("YYYY-MM-DD")
                     return $http.get("/ad/dailyCount?date=" + d).then(function (logs) {
                         return logs.data;
