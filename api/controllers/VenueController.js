@@ -12,7 +12,7 @@ var yelp = new Yelp({
     consumer_secret: "lU4QHPKu7XdO-8IRIdH-1gpgWxg",
     token: "4zCE_xN7zdbdrGgxiM-_kuFER25FWLEh",
     token_secret: "WLHkoScUyrkJCW1WS7c_fXe_ekI"
-})
+});
 
 module.exports = {
 

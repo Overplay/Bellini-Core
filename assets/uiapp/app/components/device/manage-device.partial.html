@@ -16,7 +16,9 @@
                                 </tr>
                                 <tr>
                                     <td>Venue</td>
-                                    <td><a ui-sref="venue.view({id: device.venue.id})">{{device.venue.name}}</a></td>
+                                    <td><a ui-sref="venue.view({id: device.venue.id})" ng-if="edit">{{device.venue.name}}</a>
+                                        <span ng-if="!edit">{{device.venue.name}}</span>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>Venue Address</td>
@@ -24,6 +26,12 @@
                                         <a ng-href="http://maps.google.com/?q={{addressString(device.venue.address)}}" target="_blank">
                                             {{addressString(device.venue.address)}}
                                         </a>
+                                    </td>
+                                </tr>
+                                <tr ng-if="device.lineupName">
+                                    <td>Lineup</td>
+                                    <td>
+                                        {{ device.lineupName }}
                                     </td>
                                 </tr>
                             </table>
