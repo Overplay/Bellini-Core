@@ -8,11 +8,20 @@ var jwt = require('jwt-simple')
 var secret = sails.config.jwt.secret;
 
 var transport = nodemailer.createTransport(sails.config.mailing.emailConfig); 
-
+var configs = true;
+if (!sails.config.jwt || !sails.config.mailing){
+    configs = false;
+    sails.log.warn("NO CONFIG FOR JWT OR MAILING")
+}
 
 module.exports = {
 
     inviteEmail: function (email, name, venue, role) {
+
+        if(!configs){
+            sails.log.debug("CANNOT SEND MAIL DUE TO MISSING CONFIG")
+            return null;
+        }
 
         var viewVars = {
             name: name,
@@ -26,11 +35,18 @@ module.exports = {
     },
     
     inviteNewUser: function(email){
+        if(!configs){
+            sails.log.debug("CANNOT SEND MAIL DUE TO MISSING CONFIG")
+            return null;
+        }
         sendMail({url: sails.config.mailing.inviteUrl}, "invitenewuser.jade", "You have been invited to Ourglass!", email)
     },
 
     inviteRole: function (email, name, venue, role) {
-
+        if(!configs){
+            sails.log.debug("CANNOT SEND MAIL DUE TO MISSING CONFIG")
+            return null;
+        }
         var viewVars = {
             name: name,
             venue: venue.name,
@@ -45,6 +61,11 @@ module.exports = {
     },
 
     adReviewNotification: function () {
+        if(!configs){
+            sails.log.debug("CANNOT SEND MAIL DUE TO MISSING CONFIG")
+            return null;
+        }
+
         var viewVars = {
             url: sails.config.mailing.login
         }
@@ -76,7 +97,10 @@ module.exports = {
     },
 
     adRejectNotification: function (userId, name, reason) {
-
+        if(!configs){
+            sails.log.debug("CANNOT SEND MAIL DUE TO MISSING CONFIG")
+            return null;
+        }
         var viewVars = {
             url: sails.config.mailing.login,
             name: name,
