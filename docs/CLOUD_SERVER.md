@@ -86,7 +86,7 @@
         - `sudo nginx -s reload`
 
 12. Install PM2 and set up Keymetrics
-    - used `sudo npm install pm2@next -g` (currently on 2.0.4)
+    - used `sudo npm install pm2 -g` (currently on 2.0.18)
         - `pm2 update`
     - set up keymetrics if desired (allows web view of pm2 processes)
         - on your keymetrics bucket, simply link by copy pasting the command at the bottom
@@ -131,6 +131,7 @@
     - `pm2 install auto-reload-pm2`
         - it is on the npm registry and will install automatically!
     - NOTE: May need to be configured based on process name. look at the README
+    - now works for multiple procs
 
 20. Generate a Startup Script
     - `pm2 startup ubuntu`

@@ -698,6 +698,12 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                         {link: 'device.managerList', text: 'Managed Devices'},
                         // {link: 'device.add', text: 'Add Device'}
                     ]
+                },
+                heartbeat: function ($http, $stateParams) {
+                    return $http.get('/OGLog/deviceHeartbeat', { params: { id : $stateParams.id }})
+                        .then( function (data) {
+                            return data.data;
+                        })
                 }
             }
         })
