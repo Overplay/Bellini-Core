@@ -176,7 +176,7 @@ app.factory('navBarService', function ($log) {
                     ]
                 }]
             },
-            'advertiser': {
+            'sponsor': {
                 left: [
                     {
                         label: 'Sponsorships',
