@@ -455,6 +455,34 @@ app.config(function ($stateProvider, $urlRouterProvider) {
             }
         })
 
+        .state('bestposition', {
+            url: '/bestposition',
+            templateUrl: '/uiapp/app/components/bestposition/bestposition-sidemenu.partial.html',
+            controller: function ($scope) {
+                $scope.panelHeading = {text: "", color: "#0000FF"}
+            },
+            abstract: true
+        })
+
+        .state('bestposition.list', {
+            url: '/list',
+            templateUrl: '/uiapp/app/components/bestposition/bestpositionlist.partial.html',
+            controller: 'bestPositionListController',
+            resolve: {
+                links: function () {
+                    return [
+                        {link: 'bestposition.list', text: "All Models"}
+                    ]
+                },
+                models: function ($http) {
+                    return $http.get('http://localhost:1338/BestPosition/findAll')
+                        .then( function (data) {
+                            return data.data
+                        })
+                }
+            }
+        })
+
         .state('device', {
             url: '/device',
             templateUrl: '/uiapp/app/components/device/device-sidemenu.partial.html',

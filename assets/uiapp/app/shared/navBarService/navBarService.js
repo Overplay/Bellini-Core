@@ -33,6 +33,11 @@ app.factory('navBarService', function ($log) {
                         label: "Advertisements",
                         id: "trevda",
                         items: [{label: "All Advertisements", link: {type: 'ui-sref', addr: 'advertisement.adminList'}}]
+                    },
+                    {
+                        label: "Best Position",
+                        id: "bestposition",
+                        items: [{label: "Best Position", link: {type: 'ui-sref', addr: 'bestposition.list'}}]
                     }
                 ],
                 right: [{

@@ -45,3 +45,10 @@ app.filter('capitalize', function() {
         return input.substring(0,1).toUpperCase()+input.substring(1);
     }
 });
+
+app.filter('startFrom', function () {
+    return function (input, start) {
+//        start = parseInt(start);
+        return input.slice(start);
+    }
+})
