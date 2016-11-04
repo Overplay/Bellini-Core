@@ -16,4 +16,27 @@ app.controller('bestPositionListController', function ($scope, $state, nucleus, 
         $location.hash('top');
         $anchorScroll();
     }
+
+})
+
+app.controller('bestPositionEditController', function ($scope, $state, nucleus, $log, links, model, $http) {
+    $log.debug("bestPositionEditController");
+    $scope.$parent.ui.pageTitle = "Edit Best Position";
+    $scope.$parent.ui.panelHeading = "";
+    $scope.$parent.links = links;
+
+    $scope.adPositions = ['top-right', 'top-left', 'bottom-right', 'bottom-left'];
+    $scope.crawlerPositions = ['bottom', 'top']
+
+    $scope.model = model;
+    $log.log(model)
+    $scope.update = function() {
+        $log.log("UPDATE")
+
+        //TODO url 
+        $http.put("http://localhost:1338/bestPosition/" + $scope.model.id, $scope.model)
+            .then(function(l){
+                $log.log(l)
+            })
+    }
 })

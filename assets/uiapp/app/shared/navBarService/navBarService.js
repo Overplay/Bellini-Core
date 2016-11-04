@@ -30,9 +30,9 @@ app.factory('navBarService', function ($log) {
                         items: [{label: "All Venues", link: {type: 'ui-sref', addr: 'venue.adminList'}}]
                     },
                     {
-                        label: "Advertisements",
+                        label: "Sponsorships",
                         id: "trevda",
-                        items: [{label: "All Advertisements", link: {type: 'ui-sref', addr: 'advertisement.adminList'}}]
+                        items: [{label: "All Sponsorships", link: {type: 'ui-sref', addr: 'advertisement.adminList'}}]
                     },
                     {
                         label: "Best Position",
@@ -179,11 +179,11 @@ app.factory('navBarService', function ($log) {
             'sponsor': {
                 left: [
                     {
-                        label: 'Advertisements',
+                        label: 'Sponsorships',
                         id: "ads",
                         items: [
                             {
-                                label: 'My Advertisements', link: {type: 'ui-sref', addr: 'advertisement.list'}
+                                label: 'My Sponsorships', link: {type: 'ui-sref', addr: 'advertisement.list'}
                             }
                         ]
                     }]
