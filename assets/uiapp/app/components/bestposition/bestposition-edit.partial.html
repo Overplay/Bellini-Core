@@ -1,0 +1,34 @@
+<div class="row" id="top">
+    <div class="col-sm-8 col-sm-offset-2 top30">
+
+
+        <div ng-show="model.type=='network'">
+            <h2> Network: {{model.network}} </h2>
+
+        </div>
+        <div ng-show="model.type=='series'">
+            <h2> Series Name: {{model.seriesName}} </h2>
+
+        </div>
+
+        <div>
+            <h4> Ad Position </h4>
+            <select class="selectpicker" ng-model="model.adPosition">
+                <option ng-repeat="position in adPositions">{{position}}</option>
+            </select>
+        </div>
+
+        <div>
+            <h4> Crawler Position </h4>
+            <select ng-model="model.crawlerPosition">
+                <option ng-repeat="position in crawlerPositions">{{position}}</option>
+            </select>
+
+        </div>
+        <br>
+        <div>
+            <button class="btn btn-success" ng-click="update()">UPDATE</button>
+        </div>
+
+    </div>
+</div>
