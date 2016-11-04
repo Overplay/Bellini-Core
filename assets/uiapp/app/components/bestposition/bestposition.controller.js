@@ -36,6 +36,7 @@ app.controller('bestPositionEditController', function ($scope, $state, nucleus, 
     $scope.update = function() {
         $log.log("UPDATE")
 
+        //TODO url 
         $http.put("http://localhost:1338/bestPosition/" + $scope.model.id, $scope.model)
             .then(function(l){
                 $log.log(l)
