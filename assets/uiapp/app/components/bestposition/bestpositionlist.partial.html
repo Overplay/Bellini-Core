@@ -1,10 +1,18 @@
 <div class="row" id="top">
-    <div class="col-sm-8 col-sm-offset-2 top30" ng-show="models.length && !fetching">
+    <div class="col-sm-8 col-sm-offset-2 top30" ng-show="models.length && !loadingData">
         <input type="text" ng-model="searchTerm" class="form-control" placeholder="Search best position models...">
     </div>
     <div class="col-sm-10 col-sm-offset-1 top30">
-        <h3 ng-show="!results.length && !fetching" style="text-align: center; margin-bottom: 40px">No Best Position Models Found</h3>
-        <table class="table table-striped" ng-show="results.length">
+        <h3 ng-if="!results.length && !loadingData" style="text-align: center; margin-bottom: 40px">No Best Position Models</h3>
+
+        <div ng-show="loadingData" class="text-center">
+            <br>
+            <h5>Loading...</h5>
+            <br>
+            <i class="fa fa-spinner fa-spin fa-pulse fa-fw"></i>
+        </div>
+
+        <table class="table table-striped" ng-if="results.length">
             <thead>
             <tr>
                 <th>Network</th>
@@ -27,7 +35,7 @@
                 <td>{{ model.adPosition | capitalize }}</td>
                 <td>{{ model.crawlerPosition | capitalize}}</td>
                 <td>
-                    <a class="btn btn-sm btn-warning">EDIT</a></td>
+                    <a class="btn btn-sm btn-warning" ui-sref="bestposition.edit({id: model.id})">EDIT</a></td>
             </tr>
             </tbody>
         </table>
