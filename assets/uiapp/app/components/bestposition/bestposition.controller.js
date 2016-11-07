@@ -22,24 +22,24 @@ app.controller('bestPositionListController', function ($scope, $state, nucleus, 
 })
 
 
-app.controller('bestPositionEditController', function ($scope, $state, nucleus, $log, links, model, $http) {
+app.controller('bestPositionEditController', function ($scope, $state, nucleus, $log, links, model, $http, toastr) {
     $log.debug("bestPositionEditController");
+    $scope.model = model;
     $scope.$parent.ui.pageTitle = "Edit Best Position";
-    $scope.$parent.ui.panelHeading = "";
+    $scope.$parent.ui.panelHeading = model.type == 'network' ? "Network: " + model.network : "Series: " + model.seriesName;
     $scope.$parent.links = links;
 
     $scope.adPositions = ['top-right', 'top-left', 'bottom-right', 'bottom-left'];
     $scope.crawlerPositions = ['bottom', 'top']
 
-    $scope.model = model;
+
     $log.log(model)
     $scope.update = function() {
-        $log.log("UPDATE")
-
         //TODO url 
         $http.put("http://localhost:1338/bestPosition/" + $scope.model.id, $scope.model)
             .then(function(l){
                 $log.log(l)
+                toastr.success("Positions updated!", "Nice!")
             })
     }
 })

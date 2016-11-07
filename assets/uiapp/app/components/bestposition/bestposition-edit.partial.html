@@ -1,33 +1,33 @@
 <div class="row" id="top">
     <div class="col-sm-8 col-sm-offset-2 top30">
 
+        <div class="row">
+            <div class="col-sm-4">
+                <h3> Ad Position </h3>
+                <select class="form-control" ng-model="model.adPosition">
+                    <option ng-repeat="position in adPositions">{{position}}</option>
+                </select>
+            </div>
 
-        <div ng-show="model.type=='network'">
-            <h2> Network: {{model.network}} </h2>
-
-        </div>
-        <div ng-show="model.type=='series'">
-            <h2> Series Name: {{model.seriesName}} </h2>
-
-        </div>
-
-        <div>
-            <h4> Ad Position </h4>
-            <select class="selectpicker" ng-model="model.adPosition">
-                <option ng-repeat="position in adPositions">{{position}}</option>
-            </select>
-        </div>
-
-        <div>
-            <h4> Crawler Position </h4>
-            <select ng-model="model.crawlerPosition">
-                <option ng-repeat="position in crawlerPositions">{{position}}</option>
-            </select>
-
+            <div class="col-sm-4">
+                <h3> Crawler Position </h3>
+                <select class="form-control" ng-model="model.crawlerPosition">
+                    <option ng-repeat="position in crawlerPositions">{{position}}</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <h2> Screen with positions here? </h2>
+            </div>
         </div>
         <br>
-        <div>
-            <button class="btn btn-success" ng-click="update()">UPDATE</button>
+        <div class="row">
+            <div class="col-md-4"></div>
+            <div class="col-md-4 text-center">
+                <button class="btn btn-success" ng-click="update()">UPDATE</button>
+
+
+            </div>
+            <div class="col-md-4"></div>
         </div>
 
     </div>
