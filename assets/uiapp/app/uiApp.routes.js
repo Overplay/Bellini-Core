@@ -1033,7 +1033,7 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 }
             }
         })
-        .state('dash.advertiser', {
+        .state('dash.sponsor', {
             templateUrl: '/uiapp/app/components/dash/ad-dash.partial.html',
             controller: 'adDashController',
             resolve: {
