@@ -87,7 +87,7 @@ app.controller("adminDashController", function ($scope, $log, ads, userCount, de
 
 app.controller("adDashController", function($scope, $log, ads, $http, $q){
     $log.log("starting adDashController")
-    $scope.$parent.selected = "advertiser"
+    $scope.$parent.selected = "sponsor"
 
 
     $scope.loadingWeekly = true;
