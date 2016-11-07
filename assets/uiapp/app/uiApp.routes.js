@@ -474,12 +474,12 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                         {link: 'bestposition.list', text: "All Models"}
                     ]
                 },
-                models: function ($http) {
-                    return $http.get('http://localhost:1338/BestPosition/findAll')
-                        .then( function (data) {
-                            return data.data
-                        })
-                }
+//                models: function ($http) {
+//                    return $http.get('http://localhost:1338/BestPosition/findAll')
+//                        .then( function (data) {
+//                            return data.data
+//                        })
+//                }
             }
         })
 
