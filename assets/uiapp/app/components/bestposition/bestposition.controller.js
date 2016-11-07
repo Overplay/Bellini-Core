@@ -2,17 +2,27 @@
  * Created by ryanhartzell on 11/3/16.
  */
 
-app.controller('bestPositionListController', function ($scope, $state, nucleus, $log, links, models, $anchorScroll, $location) {
+var url = "localhost";
+
+app.controller('bestPositionListController', function ($scope, $state,$http, nucleus, $log, links, $anchorScroll, $location) {
     $log.debug("bestPositionListController");
+    $scope.loadingData = true;
     $scope.$parent.ui.pageTitle = "Best Position Models";
     $scope.$parent.ui.panelHeading = "";
     $scope.$parent.links = links;
 
-    $scope.models = models;
+    $scope.models = [];
     $scope.pageSize = 50;
     $scope.currentPage = 1;
 
     //$log.log(models[0])
+
+    $http.get('http://'+url+':1338/BestPosition/findAll')
+        .then( function (data) {
+            $scope.models = data.data
+            $scope.loadingData = false
+        })
+
 
     $scope.goToTableTop = function () {
         $location.hash('top');
@@ -32,11 +42,9 @@ app.controller('bestPositionEditController', function ($scope, $state, nucleus, 
     $scope.adPositions = ['top-right', 'top-left', 'bottom-right', 'bottom-left'];
     $scope.crawlerPositions = ['bottom', 'top']
 
-
-    $log.log(model)
     $scope.update = function() {
         //TODO url 
-        $http.put("http://localhost:1338/bestPosition/" + $scope.model.id, $scope.model)
+        $http.put("http://"+url+":1338/bestPosition/" + $scope.model.id, $scope.model)
             .then(function(l){
                 $log.log(l)
                 toastr.success("Positions updated!", "Nice!")

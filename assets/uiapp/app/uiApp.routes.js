@@ -475,13 +475,13 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                         {link: 'bestposition.list', text: "All Models"}
                     ]
                 },
-                //TODO url and edit page (save function
+               /* 
                 models: function ($http) {
                     return $http.get('http://'+url+':1338/BestPosition/findAll')
                         .then( function (data) {
                             return data.data
                         })
-                }
+                }*/
             }
         })
         .state('bestposition.edit', {
