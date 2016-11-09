@@ -49,6 +49,8 @@ app.filter('capitalize', function() {
 app.filter('startFrom', function () {
     return function (input, start) {
 //        start = parseInt(start);
-        return input.slice(start);
+        if (input)
+            return input.slice(start);
+        return null;
     }
 })
