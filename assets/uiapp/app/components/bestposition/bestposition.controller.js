@@ -4,7 +4,7 @@
 
 var url = "localhost";
 
-app.controller('bestPositionListController', function ($scope, $state,$http, nucleus, $log, links, $anchorScroll, $location) {
+app.controller('bestPositionListController', function ($scope, $state, $http, nucleus, $log, links, $anchorScroll, $location, toastr) {
     $log.debug("bestPositionListController");
     $scope.loadingData = true;
     $scope.$parent.ui.pageTitle = "Best Position Models";
@@ -19,9 +19,13 @@ app.controller('bestPositionListController', function ($scope, $state,$http, nuc
 
     $http.get('http://'+url+':1338/BestPosition/findAll')
         .then( function (data) {
-            $scope.models = data.data
-            $scope.loadingData = false
+            $scope.models = data.data;
+            $scope.loadingData = false;
         })
+        .catch( function (err) {
+            $scope.loadingData = false;
+            toastr.error("Unable to fetch best position models. Please try again later.", "Error");
+        });
 
 
     $scope.goToTableTop = function () {
