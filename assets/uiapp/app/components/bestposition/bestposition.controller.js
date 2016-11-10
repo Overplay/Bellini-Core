@@ -14,7 +14,7 @@ app.controller('bestPositionListController', function ($scope, $state, $http, nu
     $scope.models = [];
     $scope.pageSize = 50;
     $scope.currentPage = 1;
-
+    $scope.multiEditIds = [];
     //$log.log(models[0])
 
     $http.get('http://'+url+':1338/BestPosition/findAll')
@@ -31,6 +31,33 @@ app.controller('bestPositionListController', function ($scope, $state, $http, nu
     $scope.goToTableTop = function () {
         $location.hash('top');
         $anchorScroll();
+    }
+
+    $scope.selectOne = function (id) {
+        var index = _.indexOf($scope.multiEditIds, id);
+        if (index === -1) {
+            $scope.multiEditIds.push(id);
+            if ($scope.multiEditIds.length === $scope.results.length)
+                $scope.allSelected = true;
+        }
+        else {
+            $scope.multiEditIds.splice(index, 1);
+            $scope.allSelected = false;
+        }
+    }
+
+    $scope.selectAll = function () {
+        if ($scope.multiEditIds.length !== $scope.results.length) {
+            $scope.multiEditIds = [];
+            _.forEach($scope.results, function (o) {
+                $scope.multiEditIds.push(o.id);
+                o.selected = true;
+            });
+        }
+        else {
+            $scope.multiEditIds = [];
+            _.forEach($scope.results, function (o) { o.selected = false; })
+        }
     }
 
 })

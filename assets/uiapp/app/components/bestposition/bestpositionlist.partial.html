@@ -15,6 +15,7 @@
         <table class="table table-striped" ng-show="results.length">
             <thead>
             <tr>
+                <th><input type="checkbox" ng-change="selectAll()" ng-model="allSelected"></th>
                 <th>Network</th>
                 <th>Program</th>
                 <th>Type</th>
@@ -24,6 +25,9 @@
             </thead>
             <tbody>
             <tr ng-repeat="model in ($parent.results = (models | filter: searchTerm | orderBy: 'network') | startFrom: (currentPage-1)*pageSize | limitTo: pageSize)">
+                <td>
+                    <input type="checkbox" ng-change="selectOne(model.id)" ng-model="model.selected">
+                </td>
                 <td ng-show="model.network">{{ model.network }}</td>
                 <td ng-show="model.seriesNetworks.length">
                     <p ng-repeat="network in model.seriesNetworks | orderBy: '+'">
