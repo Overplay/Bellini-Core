@@ -2,14 +2,15 @@
  * Created by ryanhartzell on 11/3/16.
  */
 
-var url = "localhost";
 
-app.controller('bestPositionListController', function ($scope, $state, $http, nucleus, $log, links, $anchorScroll, $location, toastr) {
+app.controller('bestPositionListController', function ($scope, $rootScope, $state, $http, nucleus, $log, links, $anchorScroll, $location, toastr) {
     $log.debug("bestPositionListController");
     $scope.loadingData = true;
     $scope.$parent.ui.pageTitle = "Best Position Models";
     $scope.$parent.ui.panelHeading = "";
     $scope.$parent.links = links;
+
+    $scope.url = $rootScope.url
 
     $scope.models = [];
     $scope.pageSize = 50;
@@ -17,7 +18,7 @@ app.controller('bestPositionListController', function ($scope, $state, $http, nu
     $scope.multiEditIds = [];
     //$log.log(models[0])
 
-    $http.get('http://'+url+':1338/BestPosition/findAll')
+    $http.get('http://'+$scope.url+':1338/BestPosition/findAll')
         .then( function (data) {
             $scope.models = data.data;
             $scope.loadingData = false;
@@ -63,15 +64,21 @@ app.controller('bestPositionListController', function ($scope, $state, $http, nu
 })
 
 
-app.controller('bestPositionEditController', function ($scope, $state, nucleus, $log, links, model, $http, toastr) {
+app.controller('bestPositionEditController', function ($scope, $rootScope, $state, nucleus, $log, links, model, $http, toastr) {
     $log.debug("bestPositionEditController");
     $scope.model = model;
+    var url = $rootScope.url
+
     $scope.$parent.ui.pageTitle = "Edit Best Position";
     $scope.$parent.ui.panelHeading = model.type == 'network' ? "Network: " + model.network : "Series: " + model.seriesName;
     $scope.$parent.links = links;
 
     $scope.adPositions = ['top-right', 'top-left', 'bottom-right', 'bottom-left'];
     $scope.crawlerPositions = ['bottom', 'top']
+
+    $http.get('/uiapp/local.json').then(function(data){
+        url = data.data.url
+    })
 
     $scope.update = function() {
         //TODO url

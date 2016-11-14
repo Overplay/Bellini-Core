@@ -7,7 +7,6 @@ app.config(function ($stateProvider, $urlRouterProvider) {
     console.debug("Loading routes");
 
     var apiPath = 'api/v1';
-    var url = "localhost"
 
     $urlRouterProvider.otherwise('/dash');
 
@@ -485,7 +484,7 @@ app.config(function ($stateProvider, $urlRouterProvider) {
             }
         })
         .state('bestposition.edit', {
-            url: '/edit/:id',
+            url: '/edit/:id/:url',
             templateUrl: '/uiapp/app/components/bestposition/bestposition-edit.partial.html',
             controller: 'bestPositionEditController',
             resolve: {
@@ -496,7 +495,7 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 },
                 //TODO url and edit page (save function
                 model: function ($http, $stateParams) {
-                    return $http.get('http://'+url+':1338/BestPosition/'+$stateParams.id)
+                    return $http.get('http://'+$stateParams.url+':1338/BestPosition/'+$stateParams.id)
                         .then( function (data) {
                             return data.data
                         })
