@@ -4,7 +4,7 @@
 
 var url = "localhost";
 
-app.controller('bestPositionListController', function ($scope, $state,$http, nucleus, $log, links, $anchorScroll, $location) {
+app.controller('bestPositionListController', function ($scope, $state, $http, nucleus, $log, links, $anchorScroll, $location, toastr) {
     $log.debug("bestPositionListController");
     $scope.loadingData = true;
     $scope.$parent.ui.pageTitle = "Best Position Models";
@@ -14,19 +14,50 @@ app.controller('bestPositionListController', function ($scope, $state,$http, nuc
     $scope.models = [];
     $scope.pageSize = 50;
     $scope.currentPage = 1;
-
+    $scope.multiEditIds = [];
     //$log.log(models[0])
 
     $http.get('http://'+url+':1338/BestPosition/findAll')
         .then( function (data) {
-            $scope.models = data.data
-            $scope.loadingData = false
+            $scope.models = data.data;
+            $scope.loadingData = false;
         })
+        .catch( function (err) {
+            $scope.loadingData = false;
+            toastr.error("Unable to fetch best position models. Please try again later.", "Error");
+        });
 
 
     $scope.goToTableTop = function () {
         $location.hash('top');
         $anchorScroll();
+    }
+
+    $scope.selectOne = function (id) {
+        var index = _.indexOf($scope.multiEditIds, id);
+        if (index === -1) {
+            $scope.multiEditIds.push(id);
+            if ($scope.multiEditIds.length === $scope.results.length)
+                $scope.allSelected = true;
+        }
+        else {
+            $scope.multiEditIds.splice(index, 1);
+            $scope.allSelected = false;
+        }
+    }
+
+    $scope.selectAll = function () {
+        if ($scope.multiEditIds.length !== $scope.results.length) {
+            $scope.multiEditIds = [];
+            _.forEach($scope.results, function (o) {
+                $scope.multiEditIds.push(o.id);
+                o.selected = true;
+            });
+        }
+        else {
+            $scope.multiEditIds = [];
+            _.forEach($scope.results, function (o) { o.selected = false; })
+        }
     }
 
 })
@@ -43,7 +74,7 @@ app.controller('bestPositionEditController', function ($scope, $state, nucleus, 
     $scope.crawlerPositions = ['bottom', 'top']
 
     $scope.update = function() {
-        //TODO url 
+        //TODO url
         $http.put("http://"+url+":1338/bestPosition/" + $scope.model.id, $scope.model)
             .then(function(l){
                 $log.log(l)
