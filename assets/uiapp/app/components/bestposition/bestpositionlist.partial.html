@@ -29,6 +29,7 @@
                 <td>
                     <input type="checkbox" ng-change="selectOne(model.id)" ng-model="model.selected">
                 </td>
+                <td ng-show="!model.network && !model.seriesNetworks.length"> N/A </td>
                 <td ng-show="model.network">{{ model.network }}</td>
                 <td ng-show="model.seriesNetworks.length">
                     <p ng-repeat="network in model.seriesNetworks | orderBy: '+'">
