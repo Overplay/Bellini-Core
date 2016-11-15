@@ -496,6 +496,27 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 }
             }
         })
+        .state('bestposition.multiEdit', {
+            url: '/multi-edit/',
+            templateUrl: '/uiapp/app/components/bestposition/bestposition-multiedit.partial.html',
+            controller: 'bestPositionMultiEditController',
+            params: {
+                ids: {
+                    value: [],
+                    array: true
+                }
+            },
+            resolve: {
+                links: function () {
+                    return [
+                        {link: 'bestposition.list', text: "All Models"}
+                    ]
+                },
+                ids: function ($http, $stateParams) {
+                    return $stateParams.ids;
+                }
+            }
+        })
 
         .state('device', {
             url: '/device',

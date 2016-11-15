@@ -21,6 +21,7 @@
                 <th>Type</th>
                 <th>Ad Position</th>
                 <th>Crawler Position</th>
+                <th><a class="btn btn-sm btn-warning" ui-sref="bestposition.multiEdit({ids: multiEditIds})" ng-class="{'disabled': !multiEditIds.length}">EDIT SELECTED</a></th>
             </tr>
             </thead>
             <tbody>
@@ -39,7 +40,12 @@
                 <td>{{ model.adPosition | capitalize }}</td>
                 <td>{{ model.crawlerPosition | capitalize}}</td>
                 <td>
-                    <a class="btn btn-sm btn-warning" ui-sref="bestposition.edit({id: model.id})">EDIT</a></td>
+                    <a class="btn btn-sm btn-warning" ui-sref="bestposition.edit({id: model.id})" ng-hide="model.selected">EDIT</a>
+                    <a class="btn btn-sm btn-warning"
+                       ui-sref="bestposition.multiEdit({ids: multiEditIds})"
+                       ng-show="model.selected">EDIT SELECTED</a>
+                </td>
+
             </tr>
             </tbody>
         </table>
@@ -50,7 +56,7 @@
                             rotate="true"
                             max-size="8"
                             boundary-link-numbers="true"
-                            ng-show="results.length"
+                            ng-show="results.length > 50"
                             ng-change="goToTableTop()"></uib-pagination>
         </div>
 

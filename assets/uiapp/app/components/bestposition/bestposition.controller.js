@@ -62,6 +62,78 @@ app.controller('bestPositionListController', function ($scope, $state, $http, nu
 
 })
 
+app.controller('bestPositionMultiEditController', function ($scope, $state, nucleus, $log, $http, links, toastr, ids) {
+    $log.debug("bestPositionMultiEditController starting");
+    $scope.$parent.ui.pageTitle = "Edit Best Position Models";
+    $scope.$parent.ui.panelHeading = "Editing " + ids.length + " Models";
+    $scope.$parent.links = links;
+    $scope.adPositions = ['top-right', 'top-left', 'bottom-right', 'bottom-left'];
+    $scope.crawlerPositions = ['bottom', 'top'];
+    $scope.bestPositions = [];
+    $scope.updating = {
+        active: false,
+        count: 0
+    };
+
+    $scope.model = {
+        adPosition: "",
+        crawlerPosition: ""
+    };
+
+    // change states if not a multiedit
+    if (ids.length === 1)
+        $state.go('bestposition.edit', { id: ids[0]});
+    else if (ids.length === 0) {
+        toastr.warning("There were no items selected to edit", "No Items!");
+        $state.go('bestposition.list');
+    }
+    else {
+        var promises = [];
+        _.forEach(ids, function (id) {
+            promises.push(
+                $http.get("http://" + url + ":1338/bestPosition/" + id)
+                    .then(function (bp) {
+                        $scope.bestPositions.push(bp.data);
+                    })
+            )
+        });
+
+        Promise.all(promises).then( function () {
+            $log.debug("All best position models fetched");
+        })
+        .catch( function (err) {
+            $log.error(err);
+        })
+
+    }
+
+    $scope.update = function () {
+        if (!$scope.model.adPosition || !$scope.model.crawlerPosition)
+            toastr.error("You must select both ad and crawler positions", "Can't Save");
+        else {
+            var promises = [];
+            $scope.updating.active = true;
+
+            _.forEach($scope.bestPositions, function (bp) {
+                bp.adPosition = $scope.model.adPosition;
+                bp.crawlerPosition = $scope.model.crawlerPosition;
+                promises.push(
+                    $http.put("http://"+url+":1338/bestPosition/" + bp.id, bp)
+                        .then( function (b) {
+                            $scope.updating.count++;
+                        })
+                )
+            })
+
+            Promise.all(promises).then( function () {
+                $scope.updating.active = false;
+                $scope.updating.count = 0;
+                toastr.success("Best positions updated", "Success!");
+            })
+        }
+    }
+})
+
 
 app.controller('bestPositionEditController', function ($scope, $state, nucleus, $log, links, model, $http, toastr) {
     $log.debug("bestPositionEditController");
