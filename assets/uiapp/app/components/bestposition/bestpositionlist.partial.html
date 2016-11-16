@@ -4,6 +4,7 @@
     </div>
     <div class="col-sm-10 col-sm-offset-1 top30">
         <h3 ng-show="!results.length && !loadingData" style="text-align: center; margin-bottom: 40px">No Best Position Models Found</h3>
+        <h3 ng-if="!models.length && !loadingData" style="text-align: center; margin-bottom: 40px">No Best Position Models</h3>
 
         <div ng-show="loadingData" class="text-center">
             <br>
@@ -29,6 +30,7 @@
                 <td>
                     <input type="checkbox" ng-change="selectOne(model.id)" ng-model="model.selected">
                 </td>
+                <td ng-show="!model.network && !model.seriesNetworks.length"> N/A </td>
                 <td ng-show="model.network">{{ model.network }}</td>
                 <td ng-show="model.seriesNetworks.length">
                     <p ng-repeat="network in model.seriesNetworks | orderBy: '+'">
@@ -40,12 +42,11 @@
                 <td>{{ model.adPosition | capitalize }}</td>
                 <td>{{ model.crawlerPosition | capitalize}}</td>
                 <td>
-                    <a class="btn btn-sm btn-warning" ui-sref="bestposition.edit({id: model.id})" ng-hide="model.selected">EDIT</a>
+                    <a class="btn btn-sm btn-warning" ui-sref="bestposition.edit({id: model.id, url: url})" ng-hide="model.selected">EDIT</a>
                     <a class="btn btn-sm btn-warning"
                        ui-sref="bestposition.multiEdit({ids: multiEditIds})"
                        ng-show="model.selected">EDIT SELECTED</a>
                 </td>
-
             </tr>
             </tbody>
         </table>

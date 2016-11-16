@@ -23,10 +23,13 @@ app.config(['ChartJsProvider', function (ChartJsProvider) {
     });
 }])
 
-app.run( function ( $log, $rootScope ) {
+app.run( function ( $log, $rootScope , $http) {
 
     $log.info( "Asahi is pouring!" );
 
+    $http.get('/uiapp/local.json').then(function(data){
+        $rootScope.url = data.data.url
+    })
 
     $rootScope.$on( '$stateChangeError',
         function ( event, toState, toParams, fromState, fromParams, error ) {
