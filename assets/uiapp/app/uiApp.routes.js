@@ -484,9 +484,14 @@ app.config(function ($stateProvider, $urlRouterProvider) {
             }
         })
         .state('bestposition.edit', {
-            url: '/edit/:id/:url',
+            url: '/edit/:id',
             templateUrl: '/uiapp/app/components/bestposition/bestposition-edit.partial.html',
             controller: 'bestPositionEditController',
+            params: {
+                url: {
+                    value: ""
+                }
+            },
             resolve: {
                 links: function () {
                     return [

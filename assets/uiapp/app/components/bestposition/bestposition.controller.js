@@ -10,7 +10,7 @@ app.controller('bestPositionListController', function ($scope, $rootScope, $stat
     $scope.$parent.ui.panelHeading = "";
     $scope.$parent.links = links;
 
-    $scope.url = $rootScope.url
+    $scope.url = $rootScope.url;
 
     $scope.models = [];
     $scope.pageSize = 50;
@@ -63,11 +63,12 @@ app.controller('bestPositionListController', function ($scope, $rootScope, $stat
 
 })
 
-app.controller('bestPositionMultiEditController', function ($scope, $state, nucleus, $log, $http, links, toastr, ids) {
+app.controller('bestPositionMultiEditController', function ($scope, $rootScope, $state, nucleus, $log, $http, links, toastr, ids) {
     $log.debug("bestPositionMultiEditController starting");
     $scope.$parent.ui.pageTitle = "Edit Best Position Models";
     $scope.$parent.ui.panelHeading = "Editing " + ids.length + " Models";
     $scope.$parent.links = links;
+    var url = $rootScope.url;
     $scope.adPositions = ['top-right', 'top-left', 'bottom-right', 'bottom-left'];
     $scope.crawlerPositions = ['bottom', 'top'];
     $scope.bestPositions = [];
@@ -139,7 +140,7 @@ app.controller('bestPositionMultiEditController', function ($scope, $state, nucl
 app.controller('bestPositionEditController', function ($scope, $rootScope, $state, nucleus, $log, links, model, $http, toastr) {
     $log.debug("bestPositionEditController");
     $scope.model = model;
-    var url = $rootScope.url
+    var url = $rootScope.url;
 
     $scope.$parent.ui.pageTitle = "Edit Best Position";
     $scope.$parent.ui.panelHeading = model.type == 'network' ? "Network: " + model.network : "Series: " + model.seriesName;

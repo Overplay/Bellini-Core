@@ -19,16 +19,16 @@
             </div>
         </div>
         <br>
-        <div class="row">
+        <div class="row" ng-hide="updating.active">
             <div class="col-md-4"></div>
             <div class="col-md-4 text-center" ng-hide="updating.active">
                 <button class="btn btn-success" ng-click="update()">UPDATE</button>
             </div>
-            <div class="col-md-4" ng-show="updating.active">
-                <uib-progressbar max="bestPositions.length" type="success" value="updating.count"></uib-progressbar>
-            </div>
+
             <div class="col-md-4"></div>
         </div>
-
+        <div class="row" ng-show="updating.active">
+            <uib-progressbar max="bestPositions.length" type="success" value="updating.count"></uib-progressbar>
+        </div>
     </div>
 </div>
