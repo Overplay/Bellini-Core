@@ -71,7 +71,6 @@ app.controller('bestPositionMultiEditController', function ($scope, $rootScope, 
     var url = $rootScope.url;
     $scope.adPositions = ['top-right', 'top-left', 'bottom-right', 'bottom-left'];
     $scope.crawlerPositions = ['bottom', 'top'];
-    $scope.bestPositions = [];
     $scope.updating = {
         active: false,
         count: 0
@@ -85,28 +84,9 @@ app.controller('bestPositionMultiEditController', function ($scope, $rootScope, 
     // change states if not a multiedit
     if (ids.length === 1)
         $state.go('bestposition.edit', { id: ids[0]});
-    else if (ids.length === 0) {
+    if (ids.length === 0) {
         toastr.warning("There were no items selected to edit", "No Items!");
         $state.go('bestposition.list');
-    }
-    else {
-        var promises = [];
-        _.forEach(ids, function (id) {
-            promises.push(
-                $http.get("http://" + url + ":1338/bestPosition/" + id)
-                    .then(function (bp) {
-                        $scope.bestPositions.push(bp.data);
-                    })
-            )
-        });
-
-        Promise.all(promises).then( function () {
-            $log.debug("All best position models fetched");
-        })
-        .catch( function (err) {
-            $log.error(err);
-        })
-
     }
 
     $scope.update = function () {
@@ -114,15 +94,13 @@ app.controller('bestPositionMultiEditController', function ($scope, $rootScope, 
             toastr.error("You must select both ad and crawler positions", "Can't Save");
         else {
             var promises = [];
-            $scope.updating.active = true;
+            $scope.updating.active = true; // used to show progress bar
 
-            _.forEach($scope.bestPositions, function (bp) {
-                bp.adPosition = $scope.model.adPosition;
-                bp.crawlerPosition = $scope.model.crawlerPosition;
+            _.forEach(ids, function (id) {
                 promises.push(
-                    $http.put("http://"+url+":1338/bestPosition/" + bp.id, bp)
-                        .then( function (b) {
-                            $scope.updating.count++;
+                    $http.put("http://"+url+":1338/bestPosition/" + id, $scope.model)
+                        .then( function () {
+                            $scope.updating.count++; // adjust progress bar...progress
                         })
                 )
             })
