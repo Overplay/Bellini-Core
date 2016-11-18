@@ -5,6 +5,8 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
+var request = require("superagent")
+
 module.exports = {
 
     /*
@@ -73,6 +75,8 @@ module.exports = {
     testDevice: function (req, res) {
         //sails.log.debug(req.allParams());
         var params = req.allParams()
+        
+        sails.log.debug(params)
         return Device.create(params)
             .then(function (dev) {
                 //sails.log.debug(dev)
@@ -81,8 +85,21 @@ module.exports = {
                 sails.log.debug(dev.apiToken)
 
                 return Device.update(dev.id, dev)
-                    .then(function (dev) {
-                        return res.ok(dev)
+                    .then(function (d) {
+                        d = d[0]
+                        sails.log.debug(d) //NEED to find venue then address.zip
+
+                        return Venue.findOne(d.venue)
+                            .then(function(v){
+                                sails.log.debug(v)
+                                request //TODO
+                                    .get("http://" + sails.config.localIp + ':1338/lineup/initialize')
+                                    .query({zip: v.address.zip, providerID: 195}) //TODO
+                                    .end(function(err, response) {
+                                        return res.ok(d)
+
+                                    })
+                            })
 
                     })
 
