@@ -49,41 +49,100 @@ module.exports.policies = {
      *
      */
 
+
+
     ActivationController: {
+        '*': false,
+        'generateCode': ['sessionAuth'] //just need to be logged in as any user 
+    },
+    AdController: {
         '*': true,
-        'generateCode': ['sessionAuth', 'isAdmin']
+        'update': ['sessionAuth', 'isAdOwner'],
+        'destroy': ['sessionAuth', 'isAdOwner'],
+        'review': ['sessionAuth', 'isAdmin'],
+        'pauseOrResume': ['sessionAuth', 'isAdOwner'],
+        'setDelete': ['sessionAuth', 'isAdOwner'],
+        'forReview': ['sessionAuth', 'isAdmin'],
+        'editAd': ['sessionAuth', 'isAdOwner'],
+        'getAccepted': true //TODO 
     },
     
     AuthController: {
-        '*':       true,
+        '*': true, //really protect auth
         'find':    [ 'sessionAuth', 'isAdmin' ],
-        'findOne': [ 'sessionAuth', 'isMeOrAdmin' ],
+        'findOne': ['sessionAuth', 'isVenueOwnerMeOrAdmin'], //tricky for manager list and whatnot
         'update':  [ 'sessionAuth', 'isAdmin' ],
-        'destroy': [ 'sessionAuth', 'isAdmin' ],
-        status:    [ 'sessionAuth' ],
-        loginPage: true,
-        login:     true,
-        register:  [ 'sessionAuth', 'isAdmin' ],
-        addUser:   [ 'sessionAuth', 'isAdmin' ],
-        resetPwd:  [ 'passwordReset' ],
-        changePwd: [ 'passwordReset' ],
+        'destroy': ['sessionAuth', 'isAdmin'], //maybe me?
+        'register': ['sessionAuth', 'isAdmin'], //not even used anywhere
+        'addUser': true, //used in SignupApp through nucleus service
+        'resetPwd': ['passwordReset'],
+        'register': false, //we use a differnet registration than waterlock
+        //changePw own policy because it could be an authenticated user OR a reset token 
+        'changePwd': ['passwordChange'] //this is tricky becuase of pw reset... 
     },
 
     DeviceController: {
         '*': true,
-        'update': ['sessionAuth', 'isAdmin', 'isDeviceManagerOrOwner'],
-        'destroy': ['sessionAuth', 'isAdmin', 'isDeviceOwner'],
+        'find': ['sessionAuth', 'isDeviceManagerOrOwner'],
+        'findOne': ['sessionAuth', 'isDeviceManagerOrOwner'],
+        'update': ['sessionAuth', 'isDeviceOwner'],
+        'destroy': ['sessionAuth', 'isDeviceOwner'],
+        'registerDevice': ['sessionAuth'],
+        'testDevice': ['sessionAuth'],
+        //backup and restore todo
+        'getUserRolesForDevice': ['GETOnly', 'hasJsonWebToken'],
+        'verifyRequest': ['hasSameIP']
+
+    },
+
+    MediaController: {
+        '*': true,
+        'upload': ['sessionAuth'],
+        'deleteAllEntries': false
+    },
+
+    OGLogController: {
+        '*': true,
+        'destroy': ['sessionAuth', 'isAdmin'],
+        'upload': ['tempAuth']
+    },
+
+    SMSController: {
+        '*': true,
+        'notify': ['limitSMS', 'tempAuth']
+    },
+
+    UserController: {
+        '*': true,
+        'find': ['sessionAuth', 'isAdmin'],
+        'findOne': ['sessionAuth', 'isVenueOwnerMeOrAdmin'],
+        'update':  [ 'sessionAuth', 'isMeOrAdmin' ],
+        'destroy': [ 'sessionAuth', 'isAdmin' ],
+        'inviteUser': ['sessionAuth', 'isProprietorOwner'],
+        'inviteRole': ['sessionAuth', 'isProprietorOwner'],
+        'findByEmail': ['sessionAuth', 'isProprietorOwner'],
+        'getVenues': ['sessionAuth', 'isProprietorOwner'],
+        'getDevices': ['sessionAuth', 'isProprietorOwner'],
+        'getManagedDevices': ['sessionAuth', 'isProprietorManager'],
+        'getAlist': ['sessionAuth', 'isAdvertiser'],
+        'becomeAdvertiser': ['sessionAuth']
 
     },
     
-    UserController: {
-        '*':       true,
-        'find':    [ 'sessionAuth', 'isAdmin' ],
-        'findOne': [ 'sessionAuth', 'isMeOrAdmin' ],
-        'update':  [ 'sessionAuth', 'isMeOrAdmin' ],
-        'destroy': [ 'sessionAuth', 'isAdmin' ]
-
+    VenueController: {
+        '*': ['sessionAuth'],
+        'find': ['sessionAuth', 'isVenueOwnerMeOrAdmin'],
+        'findOne': ['sessionAuth'], //issues with this one for device population
+        'update': ['sessionAuth', 'isVenueOwnerMeOrAdmin'],
+        'destroy': ['sessionAuth', 'isVenueOwnerMeOrAdmin'],
+        'getVenueManagers': ['sessionAuth', 'isVenueOwnerMeOrAdmin'],
+        'addManager': ['sessionAuth', 'isVenueOwnerMeOrAdmin'],
+        'addOwner': ['sessionAuth', 'isVenueOwnerMeOrAdmin'],
+        'removeManager': ['sessionAuth', 'isVenueOwnerMeOrAdmin'],
+        'removeOwner': ['sessionAuth', 'isVenueOwnerMeOrAdmin'],
+        'getMobileView': true //TODO 
     },
+    
 
     RoleController: {
         '*':       true,
@@ -98,7 +157,7 @@ module.exports.policies = {
     //AuthController: [ 'sessionAuth', 'meOrAdmin' ],
 
     UIController: {
-        uiApp: [ 'authDecorator', 'sessionAuth' ]
+        'uiApp': ['forceAnonToLogin', 'authDecorator', 'sessionAuth']
     },
 
     // Override this in local.js for testing

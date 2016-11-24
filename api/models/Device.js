@@ -57,16 +57,6 @@ module.exports = {
             defaultsTo: ''
         },
         
-        // for now, can only be owned by one proprietor.owner
-        deviceOwner: {
-            model: 'User'
-        },
-
-        deviceManagers: {
-            collection: 'User',
-            via: 'managedDevices'
-        },
-
         // Located at this venue
         venue: {
             model: 'venue'
@@ -89,5 +79,7 @@ module.exports = {
         }
 
     }
+
+    //BEFORE UPDATE?? 
 };
 

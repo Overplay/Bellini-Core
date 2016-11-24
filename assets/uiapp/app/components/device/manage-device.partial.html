@@ -3,38 +3,78 @@
         <uib-tabset active="active">
             <uib-tab heading="More Info">
                 <div class="top15">
-                    <div class="panel-heading">
-                        <h3>Device Information</h3>
+                    <div class="col-sm-6 col-md-12 col-lg-6">
+                        <div class="panel-heading">
+                            <h3>Device Information</h3>
+                        </div>
+                        <div class="panel-body">
+                            <table class="table table-striped top15">
+                                <tr>
+                                    <td>Name</td>
+                                    <td ng-show="deviceName">{{deviceName}}</td>
+                                    <td ng-hide="deviceName">(Device has no name)</td>
+                                </tr>
+                                <tr>
+                                    <td>Venue</td>
+                                    <td><a ui-sref="venue.view({id: device.venue.id})">{{device.venue.name}}</a></td>
+                                </tr>
+                                <tr>
+                                    <td>Venue Address</td>
+                                    <td>
+                                        <a ng-href="http://maps.google.com/?q={{addressString(device.venue.address)}}" target="_blank">
+                                            {{addressString(device.venue.address)}}
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
                     </div>
-                    <div class="panel-body">
-                        <table class="table table-striped top15">
-                            <tr>
-                                <td>Name</td>
-                                <td ng-show="deviceName">{{deviceName}}</td>
-                                <td ng-hide="deviceName">(Device has no name)</td>
-                            </tr>
-                            <tr>
-                                <td>Venue</td>
-                                <td><a ui-sref="venue.view({id: device.venue.id})">{{device.venue.name}}</a></td>
-                            </tr>
-                            <tr>
-                                <td>Venue Address</td>
-                                <td>
-                                    <a ng-href="http://maps.google.com/?q={{addressString(device.venue.address)}}" target="_blank">
-                                        {{addressString(device.venue.address)}}
-                                    </a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Owner</td>
-                                <td><a ui-sref="user.editUserAdmin({ id: owner.auth })">{{owner.firstName}}
-                                    {{owner.lastName}}</a></td>
-                            </tr>
-                        </table>
+                    <div class="col-sm-6 col-md-12 col-lg-6">
+                        <div class="panel-heading">
+                            <h3>Heartbeat</h3>
+                        </div>
+                        <div class="panel-body">
+                            <h4 ng-if="!heartbeats.length">No Heartbeat Found</h4>
+                            <div ng-if="heartbeats.length">
+                                <form name="heartbeatSelector">
+                                    <select name="select" id="hbSelect" class="form-control"
+                                            ng-options="heartbeat.loggedAt | date:'MMM d, yyyy - H:mm:ss' for heartbeat in heartbeats"
+                                            ng-model="selectedHeartbeat"></select>
+                                </form>
+                                <table class="table table-striped top15" ng-if="heartbeats">
+                                    <tr>
+                                        <td>Device ID</td>
+                                        <td>{{ selectedHeartbeat.deviceUniqueId }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Uptime</td>
+                                        <td>{{ selectedHeartbeat.message.uptime }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Software Revisions</td>
+                                        <td>Amstel Bright:<br>{{ selectedHeartbeat.message.softwareVersions.amstelBright }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td>Aqui:<br>{{ selectedHeartbeat.message.softwareVersions.aqui }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td>OS:<br>{{ selectedHeartbeat.message.softwareVersions.android }}</td>
+                                    </tr>
+                                    <tr ng-repeat="app in selectedHeartbeat.message.installedApps">
+                                        <td>{{ $first ? "Installed Apps" : "" }}</td>
+                                        <td>{{ app }}</td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                        </div>
                     </div>
+
                 </div>
             </uib-tab>
-            <uib-tab heading="Edit Device">
+            <uib-tab heading="Edit Device" ng-if="edit">
                 <div class="top15">
                     <div class="col-sm-12">
                         <button type="submit" ng-disabled="form.$invalid" class="btn btn-primary top15" ng-click="update()">
@@ -62,12 +102,12 @@
                                            ng-model="device.locationWithinVenue" required/>
                                 </div>
                             </fieldset>
-                            <fieldset class="form-group" ng-if="owner.venues.length > 1">
+                            <fieldset class="form-group" ng-if="user.ownedVenues.length > 1 || venues">
                                 <label for="venue" class="col-sm-2 control-label">Venue</label>
                                 <div class="col-sm-8">
                                     <select type="text" class="form-control" id="venue"
                                             ng-model="device.venue" required
-                                            ng-options="listAddress(venue) for venue in owner.venues track by venue.id">
+                                            ng-options="listAddress(venue) for venue in {{ venues ? 'venues' : 'user.ownedVenues' }} track by venue.id">
                                     </select>
                                 </div>
                             </fieldset>

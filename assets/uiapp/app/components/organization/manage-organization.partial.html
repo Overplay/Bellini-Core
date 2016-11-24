@@ -44,7 +44,7 @@
                             <tr ng-repeat="venue in organization.venues"> <!-- TODO make scrollable-->
                                 <td></td>
                                 <td>
-                                    <a ui-sref="venue.manageVenue({ id: venue.id })">
+                                    <a ui-sref="venue.manage({ id: venue.id })">
                                         {{venue.name}}</a>
                                 </td>
                             </tr>
@@ -91,7 +91,6 @@
                                 <label for="email">Email</label>
                                 <input type="email" class="form-control" id="email"
                                        ng-model="organizationUpdate.email" required>
-                                </input>
                             </fieldset>
                             <div class="row">
                                 <div class="col-sm-12">

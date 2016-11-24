@@ -1,6 +1,7 @@
 <div class="row">
     <div class="col-md-10 col-md-offset-1">
-        <form name="form" ng-submit="submitForCode()" role="form" ng-if="!code" class="form-horizontal">
+        <!--TODO READD ng-submit="submitForCode()"-->
+        <form name="form"  role="form" ng-if="!code" class="form-horizontal">
             <fieldset class="form-group">
                 <label for="name" class="col-sm-3 control-label">Device Name</label>
                 <div class="col-sm-8">
@@ -16,18 +17,22 @@
                            ng-model="device.locationWithinVenue" required/>
                 </div>
             </fieldset>
-            <fieldset class="form-group" ng-if="user.venues.length > 0">
+            <fieldset class="form-group" ng-if="user.ownedVenues.length || venues.length">
                 <label for="venue" class="col-sm-3 control-label">Venue</label>
                 <div class="col-sm-8">
-                    <select type="text" class="form-control" id="venue"
+                    <select class="form-control" id="venue"
                             ng-model="device.venue"
-                            ng-options="listAddress(venue) for venue in user.venues track by venue.id" required>
+                            ng-options="listAddress(venue) for venue in {{ venues ? 'venues' : 'user.ownedVenues' }} track by venue.id"
+                            required>
                     </select>
                 </div>
             </fieldset>
 
             <div class="form-actions col-sm-11">
-                <button type="submit" ng-disabled="form.$invalid" class="btn btn-success pull-right top15">
+                <button ng-click="testDevice()" type="submit" ng-disabled="form.$invalid" class="btn btn-success pull-left top15">
+                    Create Test Device (without code)
+                </button>
+                <button ng-click="submitForCode()" type="submit" ng-disabled="form.$invalid" class="btn btn-success pull-right top15">
                     Create Activation Code
                 </button>
             </div>

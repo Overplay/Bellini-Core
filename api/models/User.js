@@ -81,30 +81,21 @@ module.exports = {
             type: 'array',
             defaultsTo: []
         },
-
-        ownedDevices: {
-            collection: 'Device',
-            via: 'deviceOwner'
-        },
         
-        venues: {
+        ownedVenues: {
             collection: 'Venue',
-            via: 'venueOwner'
+            via: 'venueOwners'
         },
 
-        managedDevices: {
-            collection: 'Device',
-            via: 'deviceManagers'
+        managedVenues: {
+            collection: 'Venue',
+            via: 'venueManagers'
         },
 
         organization: { //only for proprietors 
             model: 'Organization'
         },
-
-        advertisements: {
-            collection: 'Ad',
-            via: 'creator'
-        },
+        
 
         toJSON: function() {
 
@@ -137,7 +128,7 @@ module.exports = {
 
         return Promise( function(resolve, reject){
 
-            User.findOneById(userId)
+            User.findOne(userId)
                 .then( function(user){
                     if (!user)
                         return reject( new Error('No such user id'));
@@ -149,10 +140,10 @@ module.exports = {
                                 // So in theory we could have a role get deleted out and not fixed in the db
                                 // we will ignore that here and just not return ot throw such
                                 if (role)
-                                    rval.push( );
+                                    rval.push(role);
                             });
                     })
-                
+
                 })
             
 
@@ -161,5 +152,5 @@ module.exports = {
 
 
     beforeCreate: require( 'waterlock' ).models.user.beforeCreate,
-    beforeUpdate: require( 'waterlock' ).models.user.beforeUpdate
+    beforeUpdate: require( 'waterlock' ).models.user.beforeUpdate //TODO remove venues?
 };

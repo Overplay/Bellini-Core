@@ -35,7 +35,7 @@ module.exports = {
             type: 'string',
             defaultsTo: ''
         },
-        
+
 
         // For determining where a user is and whether venue is shown on the Mobile app
         // finder app 
@@ -58,18 +58,29 @@ module.exports = {
             via: 'venue'
         },
 
-        venueOwner: {
-            model: 'User'
+        venueOwners: {
+            collection: 'User',
+            via: 'ownedVenues'
+        },
+
+        venueManagers: {
+            collection: 'User',
+            via: 'managedVenues'
         },
 
         organization: {
             model: 'Organization'
+        },
+
+        textHistory: {
+            type: 'array',
+            defaultsTo: []
         }
     },
 
+    //not sure if this is needed for anything? -CEG 
     beforeUpdate: function( valuesToUpdate, cb ){
-        
-        sails.log.debug("In before update for venue");
+        //sails.log.debug("In before update for venue");//, valuesToUpdate);
         cb();
     }
 };

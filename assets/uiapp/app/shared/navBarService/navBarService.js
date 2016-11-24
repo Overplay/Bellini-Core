@@ -11,24 +11,28 @@ app.factory('navBarService', function ($log) {
                 left: [{
                     label: 'Users',
                     id: 'users',
-                    items: [{label: "Manage Users", link: {type: 'ui-sref', addr: 'admin.manageUsers'}},
-                        {label: "Add User", link: {type: 'ui-sref', addr: 'admin.addUser'}}
+                    items: [{label: "Users", link: {type: 'ui-sref', addr: 'user.adminList'}}
                     ]
                 }, {
                     label: "Devices", //might need to be modified
                     id: "devices",
-                    items: [{label: "Devices", link: {type: 'ui-sref', addr: 'device.list'}}
+                    items: [{label: "All Devices", link: {type: 'ui-sref', addr: 'device.adminList'}}
                     ]
                 },
-                    {
-                        label: "Organization",
-                        id: "organization",
-                        items: [{label: "organization", link: {type: 'ui-sref', addr: 'organization.view'}}]
-                    },
+                    /*{
+                     label: "Organization",
+                     id: "organization",
+                     items: [{label: "organization", link: {type: 'ui-sref', addr: 'organization.view'}}]
+                     },*/
                     {
                         label: "Venues",
                         id: "venues",
-                        items: [{label: "venues", link: {type: 'ui-sref', addr: 'venue.list'}}]
+                        items: [{label: "All Venues", link: {type: 'ui-sref', addr: 'venue.adminList'}}]
+                    },
+                    {
+                        label: "Advertisements",
+                        id: "trevda",
+                        items: [{label: "All Advertisements", link: {type: 'ui-sref', addr: 'advertisement.adminList'}}]
                     }
                 ],
                 right: [{
@@ -42,88 +46,121 @@ app.factory('navBarService', function ($log) {
             },
             'proprietor.owner': {
                 left: [{
-                    label: 'Users',
-                    id: 'users',
-                    items: [{label: "Manage Users", link: {type: 'ui-sref', addr: 'admin.manageUsers'}},
-                        {label: "Add User", link: {type: 'ui-sref', addr: 'admin.addUser'}}
+                    label: 'Managers',
+                    id: 'managers',
+                    items: [{label: "Managers", link: {type: 'ui-sref', addr: 'user.managerList'}}
                     ]
                 },
                     {
                         label: "Devices", //might need to be modified
                         id: "devices",
-                        items: [{label: "Devices", link: {type: 'ui-sref', addr: 'device.list'}}
+                        items: [{label: "Owned Devices", link: {type: 'ui-sref', addr: 'device.list'}}
                         ]
                     },
                     {
                         label: "Venues",
                         id: "venues",
-                        items: [{label: "venues", link: {type: 'ui-sref', addr: 'venue.list'}}]
+                        items: [{label: "My Venues", link: {type: 'ui-sref', addr: 'venue.list'}}]
                     },
-                    {
-                        label: "Organization",
-                        id: "organization",
-                        items: [{label: "organization", link: {type: 'ui-sref', addr: 'organization.view'}}]
-                    }
+                    /* {
+                     label: "Organization",
+                     id: "organization",
+                     items: [{label: "organization", link: {type: 'ui-sref', addr: 'organization.view'}}]
+                     }*/
                 ],
                 right: [{
                     label: 'Account',
                     id: 'account',
-                    items: [{label: "Edit My Account", link: {type: 'ui-sref', addr: 'user.editUser'}},
-                        {label: "Logout", link: {type: 'href', addr: '/logout'}}
+                    items: [{
+                        label: "Edit My Account",
+                        link: {type: 'ui-sref', addr: 'user.editUser'}
+                    },
+                        {
+                            label: "Logout", link: {type: 'href', addr: '/logout'}
+                        }
                     ]
-                }
-                ]
+                }]
             },
             'proprietor.manager': {
-                left: [{
-                    label: 'Users',
-                    id: 'users',
-                    items: [{label: "Manage Users", link: {type: 'ui-sref', addr: 'admin.manageUsers'}},
-                        {label: "Add User", link: {type: 'ui-sref', addr: 'admin.addUser'}}
-                    ]
-                }, {
-                    label: "Devices", //might need to be modified
-                    id: "devices",
-                    items: [{label: "Devices", link: {type: 'ui-sref', addr: 'device.list'}}]
-                },
+                left: [
+                    // {
+                    // label: 'Users',
+                    // id: 'users',
+                    // items: [{label: "Manage Users", link: {type: 'ui-sref', addr: 'admin.manageUsers'}},
+                    //     {label: "Add User", link: {type: 'ui-sref', addr: 'admin.addUser'}}
+                    // ]
+                    // },
                     {
-                        label: "Organization",
-                        id: "organization",
-                        items: [{
-                            label: "organization",
-                            link: {type: 'ui-sref', addr: 'organization.view'}
-                        }]
-                    }
+                        label: "Devices", //might need to be modified
+                        id: "devices",
+                        items: [{label: "Managed Devices", link: {type: 'ui-sref', addr: 'device.managerList'}}]
+                    },
+                    /*{
+                     label: "Organization",
+                     id: "organization",
+                     items: [{
+                     label: "organization",
+                     link: {type: 'ui-sref', addr: 'organization.view'}
+                     }]
+                     }*/
                 ],
                 right: [{
                     label: 'Account',
                     id: 'account',
-                    items: [{label: "Edit My Account", link: {type: 'ui-sref', addr: 'user.editUser'}},
-                        {label: "Logout", link: {type: 'href', addr: '/logout'}}
+                    items: [{
+                        label: "Edit My Account",
+                        link: {type: 'ui-sref', addr: 'user.editUser'}
+                    },
+                        {
+                            label: "Logout", link: {type: 'href', addr: '/logout'}
+                        }
                     ]
-                }
-                ]
+                }]
             },
             'user': {
                 left: [
-                    {
-                        label: 'Me',
-                        id: "user",
-                        items: [{
-                            label: 'me', link: {type: 'ui-sref', addr: 'user.editUser'}
-                        }
-                        ]
-                    },
-                    {
-                        label: 'Link2',
-                        id: "link2",
-                        items: [{
-                            label: 'Link2', link: {type: 'href', addr: '#'}
-                        }]
-                    }],
+                    /*{
+                     label: 'Register a Device',
+                     id: 'device',
+                     items: [{label: "device", link: {type: 'ui-sref', addr: 'device.add'}}]
+
+                     }*/
+                    /*{
+                     label: 'Me',
+                     id: "user",
+                     items: [{
+                     label: 'me', link: {type: 'ui-sref', addr: 'user.editUser'}
+                     }
+                     ]
+                     },
+                     {
+                     label: 'Check Ins',
+                     id: "checkins",
+                     items: [{
+                     label: 'Check Ins', link: {type: 'href', addr: '#'}
+                     }]
+                     }
+                     */],
                 right: [{
                     label: 'Account',
-                    id: 'account3',
+                    id: 'account',
+                    items: [{
+                        label: "Edit My Account",
+                        link: {type: 'ui-sref', addr: 'user.editUser'}
+                    },
+                        {
+                            label: "Logout", link: {type: 'href', addr: '/logout'}
+                        }
+                    ]
+                }]
+            },
+            'developer': {
+                left: {}
+                ,
+
+                right: [{
+                    label: 'Account',
+                    id: 'account',
                     items: [{
                         label: "Edit My Account",
                         link: {type: 'ui-sref', addr: 'user.editUser'}
@@ -141,10 +178,7 @@ app.factory('navBarService', function ($log) {
                         id: "ads",
                         items: [
                             {
-                                label: 'Manage Ads', link: {type: 'ui-sref', addr: 'advertisement.manageAdvertisements'}
-                            },
-                            {
-                                label: 'Add Ad', link: {type: 'ui-sref', addr: 'advertisement.addAdvertisement'}
+                                label: 'My Advertisements', link: {type: 'ui-sref', addr: 'advertisement.list'}
                             }
                         ]
                     }]
@@ -152,7 +186,7 @@ app.factory('navBarService', function ($log) {
 
                 right: [{
                     label: 'Account',
-                    id: 'account3',
+                    id: 'account',
                     items: [{
                         label: "Edit My Account",
                         link: {type: 'ui-sref', addr: 'user.editUser'}
@@ -199,7 +233,7 @@ app.factory('navBarService', function ($log) {
                 ],
                 right: [{
                     label: 'Account', //similar to above, shows no repeats and dropdown combinations
-                    id: "account4", //duplicate dropdown
+                    id: "account", //duplicate dropdown
                     items: [{
                         label: "Edit My Account",
                         link: {type: 'ui-sref', addr: 'user.editUser'}
@@ -217,9 +251,10 @@ app.factory('navBarService', function ($log) {
         ;
 
 
-    service.getMenuForRoles = function () {
+    service.getMenuForRoles = function (r) {
         //init menus so that it can be merged with
         var menus = {};
+        var roles = r || nucleus.roles;
 
         //helper method to combine arrays within the object
         //basically it prevents duplicate tabs and combines sub links
@@ -229,8 +264,12 @@ app.factory('navBarService', function ($log) {
             _.forEach(objValue, function (val) {
                 var match;
 
-                if (match = _.find(srcValue, {label: val.label})) { //could add id to find but that seems counterintuitive
-                    val.items = match.items = _.unionWith(val.items, match.items, _.isEqual);
+                if (match = _.find(srcValue, {label: val.label})) {
+                    val.items = match.items = _.unionWith(val.items, match.items, function (obj1, obj2) {
+                        if (obj1.label == obj2.label) {
+                            return true;
+                        }
+                    });
                     val.id = match.id = val.id; //fix not matched IDs
                 }
             });
@@ -242,12 +281,12 @@ app.factory('navBarService', function ($log) {
             }
         }
 
-        //step through all the roles and append them to the nav bar
+        // step through all the roles and append them to the nav bar
         // order of tabs for multiple roles??
 
-        nucleus.roles.forEach(function (val) {
+        roles.forEach(function (val) {
             menus = _.mergeWith(menus, _navBarMenus[val], mergeHelper);
-
+            
         });
 
         return menus;

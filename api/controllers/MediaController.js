@@ -24,7 +24,7 @@ module.exports = {
 
             var count = 0, now = Date.now();
 
-            //TODO can't this be done with a straight query?
+            //TODO can't this be done with a straight waterlin query?
             Media.find().then( function ( data ) {
                 data.forEach( function ( media ) {
                     media.createdAt = new Date( media.createdAt );
@@ -62,9 +62,14 @@ module.exports = {
     },
 
 
+    /*
+    uploads a file and creates it as a Media instance 
+     */
     upload: function ( req, res ) {
 
-        var destinationFolder = require( 'path' ).resolve( sails.config.paths.media );
+
+        //TODO media path config CEG
+        var destinationFolder = require( 'path' ).resolve(sails.config.appPath, 'data/uploads/media');
 
         var uploadOptions = {
             dirname:  destinationFolder,
@@ -75,12 +80,12 @@ module.exports = {
 
             if ( err ) {
                 sails.log.error( "Media upload error: " + util.inspect( err ) );
-                res.serverError( err );
+                res.serverError( {error: err} );
             }
 
             // If no files were uploaded, respond with an error.
             else if ( (uploadedFiles === undefined) || (uploadedFiles.length === 0) ) {
-                res.badRequest( 'No file(s) uploaded.' );
+                res.badRequest( {error: 'No file(s) uploaded.'} );
             }
 
             else {
@@ -124,7 +129,7 @@ module.exports = {
                     .catch(
                         function ( err ) {
                             sails.log.error( "Media.create (error): " + util.inspect( err ) );
-                            res.serverError( err );
+                            res.serverError( {error: err} );
                         } );
 
             }

@@ -47,7 +47,7 @@
                     {{ edit ? "Update" : "Create" }}
                 </button>
                 <button class="btn btn-default" style="margin-left: 10px" ng-if="edit"
-                        ui-sref="venue.view({id: venue.id})">
+                        ui-sref="{{ admin ? 'venue.adminView({id: venue.id})' : 'venue.view({id: venue.id})'}}">
                     Cancel
                 </button>
                 <div class="pull-right" ng-if="edit">
@@ -141,9 +141,9 @@
             <uib-tab heading="Logo and Images">
                 <br>
                 <img-input prompt="Logo" width="256" height="256" dirty="media.logo" src-field="venue.logo" exact></img-input>
-                <img-input prompt="Venue Image 1" width="800" height="600" dirty="media.photos[0]" src-field="venue.photos[0]" ratio="4:3" max-size></img-input>
+                <!--<img-input prompt="Venue Image 1" width="800" height="600" dirty="media.photos[0]" src-field="venue.photos[0]" ratio="4:3" max-size></img-input>
                 <img-input prompt="Venue Image 2" width="800" height="600" dirty="media.photos[1]" src-field="venue.photos[1]" ratio="4:3" max-size></img-input>
-                <img-input prompt="Venue Image 3" width="800" height="600" dirty="media.photos[2]" src-field="venue.photos[2]" ratio="4:3" max-size></img-input>
+                <img-input prompt="Venue Image 3" width="800" height="600" dirty="media.photos[2]" src-field="venue.photos[2]" ratio="4:3" max-size></img-input>-->
             </uib-tab>
         </uib-tabset>
     </div>

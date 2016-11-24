@@ -1,13 +1,12 @@
 <div class="row">
-   <div class="col-md-offset-2 col-md-6">
+   <div class="col-md-offset-3 col-md-8 col-lg-offset-2 col-xs-8 col-xs-offset-2">
        <h1>{{ ui.pageTitle }}</h1>
    </div>
 </div>
 <div class="row">
-    <div class="col-md-2">
+    <div class="col-md-3 col-lg-2">
         <ul class="side-menu top30">
-            <li><a ui-sref=".list">My Venues</a></li>
-            <li><a ui-sref=".new">Add Venue</a></li>
+            <li ng-repeat="link in links"><a ui-sref="{{link.link}}">{{ link.text }}</a></li>
         </ul>
     </div>
     <div class="col-md-8 top30" style="border: 1px solid #f0f0f0; border-radius: 3px; padding: 20px;">

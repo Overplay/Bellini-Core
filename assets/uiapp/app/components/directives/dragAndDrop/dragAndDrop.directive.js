@@ -1,4 +1,4 @@
-app.directive('dragAndDrop', [
+/*app.directive('dragAndDrop', [
     '$rootScope', function ($rootScope) {
         return {
             restrict: 'A',
@@ -34,4 +34,4 @@ app.directive('dragAndDrop', [
 
             }
         };
-    }]);
+    }]);*/

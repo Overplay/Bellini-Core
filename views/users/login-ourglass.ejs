@@ -11,9 +11,10 @@
         margin: 50px auto;
     }
 
-    h1 {
+    h2 {
         color: white;
-        margin-bottom: 50px;
+        margin-bottom: 30px;
+        text-align: center;
     }
 
     .alertbubble {
@@ -142,33 +143,40 @@
 
     <img style="margin: auto; display: block; max-width: 50vw; padding: 50px 0" src="/images/ourglass-white.png"/>
 
+
     <div class="container-fluid popin" ng-app="loginApp" ng-controller="loginController">
         <div class="row">
-            <div class="col-sm-8 col-sm-offset-2" style="background: rgba(1,1,1,0.5); padding: 30px;">
-                <h1>Please Log In</h1>
+            <div class="col-sm-8 col-sm-offset-2 col-lg-6 col-lg-offset-3"
+                 style="background: rgba(1,1,1,0.5); padding: 30px;">
+                <h2>Please Log In</h2>
                 <form ng-submit="submit()">
                     <!-- fake fields are a workaround for chrome autofill getting the wrong fields -->
                     <input style="display:none" type="text" name="fakeusernameremembered"/>
                     <input style="display:none" type="password" name="fakepasswordremembered"/>
 
+
                     <div class="input-group input-group-lg">
                         <span class="input-group-addon"><li class="glyphicon-envelope glyphicon"></li></span>
 
                         <input type="text" class="form-control" placeholder="Email"
-                               ng-model="user.email" autofocus>
+                               ng-model="user.email" name="email">
 
                     </div>
+
                     <div class="input-group input-group-lg top15">
                         <span class="input-group-addon"><li class="glyphicon glyphicon-lock"></li></span>
 
                         <input type="password" class="form-control" placeholder="Password"
-                               ng-model="user.password">
+                               ng-model="user.password" name="password">
                     </div>
 
 
-                    <button ng-click="login()" id='login' class="btn btn-primary btn-lg top15">Go</button>
+                    <button ng-click="login()" id='login' class="btn btn-success btn-lg top30">Go</button>
                     &nbsp;
-                    <button ng-click="forgot()" class="btn btn-warn btn-lg top15">I Forgot!</button>
+                    <button ng-click="forgot()" class="btn btn-default btn-lg top30">I Forgot!</button>
+                    &nbsp;
+                    <a class="btn btn-default btn-lg top30" href="/auth/login?type=facebook"><img src="/images/FB-f-Logo__blue_100.png" style="height:25px;">&nbsp; Login with Facebook</a>
+
 
                     <div class="alertbubble" ng-show="ui.error">
                         {{ ui.errorMessage }}
@@ -179,7 +187,6 @@
     </div>
 
 </div>
-
 
 <script src="/js/nucleusService/nucleusService.js"></script>
 <script src="/js/views/users/loginapp.js"></script>

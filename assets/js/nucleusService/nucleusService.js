@@ -55,7 +55,8 @@
 
             service.authorize = function ( email, pass ) {
 
-                return $http.post( '/auth/login', { email: email, password: pass } )
+
+                return $http.post('/auth/login', {email: email, password: pass, type: "local"}) //local required with facebook activated
                     .then( function ( resp ) {
                         $log.debug( "User is authorized." );
                         _authorized = true;
@@ -125,10 +126,17 @@
 
 
             }
-            
-            service.addUser = function( email, password, userObj ){
+
+            //TODO test validate TODO handle facebookId 
+            service.addUser = function (email, password, userObj, facebookId, validate) {
                 
-                return $http.post( '/auth/addUser', { email: email, password: password, user: userObj})
+                return $http.post('/auth/addUser', {
+                        email: email,
+                        password: password,
+                        user: userObj,
+                        facebookId: facebookId,
+                        validate: validate
+                    })
                     .then( function(data){
                         return data.data;
                     });
@@ -141,14 +149,6 @@
                 var endPoint = _apiPath + '/user' + (userId ? '/' + userId : '');
                 return apiGet( endPoint );
 
-            }
-
-            service.getUserVenues = function (userId) {
-                if (!userId)
-                    throw new Error("Bad userId");
-
-                var endPoint = _apiPath + '/user/' + userId + '/venues';
-                return apiGet(endPoint);
             }
 
             service.updateUser = function ( userId, newFields ) {
@@ -180,16 +180,6 @@
 
             }
             
-            service.changePwd = function( email, newPwd, resetToken ){
-            
-                return $http.post('auth/changePwd', { 
-                    email: email,
-                    newpass: newPwd,
-                    resetToken: resetToken });
-                    
-            }
-
-            // TODO can a non-admin user change someone else's password?? Check in authController on Sails side.
             /**
              * Change password. Must include either email or resetToken in the params
              * @param params email or resetToken must be in the params
@@ -197,7 +187,7 @@
              */
             service.changePassword = function ( params ) {
 
-                return $http.post( 'auth/changePwd', params );
+                return $http.post( '/auth/changePwd', params );
 
             }
 
@@ -228,13 +218,7 @@
                 var endPoint = 'venue/addVenue';
                 return apiPost(endPoint, venue);
             }
-            
-            service.getVenue = function (venueId) {
-                
-                var endPoint = _apiPath + '/venue' + (venueId ? '/' + venueId : '');
-                return apiGet(endPoint);
-            }
-
+           
             service.updateVenue = function (venueId, newFields) {
 
                 if (!venueId)
@@ -262,11 +246,7 @@
                 return apiGet(endPoint, fields);
             }
             // =========== DEVICES ======== //TODO move to controllers? 
-            service.getDevice = function (deviceId) {
 
-                var endPoint = _apiPath + '/device' + (deviceId ? '/' + deviceId : '');
-                return apiGet(endPoint);
-            } 
             
             service.updateDevice = function (deviceId, newFields) {
 
@@ -277,15 +257,6 @@
                 var endPoint = _apiPath + '/device/' + deviceId;
                 return apiPut(endPoint, newFields);
 
-            }
-
-            service.deleteDevice = function (deviceId) {
-
-                if (!deviceId)
-                    throw new Error("Bad deviceId");
-
-                var endPoint = _apiPath + '/device/' + deviceId;
-                return apiDelete(endPoint);
             }
 
             service.mediaPath = function ( mediaId ) {

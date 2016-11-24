@@ -11,7 +11,7 @@ app.directive('imgInput', function($log, $timeout){
             prompt: '@'
         },
         link: function ( scope, elem, attrs ){
-
+            
             var w = attrs.width || '128';
             var h = attrs.height || '128';
 
@@ -40,7 +40,7 @@ app.directive('imgInput', function($log, $timeout){
 
                 $log.debug("Files dropped!");
                 var fr = new FileReader();
-                var acceptedTypes = ["image/png", "image/jpeg"];
+                var acceptedTypes = ["image/png", "image/jpeg", "image/gif"]; //TODO gif???
                 var img = new Image();
 
                 img.onload = function() {
@@ -60,13 +60,11 @@ app.directive('imgInput', function($log, $timeout){
 
                     // Must force digest since onload event is outside of angular
                     scope.$apply( function() {
-                        //TODO Ryan, validate correct image size and file type here.
                         img.src = window.URL.createObjectURL(files[0]);
                         // scope.img.mediaSrc = fr.result;
                         scope.dirty = files[0]; // it's truthy and the file we want the Controller to upload
                     })
                 };
-                // TODO Ryan, check file mimetype here and reject anything not JPG, PNG
 
                 if (acceptedTypes.indexOf(files[0].type) <= -1) {
                     showWarning( "Error: invalid file type" );
@@ -80,7 +78,6 @@ app.directive('imgInput', function($log, $timeout){
 
             }
 
-            // TODO Ryan, make this hide/show animated using ng-animate
 
             // This would be used to signal bad files, bad sizes.
             function showWarning(message) {

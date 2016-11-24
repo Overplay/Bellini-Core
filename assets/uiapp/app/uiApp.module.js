@@ -2,7 +2,7 @@
  * Created by mkahn on 4/6/16.
  */
 
-var app = angular.module('uiApp', [ 'nucleus.service', 'ngAnimate',  'ui.router', 'ui.bootstrap', 'toastr', 'uiGmapgoogle-maps' ]);
+var app = angular.module('uiApp', ['nucleus.service', 'ngAnimate', 'ui.router', 'ui.bootstrap', 'toastr', 'uiGmapgoogle-maps', 'chart.js']);
 
 app.config( function ( toastrConfig ) {
     angular.extend( toastrConfig, {
@@ -16,13 +16,32 @@ app.config( function ( uiGmapGoogleMapApiProvider) {
     })
 })
 
+app.config(['ChartJsProvider', function (ChartJsProvider) {
+    // Configure all charts
+    ChartJsProvider.setOptions({
+        chartColors: ['#3FAD49', '#39A8FF'],
+    });
+}])
+
 app.run( function ( $log, $rootScope ) {
 
     $log.info( "Asahi is pouring!" );
+
 
     $rootScope.$on( '$stateChangeError',
         function ( event, toState, toParams, fromState, fromParams, error ) {
             $log.error( "State change fail!" );
         } )
 
+
+
+
 } );
+
+app.filter('capitalize', function() {
+    return function(input, scope) {
+        if (input!=null)
+            input = input.toLowerCase();
+        return input.substring(0,1).toUpperCase()+input.substring(1);
+    }
+});

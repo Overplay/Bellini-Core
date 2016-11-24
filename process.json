@@ -5,8 +5,9 @@
   "apps" : [{
     "name"       : "asahi",
     "script"     : "app.js", //TODO change if nec. depends on file locations
-    "instances"  : 1,
-    "exec_mode"  : "fork",
+    "instances": 2,
+    "exec_mode": "cluster",
+    //TODO clustering support
     "cwd" : "/opt/asahi", //TODO change this if deploying in a different folder!
     "env": {
       "COMMON_VARIABLE": "true",
@@ -20,8 +21,12 @@
     },
     "autorestart" : true,
     "vizion": true,
-    "post_update": ["npm install && cd assets && bower update && cd .."] //for reloads //also restart the module??
-
+    "post_update": [
+      "npm install && cd assets && bower update && cd .."
+    ],
+    //for reloads //also restart the module??
+    "watch": false
+    //now that pm2 reload works as it should
 
   }]
 }
