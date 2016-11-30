@@ -122,7 +122,19 @@ module.exports = {
                             .then( function(updatedDevice){
                                 if (updatedDevice.length==1){
                                     sails.log.debug( updatedDevice, "updated/registered" );
-                                    return res.ok( updatedDevice[ 0 ] );
+                                    
+                                    var d = updatedDevice[0]
+                                    return Venue.findOne(d.venue)
+                                        .then(function(v){
+                                            sails.log.debug(v)
+                                            request 
+                                                .get("http://" + sails.config.localIp + ':1338/lineup/initialize')
+                                                .query({zip: v.address.zip, providerID: 195}) //TODO
+                                                .end(function(err, response) {
+                                                    return res.ok(d)
+
+                                                })
+                                        })
                                 } else {
                                     sails.log.debug( "NOT GOOD UPDATE :(" );
                                     return res.serverError( { error: "Too many or too few devices updated" } );
