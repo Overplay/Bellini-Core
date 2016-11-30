@@ -474,11 +474,57 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                         {link: 'bestposition.list', text: "All Models"}
                     ]
                 },
+               /* 
                 models: function ($http) {
-                    return $http.get('http://localhost:1338/BestPosition/findAll')
+                    return $http.get('http://'+url+':1338/BestPosition/findAll')
                         .then( function (data) {
                             return data.data
                         })
+                }*/
+            }
+        })
+        .state('bestposition.edit', {
+            url: '/edit/:id',
+            templateUrl: '/uiapp/app/components/bestposition/bestposition-edit.partial.html',
+            controller: 'bestPositionEditController',
+            params: {
+                url: {
+                    value: ""
+                }
+            },
+            resolve: {
+                links: function () {
+                    return [
+                        {link: 'bestposition.list', text: "All Models"}
+                    ]
+                },
+                //TODO url and edit page (save function
+                model: function ($http, $stateParams) {
+                    return $http.get('http://'+$stateParams.url+':1338/BestPosition/'+$stateParams.id)
+                        .then( function (data) {
+                            return data.data
+                        })
+                }
+            }
+        })
+        .state('bestposition.multiEdit', {
+            url: '/multi-edit/',
+            templateUrl: '/uiapp/app/components/bestposition/bestposition-multiedit.partial.html',
+            controller: 'bestPositionMultiEditController',
+            params: {
+                ids: {
+                    value: [],
+                    array: true
+                }
+            },
+            resolve: {
+                links: function () {
+                    return [
+                        {link: 'bestposition.list', text: "All Models"}
+                    ]
+                },
+                ids: function ($http, $stateParams) {
+                    return $stateParams.ids;
                 }
             }
         })
