@@ -133,6 +133,7 @@ module.exports = {
                                 return res.serverError( { error: err.message } );
                             })
 
+                        return null;
                     } else {
                         //sails.log.debug(moment().format(), moment(ca).add(sails.config.ogsettings.regCodeTimeout, 'ms').format())
                         return res.badRequest( { error: "Code expired." } );
