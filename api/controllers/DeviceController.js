@@ -13,6 +13,7 @@ module.exports = {
      if it does not exist, the code was incorrect / a user never started the registration proc for it
      */
     registerDevice: function (req, res) {
+
         //get code
         var params = req.allParams();
         /*req certain params? CEG
@@ -20,8 +21,11 @@ module.exports = {
          wifi mac address -tbd 
          code 
          */
-        if ((params.regCode === undefined)) //test other stuff too
-            return res.badRequest({error: "No registration code specified"});
+
+         var regCode = params.regCode;
+
+        if (( !regCode || regCode.length!=6 )) //test other stuff too
+            return res.badRequest({error: "No registration code specified, or incorrect format."});
 
 
         var deviceObj = {};
@@ -30,42 +34,58 @@ module.exports = {
          deviceObj.deviceOwner = req.session.user.id;
          */
 
-        deviceObj.regCode = params.regCode;
+        deviceObj.regCode = regCode;
 
         //sails.log.debug(deviceObj, "searching ");
 
-        return Device.findOne(deviceObj)
+        Device.findOne(deviceObj)
             .then(function (device) {
 
                 //check if device exists
                 if (device) {
-                    var ca = device["createdAt"];
-                    if (Date.now() < Date.parse(ca) + sails.config.device.regCodeTimeout) {
-                        sails.log.debug(device, "being updated");
-                        params.regCode = ''; //clear registration code 
+                    var ca = device.createdAt;
+                    // TODO I doubt this logic is right. It's adding millesecods to a date object using the + operator
+                    if (Date.now() <  ( Date.parse(ca) + sails.config.ogsettings.regCodeTimeout) ) {
+
+                        sails.log.silly(device, "being updated");
+
+                        var updatedFields = {};
+
+                        updatedFields.regCode = ''; //clear registration code
 
                         //TODO JSONWebToken into apiToken field
-                        params.apiToken = APITokenService.createToken(device.id);
+                        updatedFields.apiToken = APITokenService.createToken(device.id);
 
                         //TODO MAC Address -- done on android device :) - will act as UUID 
-                        params.wifiMacAddress = 'FETCH FROM ANDROID'; //in req? 
+                        updatedFields.wifiMacAddress = 'FETCH FROM ANDROID'; //in req?
 
-                        return Device.update({id: device.id}, params);
+                        Device.update({id: device.id}, updatedFields)
+                            .then( function(updatedDevice){
+                                if (updatedDevice.length==1){
+                                    sails.log.debug( updatedDevice, "updated/registered" );
+                                    return res.ok( updatedDevice[ 0 ] );
+                                } else {
+                                    sails.log.debug( "NOT GOOD UPDATE :(" );
+                                    return res.serverError( { error: "Too many or too few devices updated" } );
+                                }
+                            })
+                            .catch( function(err){
+                                sails.log.debug( "NOT GOOD UPDATE :( (catch error)" );
+                                return res.serverError( { error: err.message } );
+                            })
+
+                    } else {
+                        return res.badRequest( { error: "Code expired." } );
                     }
+                } else {
+                    return res.badRequest( { error: "No device for that code." } );
                 }
-
-            }).then(function (devices) {
-                if (devices.length != 1) { //should never find and update more than one device
-                    sails.log.debug("NOT GOOD UPDATE :(");
-                    return res.serverError({error: "Too many or too few devices updated"})
-                }
-                sails.log.debug(devices, "updated/registered");
-                return res.ok(devices[0]);
 
             })
-            .catch(function (err) {
-                return res.serverError({error: err});
-            });
+            .catch( function(err){
+                sails.log.debug( "Error searching devices, this is bad." );
+                return res.serverError( { error: err.message } );
+            })
     },
 
     //TODO remove once production
