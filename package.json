@@ -32,6 +32,7 @@
     "mkdirp": "^0.5.1",
     "moment": "^2.15.2",
     "node-excel-export": "^1.2.0",
+    "node-uuid": "^1.4.7",
     "nodemailer": "^2.6.4",
     "path": "^0.12.7",
     "rc": "^1.0.1",
