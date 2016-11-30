@@ -46,6 +46,8 @@ module.exports = {
         if (!deviceObj.name || !deviceObj.venue)
             return res.badRequest({error: "Missing device params"})
 
+        //todo test Venue existence?
+
         deviceObj.regCode = code;
         
 

@@ -5,6 +5,10 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
+
+var request = require("superagent");
+var moment = require("moment")
+
 module.exports = {
 
     /*
@@ -12,14 +16,14 @@ module.exports = {
      if it exists, it removes the code, and updates the device information so that it is active
      if it does not exist, the code was incorrect / a user never started the registration proc for it
      */
-    registerDevice: function (req, res) {
+     /* DUMB registerDevice: function (req, res) {
         //get code
         var params = req.allParams();
         /*req certain params? CEG
 
          wifi mac address -tbd 
          code 
-         */
+         
         if ((params.regCode === undefined)) //test other stuff too
             return res.badRequest({error: "No registration code specified"});
 
@@ -28,7 +32,7 @@ module.exports = {
 
         /*use if the user is logged in on the box when registering??
          deviceObj.deviceOwner = req.session.user.id;
-         */
+         
 
         deviceObj.regCode = params.regCode;
 
@@ -66,8 +70,86 @@ module.exports = {
             .catch(function (err) {
                 return res.serverError({error: err});
             });
-    },
+    },*/
+    
+    registerDevice: function (req, res) {
 
+        //get code
+        var params = req.allParams();
+        /*req certain params? CEG
+
+         wifi mac address -tbd
+         code
+         */
+
+        var regCode = params.regCode;
+
+        if (( !regCode || regCode.length!=6 )) //test other stuff too
+            return res.badRequest({error: "No registration code specified, or incorrect format."});
+
+
+        var deviceObj = {};
+
+        /*use if the user is logged in on the box when registering??
+         deviceObj.deviceOwner = req.session.user.id;
+         */
+
+        deviceObj.regCode = regCode;
+
+        //sails.log.debug(deviceObj, "searching ");
+
+        Device.findOne(deviceObj)
+            .then(function (device) {
+
+                //check if device exists
+                if (device) {
+                    var ca = device.createdAt;
+                    // TODO I doubt this logic is right. It's adding millesecods to a date object using the + operator
+                    if (moment().isBefore(moment(ca).add(sails.config.ogsettings.regCodeTimeout, 'ms'))) {
+
+                        sails.log.silly(device, "being updated");
+
+                        var updatedFields = {};
+
+                        updatedFields.regCode = ''; //clear registration code
+
+                        //TODO JSONWebToken into apiToken field
+                        updatedFields.apiToken = APITokenService.createToken(device.id);
+
+                        //TODO MAC Address -- done on android device :) - will act as UUID
+                        updatedFields.wifiMacAddress = 'FETCH FROM ANDROID'; //in req?
+
+                        Device.update({id: device.id}, updatedFields)
+                            .then( function(updatedDevice){
+                                if (updatedDevice.length==1){
+                                    sails.log.debug( updatedDevice, "updated/registered" );
+                                    return res.ok( updatedDevice[ 0 ] );
+                                } else {
+                                    sails.log.debug( "NOT GOOD UPDATE :(" );
+                                    return res.serverError( { error: "Too many or too few devices updated" } );
+                                }
+                            })
+                            .catch( function(err){
+                                sails.log.debug( "NOT GOOD UPDATE :( (catch error)" );
+                                return res.serverError( { error: err.message } );
+                            })
+                        
+                        return null;
+
+                    } else {
+                        //sails.log.debug(moment().format(), moment(ca).add(sails.config.ogsettings.regCodeTimeout, 'ms').format())
+                        return res.badRequest( { error: "Code expired." } );
+                    }
+                } else {
+                    return res.badRequest( { error: "No device for that code." } );
+                }
+
+            })
+            .catch( function(err){
+                sails.log.debug( "Error searching devices, this is bad." );
+                return res.serverError( { error: err.message } );
+            })
+    },
     //TODO remove once production
     //creates a test device for demo purposes 
     testDevice: function (req, res) {
