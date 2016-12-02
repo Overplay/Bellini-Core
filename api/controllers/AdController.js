@@ -22,7 +22,7 @@ module.exports = {
         }
         var chain = Promise.resolve();
 
-        return Ad.findOne(req.allParams().id)
+        Ad.findOne(req.allParams().id)
             .then(function (a) {
 
                 var media = a.advert.media;
@@ -48,7 +48,7 @@ module.exports = {
             .catch(function (err) {
                 //something bad
                 sails.log.debug({error: err});
-                res.serverError({error: err});
+                return res.serverError({error: err});
             })
 
     },
@@ -61,7 +61,7 @@ module.exports = {
             return res.badRequest({error: "Invalid req params"})
         }
         else {
-            return Ad.update(params.id, {accepted: params.accepted, reviewed: true})
+            Ad.update(params.id, {accepted: params.accepted, reviewed: true})
                 .then(function (updated) {
                     if (updated.length == 1) {
                         if (params.accepted == false) { //rejected by admin 
@@ -85,7 +85,7 @@ module.exports = {
             return res.badRequest({ "error" : "Invalid req Params" })
         }
         else {
-            return Ad.findOne(params.id)
+            Ad.findOne(params.id)
                 .then(function (ad) {
                     ad.paused = !ad.paused;
                     ad.save(function (err) {
@@ -106,7 +106,7 @@ module.exports = {
             return res.badRequest({error: "Invalid req Params"})
         }
         else {
-            return Ad.findOne(params.id)
+            Ad.findOne(params.id)
                 .then(function (ad) {
                     ad.deleted = params.delete;
                     ad.save(function (err) {
@@ -289,7 +289,7 @@ module.exports = {
     },
 
     forReview: function (req, res) {
-        return Ad.find({where: {reviewed: false}, sort: 'createdAt ASC'})
+        Ad.find({where: {reviewed: false}, sort: 'createdAt ASC'})
             .then(function (ads) {
                 return res.ok(ads)
             })
@@ -327,7 +327,7 @@ module.exports = {
     ,
 
     getAccepted: function (req, res) {
-        return Ad.find({reviewed: true, accepted: true, deleted: false})
+        Ad.find({reviewed: true, accepted: true, deleted: false})
             .then(function (ads) {
                 return res.ok(ads)
             })
@@ -347,7 +347,7 @@ module.exports = {
         Ad.findOne(id)
             .then(function(ad){
                 if (!ad){
-                    res.notFound({error: "Ad Id does not exist"})
+                    return res.notFound({error: "Ad Id does not exist"})
                 }
                 else {
                     var adLogs;
@@ -403,7 +403,7 @@ module.exports = {
                 '<': new Date(moment(params.date, "YYYY-MM-DD").endOf('day'))
             }
         }
-        return OGLog.find(query)
+        OGLog.find(query)
             .then(function (logs) {
                 if (params.id) {
                     logs = _.filter(logs, {message: {adId: params.id}})
@@ -577,6 +577,8 @@ module.exports = {
         
     },
     
+    
+    //TODO 
     forDevice: function (req, res) {
         var params = req.allParams()
 
