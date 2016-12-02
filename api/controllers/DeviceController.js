@@ -82,11 +82,19 @@ module.exports = {
          */
 
         var regCode = params.regCode;
+        var udid = params.udid;
 
-        if (( !regCode || regCode.length!=6 )) //test other stuff too
+        if (!udid)
+            return res.badRequest({error: "No udid provided"});
+        
+        
+        
+        if ((  !regCode || regCode.length!=6 )) //test other stuff too
             return res.badRequest({error: "No registration code specified, or incorrect format."});
 
 
+
+        
         var deviceObj = {};
 
         /*use if the user is logged in on the box when registering??
@@ -96,69 +104,81 @@ module.exports = {
         deviceObj.regCode = regCode;
 
         //sails.log.debug(deviceObj, "searching ");
+        Device.find({uniqueId: udid})
+            .then(function(ds){
+                if (ds.length>0)
+                    return res.badRequest({error: "The device with udid: " + udid + " already exists! Cannot Register"})
+                else {
+                    //the return here is to prevent a promise not returned warning.
+                    return Device.findOne(deviceObj)
+                        .then(function (device) {
+                            if (device) {
 
-        Device.findOne(deviceObj)
-            .then(function (device) {
+                                var ca = device.createdAt;
+                                // TODO I doubt this logic is right. It's adding millesecods to a date object using the + operator
+                                if (moment().isBefore(moment(ca).add(sails.config.ogsettings.regCodeTimeout, 'ms'))) {
 
-                //check if device exists
-                if (device) {
-                    var ca = device.createdAt;
-                    // TODO I doubt this logic is right. It's adding millesecods to a date object using the + operator
-                    if (moment().isBefore(moment(ca).add(sails.config.ogsettings.regCodeTimeout, 'ms'))) {
+                                    sails.log.silly(device, "being updated");
 
-                        sails.log.silly(device, "being updated");
+                                    var updatedFields = {};
 
-                        var updatedFields = {};
+                                    updatedFields.regCode = ''; //clear registration code
+                                    updatedFields.uniqueId = udid
+                                    //TODO JSONWebToken into apiToken field
+                                    updatedFields.apiToken = APITokenService.createToken(device.id);
 
-                        updatedFields.regCode = ''; //clear registration code
+                                    //TODO MAC Address -- done on android device :) - will act as UUID
+                                    updatedFields.wifiMacAddress = 'FETCH FROM ANDROID'; //in req?
 
-                        //TODO JSONWebToken into apiToken field
-                        updatedFields.apiToken = APITokenService.createToken(device.id);
+                                    Device.update({id: device.id}, updatedFields)
+                                        .then( function(updatedDevice){
+                                            if (updatedDevice.length==1){
+                                                sails.log.debug( updatedDevice, "updated/registered" );
 
-                        //TODO MAC Address -- done on android device :) - will act as UUID
-                        updatedFields.wifiMacAddress = 'FETCH FROM ANDROID'; //in req?
+                                                var d = updatedDevice[0]
+                                                return Venue.findOne(d.venue)
+                                                    .then(function(v){
+                                                        sails.log.debug(v)
+                                                        request
+                                                            .get("http://" + sails.config.localIp + ':1338/lineup/initialize')
+                                                            .query({zip: v.address.zip, providerID: 195}) //TODO
+                                                            .end(function(err, response) {
+                                                                return res.ok(d)
 
-                        Device.update({id: device.id}, updatedFields)
-                            .then( function(updatedDevice){
-                                if (updatedDevice.length==1){
-                                    sails.log.debug( updatedDevice, "updated/registered" );
-                                    
-                                    var d = updatedDevice[0]
-                                    return Venue.findOne(d.venue)
-                                        .then(function(v){
-                                            sails.log.debug(v)
-                                            request 
-                                                .get("http://" + sails.config.localIp + ':1338/lineup/initialize')
-                                                .query({zip: v.address.zip, providerID: 195}) //TODO
-                                                .end(function(err, response) {
-                                                    return res.ok(d)
-
-                                                })
+                                                            })
+                                                    })
+                                            } else {
+                                                sails.log.debug( "NOT GOOD UPDATE :(" );
+                                                return res.serverError( { error: "Too many or too few devices updated" } );
+                                            }
                                         })
+                                        .catch( function(err){
+                                            sails.log.debug( "NOT GOOD UPDATE :( (catch error)" );
+                                            return res.serverError( { error: err.message } );
+                                        })
+
+                                    //for a promise warning :) 
+                                    return null;
                                 } else {
-                                    sails.log.debug( "NOT GOOD UPDATE :(" );
-                                    return res.serverError( { error: "Too many or too few devices updated" } );
+                                    //sails.log.debug(moment().format(), moment(ca).add(sails.config.ogsettings.regCodeTimeout, 'ms').format())
+                                    return res.badRequest( { error: "Code expired." } );
                                 }
-                            })
-                            .catch( function(err){
-                                sails.log.debug( "NOT GOOD UPDATE :( (catch error)" );
-                                return res.serverError( { error: err.message } );
-                            })
+                            } else {
+                                return res.badRequest( { error: "No device for that code." } );
+                            }
 
-                        return null;
-                    } else {
-                        //sails.log.debug(moment().format(), moment(ca).add(sails.config.ogsettings.regCodeTimeout, 'ms').format())
-                        return res.badRequest( { error: "Code expired." } );
-                    }
-                } else {
-                    return res.badRequest( { error: "No device for that code." } );
+                        })
+                        .catch( function(err){
+                            sails.log.debug( "Error searching devices, this is bad." );
+                            return res.serverError( { error: err.message } );
+                        })
                 }
+            })
+            .catch(function(err){
+                return res.serverError({error: err.message})
+            })
 
-            })
-            .catch( function(err){
-                sails.log.debug( "Error searching devices, this is bad." );
-                return res.serverError( { error: err.message } );
-            })
+       
     },
     //TODO remove once production
     //creates a test device for demo purposes 
