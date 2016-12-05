@@ -323,7 +323,42 @@ module.exports = {
         });
 
 
+    },
+
+    updateNameLocation: function(req, res) {
+        var params = req.allParams();
+
+        if(!params.id){
+            return res.badRequest({error: "No Device Id given"})
+        }
+
+        Device.findOne(params.id)
+            .then(function(device){
+                if (device){
+                    if(params.name){
+                        device.name = params.name
+                    }
+                    if (params.locationWithinVenue){
+                        device.locationWithinVenue = params.locationWithinVenue
+                    }
+                    device.save(function(err){
+                        if(err){
+                            return res.serverError({error: err})
+                        }
+                        else return res.ok(device)
+                    })
+                }
+                else {
+                    return res.notFound({error: "Device with given ID not found"})
+                }
+
+            })
+            .catch(function(err){
+                return res.serverError({error: err.message})
+            })
     }
+    
+
 
 
 };
