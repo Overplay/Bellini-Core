@@ -32,7 +32,7 @@ module.exports = {
                     .catch(function (err) {
                         sails.log.debug("this is bad...");
                         codeInUse = false;
-                        res.notFound({error: err});
+                        return res.notFound({error: err});
                     });
                 sails.log.debug(code)
 
@@ -46,10 +46,12 @@ module.exports = {
         if (!deviceObj.name || !deviceObj.venue)
             return res.badRequest({error: "Missing device params"})
 
+        //todo test Venue existence?
+
         deviceObj.regCode = code;
         
 
-        return Device.create(deviceObj)
+        Device.create(deviceObj)
             .then(function (device) {
                 //sails.log.debug(device, "created");
                 return res.ok({code: device.regCode});
