@@ -8,7 +8,7 @@
 app.controller("addAdvertisementController", function ($scope, $log, $http, $state, user, asahiService, links, toastr) {
     $log.debug("addAdvertisementController starting");
 
-    $scope.$parent.ui.pageTitle = "Create An Advertisement";
+    $scope.$parent.ui.pageTitle = "Create a Sponsorship";
     $scope.$parent.ui.panelHeading = '';
     $scope.$parent.links = links;
 
@@ -51,7 +51,7 @@ app.controller("addAdvertisementController", function ($scope, $log, $http, $sta
         chain.then(function () {
             $http.post("/ad/create", $scope.advertisement)
                 .then(function () {
-                    toastr.success("Advertisement Created and submitted for review!", "Nice!")
+                    toastr.success("Sponsorship Created and submitted for review!", "Nice!")
                     $state.go("advertisement.list")
                 })
         })
@@ -65,7 +65,7 @@ app.controller("addAdvertisementController", function ($scope, $log, $http, $sta
 app.controller("manageAdvertisementController", function ($scope, $log, $http, toastr, ads, links, admin) {
     $log.debug("manageAdvertisementController starting");
 
-    $scope.$parent.ui.pageTitle = admin ? "All Advertisements" : "Manage My Advertisements";
+    $scope.$parent.ui.pageTitle = admin ? "All Sponsorships" : "Manage My Sponsorships";
     $scope.$parent.ui.panelHeading = '';
     $scope.$parent.links = links;
     $scope.sort = '';
@@ -87,7 +87,7 @@ app.controller("manageAdvertisementController", function ($scope, $log, $http, t
     $scope.pause = function (advertisement) {
         var paused = advertisement.paused;
 
-        var successMessage = paused ? "Advertisement will appear in venues!" : "Advertisement will no longer be placed in venues"
+        var successMessage = paused ? "Sponsorship will appear in venues!" : "Sponsorship will no longer be placed in venues"
 
         $http.post('ad/pauseOrResume/', {id: advertisement.id, ad: advertisement})
             .then(function (data) {
@@ -218,7 +218,7 @@ app.controller("editAdvertisementController", function ($scope, $log, $http, $st
     $scope.advertisementUpdate = angular.copy(advertisement);
 
 
-    $scope.$parent.ui.pageTitle = "Manage Advertisement";
+    $scope.$parent.ui.pageTitle = "Manage Sponsorship";
     $scope.$parent.ui.panelHeading = "";
     $scope.$parent.links = links;
 
@@ -263,7 +263,7 @@ app.controller("editAdvertisementController", function ($scope, $log, $http, $st
                 .then(function (data) {
                     $scope.advertisement = data.data;
                     $scope.advertisementUpdate = angular.copy(data.data);
-                    toastr.success("Advertisement info updated", "Success!");
+                    toastr.success("Sponsorship info updated", "Success!");
                 })
                 .catch(function (err) {
                     toastr.error("Something went wrong", "Damn!");
@@ -288,12 +288,12 @@ app.controller("editAdvertisementController", function ($scope, $log, $http, $st
 
     $scope.pause = function () {
         var paused = $scope.advertisement.paused;
-        var q = paused ? "Resume" : "Pause" + " Advertisement"
-        var e = paused ? "Are you sure you would like to resume to advertisement into venues?"
-            : "Are you sure you would like to pause the advertisement from being placed in venues?"
+        var q = paused ? "Resume" : "Pause" + " Sponsorship"
+        var e = paused ? "Are you sure you would like to resume to sponsorship into venues?"
+            : "Are you sure you would like to pause the sponsorship from being placed in venues?"
 
 
-        var successMessage = paused ? "Advertisement will appear in venues!" : "Advertisement will no longer be placed in venues"
+        var successMessage = paused ? "Sponsorship will appear in venues!" : "Sponsorship will no longer be placed in venues"
 
         uibHelper.confirmModal(q, e, true)
             .then(function (confirmed) {
@@ -322,7 +322,7 @@ app.controller("editAdvertisementController", function ($scope, $log, $http, $st
 
                         var state = admin ? 'adminList' : 'list'
                         $state.go('advertisement.' + state)
-                        toastr.success("Advertisement successfully deleted", "Success!")
+                        toastr.success("Sponsorship successfully deleted", "Success!")
                     })
             })
     }
@@ -330,7 +330,7 @@ app.controller("editAdvertisementController", function ($scope, $log, $http, $st
 
 app.controller("reviewAdvertisementController", function ($scope, $log, $http, $state, ad, links, toastr, uibHelper) {
     $scope.advertisement = ad
-    $scope.$parent.ui.pageTitle = "Review Advertisement";
+    $scope.$parent.ui.pageTitle = "Review Sponsorship";
     $scope.$parent.ui.panelHeading = ad.name;
     $scope.$parent.links = links;
     $scope.mediaSizes = ['widget', 'crawler']
@@ -343,7 +343,7 @@ app.controller("reviewAdvertisementController", function ($scope, $log, $http, $
                 $http.post("/ad/review", {id: $scope.advertisement.id, accepted: acc})
                     .then(function (a) {
                         $scope.advertisement = a.data;
-                        toastr.success("Advertisement " + (acc ? "accepted!" : "rejected!"), "Success")
+                        toastr.success("Sponsorship " + (acc ? "accepted!" : "rejected!"), "Success")
 
                         $state.go("advertisement.adminList")
                     })

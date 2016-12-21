@@ -1,5 +1,5 @@
 <div ng-if="!advertisements.length" class="text-center">
-    <h2>No Advertisements to show</h2>
+    <h2>No Sponsorships to show</h2>
     <a class="btn  btn-success" ui-sref="advertisement.add"><h4>Create One!</h4></a>
 </div>
 
@@ -9,7 +9,7 @@
     <div class="col-sm-10 col-sm-offset-1">
 
         <div class="col-sm-8 col-sm-offset-2 top30" ng-show="advertisements.length">
-            <input type="text" ng-model="search.name" class="form-control" placeholder="Search advertisements...">
+            <input type="text" ng-model="search.name" class="form-control" placeholder="Search sponsorships...">
         </div>
         <table class="table table-striped top15">
             <thead>

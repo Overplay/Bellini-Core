@@ -31,7 +31,7 @@ app.controller('signupController', function ($scope, $log, nucleus, $timeout, $w
     }
 
     $scope.signup = function () {
-        $log.debug("Signup clicked for: " + $scope.auth.email + " and password: " + $scope.auth.password);
+        //$log.debug("Signup clicked for: " + $scope.auth.email + " and password: " + $scope.auth.password);
 
 
         nucleus.addUser($scope.auth.email, $scope.auth.password, $scope.user, $scope.auth.facebookId, $scope.validate)

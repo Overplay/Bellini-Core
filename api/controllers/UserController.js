@@ -340,7 +340,7 @@ module.exports = require('waterlock').actions.user({
                                     user.auth = a;
 
                                     //is this dangerous since the token isn't kept track of?
-                                    waterlock.cycle.loginSuccess(req, res, user)
+                                    waterlock.cycle.loginSuccess(req, res, user, '/ui')
                                 }
 
                             })
@@ -368,7 +368,7 @@ module.exports = require('waterlock').actions.user({
 
         return User.findOne(req.session.user.id)
             .then(function (u) {
-                u.roles = _.union(u.roles, [RoleCacheService.roleByName('advertiser')])
+                u.roles = _.union(u.roles, [RoleCacheService.roleByName('sponsor')])
                 u.save(function (err) {
                     if (err)
                         return res.serverError({error: "Add role error "})

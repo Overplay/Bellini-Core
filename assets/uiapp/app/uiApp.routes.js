@@ -455,6 +455,80 @@ app.config(function ($stateProvider, $urlRouterProvider) {
             }
         })
 
+        .state('bestposition', {
+            url: '/bestposition',
+            templateUrl: '/uiapp/app/components/bestposition/bestposition-sidemenu.partial.html',
+            controller: function ($scope) {
+                $scope.panelHeading = {text: "", color: "#0000FF"}
+            },
+            abstract: true
+        })
+
+        .state('bestposition.list', {
+            url: '/list',
+            templateUrl: '/uiapp/app/components/bestposition/bestpositionlist.partial.html',
+            controller: 'bestPositionListController',
+            resolve: {
+                links: function () {
+                    return [
+                        {link: 'bestposition.list', text: "All Models"}
+                    ]
+                },
+               /* 
+                models: function ($http) {
+                    return $http.get('http://'+url+':1338/BestPosition/findAll')
+                        .then( function (data) {
+                            return data.data
+                        })
+                }*/
+            }
+        })
+        .state('bestposition.edit', {
+            url: '/edit/:id',
+            templateUrl: '/uiapp/app/components/bestposition/bestposition-edit.partial.html',
+            controller: 'bestPositionEditController',
+            params: {
+                url: {
+                    value: ""
+                }
+            },
+            resolve: {
+                links: function () {
+                    return [
+                        {link: 'bestposition.list', text: "All Models"}
+                    ]
+                },
+                //TODO url and edit page (save function
+                model: function ($http, $stateParams) {
+                    return $http.get('http://'+$stateParams.url+':1338/BestPosition/'+$stateParams.id)
+                        .then( function (data) {
+                            return data.data
+                        })
+                }
+            }
+        })
+        .state('bestposition.multiEdit', {
+            url: '/multi-edit/',
+            templateUrl: '/uiapp/app/components/bestposition/bestposition-multiedit.partial.html',
+            controller: 'bestPositionMultiEditController',
+            params: {
+                ids: {
+                    value: [],
+                    array: true
+                }
+            },
+            resolve: {
+                links: function () {
+                    return [
+                        {link: 'bestposition.list', text: "All Models"}
+                    ]
+                },
+                ids: function ($http, $stateParams) {
+                    return $stateParams.ids;
+                }
+            }
+        })
+
         .state('device', {
             url: '/device',
             templateUrl: '/uiapp/app/components/device/device-sidemenu.partial.html',
@@ -698,6 +772,12 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                         {link: 'device.managerList', text: 'Managed Devices'},
                         // {link: 'device.add', text: 'Add Device'}
                     ]
+                },
+                heartbeat: function ($http, $stateParams) {
+                    return $http.get('/OGLog/deviceHeartbeat', { params: { id : $stateParams.id }})
+                        .then( function (data) {
+                            return data.data;
+                        })
                 }
             }
         })
@@ -766,8 +846,8 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 links: function () {
 
                     return [
-                        {text: 'My Advertisements', link: 'advertisement.list'},
-                        {text: 'Create an Advertisement', link: 'advertisement.add'}
+                        {text: 'My Sponsorships', link: 'advertisement.list'},
+                        {text: 'Create an Sponsorship', link: 'advertisement.add'}
                     ]
                 }
             }
@@ -776,14 +856,14 @@ app.config(function ($stateProvider, $urlRouterProvider) {
         .state('advertisement.add', {
             url: '/add',
             templateUrl: '/uiapp/app/components/trevda/add-trevda.partial.html',
-            data: {subTitle: "Add Advertisement"},
+            data: {subTitle: "Add Sponsorship"},
             controller: 'addAdvertisementController'
         })
 
         .state('advertisement.list', {
             url: '/manage',
             templateUrl: '/uiapp/app/components/trevda/trevdalist.partial.html',
-            data: {subTitle: "Manage Advertisements"},
+            data: {subTitle: "Manage Sponsorships"},
             controller: 'manageAdvertisementController',
             resolve: {
                 ads: function ($http) {
@@ -802,7 +882,7 @@ app.config(function ($stateProvider, $urlRouterProvider) {
         .state('advertisement.adminList', {
             url: '/admin-list',
             templateUrl: '/uiapp/app/components/trevda/trevdalist.partial.html',
-            data: {subTitle: "Manage Advertisements"},
+            data: {subTitle: "Manage Sponsorships"},
             controller: 'manageAdvertisementController',
             resolve: {
                 ads: function ($http) {
@@ -816,7 +896,7 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 links: function () {
 
                     return [
-                        {text: 'All Advertisements', link: 'advertisement.adminList'},
+                        {text: 'All Sponsorships', link: 'advertisement.adminList'},
                         //{text: 'Create an Advertisement', link: 'advertisement.add'}
                     ]
                 }
@@ -827,7 +907,7 @@ app.config(function ($stateProvider, $urlRouterProvider) {
         .state('advertisement.adminReview', {
             url: '/admin-review/:id',
             templateUrl: '/uiapp/app/components/trevda/trevdareview.partial.html',
-            data: {subTitle: "Review Advertisement"},
+            data: {subTitle: "Review Sponsorship"},
             controller: 'reviewAdvertisementController',
             resolve: {
                 ad: function ($http, $stateParams) {
@@ -841,7 +921,7 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 links: function () {
 
                     return [
-                        {text: 'All Advertisements', link: 'advertisement.adminList'},
+                        {text: 'All Sponsorships', link: 'advertisement.adminList'},
                         //{text: 'Create an Advertisement', link: 'advertisement.add'}
                     ]
                 }
@@ -853,7 +933,7 @@ app.config(function ($stateProvider, $urlRouterProvider) {
         .state('advertisement.edit', {
             url: '/edit/:id',
             templateUrl: '/uiapp/app/components/trevda/edit-trevda.partial.html',
-            data: {subTitle: "Edit Advertisement"},
+            data: {subTitle: "Edit Sponsorship"},
             controller: 'editAdvertisementController',
             resolve: {
                 advertisement: function ($stateParams, $http) {
@@ -887,7 +967,7 @@ app.config(function ($stateProvider, $urlRouterProvider) {
         .state('advertisement.adminEdit', {
             url: '/admin-edit/:id',
             templateUrl: '/uiapp/app/components/trevda/edit-trevda.partial.html',
-            data: {subTitle: "Edit Advertisement"},
+            data: {subTitle: "Edit Sponsorship"},
             controller: 'editAdvertisementController',
             resolve: {
                 advertisement: function ($stateParams, $http) {
@@ -902,7 +982,7 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 links: function () {
 
                     return [
-                        {text: 'All Advertisements', link: 'advertisement.adminList'},
+                        {text: 'All Sponsorships', link: 'advertisement.adminList'},
                         //{text: 'Create an Advertisement', link: 'advertisement.add'}
                     ]
                 }
@@ -978,7 +1058,7 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 }
             }
         })
-        .state('dash.advertiser', {
+        .state('dash.sponsor', {
             templateUrl: '/uiapp/app/components/dash/ad-dash.partial.html',
             controller: 'adDashController',
             resolve: {

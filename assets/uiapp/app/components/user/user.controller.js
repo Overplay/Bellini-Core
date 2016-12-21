@@ -15,7 +15,7 @@ app.controller("editUserController", function ($scope, $log, user, toastr, nucle
     $scope.user.email = user.auth.email;
 
 
-    $scope.advertiser = $scope.user.roleTypes.indexOf("advertiser") != -1
+    $scope.advertiser = $scope.user.roleTypes.indexOf("sponsor") != -1
 
     $scope.$parent.ui.panelHeading = user.email;
     $scope.$parent.ui.pageTitle = "Edit User";
@@ -70,13 +70,13 @@ app.controller("editUserController", function ($scope, $log, user, toastr, nucle
 
 
     $scope.becomeAdvertiser = function () {
-        uibHelper.confirmModal("Are you sure?", "Would you like to be an advertiser account on Ourglass?", true)
+        uibHelper.confirmModal("Are you sure?", "Would you like to be an sponsor account on Ourglass?", true)
             .then(function (confirmed) {
                 $http.post("/user/becomeAdvertiser")
                     .then(function (data) {
                         $rootScope.$emit('navBarUpdate', data.data.roleTypes);
                         $scope.advertiser = true;
-                        toastr.success("You are now an advertiser!")
+                        toastr.success("You are now an sponsor!")
                     })
                     .catch( function (err) {
                         $log.log(err);
