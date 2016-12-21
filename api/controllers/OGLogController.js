@@ -10,13 +10,12 @@ module.exports = {
     upload: function (req, res) {
 
         var params = req.allParams();
-        var chain = Promise.resolve();
 
         if (!params.logType)
             return res.badRequest({error: "Missing log type"});
         if (!params.message)
             return res.badRequest({error: "Missing message"});
-        if (!params.deviceUniqueId)
+        if (!params.deviceUniqueId && !params.deviceId)
             return res.badRequest({error: "Missing device id"});
         if (!params.loggedAt)
             return res.badRequest({error: "Missing logged at time"});
@@ -24,24 +23,19 @@ module.exports = {
         params.loggedAt = new Date(params.loggedAt);
         sails.log.debug(params);
 
-        chain = chain.then( function () {
-            return OGLog.create(params)
-                .then( function (log) {
-                    if (log.logType == "alert") {
-                        // return TwilioService.sendText('+13033249551', "RED ALERT!!!!");
-                    }
-                })
+        OGLog.create(params)
+            .then( function (log) {
+                if (log.logType == "alert") {
+                    // return TwilioService.sendText('+13033249551', "RED ALERT!!!!");
+                }
+                return res.ok(log)
+            })
 
-        });
-
-        chain = chain.then( function () {
-            return res.ok();
-        })
             .catch( function (err) {
+                sails.log.debug("error creating log")
                 return res.serverError({error: err});
             })
 
-        return chain;
     },
 
     //if device id in OGLog, include ad id? this is complicated 
@@ -60,7 +54,8 @@ module.exports = {
 
         var id = req.allParams().id;
 
-        return OGLog.find({ where: { logType: 'heartbeat'}, sort: 'loggedAt DESC'})
+        //TODO test with uniqueDeviceId: id in query if deviceId now instead of unique TOODODODODO
+        OGLog.find({ where: { logType: 'heartbeat', deviceId: id}, sort: 'loggedAt DESC'})
             .then( function (logs) {
                 var venueLogs = _.filter(logs, function (o) { return o.deviceUniqueId == id });
                 return res.json(venueLogs);
@@ -71,7 +66,7 @@ module.exports = {
     },
 
     getAll: function (req, res) {
-        return OGLog.find()
+        OGLog.find()
             .then(function (logs) {
                 return res.ok(logs)
             })
