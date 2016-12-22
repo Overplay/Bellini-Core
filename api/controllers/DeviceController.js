@@ -186,7 +186,8 @@ module.exports = {
         //sails.log.debug(req.allParams());
         var params = req.allParams()
         
-        return Device.create(params)
+        sails.log.debug(params)
+        Device.create(params)
             .then(function (dev) {
                 //sails.log.debug(dev)
                 dev.apiToken = APITokenService.createToken(dev.id);

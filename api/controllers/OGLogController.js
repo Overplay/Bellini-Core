@@ -41,9 +41,12 @@ module.exports = {
     //if device id in OGLog, include ad id? this is complicated 
     //more in the ad controller
     impressions: function (req, res) {
-        return OGLog.find({where: { logType: 'impression'}, sort: 'loggedAt DESC' })
+        OGLog.find({where: { logType: 'impression'}, sort: 'loggedAt DESC' })
             .then(function(logs) {
                 return res.ok(logs); //all logs
+            })
+            .catch(function(err){
+                return res.serverError({error: err})
             })
     },
 
@@ -54,6 +57,7 @@ module.exports = {
 
         var id = req.allParams().id;
 
+        OGLog.find({ where: { logType: 'heartbeat'}, sort: 'loggedAt DESC'})
         //TODO test with uniqueDeviceId: id in query if deviceId now instead of unique TOODODODODO
         OGLog.find({ where: { logType: 'heartbeat', deviceId: id}, sort: 'loggedAt DESC'})
             .then( function (logs) {
@@ -69,6 +73,9 @@ module.exports = {
         OGLog.find()
             .then(function (logs) {
                 return res.ok(logs)
+            })
+            .catch(function(err){
+                return res.serverError({error: err})
             })
     }
 

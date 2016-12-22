@@ -23,10 +23,10 @@ module.exports = {
         var params = req.allParams();
 
         if (!params.address || !params.name)
-            res.badRequest({error: "Missing params"})
+            return res.badRequest({error: "Missing params"})
 
         if (!params.id && !(req.session && req.session.user && req.session.user.id))
-            res.badRequest({error: "No user id provided and no user logged in"});
+            return res.badRequest({error: "No user id provided and no user logged in"});
 
         var id = params.id ? params.id : req.session.user.id;
 
@@ -52,7 +52,7 @@ module.exports = {
 
         var newVenue = req.allParams();
 
-        return User.findOne({id: req.session.user.id})
+        User.findOne({id: req.session.user.id})
             .populate('auth')
             .then(function (user) {
                 if (user) {
@@ -74,11 +74,12 @@ module.exports = {
                                 //sails.log.debug("venue ownership", v)
                                 return res.json({venue: v, user: user})
                             })
-                            .catch(function (err) {
-                                return res.serverError({error: err}); //give out error (will only show error info if not in production)
-                            })
+
                     });
                 }
+            })
+            .catch(function (err) {
+                return res.serverError({error: err}); //give out error (will only show error info if not in production)
             })
 
 
@@ -87,10 +88,10 @@ module.exports = {
     getVenueManagers: function (req, res) {
 
         if (!req.allParams().id)
-            res.badRequest({error: "No venue id specified"});
+            return res.badRequest({error: "No venue id specified"});
 
-        return Venue.findOne({ id: req.allParams().id }).populate('venueManagers')
-            .then( function (venue) {
+        Venue.findOne({id: req.allParams().id}).populate('venueManagers')
+            .then(function (venue) {
                 if (venue) {
                     return res.ok(venue.venueManagers);
                 }
@@ -103,22 +104,22 @@ module.exports = {
     },
 
     yelpSearch: function (req, res) {
-        return yelp.search(req.allParams())
+        yelp.search(req.allParams())
             .then(function (data) {
-                res.ok(data);
+                return res.ok(data);
             })
             .catch(function (err) {
-                res.serverError({error: err});
+                return res.serverError({error: err});
             })
     },
 
     yelpBusiness: function (req, res) {
-        return yelp.business(req.allParams().yelpId)
+        yelp.business(req.allParams().yelpId)
             .then(function (data) {
-                res.ok(data);
+                return res.ok(data);
             })
             .catch(function (err) {
-                res.serverError({error: err});
+                return res.serverError({error: err});
             })
     },
 
@@ -127,7 +128,7 @@ module.exports = {
         var params = req.allParams();
 
         if (!params.query)
-            res.badRequest({error: "No query provided"});
+            return res.badRequest({error: "No query provided"});
 
         var query = params.query;
         var venues = [];
@@ -162,10 +163,10 @@ module.exports = {
         var params = req.allParams();
 
         if (!params.id)
-            res.badRequest({error: "Missing params"});
+            return res.badRequest({error: "Missing params"});
 
         //have to add proprietor.manager role to user if not already there.
-        return User.findOne(params.userId)
+        User.findOne(params.userId)
             .populate("managedVenues")
             .populate("ownedVenues")
             .then(function (user) {
@@ -210,10 +211,10 @@ module.exports = {
         var params = req.allParams();
 
         if (!params.id)
-            res.badRequest({error: "Missing params"});
+            return res.badRequest({error: "Missing params"});
 
         //have to add proprietor.owner role to user if not already there.
-        return User.findOne(params.userId)
+        User.findOne(params.userId)
             .populate("managedVenues")
             .populate("ownedVenues")
             .then(function (user) {
@@ -233,13 +234,13 @@ module.exports = {
                         user.save(function (err) {
                             if (err)
                                 sails.log.debug(err)
-                            return Venue.findOne(params.id)
+                            Venue.findOne(params.id)
                                 .populate("venueOwners")
                                 .then(function (venue) {
                                     return res.ok(venue.venueOwners)
 
                                 })
-                                .catch( function (err) {
+                                .catch(function (err) {
                                     return res.serverError({error: err});
                                 })
                         })
@@ -248,6 +249,9 @@ module.exports = {
                 else
                     return res.badRequest({error: "invalid user id"})
             })
+            .catch(function (err) {
+                return res.serverError({error: err}); //give out error (will only show error info if not in production)
+            })
     },
 
     removeManager: function (req, res) {
@@ -255,10 +259,10 @@ module.exports = {
         //params : user ID , venue ID is id
 
         if (!params.id)
-            res.badRequest({error: "Missing params"});
+            return res.badRequest({error: "Missing params"});
 
         //have to remove from many to many and possibly role
-        return User.findOne(params.userId)
+        User.findOne(params.userId)
             .populate("managedVenues")
             .populate("ownedVenues")
             .then(function (user) {
@@ -284,7 +288,7 @@ module.exports = {
                                 return res.ok(venue.venueManagers)
 
                             })
-                            .catch(function(err) {
+                            .catch(function (err) {
                                 return res.serverError({error: err})
                             })
                     })
@@ -292,6 +296,9 @@ module.exports = {
 
                 else
                     return res.badRequest({error: "invalid user id"})
+            })
+            .catch(function (err) {
+                return res.serverError({error: err}); //give out error (will only show error info if not in production)
             })
 
 
@@ -301,7 +308,7 @@ module.exports = {
         //params : user ID , venue ID
 
         if (!params.id)
-            res.badRequest({error: "Missing params"});
+            return res.badRequest({error: "Missing params"});
 
         //prevent self removal from venue owner
         if (params.userId == req.session.user.id) {
@@ -327,52 +334,54 @@ module.exports = {
         })
 
         //have to remove from many to many and possibly role
-        chain.then(function (r) {
-            if (!r) {
-                return User.findOne(params.userId)
-                    .populate("managedVenues")
-                    .populate("ownedVenues")
-                    .then(function (user) {
-                        if (user) {
+        chain
+            .then(function (r) {
+                if (!r) {
+                    return User.findOne(params.userId)
+                        .populate("managedVenues")
+                        .populate("ownedVenues")
+                        .then(function (user) {
+                            if (user) {
 
-                            //remove their role as a manager if they are no longer managing any venues
-                            if (user.ownedVenues.length < 2) {
-                                _.remove(user.roles, function (r) {
-                                    return r == RoleCacheService.roleByName("proprietor", "owner")
+                                //remove their role as a manager if they are no longer managing any venues
+                                if (user.ownedVenues.length < 2) {
+                                    _.remove(user.roles, function (r) {
+                                        return r == RoleCacheService.roleByName("proprietor", "owner")
+                                    })
+
+                                }
+
+                                user.ownedVenues.remove(params.id)
+                                user.save(function (err) {
+                                    if (err) {
+                                        sails.log.debug(err)
+                                        return res.serverError({error: err})
+                                    }
+                                    return Venue.findOne(params.id)
+                                        .populate("venueOwners")
+                                        .then(function (venue) {
+                                            return res.ok(venue.venueOwners)
+
+                                        })
                                 })
-
                             }
 
-                            user.ownedVenues.remove(params.id)
-                            user.save(function (err) {
-                                if (err) {
-                                    sails.log.debug(err)
-                                    return res.serverError({error: err})
-                                }
-                                return Venue.findOne(params.id)
-                                    .populate("venueOwners")
-                                    .then(function (venue) {
-                                        return res.ok(venue.venueOwners)
-
-                                    })
-                            })
-                        }
-
-                        else
-                            return res.badRequest({error: "invalid user id"})
-                    })
-            }
+                            else
+                                return res.badRequest({error: "invalid user id"})
+                        })
+                }
 
 
-        })
-
-        return chain;
+            })
+            .catch(function (err) {
+                return res.serverError({error: err}); //give out error (will only show error info if not in production)
+            })
 
 
     },
 
     getMobileView: function (req, res) {
-        return Venue.find({showInMobileAppMap: true})
+        Venue.find({showInMobileAppMap: true})
             .then(function (venues) {
                 return res.ok(venues)
             })

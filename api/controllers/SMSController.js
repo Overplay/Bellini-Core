@@ -31,7 +31,7 @@ module.exports = {
         if (params.destination.length == 10)
             params.destination = "+1" + params.destination;
 
-        return Device.findOne(params.deviceId)
+        Device.findOne(params.deviceId)
             .populate('venue')
             .then( function (dev) {
                 if (!dev)
@@ -53,6 +53,9 @@ module.exports = {
                                 })
                         })
                 }
+            })
+            .catch(function(err){
+                return res.serverError({error: err})
             })
     }
 };

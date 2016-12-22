@@ -25,7 +25,8 @@ module.exports = {
             var count = 0, now = Date.now();
 
             //TODO can't this be done with a straight waterlin query?
-            Media.find().then( function ( data ) {
+            Media.find()
+                .then( function ( data ) {
                 data.forEach( function ( media ) {
                     media.createdAt = new Date( media.createdAt );
                     if ( media.createdAt > req.body.start && media.createdAt < req.body.end ) {
