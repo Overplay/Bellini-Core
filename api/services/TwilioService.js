@@ -28,7 +28,10 @@ module.exports = {
 
     sendText:  function(phoneNumber, messageObj) {
         return new Promise(function (resolve, reject) {
+            if(!sails.config.twilio) {
+                return reject({error: "No twilio Configuration"});
 
+            }
             // Twilio Credentials
             var accountSid = sails.config.twilio.accountSid;
             var authToken = sails.config.twilio.authToken;
