@@ -18,7 +18,7 @@ app.controller('bestPositionListController', function ($scope, $rootScope, $stat
     $scope.multiEditIds = [];
     //$log.log(models[0])
 
-    $http.get('http://'+$scope.AJPGSUrl+'/BestPosition/findAll')
+    $http.get('https://'+$scope.AJPGSUrl+'/BestPosition/findAll')
         .then( function (data) {
             $scope.models = data.data;
             $scope.loadingData = false;
@@ -98,7 +98,7 @@ app.controller('bestPositionMultiEditController', function ($scope, $rootScope, 
 
             _.forEach(ids, function (id) {
                 promises.push(
-                    $http.put("http://"+AJPGSUrl+"/bestPosition/" + id, $scope.model)
+                    $http.put("https://"+AJPGSUrl+"/bestPosition/" + id, $scope.model)
                         .then( function () {
                             $scope.updating.count++; // adjust progress bar...progress
                         })
@@ -130,7 +130,7 @@ app.controller('bestPositionEditController', function ($scope, $rootScope, $stat
 
     $scope.update = function() {
         //TODO url
-        $http.put("http://"+AJPGSUrl+"/bestPosition/" + $scope.model.id, $scope.model)
+        $http.put("https://"+AJPGSUrl+"/bestPosition/" + $scope.model.id, $scope.model)
             .then(function(l){
                 $log.log(l)
                 toastr.success("Positions updated!", "Nice!")
