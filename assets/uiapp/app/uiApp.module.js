@@ -28,7 +28,7 @@ app.run( function ( $log, $rootScope , $http) {
     $log.info( "Asahi is pouring!" );
 
     $http.get('/uiapp/local.json').then(function(data){
-        $rootScope.url = data.data.url
+        $rootScope.AJPGSUrl = data.data.AJPGSUrl
     })
 
     $rootScope.$on( '$stateChangeError',
