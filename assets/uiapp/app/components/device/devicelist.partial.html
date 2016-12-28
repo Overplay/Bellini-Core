@@ -10,6 +10,7 @@
             <thead>
             <tr>
                 <th>Name</th>
+                <th>UDID</th>
                 <th>Location</th>
                 <th>Venue</th>
                 <th></th>
@@ -19,6 +20,7 @@
             <tbody>
             <tr ng-repeat="device in devices | filter:searchTerm">
                 <td>{{ device.name }}</td>
+                <td>{{ device.uniqueId }}</td>
                 <td>{{ device.locationWithinVenue }}</td>
                 <td><span uib-popover-template="'uiapp/app/components/device/address-popover.template.html'"
                           popover-trigger="mouseenter"
