@@ -6,7 +6,7 @@
     "name"       : "asahi",
     "script"     : "app.js", //TODO change if nec. depends on file locations
     "instances": 'max',
-    "exec_mode": "cluster",
+    //NO! we cannot cluster because auth is not clusterable now. "exec_mode": "cluster",
     //TODO clustering support
     "cwd" : "/opt/asahi", //TODO change this if deploying in a different folder!
     "env": {
