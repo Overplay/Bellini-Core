@@ -12,6 +12,13 @@ app.config(function ($stateProvider, $urlRouterProvider) {
 
     $stateProvider
 
+        .state( 'socket', {
+                url: '/socket',
+                templateUrl: '/uiapp/app/components/socket/socket.partial.html',
+                controller:  'socketController'
+            }
+        )
+                             
         .state('user.adminList', {
             url: '/admin-list',
             data: {subTitle: "Manage Users"},
