@@ -8,6 +8,9 @@ app.controller('socketController', function($scope, $log){
 
     io.socket.on( 'hello', function ( data ) {
         console.log( 'Socket `' + data.id + '` joined the party!' );
+        $scope.$apply( function(){
+            $scope.rxs.push( 'Socket `' + data.id + '` joined the party at ' + new Date() );
+        })
     } );
 
     $scope.subscribe = function() {
@@ -18,6 +21,8 @@ app.controller('socketController', function($scope, $log){
         } );
 
     };
+
+    $scope.rxs = [];
 
 
 });
