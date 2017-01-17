@@ -4,6 +4,7 @@
     "script"     : "app.js",
     "instances": 1,
     "cwd" : "/opt/asahi",
+    "exec_mode": "fork",
     "env": {
       "COMMON_VARIABLE": "true",
       "NODE_ENV": "development"
