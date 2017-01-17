@@ -1,20 +1,12 @@
-//additional test file for config. for on server not just
-
-
 {
   "apps" : [{
     "name"       : "asahi",
-    "script"     : "app.js", //TODO change if nec. depends on file locations
-    "instances": '1',
-    //NO! we cannot cluster because auth is not clusterable now. "exec_mode": "cluster",
-    //TODO clustering support
-    "cwd" : "/opt/asahi", //TODO change this if deploying in a different folder!
+    "script"     : "app.js",
+    "instances": 1,
+    "cwd" : "/opt/asahi",
     "env": {
       "COMMON_VARIABLE": "true",
       "NODE_ENV": "development"
-      //"PM2_SILENT": false, //trying to get output for debugging
-      //"PM2_PROGRAMMATIC": false //same
-
     },
     "env_production" : {
       "NODE_ENV": "production"
@@ -24,9 +16,6 @@
     "post_update": [
       "npm install && cd assets && bower update && cd .."
     ],
-    //for reloads //also restart the module??
     "watch": false
-    //now that pm2 reload works as it should
-
   }]
 }
