@@ -21,6 +21,9 @@ module.exports = {
         deviceUniqueId: {
             type: 'string'
         },
+        deviceId: {
+            type: 'string'
+        },
         loggedAt: {
             type: 'datetime'
         }

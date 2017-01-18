@@ -500,7 +500,7 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 },
                 //TODO url and edit page (save function
                 model: function ($http, $stateParams) {
-                    return $http.get('http://'+$stateParams.url+':1338/BestPosition/'+$stateParams.id)
+                    return $http.get('https://'+$stateParams.url+'/BestPosition/'+$stateParams.id)
                         .then( function (data) {
                             return data.data
                         })
