@@ -52,7 +52,7 @@ app.controller("addAdvertisementController", function ($scope, $log, $http, $sta
             $http.post("/ad/create", $scope.advertisement)
                 .then(function () {
                     toastr.success("Sponsorship Created and submitted for review!", "Nice!")
-                    $state.go("advertisement.list")
+                    $state.go("sponsorship.adminList")
                 })
         })
 
@@ -82,7 +82,7 @@ app.controller("manageAdvertisementController", function ($scope, $log, $http, t
 
     $scope.admin = admin
 
-    $scope.infoLink = ($scope.admin ? "advertisement.adminEdit" : "advertisement.edit" )+ "({id: advertisement.id})"
+    $scope.infoLink = ($scope.admin ? "sponsorship.adminEdit" : "sponsorship.edit" )+ "({id: advertisement.id})"
 
     $scope.pause = function (advertisement) {
         var paused = advertisement.paused;
@@ -320,8 +320,7 @@ app.controller("editAdvertisementController", function ($scope, $log, $http, $st
                     })
                     .then(function (data) {
 
-                        var state = admin ? 'adminList' : 'list'
-                        $state.go('advertisement.' + state)
+                        $state.go('sponsorship.' + (admin ? 'adminList' : 'list'));
                         toastr.success("Sponsorship successfully deleted", "Success!")
                     })
             })
@@ -345,7 +344,7 @@ app.controller("reviewAdvertisementController", function ($scope, $log, $http, $
                         $scope.advertisement = a.data;
                         toastr.success("Sponsorship " + (acc ? "accepted!" : "rejected!"), "Success")
 
-                        $state.go("advertisement.adminList")
+                        $state.go("sponsorship.adminList")
                     })
             })
     }

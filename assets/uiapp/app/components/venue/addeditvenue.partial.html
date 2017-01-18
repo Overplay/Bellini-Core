@@ -64,14 +64,14 @@
                 <form name="form" role="form" ng-submit="submit()" class="form-horizontal top15">
                     <div ng-init="setForm(form)"></div>
                     <fieldset class="form-group" ng-class="{'has-error' : !form.name.$valid && form.name.$touched, 'has-success' : form.name.$valid && form.name.$touched}">
-                        <label for="name" class="col-sm-3 control-label">Venue Name</label>
+                        <label for="name" class="col-sm-3 control-label">Venue Name *</label>
                         <div class="col-sm-9">
                             <input type="text" class="form-control" id="name" name="name" placeholder="Venue Name"
                                    ng-model="venue.name" required/>
                         </div>
                     </fieldset>
                     <fieldset class="form-group" ng-class="{'has-error' : !form.street.$valid && form.street.$touched, 'has-success' : form.street.$valid && form.street.$touched}">
-                        <label for="address-street" class="col-sm-3 control-label">Street Address</label>
+                        <label for="address-street" class="col-sm-3 control-label">Street Address *</label>
                         <div class="col-sm-9">
                             <input type="text" class="form-control" id="address-street" name="street"
                                    placeholder="Address"
@@ -87,14 +87,14 @@
                         </div>
                     </fieldset>
                     <fieldset class="form-group" ng-class="{'has-error' : !form.city.$valid && form.city.$touched, 'has-success' : form.city.$valid && form.city.$touched}">
-                        <label for="address-city" class="col-sm-3 control-label">City</label>
+                        <label for="address-city" class="col-sm-3 control-label">City *</label>
                         <div class="col-sm-9">
                             <input type="text" class="form-control" id="address-city" name="city" placeholder="City"
                                    ng-model="venue.address.city" required/>
                         </div>
                     </fieldset>
                     <fieldset class="form-group" ng-class="{'has-error' : !form.state.$valid && form.state.$touched, 'has-success' : form.state.$valid && form.state.$touched}">
-                        <label for="address-state" class="col-sm-3 control-label">State/Province</label>
+                        <label for="address-state" class="col-sm-3 control-label">State/Province *</label>
                         <div class="col-sm-3">
                             <input type="text" class="form-control" id="address-state" name="state" placeholder="State"
                                    ng-model="venue.address.state" maxlength="2" required/>
@@ -103,7 +103,7 @@
                         </div>
                     </fieldset>
                     <fieldset class="form-group" ng-class="{'has-error' : !form.zip.$valid && form.zip.$touched, 'has-success' : form.zip.$valid && form.zip.$touched}">
-                        <label for="address-zip" class="col-sm-3 control-label">Postal/Zip Code</label>
+                        <label for="address-zip" class="col-sm-3 control-label">Postal/Zip Code *</label>
                         <div class="col-sm-5">
                             <input type="text" class="form-control" id="address-zip" name="zip" placeholder="ex: 80304"
                                    ng-model="venue.address.zip" ng-pattern="regex" required/>

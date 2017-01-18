@@ -205,7 +205,7 @@ app.controller("editDeviceAdminController", function ($scope, $state, $log, devi
 
 });
 
-app.controller("editDeviceOwnerController", function ($scope, $state, $log, device, toastr, uibHelper, nucleus, user, $http, links, edit, heartbeat) {
+app.controller("editDeviceOwnerController", function ($rootScope, $scope, $state, $log, device, toastr, uibHelper, nucleus, user, $http, links, edit, heartbeat) {
     $log.debug("editDeviceOwnerController starting");
 
     $scope.edit = edit;
@@ -220,6 +220,7 @@ app.controller("editDeviceOwnerController", function ($scope, $state, $log, devi
     };
     $scope.heartbeats = heartbeat;
     $scope.selectedHeartbeat = $scope.heartbeats[0];
+    var url = $rootScope.url;
 
     $http.get("api/v1/user/" + user.id) //nucleus.getMe doesn't populate ownedVenues (nucleus uses and auth endpoint in getMe)
         .then(function(u){
@@ -228,6 +229,86 @@ app.controller("editDeviceOwnerController", function ($scope, $state, $log, devi
         .catch( function (err) {
             $log.debug("Error fetching user")
         });
+
+    $scope.addLineup = function () {
+        $http.get('api/v1/venue/' + device.venue.id)
+            .then( function (res) {
+                var lineups = []
+//                return _.map(res.data.devices, function (o) { return o.lineupID ? { ID: o.lineupID, name: o.lineupName} : null})
+                _.forEach(res.data.devices, function (o) { if (o.lineupID) lineups.push({lineupID: o.lineupID, lineupName: o.lineupName, source: "venue"})});
+                return lineups;
+            })
+            .then( function (lineups) {
+                if (!lineups) {
+                    return $http.get('http://'+url+':1338/lineup/searchByZip', { params: { zip : device.venue.address.zip, extended: true }})
+                        .then( function (res) {
+                            return _.map(res.data, function (o) {
+                                o["source"] = "remote";
+                                return o;
+                            })
+                        })
+                }
+                lineups.push({ lineupName: "Search for more lineups..." });
+                return lineups;
+            })
+            .then( function (lineups) {
+                return uibHelper.selectListModal("Select your program lineup from the list below:", "", _.map(lineups, "lineupName"), 0)
+                    .then( function (res) {
+                        return lineups[res];
+                    })
+            })
+            .then( function (res) {
+                if (res.lineupName === "Search for more lineups...") {
+                    $log.debug("SEARCH HERE");
+                    return $http.get('http://' + url + ':1338/lineup/searchByZip', { params: { zip: device.venue.address.zip, extended: true}})
+                        .then(function (res) {
+                            return _.map(res.data, function (o) {
+                                o["source"] = "remote";
+                                return o;
+                            })
+                        })
+                        .then(function (lineups) {
+                            return uibHelper.selectListModal("Select your program lineup from the list below:", "", _.map(lineups, "lineupName"), 0)
+                                .then(function (res) {
+                                    return lineups[res];
+                                })
+                        })
+                }
+                else
+                    return res;
+            })
+            .then(function (res) {
+                if (res.source === "remote") {
+                    delete res.source;
+                    res.zip = device.venue.address.zip;
+                    return $http.post('http://'+url+':1338/lineup/add', res )
+                        .then( function (data) {
+                            return data.data;
+                        })
+                }
+                else {
+                    return res;
+                }
+            })
+            .then( function (res) {
+                $scope.device.lineupID = res.id;
+                $scope.device.lineupName = res.lineupName;
+                nucleus.updateDevice($scope.device.id, $scope.device)
+                    .then( function () {
+                        toastr.success("Lineup successfully added", "Success!");
+                    })
+                    .catch( function () {
+                        toastr.error("Could not update device", "Error!");
+                    })
+            })
+    }
+
+    $scope.removeLineup = function () {
+        nucleus.updateDevice($scope.device.id, $scope.device)
+            .then( function (d) {
+
+            })
+    }
 
     $scope.update = function () {
         //post to an update with $scope.device
@@ -242,6 +323,7 @@ app.controller("editDeviceOwnerController", function ($scope, $state, $log, devi
                 toastr.error("Something went wrong", "Damn!");
             });
     }
+
 
 
     // Cole's code for deleting device

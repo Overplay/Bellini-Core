@@ -32,7 +32,7 @@ app.factory('navBarService', function ($log) {
                     {
                         label: "Sponsorships",
                         id: "trevda",
-                        items: [{label: "All Sponsorships", link: {type: 'ui-sref', addr: 'advertisement.adminList'}}]
+                        items: [{label: "All Sponsorships", link: {type: 'ui-sref', addr: 'sponsorship.adminList'}}]
                     },
                     {
                         label: "Best Position",
@@ -183,7 +183,7 @@ app.factory('navBarService', function ($log) {
                         id: "ads",
                         items: [
                             {
-                                label: 'My Sponsorships', link: {type: 'ui-sref', addr: 'advertisement.list'}
+                                label: 'My Sponsorships', link: {type: 'ui-sref', addr: 'sponsorship.list'}
                             }
                         ]
                     }]
