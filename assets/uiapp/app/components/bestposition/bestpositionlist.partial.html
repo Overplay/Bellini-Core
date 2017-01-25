@@ -4,7 +4,6 @@
     </div>
     <div class="col-sm-10 col-sm-offset-1 top30">
         <h3 ng-show="!results.length && !loadingData" style="text-align: center; margin-bottom: 40px">No Best Position Models Found</h3>
-        <!--<h3 ng-if="!models.length && !loadingData" style="text-align: center; margin-bottom: 40px">No Best Position Models</h3>-->
 
         <div ng-show="loadingData" class="text-center">
             <br>
@@ -20,10 +19,11 @@
                 <th>Network</th>
                 <th>Program</th>
                 <th>Type</th>
-                <th>Ad Position</th>
+                <th>Widget Position</th>
                 <th>Crawler Position</th>
                 <th><a class="btn btn-sm btn-warning" ui-sref="bestposition.multiEdit({ids: multiEditIds})" ng-class="{'disabled': !multiEditIds.length}">EDIT SELECTED</a></th>
             </tr>
+
             </thead>
             <tbody>
             <tr ng-repeat="model in ($parent.results = (models | filter: searchTerm | orderBy: 'network') | startFrom: (currentPage-1)*pageSize | limitTo: pageSize)">
@@ -39,8 +39,8 @@
                 </td>
                 <td>{{ model.seriesName || "N/A" }}</td>
                 <td>{{ model.type | capitalize }}</td>
-                <td>{{ model.adPosition | capitalize }}</td>
-                <td>{{ model.crawlerPosition | capitalize}}</td>
+                <td>{{ model.widgetPosition }}</td>
+                <td>{{ model.crawlerPosition }}</td>
                 <td>
                     <a class="btn btn-sm btn-warning" ui-sref="bestposition.edit({id: model.id, url: url})" ng-hide="model.selected">EDIT</a>
                     <a class="btn btn-sm btn-warning"

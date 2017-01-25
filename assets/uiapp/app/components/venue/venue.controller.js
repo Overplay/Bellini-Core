@@ -53,7 +53,7 @@ app.controller("addEditVenueController", function ($scope, $log, nucleus, $state
                             var loc = data.data.businesses[0].location;
                             $scope.geolocation = $scope.parameters.location = loc.city + ", " + loc.state_code;
                         })
-                        .catch(function (error) {
+                        .catch(function (err) {
                             toastr.error("Try again later", "Location Unavailable");
                         })
                 })
@@ -193,8 +193,17 @@ app.controller('viewVenueController', function ($scope, venue, $log, uiGmapGoogl
 
     $scope.admin = role === "admin";
     $scope.uid = user.id;
+    $scope.mediaSizes = ['widget', 'crawler'];
 
+    $scope.sponsorships = [];
     //$log.log($scope.uid)
+
+    _.forEach($scope.venue.sponsorships, function (s) {
+        $http.get('/api/v1/ad/' + s)
+            .then( function (res) {
+                $scope.sponsorships.push(res.data);
+            })
+    });
 
     $scope.userRoute = function (id) {
         if (id === user.id)
@@ -209,6 +218,10 @@ app.controller('viewVenueController', function ($scope, venue, $log, uiGmapGoogl
             latitude: 37.2871407,
             longitude: -121.9430289
         },
+        marker: {
+            latitude: 37.2871407,
+            longitude: -121.9430289
+        },
         zoom: 18,
         address: addressify(venue.address),
         markerId: 0
@@ -218,8 +231,8 @@ app.controller('viewVenueController', function ($scope, venue, $log, uiGmapGoogl
         $scope.maps = maps;
 
         if (venue.geolocation && venue.geolocation.latitude && venue.geolocation.longitude) {
-            $scope.map.center.latitude = venue.geolocation.latitude;
-            $scope.map.center.longitude = venue.geolocation.longitude;
+            $scope.map.marker.latitude = $scope.map.center.latitude = venue.geolocation.latitude;
+            $scope.map.marker.longitude = $scope.map.center.longitude = venue.geolocation.longitude;
         }
         else {
             var geocode = new maps.Geocoder();
