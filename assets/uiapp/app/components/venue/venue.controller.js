@@ -382,7 +382,12 @@ app.controller('viewVenueController', function ($scope, venue, $log, uiGmapGoogl
                 if (!s)
                     return null;
 
-                $scope.venue.sponsorships.push(s.id);
+                try {
+                    $scope.venue.sponsorships.push(s.id);
+                }
+                catch (e) {
+                    $scope.venue.sponsorships = [s.id];
+                }
                 $http.post('api/v1/venue/' + $scope.venue.id, $scope.venue)
                     .then( function (res) {
                         $scope.sponsorships.push(s);
