@@ -184,7 +184,7 @@ app.controller('listVenueController', function ($scope, venues, $log, links, rol
 
 })
 
-app.controller('viewVenueController', function ($scope, venue, $log, uiGmapGoogleMapApi, uibHelper, nucleus, user, $http, toastr, links, role) {
+app.controller('viewVenueController', function ($scope, venue, $log, uiGmapGoogleMapApi, uibHelper, nucleus, user, $http, toastr, links, role, $uibModal) {
     
     $scope.venue = venue;
     $scope.$parent.ui.pageTitle = "Venue Overview";
@@ -349,6 +349,49 @@ app.controller('viewVenueController', function ($scope, venue, $log, uiGmapGoogl
                     })
             });
 
+    }
+
+    $scope.addSponsorship = function () {
+        $uibModal.open({
+            templateUrl: '/uiapp/app/shared/uibHelperService/adlistmodal.template.html',
+            controller: function ($scope, sponsorships, $uibModalInstance) {
+                $scope.modalUi = {
+                    sponsorships: sponsorships,
+                    mediaSizes: ['widget', 'crawler']
+                }
+
+                $scope.ok = function (sponsorship) {
+                    $uibModalInstance.close(sponsorship);
+                };
+
+                $scope.cancel = function () {
+                    $uibModalInstance.dismiss('cancel');
+                }
+            },
+            resolve: {
+                sponsorships: function ($http) {
+                    return $http.get('api/v1/ad')
+                        .then( function (res) {
+                            return _.differenceBy(res.data, $scope.venue.sponsorships, function (o) { return o.id || o })
+                        });
+                }
+            },
+            size: 'lg'
+        })
+            .result.then( function (s) {
+                if (!s)
+                    return null;
+
+                $scope.venue.sponsorships.push(s.id);
+                $http.post('api/v1/venue/' + $scope.venue.id, $scope.venue)
+                    .then( function (res) {
+                        $scope.sponsorships.push(s);
+                        toastr.success('Sponsorship added!', 'Success')
+                    })
+                    .catch( function (err) {
+                        toastr.error('Could not update the venue at this time', 'Error');
+                    })
+            })
     }
 
 
