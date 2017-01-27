@@ -53,7 +53,7 @@ app.controller("addEditVenueController", function ($scope, $log, nucleus, $state
                             var loc = data.data.businesses[0].location;
                             $scope.geolocation = $scope.parameters.location = loc.city + ", " + loc.state_code;
                         })
-                        .catch(function (error) {
+                        .catch(function (err) {
                             toastr.error("Try again later", "Location Unavailable");
                         })
                 })
@@ -184,7 +184,7 @@ app.controller('listVenueController', function ($scope, venues, $log, links, rol
 
 })
 
-app.controller('viewVenueController', function ($scope, venue, $log, uiGmapGoogleMapApi, uibHelper, nucleus, user, $http, toastr, links, role) {
+app.controller('viewVenueController', function ($scope, venue, $log, uiGmapGoogleMapApi, uibHelper, nucleus, user, $http, toastr, links, role, $uibModal) {
     
     $scope.venue = venue;
     $scope.$parent.ui.pageTitle = "Venue Overview";
@@ -193,8 +193,17 @@ app.controller('viewVenueController', function ($scope, venue, $log, uiGmapGoogl
 
     $scope.admin = role === "admin";
     $scope.uid = user.id;
+    $scope.mediaSizes = ['widget', 'crawler'];
 
+    $scope.sponsorships = [];
     //$log.log($scope.uid)
+
+    _.forEach($scope.venue.sponsorships, function (s) {
+        $http.get('/api/v1/ad/' + s)
+            .then( function (res) {
+                $scope.sponsorships.push(res.data);
+            })
+    });
 
     $scope.userRoute = function (id) {
         if (id === user.id)
@@ -209,6 +218,10 @@ app.controller('viewVenueController', function ($scope, venue, $log, uiGmapGoogl
             latitude: 37.2871407,
             longitude: -121.9430289
         },
+        marker: {
+            latitude: 37.2871407,
+            longitude: -121.9430289
+        },
         zoom: 18,
         address: addressify(venue.address),
         markerId: 0
@@ -218,8 +231,8 @@ app.controller('viewVenueController', function ($scope, venue, $log, uiGmapGoogl
         $scope.maps = maps;
 
         if (venue.geolocation && venue.geolocation.latitude && venue.geolocation.longitude) {
-            $scope.map.center.latitude = venue.geolocation.latitude;
-            $scope.map.center.longitude = venue.geolocation.longitude;
+            $scope.map.marker.latitude = $scope.map.center.latitude = venue.geolocation.latitude;
+            $scope.map.marker.longitude = $scope.map.center.longitude = venue.geolocation.longitude;
         }
         else {
             var geocode = new maps.Geocoder();
@@ -336,6 +349,71 @@ app.controller('viewVenueController', function ($scope, venue, $log, uiGmapGoogl
                     })
             });
 
+    }
+
+    $scope.addSponsorship = function () {
+        $uibModal.open({
+            templateUrl: '/uiapp/app/shared/uibHelperService/adlistmodal.template.html',
+            controller: function ($scope, sponsorships, $uibModalInstance) {
+                $scope.modalUi = {
+                    sponsorships: sponsorships,
+                    mediaSizes: ['widget', 'crawler']
+                }
+
+                $scope.ok = function (sponsorship) {
+                    $uibModalInstance.close(sponsorship);
+                };
+
+                $scope.cancel = function () {
+                    $uibModalInstance.dismiss('cancel');
+                }
+            },
+            resolve: {
+                sponsorships: function ($http) {
+                    return $http.get('api/v1/ad')
+                        .then( function (res) {
+                            return _.differenceBy(res.data, $scope.venue.sponsorships, function (o) { return o.id || o })
+                        });
+                }
+            },
+            size: 'lg'
+        })
+            .result.then( function (s) {
+                if (!s)
+                    return null;
+
+                try {
+                    $scope.venue.sponsorships.push(s.id);
+                }
+                catch (e) {
+                    $scope.venue.sponsorships = [s.id];
+                }
+                $http.post('api/v1/venue/' + $scope.venue.id, $scope.venue)
+                    .then( function (res) {
+                        $scope.sponsorships.push(s);
+                        toastr.success('Sponsorship added!', 'Success')
+                    })
+                    .catch( function (err) {
+                        toastr.error('Could not update the venue at this time', 'Error');
+                    })
+            })
+    }
+
+    $scope.removeSponsorship = function (id) {
+        uibHelper.confirmModal('Remove sponsorship?', 'Are you sure you want to remove this sponsorship from appearing in ' + venue.name + '?', true)
+            .then( function () {
+                $scope.venue.sponsorships.splice($scope.venue.sponsorships.indexOf(id), 1);
+                $http.post('api/v1/venue/' + $scope.venue.id, $scope.venue)
+                    .then( function (res) {
+                        $scope.sponsorships = _.filter($scope.sponsorships, function (o) { return o.id !== id });
+                        toastr.success('Sponsorship removed', "Success")
+                    })
+                    .catch( function (err) {
+                        $log.error(err);
+                        $scope.venue.sponsorships.push(id);
+                        toastr.error('Sponsorship could not be removed', "Error")
+                    })
+            })
     }
 
 
