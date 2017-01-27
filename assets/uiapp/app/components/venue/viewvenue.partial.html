@@ -129,6 +129,7 @@
             <div>
                 <div class="col-sm-4" style="text-align:center">
                     <span style="font-weight:bold">Crawler Text</span>
+                    <p ng-hide="s.advert.text[0] + s.advert.text[1] + s.advert.text[2]">None</p>
                     <ul class="list-group" style="text-align:left">
                         <li class="list-group-item" ng-repeat="t in s.advert.text track by $index" ng-show="t">{{ t }}</li>
                     </ul>
