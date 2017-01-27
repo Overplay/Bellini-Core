@@ -44,7 +44,7 @@
             <div class="col-sm-4" style="text-align:center">
                 <span style="font-weight:bold">Crawler Text</span>
                 <ul class="list-group" style="text-align:left">
-                    <li class="list-group-item" ng-repeat="t in s.advert.text track by $index">{{t}}</li>
+                    <li class="list-group-item" ng-repeat="t in s.advert.text track by $index" ng-show="t">{{t}}</li>
                 </ul>
             </div>
             <div ng-repeat="size in modalUi.mediaSizes" ng-if="s.advert.media[size]" class="col-sm-4" style="text-align: center">

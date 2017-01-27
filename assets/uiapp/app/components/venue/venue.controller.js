@@ -394,6 +394,23 @@ app.controller('viewVenueController', function ($scope, venue, $log, uiGmapGoogl
             })
     }
 
+    $scope.removeSponsorship = function (id) {
+        uibHelper.confirmModal('Remove sponsorship?', 'Are you sure you want to remove this sponsorship from appearing in ' + venue.name + '?', true)
+            .then( function () {
+                $scope.venue.sponsorships.splice($scope.venue.sponsorships.indexOf(id), 1);
+                $http.post('api/v1/venue/' + $scope.venue.id, $scope.venue)
+                    .then( function (res) {
+                        $scope.sponsorships = _.filter($scope.sponsorships, function (o) { return o.id !== id });
+                        toastr.success('Sponsorship removed', "Success")
+                    })
+                    .catch( function (err) {
+                        $log.error(err);
+                        $scope.venue.sponsorships.push(id);
+                        toastr.error('Sponsorship could not be removed', "Error")
+                    })
+            })
+    }
+
 
 })
 

@@ -121,7 +121,7 @@
     <h3 style="margin-bottom: 10px">Sponsorships</h3>
     <p ng-hide="sponsorships.length">No sponsorships have been added to this venue</p>
     <uib-accordion ng-show="sponsorships.length">
-        <div uib-accordion-group class="panel-default" is-open="status.isOpen" ng-repeat="s in sponsorships">
+        <div uib-accordion-group class="panel-default" is-open="status.isOpen" ng-repeat="s in sponsorships | orderBy:'name'">
             <uib-accordion-heading>
                 {{ s.name }} - <span style="font-size:14px">{{ s.description }}</span>
                 <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-up': status.isOpen, 'glyphicon-chevron-down': !status.isOpen }"></i>
@@ -139,6 +139,9 @@
                             style="width:100%"
                             class="media-prev"
                             ng-src="media/download/{{s.advert.media[size]}}"/></a>
+                </div>
+                <div class="col-xs-12 top15">
+                    <button class="btn btn-danger" ng-click="removeSponsorship(s.id)">Remove from venue</button>
                 </div>
             </div>
         </div>
