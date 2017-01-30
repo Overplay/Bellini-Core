@@ -30,6 +30,12 @@ module.exports = {
       defaultsTo: { team1: 0, team2: 0}
     },
     
+    // 0 is before game
+    currentQuarter: {
+      type: 'integer',
+      defaultsTo: 0
+    },
+    
     q1FinalScore: {
       type:       'json',
       defaultsTo: { team1: 0, team2: 0 }
