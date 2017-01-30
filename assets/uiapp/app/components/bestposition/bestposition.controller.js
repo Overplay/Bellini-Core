@@ -10,7 +10,7 @@ app.controller('bestPositionListController', function ($scope, $rootScope, $stat
     $scope.$parent.ui.panelHeading = "";
     $scope.$parent.links = links;
 
-    $scope.url = $rootScope.url;
+    $scope.AJPGSUrl = $rootScope.AJPGSUrl;
 
     $scope.models = [];
     $scope.pageSize = 50;
@@ -18,7 +18,7 @@ app.controller('bestPositionListController', function ($scope, $rootScope, $stat
     $scope.multiEditIds = [];
     //$log.log(models[0])
 
-    $http.get('http://'+$scope.url+':1338/BestPosition/findAll')
+    $http.get('https://'+$scope.AJPGSUrl+'/BestPosition/findAll')
         .then( function (data) {
             $scope.models = data.data;
             $scope.loadingData = false;
@@ -68,7 +68,7 @@ app.controller('bestPositionMultiEditController', function ($scope, $rootScope, 
     $scope.$parent.ui.pageTitle = "Edit Best Position Models";
     $scope.$parent.ui.panelHeading = "Editing " + ids.length + " Models";
     $scope.$parent.links = links;
-    var url = $rootScope.url;
+    var AJPGSUrl = $rootScope.AJPGSUrl;
     $scope.adPositions = ['top-right', 'top-left', 'bottom-right', 'bottom-left'];
     $scope.crawlerPositions = ['bottom', 'top'];
     $scope.updating = {
@@ -98,7 +98,7 @@ app.controller('bestPositionMultiEditController', function ($scope, $rootScope, 
 
             _.forEach(ids, function (id) {
                 promises.push(
-                    $http.put("http://"+url+":1338/bestPosition/" + id, $scope.model)
+                    $http.put("https://"+AJPGSUrl+"/bestPosition/" + id, $scope.model)
                         .then( function () {
                             $scope.updating.count++; // adjust progress bar...progress
                         })
@@ -118,7 +118,7 @@ app.controller('bestPositionMultiEditController', function ($scope, $rootScope, 
 app.controller('bestPositionEditController', function ($scope, $rootScope, $state, nucleus, $log, links, model, $http, toastr) {
     $log.debug("bestPositionEditController");
     $scope.model = model;
-    var url = $rootScope.url;
+    var AJPGSUrl = $rootScope.AJPGSUrl;
 
     $scope.$parent.ui.pageTitle = "Edit Best Position";
     $scope.$parent.ui.panelHeading = model.type == 'network' ? "Network: " + model.network : "Series: " + model.seriesName;
@@ -126,14 +126,11 @@ app.controller('bestPositionEditController', function ($scope, $rootScope, $stat
 
     $scope.adPositions = ['top-right', 'top-left', 'bottom-right', 'bottom-left'];
     $scope.crawlerPositions = ['bottom', 'top']
-
-    $http.get('/uiapp/local.json').then(function(data){
-        url = data.data.url
-    })
+    
 
     $scope.update = function() {
         //TODO url
-        $http.put("http://"+url+":1338/bestPosition/" + $scope.model.id, $scope.model)
+        $http.put("https://"+AJPGSUrl+"/bestPosition/" + $scope.model.id, $scope.model)
             .then(function(l){
                 $log.log(l)
                 toastr.success("Positions updated!", "Nice!")

@@ -42,7 +42,7 @@
                 <td>{{ model.widgetPosition }}</td>
                 <td>{{ model.crawlerPosition }}</td>
                 <td>
-                    <a class="btn btn-sm btn-warning" ui-sref="bestposition.edit({id: model.id, url: url})" ng-hide="model.selected">EDIT</a>
+                    <a class="btn btn-sm btn-warning" ui-sref="bestposition.edit({id: model.id, url: AJPGSUrl})" ng-hide="model.selected">EDIT</a>
                     <a class="btn btn-sm btn-warning"
                        ui-sref="bestposition.multiEdit({ids: multiEditIds})"
                        ng-show="model.selected">EDIT SELECTED</a>

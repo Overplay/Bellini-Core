@@ -140,7 +140,7 @@ module.exports = {
                                                     .then(function(v){
                                                         sails.log.debug(v)
                                                         request
-                                                            .get("http://" + sails.config.localIp + ':1338/lineup/initialize')
+                                                            .get("https://" + sails.config.AJPGSUrl + '/lineup/initialize')
                                                             .query({zip: v.address.zip, providerID: 195}) //TODO
                                                             .end(function(err, response) {
                                                                 return res.ok(d)
@@ -203,7 +203,7 @@ module.exports = {
                             .then(function(v){
                                 sails.log.debug(v)
                                 request //TODO
-                                    .get("http://" + sails.config.localIp + ':1338/lineup/initialize')
+                                    .get("https://" + sails.config.AJPGSUrl + '/lineup/initialize')
                                     .query({zip: v.address.zip, providerID: 195}) //TODO
                                     .end(function(err, response) {
                                         return res.ok(d)
