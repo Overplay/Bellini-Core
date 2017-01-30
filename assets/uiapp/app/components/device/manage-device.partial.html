@@ -76,10 +76,22 @@
                                     </tr>
                                 </table>
                             </div>
-
                         </div>
                     </div>
-
+                </div>
+            </uib-tab>
+            <uib-tab heading="Program Guide">
+                <div class="top15">
+                    <div class="col-sm-12">
+                        <div style="display:flex;justify-content:center;align-items:center;margin-top: 20px; margin-bottom: 20px;">
+                            <button class="btn btn-success" ng-click="addLineup()" ng-show="!device.lineupID">
+                                Add Lineup
+                            </button>
+                        </div>
+                        <div class="col-sm-offset-2 col-sm-8" ng-show="device.lineupName">
+                            <h3>Lineup Name: {{ device.lineupName }}</h3>
+                        </div>
+                    </div>
                 </div>
             </uib-tab>
             <uib-tab heading="Edit Device" ng-if="edit">
@@ -126,6 +138,4 @@
             </uib-tab>
         </uib-tabset>
     </div>
-
-
 </div>

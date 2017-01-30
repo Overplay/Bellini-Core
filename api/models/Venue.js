@@ -75,6 +75,11 @@ module.exports = {
         textHistory: {
             type: 'array',
             defaultsTo: []
+        },
+
+        sponsorships: {
+            type: 'array',
+            defaultsTo: []
         }
     },
 

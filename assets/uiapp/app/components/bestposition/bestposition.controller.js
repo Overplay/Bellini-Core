@@ -83,7 +83,7 @@ app.controller('bestPositionMultiEditController', function ($scope, $rootScope, 
 
     // change states if not a multiedit
     if (ids.length === 1)
-        $state.go('bestposition.edit', { id: ids[0]});
+        $state.go('bestposition.edit', { id: ids[0], url: url});
     if (ids.length === 0) {
         toastr.warning("There were no items selected to edit", "No Items!");
         $state.go('bestposition.list');

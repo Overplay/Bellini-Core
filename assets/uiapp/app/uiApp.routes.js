@@ -839,9 +839,9 @@ app.config(function ($stateProvider, $urlRouterProvider) {
         })
 
 
-        .state('advertisement', {
-            url: '/advertisement',
-            templateUrl: '/uiapp/app/components/device/device-sidemenu.partial.html',
+        .state('sponsorship', {
+            url: '/sponsorship',
+            templateUrl: '/uiapp/app/components/trevda/trevda-sidemenu.partial.html',
             controller: function ($scope) {
                 $scope.panelHeading = {text: "", color: "#0000FF"}
             },
@@ -849,25 +849,27 @@ app.config(function ($stateProvider, $urlRouterProvider) {
             resolve: {
                 user: function (nucleus) {
                     return nucleus.getMe();
-                },
-                links: function () {
-
-                    return [
-                        {text: 'My Sponsorships', link: 'advertisement.list'},
-                        {text: 'Create an Sponsorship', link: 'advertisement.add'}
-                    ]
                 }
             }
         })
 
-        .state('advertisement.add', {
+        .state('sponsorship.add', {
             url: '/add',
             templateUrl: '/uiapp/app/components/trevda/add-trevda.partial.html',
             data: {subTitle: "Add Sponsorship"},
-            controller: 'addAdvertisementController'
+            controller: 'addAdvertisementController',
+            resolve: {
+                links: function () {
+                    return [
+                        { text: "All Sponsorships", link: "sponsorship.adminList" },
+                        { text: "Create Sponsorship", link: "sponsorship.add"}
+                    ]
+                }
+            }
+
         })
 
-        .state('advertisement.list', {
+        .state('sponsorship.list', {
             url: '/manage',
             templateUrl: '/uiapp/app/components/trevda/trevdalist.partial.html',
             data: {subTitle: "Manage Sponsorships"},
@@ -880,13 +882,19 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 },
                 admin: function () {
                     return false;
+                },
+                links: function () {
+                    return [
+                        { text: "All Sponsorships", link: "sponsorship.list" },
+//                        { text: "Create Sponsorship", link: "sponsorship.add"}
+                    ]
                 }
 
 
             }
         })
 
-        .state('advertisement.adminList', {
+        .state('sponsorship.adminList', {
             url: '/admin-list',
             templateUrl: '/uiapp/app/components/trevda/trevdalist.partial.html',
             data: {subTitle: "Manage Sponsorships"},
@@ -903,15 +911,15 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 links: function () {
 
                     return [
-                        {text: 'All Sponsorships', link: 'advertisement.adminList'},
-                        //{text: 'Create an Advertisement', link: 'advertisement.add'}
+                        {text: 'All Sponsorships', link: 'sponsorship.adminList'},
+                        {text: 'Create Sponsorship', link: 'sponsorship.add'}
                     ]
                 }
 
 
             }
         })
-        .state('advertisement.adminReview', {
+        .state('sponsorship.adminReview', {
             url: '/admin-review/:id',
             templateUrl: '/uiapp/app/components/trevda/trevdareview.partial.html',
             data: {subTitle: "Review Sponsorship"},
@@ -928,8 +936,8 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 links: function () {
 
                     return [
-                        {text: 'All Sponsorships', link: 'advertisement.adminList'},
-                        //{text: 'Create an Advertisement', link: 'advertisement.add'}
+                        {text: 'All Sponsorships', link: 'sponsorship.adminList'},
+                        {text: 'Create Sponsorship', link: 'sponsorship.add'}
                     ]
                 }
 
@@ -937,7 +945,7 @@ app.config(function ($stateProvider, $urlRouterProvider) {
             }
         })
 
-        .state('advertisement.edit', {
+        .state('sponsorship.edit', {
             url: '/edit/:id',
             templateUrl: '/uiapp/app/components/trevda/edit-trevda.partial.html',
             data: {subTitle: "Edit Sponsorship"},
@@ -961,6 +969,12 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 admin: function () {
                     return false
                 },
+                links: function () {
+                    return [
+                        { text: "All Sponsorships", link: "sponsorship.list" },
+//                        { text: "Create Sponsorship", link: "sponsorship.add"}
+                    ]
+                }
                 /*logs: function ($http, $stateParams) {
                     var d = moment().format("YYYY-MM-DD")
                     return $http.get("/ad/dailyCount?date=" + d + "&id=" + $stateParams.id).then(function (logs) {
@@ -971,7 +985,7 @@ app.config(function ($stateProvider, $urlRouterProvider) {
 
         })
 
-        .state('advertisement.adminEdit', {
+        .state('sponsorship.adminEdit', {
             url: '/admin-edit/:id',
             templateUrl: '/uiapp/app/components/trevda/edit-trevda.partial.html',
             data: {subTitle: "Edit Sponsorship"},
@@ -989,8 +1003,8 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 links: function () {
 
                     return [
-                        {text: 'All Sponsorships', link: 'advertisement.adminList'},
-                        //{text: 'Create an Advertisement', link: 'advertisement.add'}
+                        {text: 'All Sponsorships', link: 'sponsorship.adminList'},
+                        {text: 'Create Sponsorship', link: 'sponsorship.add'}
                     ]
                 }
             }

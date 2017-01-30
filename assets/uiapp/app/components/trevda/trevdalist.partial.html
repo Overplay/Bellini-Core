@@ -1,6 +1,6 @@
 <div ng-if="!advertisements.length" class="text-center">
     <h2>No Sponsorships to show</h2>
-    <a class="btn  btn-success" ui-sref="advertisement.add"><h4>Create One!</h4></a>
+    <a class="btn  btn-success" ui-sref="sponsorship.add"><h4>Create One!</h4></a>
 </div>
 
 
@@ -45,7 +45,7 @@
                 <!--<td><a class="btn btn-sm btn-primary">Pause</a></td>-->
                 <!--<td><a class="btn btn-sm btn-danger">Delete</a></td>-->
 
-                <td ng-if="admin" width="10%"><a ui-sref="advertisement.adminReview({id: advertisement.id})"
+                <td ng-if="admin" width="10%"><a ui-sref="sponsorship.adminReview({id: advertisement.id})"
                                                  class="btn btn-sm btn-warning">Review</a></td>
 
             </tr>
