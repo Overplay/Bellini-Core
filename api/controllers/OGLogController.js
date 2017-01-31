@@ -57,9 +57,11 @@ module.exports = {
 
         var id = req.allParams().id;
 
-        OGLog.find({ where: { logType: 'heartbeat'}, sort: 'loggedAt DESC'})
+        //Why the f was this line ever here: MAK
+        //OGLog.find({ where: { logType: 'heartbeat'}, sort: 'loggedAt DESC'})
         //TODO test with uniqueDeviceId: id in query if deviceId now instead of unique TOODODODODO
-        OGLog.find({ where: { logType: 'heartbeat', deviceId: id}, sort: 'loggedAt DESC'})
+        //OGLog.find({ where: { logType: 'heartbeat', deviceId: id}, sort: 'loggedAt DESC'})
+        OGLog.find( { where: { logType: 'heartbeat', deviceUniqueId: id }, sort: 'loggedAt DESC' } )
             .then( function (logs) {
                 var venueLogs = _.filter(logs, function (o) { return o.deviceUniqueId == id });
                 return res.json(venueLogs);
