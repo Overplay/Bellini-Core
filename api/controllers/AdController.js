@@ -323,8 +323,7 @@ module.exports = {
                 })
         }
 
-    }
-    ,
+    },
 
     getAccepted: function (req, res) {
         Ad.find({reviewed: true, accepted: true, deleted: false, paused: false })
