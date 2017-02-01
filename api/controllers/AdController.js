@@ -9,6 +9,8 @@ var _ = require('lodash');
 var excel = require('node-excel-export');
 var moment = require('moment');
 
+var AD_RUNNING = { reviewed: true, accepted: true, deleted: false, paused: false };
+
 module.exports = {
 
     /*
@@ -326,7 +328,7 @@ module.exports = {
     },
 
     getAccepted: function (req, res) {
-        Ad.find({reviewed: true, accepted: true, deleted: false, paused: false })
+        Ad.find(AD_RUNNING)
             .then(function (ads) {
                 return res.ok(ads)
             })
@@ -606,7 +608,7 @@ module.exports = {
         if (!params.id)
             return res.badRequest({error: "No venue id provided"});
 
-        return Venue.findOne(params.id)
+        return Venue.findOne(params.id).where(AD_RUNNING)
             .then( function (venue) {
                 if (!venue)
                     return res.notFound({error: "Venue with id " + params.id + " not found"});
