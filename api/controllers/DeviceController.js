@@ -105,10 +105,26 @@ module.exports = {
 
         //sails.log.debug(deviceObj, "searching ");
         Device.find({uniqueId: udid})
-            .then(function(ds){
-                if (ds.length>0)
-                    return res.badRequest({error: "The device with udid: " + udid + " already exists! Cannot Register"})
-                else {
+            .then( function (ds) {
+                var chain = Promise.resolve();
+
+                if (ds.length > 0) {
+                    $log.debug("Destroying " + ds.length + " devices with udid: " + udid);
+
+                    _.forEach(ds, function (d) {
+                        chain = chain.then( function () {
+                            return Device.destroy(d.id);
+                        })
+                    })
+                }
+
+                return chain;
+
+            })
+            .then(function(){
+//                if (ds.length>0)
+//                    return res.badRequest({error: "The device with udid: " + udid + " already exists! Cannot Register"})
+//                else {
                     //the return here is to prevent a promise not returned warning.
                     return Device.findOne(deviceObj)
                         .then(function (device) {
@@ -172,7 +188,7 @@ module.exports = {
                             sails.log.debug( "Error searching devices, this is bad." );
                             return res.serverError( { error: err.message } );
                         })
-                }
+//                }
             })
             .catch(function(err){
                 return res.serverError({error: err.message})
