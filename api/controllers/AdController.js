@@ -595,6 +595,30 @@ module.exports = {
             .catch(function (err) {
                 return res.serverError({error: err})
             })
+    },
+
+    forVenue: function (req, res) {
+
+        if (req.method !== "GET")
+            return res.badRequest({error: "Wrong verb; must be GET"});
+
+        var params = req.allParams();
+
+        if (!params.id)
+            return res.badRequest({error: "No venue id provided"});
+
+        return Venue.findOne(params.id)
+            .then( function (venue) {
+                if (!venue)
+                    return res.notFound({error: "Venue with id " + params.id + " not found"});
+
+                if (!venue.sponsorships)
+                    return res.ok([]);
+
+                return Ad.find(venue.sponsorships)
+                    .then( res.ok );
+            })
+            .catch( res.serverError )
     }
 
 
