@@ -608,7 +608,7 @@ module.exports = {
         if (!params.id)
             return res.badRequest({error: "No venue id provided"});
 
-        return Venue.findOne(params.id).where(AD_RUNNING)
+        return Venue.findOne(params.id)
             .then( function (venue) {
                 if (!venue)
                     return res.notFound({error: "Venue with id " + params.id + " not found"});
@@ -616,7 +616,7 @@ module.exports = {
                 if (!venue.sponsorships)
                     return res.ok([]);
 
-                return Ad.find(venue.sponsorships)
+                return Ad.find(venue.sponsorships).where( AD_RUNNING )
                     .then( res.ok );
             })
             .catch( res.serverError )
