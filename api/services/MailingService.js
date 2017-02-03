@@ -42,6 +42,14 @@ module.exports = {
         sendMail({url: sails.config.mailing.inviteUrl}, "invitenewuser.jade", "You have been invited to Ourglass!", email)
     },
 
+    genericEmail: function ( emailObj ) {
+        if ( !configs ) {
+            sails.log.debug( "CANNOT SEND MAIL DUE TO MISSING CONFIG" )
+            return null;
+        }
+        sendMail( { emailbody: emailObj.body }, "genericemail.jade", "Thanks for Using Ourglass!", emailObj.sendTo )
+    },
+
     inviteRole: function (email, name, venue, role) {
         if(!configs){
             sails.log.debug("CANNOT SEND MAIL DUE TO MISSING CONFIG")
