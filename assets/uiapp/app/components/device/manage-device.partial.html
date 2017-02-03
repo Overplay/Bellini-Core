@@ -15,6 +15,10 @@
                                     <td ng-hide="deviceName">(Device has no name)</td>
                                 </tr>
                                 <tr>
+                                    <td>Registered</td>
+                                    <td>{{device.createdAt | date: 'medium'}}</td>
+                                </tr>
+                                <tr>
                                     <td>Venue</td>
                                     <td><a ui-sref="venue.view({id: device.venue.id})" ng-if="edit">{{device.venue.name}}</a>
                                         <span ng-if="!edit">{{device.venue.name}}</span>
