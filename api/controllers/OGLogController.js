@@ -61,11 +61,8 @@ module.exports = {
         //OGLog.find({ where: { logType: 'heartbeat'}, sort: 'loggedAt DESC'})
         //TODO test with uniqueDeviceId: id in query if deviceId now instead of unique TOODODODODO
         //OGLog.find({ where: { logType: 'heartbeat', deviceId: id}, sort: 'loggedAt DESC'})
-        OGLog.find( { where: { logType: 'heartbeat', deviceUniqueId: id }, sort: 'loggedAt DESC' } )
-            .then( function (logs) {
-                var venueLogs = _.filter(logs, function (o) { return o.deviceUniqueId == id });
-                return res.json(venueLogs);
-            })
+        OGLog.find( { where: { logType: 'heartbeat' }, or: { deviceUniqueId: id, deviceId: id }, sort: 'loggedAt DESC' } )
+            .then( res.ok )
             .catch(function(err){
                 return res.serverError({error: err})
             })
@@ -73,9 +70,7 @@ module.exports = {
 
     getAll: function (req, res) {
         OGLog.find()
-            .then(function (logs) {
-                return res.ok(logs)
-            })
+            .then(res.ok)
             .catch(function(err){
                 return res.serverError({error: err})
             })

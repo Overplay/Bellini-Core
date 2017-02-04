@@ -130,7 +130,7 @@ app.controller("addDeviceAdminController", function ($scope, $state, $log, toast
 
 });
 
-app.controller("editDeviceAdminController", function ($scope, $state, $log, device, toastr, uibHelper, nucleus, venues, $http, links, edit, heartbeat) {
+app.controller("editDeviceAdminController", function ($scope, $state, $log, device, toastr, uibHelper, nucleus, venues, $http, links, edit) {
     $log.debug("editDeviceAdminController starting");
 
 
@@ -144,8 +144,17 @@ app.controller("editDeviceAdminController", function ($scope, $state, $log, devi
     $scope.setForm = function (form) {
         $scope.form = form;
     };
-    $scope.heartbeats = heartbeat;
-    $scope.selectedHeartbeat = heartbeat[0];
+    $scope.heartbeats = [];
+    $scope.selectedHeartbeat = null;
+
+    $http.get('OGLog/deviceHeartbeat/' + (device.uniqueId || device.id))
+        .then( function (res) {
+            $scope.heartbeats = res.data;
+            $scope.selectedHeartbeat = res.data[0];
+        })
+        .catch( function (err) {
+            $log.error(err);
+        });
 
     $scope.update = function () {
         //post to an update with $scope.device
