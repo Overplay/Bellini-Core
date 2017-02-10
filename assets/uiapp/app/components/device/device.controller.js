@@ -144,16 +144,25 @@ app.controller("editDeviceAdminController", function ($scope, $state, $log, devi
     $scope.setForm = function (form) {
         $scope.form = form;
     };
-    $scope.heartbeats = [];
-    $scope.selectedHeartbeat = null;
+
+    $scope.heartbeat = {
+        logs: [],
+        selected: null,
+        loading: true,
+        message: "No Heartbeats Found"
+    };
 
     $http.get('OGLog/deviceHeartbeat/' + (device.uniqueId || device.id))
         .then( function (res) {
-            $scope.heartbeats = res.data;
-            $scope.selectedHeartbeat = res.data[0];
+            $scope.heartbeat.logs = res.data;
+            $scope.heartbeat.selected = res.data[0];
         })
         .catch( function (err) {
             $log.error(err);
+            $scope.heartbeat.message = "Error getting heartbeats";
+        })
+        .then( function () {
+            $scope.heartbeat.loading = false;
         });
 
     $scope.update = function () {
