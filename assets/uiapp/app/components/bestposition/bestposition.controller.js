@@ -16,9 +16,11 @@ app.controller('bestPositionListController', function ($scope, $rootScope, $stat
     $scope.pageSize = 50;
     $scope.currentPage = 1;
     $scope.multiEditIds = [];
+    $scope.widgetPositions = [];
+    $scope.crawlerPositions = [];
     //$log.log(models[0])
 
-    $http.get('https://'+$scope.AJPGSUrl+'/BestPosition/findAll')
+    $http.get('http://'+$scope.AJPGSUrl+'/BestPosition/findAll')
         .then( function (data) {
             $scope.models = data.data;
             $scope.loadingData = false;
