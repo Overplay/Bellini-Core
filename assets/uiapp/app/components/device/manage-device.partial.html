@@ -46,19 +46,19 @@
                             <h3>Heartbeat</h3>
                         </div>
                         <div class="panel-body">
-                            <h4 ng-if="!heartbeat.logs && !heartbeat.loading">{{ heartbeat.message }}</h4>
+                            <h4 ng-if="!heartbeat.logs.length && !heartbeat.loading">{{ heartbeat.message }}</h4>
                             <div ng-show="heartbeat.loading" class="text-center">
                                 <h5>Loading heartbeats...</h5>
                                 <br>
                                 <i class="fa fa-spinner fa-spin fa-pulse fa-fw fa-2x"></i>
                             </div>
-                            <div ng-if="heartbeat.logs && !heartbeat.loading">
+                            <div ng-if="heartbeat.logs.length && !heartbeat.loading">
                                 <form name="heartbeatSelector">
                                     <select name="select" id="hbSelect" class="form-control"
                                             ng-options="heartbeat.loggedAt | date:'MMM d, yyyy - H:mm:ss' for heartbeat in heartbeat.logs"
                                             ng-model="heartbeat.selected"></select>
                                 </form>
-                                <table class="table table-striped top15" ng-if="heartbeat.logs">
+                                <table class="table table-striped top15">
                                     <tr>
                                         <td>Device ID</td>
                                         <td>{{ heartbeat.selected.deviceUniqueId }}</td>
