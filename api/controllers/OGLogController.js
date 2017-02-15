@@ -61,7 +61,7 @@ module.exports = {
         //OGLog.find({ where: { logType: 'heartbeat'}, sort: 'loggedAt DESC'})
         //TODO test with uniqueDeviceId: id in query if deviceId now instead of unique TOODODODODO
         //OGLog.find({ where: { logType: 'heartbeat', deviceId: id}, sort: 'loggedAt DESC'})
-        OGLog.find( { where: { logType: 'heartbeat' }, or: { deviceUniqueId: id, deviceId: id }, sort: 'loggedAt DESC', limit: 10 } )
+        OGLog.find( { where: { logType: 'heartbeat', deviceUniqueId: id }, limit: 10, sort: 'loggedAt DESC' } )
             .then( res.ok )
             .catch(function(err){
                 return res.serverError({error: err})

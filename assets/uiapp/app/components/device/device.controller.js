@@ -152,18 +152,22 @@ app.controller("editDeviceAdminController", function ($scope, $state, $log, devi
         message: "No Heartbeats Found"
     };
 
-    $http.get('OGLog/deviceHeartbeat/' + (device.uniqueId || device.id))
-        .then( function (res) {
-            $scope.heartbeat.logs = res.data;
-            $scope.heartbeat.selected = res.data[0];
-        })
-        .catch( function (err) {
-            $log.error(err);
-            $scope.heartbeat.message = "Error getting heartbeats";
-        })
-        .then( function () {
-            $scope.heartbeat.loading = false;
-        });
+    if (device.uniqueId) {
+        $http.get('OGLog/deviceHeartbeat/' + device.uniqueId)
+            .then( function (res) {
+                $scope.heartbeat.logs = res.data;
+                $scope.heartbeat.selected = res.data[0];
+            })
+            .catch( function (err) {
+                $log.error(err);
+                $scope.heartbeat.message = "Error getting heartbeats";
+            })
+            .then( function () {
+                $scope.heartbeat.loading = false;
+            });
+    }
+    else
+        $scope.heartbeat.loading = false;
 
     $scope.update = function () {
         //post to an update with $scope.device
@@ -223,7 +227,7 @@ app.controller("editDeviceAdminController", function ($scope, $state, $log, devi
 
 });
 
-app.controller("editDeviceOwnerController", function ($rootScope, $scope, $state, $log, device, toastr, uibHelper, nucleus, user, $http, links, edit, heartbeat) {
+app.controller("editDeviceOwnerController", function ($rootScope, $scope, $state, $log, device, toastr, uibHelper, nucleus, user, $http, links, edit) {
     $log.debug("editDeviceOwnerController starting");
 
     $scope.edit = edit;
@@ -236,9 +240,30 @@ app.controller("editDeviceOwnerController", function ($rootScope, $scope, $state
     $scope.setForm = function (form) {
         $scope.form = form;
     };
-    $scope.heartbeats = heartbeat;
-    $scope.selectedHeartbeat = $scope.heartbeats[0];
-    var url = $rootScope.url;
+
+    $scope.heartbeat = {
+        logs: [],
+        selected: null,
+        loading: true,
+        message: "No Heartbeats Found"
+    };
+
+    if (device.uniqueId) {
+        $http.get('OGLog/deviceHeartbeat/' + device.uniqueId)
+            .then( function (res) {
+                $scope.heartbeat.logs = res.data;
+                $scope.heartbeat.selected = res.data[0];
+            })
+            .catch( function (err) {
+                $log.error(err);
+                $scope.heartbeat.message = "Error getting heartbeats";
+            })
+            .then( function () {
+                $scope.heartbeat.loading = false;
+            });
+    }
+    else
+        $scope.heartbeat.loading = false;
 
     $http.get("api/v1/user/" + user.id) //nucleus.getMe doesn't populate ownedVenues (nucleus uses and auth endpoint in getMe)
         .then(function(u){
