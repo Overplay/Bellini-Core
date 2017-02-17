@@ -198,12 +198,10 @@ app.controller('viewVenueController', function ($scope, venue, $log, uiGmapGoogl
     $scope.sponsorships = [];
     //$log.log($scope.uid)
 
-    _.forEach($scope.venue.sponsorships, function (s) {
-        $http.get('/api/v1/ad/' + s)
-            .then( function (res) {
-                $scope.sponsorships.push(res.data);
-            })
-    });
+    $http.get('/ad/forVenue/' + venue.id)
+        .then( function (res) {
+            $scope.sponsorships = res.data;
+        })
 
     $scope.userRoute = function (id) {
         if (id === user.id)

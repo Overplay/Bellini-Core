@@ -616,7 +616,7 @@ module.exports = {
                 if (!venue.sponsorships)
                     return res.ok([]);
 
-                return Ad.find(venue.sponsorships).where( AD_RUNNING )
+                return Ad.find(_.extend(AD_RUNNING, { id: venue.sponsorships}))
                     .then( res.ok );
             })
             .catch( res.serverError )
