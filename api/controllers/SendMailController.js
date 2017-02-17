@@ -18,6 +18,7 @@ module.exports = {
         var apikey = params.apikey;
         var to = params.to;
         
+        //TODO this is so WEAK
         if (!apikey){
             res.forbidden( { error: "No entrado, hombre" })
         }
