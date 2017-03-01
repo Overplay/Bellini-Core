@@ -47,11 +47,17 @@ app.controller("addEditVenueController", function ($scope, $log, nucleus, $state
                 $scope.parameters.location = $scope.geolocation;
             else if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(function (position) {
-                    var latLong = position.coords.latitude.toString() + "," + position.coords.longitude.toString();
-                    $http.get('venue/yelpSearch', {params: {term: "food", ll: latLong, limit: 1}, timeout: 2000})
+                    $http.get('venue/yelpSearch', {
+                        params: {
+                            latitude: position.coords.latitude.toString(),
+                            longitude: position.coords.longitude.toString(),
+                            limit: 1
+                        },
+                        timeout: 5000
+                    })
                         .then(function (data) {
                             var loc = data.data.businesses[0].location;
-                            $scope.geolocation = $scope.parameters.location = loc.city + ", " + loc.state_code;
+                            $scope.geolocation = $scope.parameters.location = loc.city + ", " + loc.state;
                         })
                         .catch(function (err) {
                             toastr.error("Try again later", "Location Unavailable");
@@ -131,7 +137,6 @@ app.controller("addEditVenueController", function ($scope, $log, nucleus, $state
                     return data.data.businesses;
                 })
         }
-
         return null;
 
     };
@@ -139,15 +144,15 @@ app.controller("addEditVenueController", function ($scope, $log, nucleus, $state
     $scope.selected = function ($item, $model) {
         $scope.venue.name = $model.name;
         $scope.venue.address = {
-            street: $model.location.address[0],
-            street2: $model.location.address[1],
+            street: $model.location.address1,
+            street2: $model.location.address2,
             city: $model.location.city,
-            state: $model.location.state_code,
-            zip: $model.location.postal_code
+            state: $model.location.state,
+            zip: $model.location.zip_code
         };
         $scope.venue.geolocation = {
-            latitude: $model.location.coordinate.latitude,
-            longitude: $model.location.coordinate.longitude
+            latitude: $model.coordinates.latitude,
+            longitude: $model.coordinates.longitude
         };
         $scope.venue.yelpId = $model.id;
     };
