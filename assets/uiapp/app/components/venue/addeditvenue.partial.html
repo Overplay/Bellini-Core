@@ -1,8 +1,8 @@
 <script type="text/ng-template" id="yelpSuggest.html">
     <a>
-        <img ng-src="{{match.model.image_url}}" style="width: 40px; margin-right: 10px">
+        <img ng-src="{{ match.model.image_url }}" style="width: 40px; margin-right: 10px">
         <span>
-            {{match.label}} - {{match.model.location.address[0]}} {{"" || match.model.location.address[1]}}
+            {{ match.label }} - {{ match.model.location.display_address[0] }}
         </span>
     </a>
 </script>
@@ -18,7 +18,7 @@
                     <div class="input-group-addon">Find</div>
                     <input type="text" ng-model="parameters.term" placeholder="Search Term" uib-typeahead="result as result.name for result in getResults($viewValue)"
                            typeahead-loading="loadingResults" typeahead-no-results="noResults" class="form-control" typeahead-template-url="yelpSuggest.html"
-                           typeahead-on-select="selected($item, $model, $label)" typeahead-show-hint="true"/>
+                           typeahead-on-select="selected($item, $model, $label)" typeahead-show-hint="true" typeahead-wait-ms="500"/>
                     <div class="input-group-addon" ng-show="loadingResults"><i ng-show="loadingResults" class="fa fa-spinner fa-spin fa-pulse fa-fw"></i></div>
 
                 </div>

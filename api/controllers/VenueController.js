@@ -5,14 +5,13 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
-var Yelp = require('yelp');
+var yelp = require('yelp-fusion');
+var client;
 
-var yelp = new Yelp({
-    consumer_key: "BAos8_zEjNvVuptYHO8tyA",
-    consumer_secret: "lU4QHPKu7XdO-8IRIdH-1gpgWxg",
-    token: "4zCE_xN7zdbdrGgxiM-_kuFER25FWLEh",
-    token_secret: "WLHkoScUyrkJCW1WS7c_fXe_ekI"
-});
+yelp.accessToken("CHNAkuUQFFBtEFoNMUPM1Q", "eT1w1XHbuZ2wEh3Bqqd1Qy5SfwLcaDXapAKrIN6BEfS81AU6U8RHLmfwpZl6Y2Sn")
+    .then( function (response) {
+        client = yelp.client(response.jsonBody.access_token);
+    });
 
 module.exports = {
 
@@ -104,23 +103,17 @@ module.exports = {
     },
 
     yelpSearch: function (req, res) {
-        yelp.search(req.allParams())
-            .then(function (data) {
-                return res.ok(data);
+        client.search(req.allParams())
+            .then( function (data) {
+                res.ok(data.body);
             })
-            .catch(function (err) {
-                return res.serverError({error: err});
-            })
+            .catch( res.serverError )
     },
 
     yelpBusiness: function (req, res) {
-        yelp.business(req.allParams().yelpId)
-            .then(function (data) {
-                return res.ok(data);
-            })
-            .catch(function (err) {
-                return res.serverError({error: err});
-            })
+        client.business(req.allParams().yelpId)
+            .then(res.ok)
+            .catch(res.serverError)
     },
 
     queryName: function (req, res) {
