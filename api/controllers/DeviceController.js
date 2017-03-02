@@ -85,7 +85,7 @@ module.exports = {
         var udid = params.udid;
 
         if ( !udid )
-            return res.badRequest( { error: "No udid provided" } );
+            return res.badRequest( { error: "You must provide a unique device id." } );
 
         if ( (  !regCode || regCode.length != 6 ) ) //test other stuff too
             return res.badRequest( { error: "No registration code specified, or incorrect format." } );
