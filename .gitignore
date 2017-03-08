@@ -28,7 +28,6 @@ waterlock.js
 #
 # 1. Sensitive information you'd rather not push to
 #    your git repository.
-/assets/uiapp/local.json
 #    e.g., your personal API keys or passwords.
 #
 # 2. Environment-specific configuration
@@ -43,7 +42,6 @@ waterlock.js
 
 config/local.js
 config/waterlock.js
-
 data/**
 
 ################################################

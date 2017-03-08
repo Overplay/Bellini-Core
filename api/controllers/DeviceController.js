@@ -85,7 +85,7 @@ module.exports = {
         var udid = params.udid;
 
         if ( !udid )
-            return res.badRequest( { error: "You must provide a unique device id." } );
+            return res.badRequest( { error: "No udid provided" } );
 
         if ( (  !regCode || regCode.length != 6 ) ) //test other stuff too
             return res.badRequest( { error: "No registration code specified, or incorrect format." } );
@@ -101,7 +101,7 @@ module.exports = {
         //sails.log.debug(deviceObj, "searching ");
         Device.destroy( { uniqueId: udid } )
             .then( function ( theVanquished ) {
-            
+
                 return Device.findOne( deviceObj )
                     .then( function ( device ) {
                         if ( device ) {

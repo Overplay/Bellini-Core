@@ -66,6 +66,8 @@ app.controller('signupController', function ($scope, $log, nucleus, $timeout, $w
                 $log.error("Could not create account");
                 //it would be cool to have feedback, but production doesn't send data in err
                 $scope.ui.errorMessage = "Account creation failed";
+                if (err.data && err.data.error)
+                    $scope.ui.errorMessage = err.data.error;
                 $scope.ui.error = true;
                 $scope.auth.email = '';
                 $timeout(function () {

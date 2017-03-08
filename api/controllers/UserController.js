@@ -407,7 +407,7 @@ module.exports = require('waterlock').actions.user({
         }
         else {
             MailingService.inviteNewUser(params.email);
-            return res.ok(); 
+            return res.ok();
         }
     }
 

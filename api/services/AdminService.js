@@ -131,9 +131,9 @@ module.exports = require('waterlock').waterlocked({
                                                     //sails.log.info(tok);
 
                                                     return Auth.update({id: tok.owner}, {
-                                                            validateToken: tok,
-                                                            blocked: true
-                                                        })
+                                                        validateToken: tok,
+                                                        blocked: true
+                                                    })
                                                         .then(function (data) {
                                                             sails.log.debug("Back attach of validateToken OK");
                                                             resolve(userWithAuth);
@@ -204,7 +204,7 @@ module.exports = require('waterlock').waterlocked({
                     .catch(reject);
 
             }
-            
+
             return null; //fixes promise handler warning  
 
 

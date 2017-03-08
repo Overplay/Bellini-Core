@@ -48,7 +48,7 @@
     "verror": "^1.6.1",
     "waterlock": "colegrigsby/waterlock",
     "waterlock-facebook-auth": "colegrigsby/waterlock-facebook-auth",
-    "waterlock-local-auth": "colegrigsby/waterlock-local-auth-1",
+    "waterlock-local-auth": "ryan-hartzell/waterlock-local-auth",
     "yelp-fusion": "^1.0.3"
   },
   "devDependencies": {},

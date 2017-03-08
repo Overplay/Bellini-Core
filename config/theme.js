@@ -7,5 +7,5 @@
  */
 
 module.exports.theme = {
-    themeName: undefined
+    themeName: "ourglass"
 };
