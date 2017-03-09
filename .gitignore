@@ -43,8 +43,8 @@
 # 
 ################################################
 
-config/local.js
-config/waterlock.js
+#config/local.js
+#config/waterlock.js
 data/**
 
 ################################################
