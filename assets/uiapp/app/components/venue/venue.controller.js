@@ -73,19 +73,20 @@ app.controller("addEditVenueController", function ($scope, $log, nucleus, $state
 
     // TODO this code is all f'd up
     $scope.submit = function () {
-        var promise;
+
+
+        var promise = $q.when();
 
         if ($scope.media.logo) {
-            promise = nucleus.uploadMedia($scope.media.logo)
-                .then(function (data) {
-                    $scope.venue.logo = data.id;
-                })
-        }
-        else {
-            promise = $q(function (resolve, reject) {
-                resolve();
+            promise = promise.then( function(){
+
+                return nucleus.uploadMedia($scope.media.logo)
+                    .then(function (data) {
+                        $scope.venue.logo = data.id;
+                    })
             });
         }
+
         $scope.media.photos.forEach(function (img, index) {
             if (img) {
                 promise = promise.then(function () {
@@ -95,39 +96,42 @@ app.controller("addEditVenueController", function ($scope, $log, nucleus, $state
                         })
                 })
             }
-        })
+        });
 
+        // Check if this is an update or new venue
         if ($scope.edit) {
             promise = promise.then(function () {
-                nucleus.updateVenue($scope.venue.id, $scope.venue)
+                return nucleus.updateVenue($scope.venue.id, $scope.venue)
                     .then(function (v) {
                         toastr.success("Venue info updated", "Success!");
                         $state.go('venue.view', {id: v.id});
-                    })
-                    .catch(function (err) {
-                        toastr.error("Something went wrong", "Damn!");
                     });
             })
-        }
-        else {
+        } else {
             promise = promise.then(function () {
-                nucleus.addVenue($scope.venue)
-                    .then(function (res) {
+                return nucleus.addVenue($scope.venue)
+                    .then(function (venue) {
                         toastr.success("Venue created", "Success!")
                         if (role === "user") {
-                            $rootScope.$emit('navBarUpdate', res.user.roleTypes);
+                            // FIXME does this work??
+                            // TODO see fixem above
+                            $rootScope.$emit('navBarUpdate', venue.user.roleTypes);
                             $state.go('device.userAdd');
                         }
                         else if ($scope.admin)
-                            $state.go('venue.adminView', {id: res.venue.id});
+                            $state.go('venue.adminView', {id: venue.id});
                         else
-                            $state.go('venue.view', {id: res.venue.id});
+                            $state.go('venue.view', {id: venue.id});
                     })
-                    .catch(function (err) {
-                        toastr.error("Something went wrong", "Error")
-                    })
+
             })
         }
+
+        promise
+            .catch( function(err){
+                // TODO should be a human readbale error, but for now...
+                toastr.error(err.toString());
+            })
 
     };
 
