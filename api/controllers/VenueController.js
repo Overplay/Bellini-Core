@@ -16,8 +16,24 @@ yelp.accessToken("CHNAkuUQFFBtEFoNMUPM1Q", "eT1w1XHbuZ2wEh3Bqqd1Qy5SfwLcaDXapAKr
 module.exports = {
 
 
+    // creates a new venue
+    // rewritten by MAK
+    addVenue: function ( req, res ) {
+
+        var params = req.allParams();
+
+        if ( !params.address || !params.name )
+            return res.badRequest( { error: "Missing params" } )
+
+        Venue.create(params)
+            .then( res.ok )
+            .catch( res.serverError );
+
+    },
+
+
     //creates a new venue
-    addVenue: function (req, res) {
+    addVenueOldAndBroken: function (req, res) {
 
         var params = req.allParams();
 

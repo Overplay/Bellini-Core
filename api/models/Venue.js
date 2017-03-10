@@ -5,6 +5,10 @@
  * @docs        :: http://sailsjs.org/documentation/concepts/models-and-orm/models
  */
 
+var uuid = require( 'uuid/v4' );
+var request = require( 'superagent-bluebird-promise' );
+
+
 module.exports = {
 
     attributes: {
@@ -17,6 +21,11 @@ module.exports = {
         yelpId: {
             type: 'string',
             defaultsTo: ''
+        },
+
+        uuid: {
+            type: 'string',
+            unique: true
         },
 
         address: {
@@ -81,6 +90,43 @@ module.exports = {
             type: 'array',
             defaultsTo: []
         }
+    },
+
+    replicateToDM: function( record, cb, isNew ){
+
+        var mirrorDest = sails.config.mirror && sails.config.mirror.venues && sails.config.mirror.venues.route;
+        if ( mirrorDest ){
+            sails.log.silly( "Replicating venue to peer Belliini-DM" );
+            var liteVenue = _.pick(record, ['name', 'address', 'uuid']);
+            
+            request
+                .post(mirrorDest)
+                .send(liteVenue)
+                .then(function(resp){
+                    sails.log.silly("Replicated");
+                })
+                .catch(function(err){
+                    sails.log.silly("Rep failed");
+                })
+        }
+
+        cb();
+
+
+    },
+
+    beforeCreate: function( values, cb ){
+        // Generate UUID
+        values.uuid = uuid();
+        cb();
+    },
+
+    afterCreate: function( record, cb ){
+        this.replicateToDM( record, cb, true );
+    },
+
+    afterUpdate: function ( record, cb ) {
+        this.replicateToDM( record, cb );
     },
 
     //not sure if this is needed for anything? -CEG 

@@ -71,6 +71,7 @@ app.controller("addEditVenueController", function ($scope, $log, nucleus, $state
     };
 
 
+    // TODO this code is all f'd up
     $scope.submit = function () {
         var promise;
 

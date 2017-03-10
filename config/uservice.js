@@ -19,7 +19,7 @@ module.exports = {
     // Where to mirror stuff to (bad architecture?) and not implemented yet
     mirror: {
         venues: {
-            server: 'localhost:2001'
+            route: 'http://localhost:2001/venue/replicate'
         }
     }
 
