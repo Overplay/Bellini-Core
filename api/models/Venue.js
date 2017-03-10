@@ -112,7 +112,6 @@ module.exports = {
 
         cb();
 
-
     },
 
     beforeCreate: function( values, cb ){
@@ -127,11 +126,7 @@ module.exports = {
 
     afterUpdate: function ( record, cb ) {
         this.replicateToDM( record, cb );
-    },
-
-    //not sure if this is needed for anything? -CEG 
-    beforeUpdate: function( valuesToUpdate, cb ){
-        //sails.log.debug("In before update for venue");//, valuesToUpdate);
-        cb();
     }
+
+
 };
