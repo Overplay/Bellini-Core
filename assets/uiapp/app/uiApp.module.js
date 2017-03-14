@@ -23,6 +23,13 @@ app.config(['ChartJsProvider', function (ChartJsProvider) {
     });
 }])
 
+app.config(['$sceDelegateProvider', function ($sceDelegateProvider) {
+    $sceDelegateProvider.resourceUrlWhitelist([
+        'self',
+        'https://maps.googleapis.com/**'
+    ])
+}])
+
 app.run( function ( $log, $rootScope , $http) {
 
     $log.info( "Asahi is pouring!" );
