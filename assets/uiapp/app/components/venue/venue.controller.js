@@ -103,7 +103,7 @@ app.controller("addEditVenueController", function ($scope, $log, nucleus, $state
                         url: 'https://maps.googleapis.com/maps/api/geocode/json',
                         params: {
                             address: addressify($scope.venue.address),
-                            key: 'AIzaSyCrbE5uwJxaBdT7bXTGpes3F3VmQ5K9nXE'
+                            key: 'AIzaSyC59s4TOzJyhlxYvNfCH7aE4_wD8VwFCdQ'
                         }
                     })
                         .then( function (res) {
