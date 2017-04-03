@@ -30,8 +30,7 @@ var self = module.exports.testdata = {
                 Venue.destroy({}),
                 Device.destroy({}),
                 Media.destroy({}),
-                Ad.destroy({}),
-                OGLog.destroy({})
+                Ad.destroy({})
             ];
 
             chain = chain.then(function () {

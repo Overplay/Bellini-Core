@@ -101,12 +101,6 @@ module.exports.policies = {
         'deleteAllEntries': false
     },
 
-    OGLogController: {
-        '*': true,
-        'destroy': ['sessionAuth', 'isAdmin'],
-        'upload': ['tempAuth']
-    },
-
     SMSController: {
         '*': true,
         'notify': ['limitSMS', 'tempAuth']
