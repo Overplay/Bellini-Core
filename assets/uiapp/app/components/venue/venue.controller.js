@@ -107,6 +107,8 @@ app.controller("addEditVenueController", function ($scope, $log, nucleus, $state
                         }
                     })
                         .then( function (res) {
+                            if (res.data.results.length === 0)
+                                
                             var result = res.data.results[0].geometry.location;
                             $scope.venue.geolocation.latitude = result.lat;
                             $scope.venue.geolocation.longitude = result.lng;
