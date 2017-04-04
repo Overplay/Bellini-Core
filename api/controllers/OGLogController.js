@@ -9,9 +9,7 @@ module.exports = {
 
     upload: function (req, res) {
 
-        var params = req.allParams();
-
-        return ProxyService.post(sails.config.localIp + ":2001/OGLog/upload", params)
+        return ProxyService.post(sails.config.localIp + ":2001/OGLog/upload", req.allParams())
             .then( function (data) {
                 return res.json(data.body);
             })
@@ -30,7 +28,7 @@ module.exports = {
 
     deviceHeartbeat: function (req, res) {
 
-        return ProxyService.get(sails.config.localIp + ":2001/OGLog/deviceHeartbeat", { id: id })
+        return ProxyService.get(sails.config.localIp + ":2001/OGLog/deviceHeartbeat", req.allParams())
             .then( function (data) {
                 return res.json(data.body)
             })
