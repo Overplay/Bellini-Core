@@ -119,7 +119,8 @@ module.exports.policies = {
         'getDevices': ['sessionAuth', 'isProprietorOwner'],
         'getManagedDevices': ['sessionAuth', 'isProprietorManager'],
         'getAlist': ['sessionAuth', 'isAdvertiser'],
-        'becomeAdvertiser': ['sessionAuth']
+        'becomeAdvertiser': ['sessionAuth'],
+        'checkjwt': ['hasJsonWebToken']
 
     },
     

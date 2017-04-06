@@ -409,6 +409,10 @@ module.exports = require('waterlock').actions.user({
             MailingService.inviteNewUser(params.email);
             return res.ok();
         }
+    },
+
+    checkjwt: function(req, res){
+        return res.ok({ message: "good token" });
     }
 
 });
