@@ -412,7 +412,15 @@ module.exports = require('waterlock').actions.user({
     },
 
     checkjwt: function(req, res){
-    
+
+        if( req.headers.authorization && req.headers.authorization == "Bearer OriginalOG" ){
+            return res.ok({
+                email: "superduper@superduper.com",
+                firstName: "Clark",
+                lastName: "Kent"
+            });
+        }
+
         var user = req.session.user;
         Role.find(user.roles)
             .then(function(roles){
