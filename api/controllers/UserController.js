@@ -417,7 +417,7 @@ module.exports = require('waterlock').actions.user({
         Role.find(user.roles)
             .then(function(roles){
                 var rval = user.toJSON();
-                rval.roles = roles.map( function(r){ return r.roleName;});
+                //rval.roles = roles.map( function(r){ return r.roleName;});
                 res.ok(rval);
             })
             .catch(res.serverError)
