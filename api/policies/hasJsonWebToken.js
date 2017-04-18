@@ -22,7 +22,7 @@ module.exports = function (req, res, next) {
 
     waterlock.validator.validateTokenRequest(req, function (err, user) {
         if (err) {
-            return res.forbidden({error: err});
+            return res.forbidden({error: err.message});
         }
 
         // valid request
