@@ -70,6 +70,16 @@ module.exports.bootstrap = function ( cb ) {
 
         } )
 
+        .then( function() {
+
+            sails.log.silly("Creating Limbo venue");
+            return Venue.updateOrCreate({ name: 'Bullpen', uuid: 'bullpen-hey-battabatta', virtual: true },
+                { name: 'Bullpen', uuid: 'bullpen-hey-battabatta',
+                virtual: true, showInMobileApp: false
+                 });
+
+        })
+
         .then( function () {
             sails.config.testdata.install();
             sails.log.debug( "Inserts done" );

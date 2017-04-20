@@ -89,6 +89,12 @@ module.exports = {
         sponsorships: {
             type: 'array',
             defaultsTo: []
+        },
+
+        // used for "Virtual Venues" like "Limbo" where devices are before associated.
+        virtual: {
+            type:       'boolean',
+            defaultsTo: false
         }
     },
 
@@ -96,8 +102,8 @@ module.exports = {
 
         var mirrorDest = sails.config.mirror && sails.config.mirror.venues && sails.config.mirror.venues.route;
         if ( mirrorDest ){
-            sails.log.silly( "Replicating venue to peer Belliini-DM" );
-            var liteVenue = _.pick(record, ['name', 'address', 'uuid']);
+            sails.log.silly( "Replicating venue to peer Bellini-DM" );
+            var liteVenue = _.pick(record, ['name', 'address', 'uuid', 'virtual']);
             
             request
                 .post(mirrorDest)

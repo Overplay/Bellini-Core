@@ -412,7 +412,24 @@ module.exports = require('waterlock').actions.user({
     },
 
     checkjwt: function(req, res){
-        return res.ok({ message: "good token" });
+
+        if( req.headers.authorization && req.headers.authorization == "Bearer OriginalOG" ){
+            return res.ok({
+                email: "superduper@superduper.com",
+                firstName: "Clark",
+                lastName: "Kent"
+            });
+        }
+
+        var user = req.session.user;
+        Role.find(user.roles)
+            .then(function(roles){
+                var rval = user.toJSON();
+                //rval.roles = roles.map( function(r){ return r.roleName;});
+                res.ok(rval);
+            })
+            .catch(res.serverError)
+        
     }
 
 });

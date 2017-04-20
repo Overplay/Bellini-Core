@@ -14,15 +14,16 @@
 //Waterlock methods to get user and stuff too so we should figure it out
 module.exports = function (req, res, next) {
 
+    // Check for "god token"
 
-    // if (sails.config.policies.wideOpen) {
-    //     sails.log.debug("In wideOpen policy mode, so skipping this policy!");
-    //     return next();
-    // }
+    if ( sails.config.policies.godToken ){
+        if ( req.headers.authorization && req.headers.authorization=="Bearer OriginalOG")
+            next();
+    }
 
     waterlock.validator.validateTokenRequest(req, function (err, user) {
         if (err) {
-            return res.forbidden({error: err});
+            return res.forbidden({error: err.message});
         }
 
         // valid request
