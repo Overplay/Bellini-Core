@@ -29,7 +29,7 @@ module.exports = {
 
                 var media = a.advert.media;
                 _.forEach(media, function (val, key) {
-                    if (val != null) {
+                    if (val !== null) {
                         chain = chain.then(function () {
                             return Media.findOne(val)
                                 .then(function (m) {
@@ -59,14 +59,14 @@ module.exports = {
         //if rejecting - send email
         var params = req.allParams();
 
-        if (typeof params.accepted == 'undefined' || !params.id) {
+        if (typeof params.accepted === 'undefined' || !params.id) {
             return res.badRequest({error: "Invalid req params"})
         }
         else {
             Ad.update(params.id, {accepted: params.accepted, reviewed: true})
                 .then(function (updated) {
-                    if (updated.length == 1) {
-                        if (params.accepted == false) { //rejected by admin 
+                    if (updated.length === 1) {
+                        if (params.accepted === false) { //rejected by admin
                             MailingService.adRejectNotification(updated[0].creator, updated[0].name, "not meeting guidelines")
                         }
 
@@ -104,7 +104,7 @@ module.exports = {
 
     setDelete: function (req, res) {
         var params = req.allParams();
-        if (!params.id || typeof params.delete == 'undefined') {
+        if (!params.id || typeof params.delete === 'undefined') {
             return res.badRequest({error: "Invalid req Params"})
         }
         else {
@@ -416,7 +416,7 @@ module.exports = {
                             var ids = _.map(ads, 'id')
                             logs = _.filter(logs, function (l) {
                                 return (_.findIndex(ids, function (id) {
-                                    return id == l.message.adId
+                                    return id === l.message.adId
                                 }) > -1)
                             });
                             return logs;
