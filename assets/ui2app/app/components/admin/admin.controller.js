@@ -198,3 +198,10 @@ app.controller( 'adminUserEditController', function ( $scope, user, $log, uibHel
     }
 
 } );
+
+app.controller( 'adminVenueListController', function ($scope, venues, $log, uibHelper, $state, toastr) {
+
+    $log.debug('Loading adminVenueListController');
+    $scope.venues = venues;
+
+})

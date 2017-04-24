@@ -30,7 +30,7 @@ app.config(['$sceDelegateProvider', function ($sceDelegateProvider) {
     ])
 }])
 
-app.run( function ( $log, $rootScope , $http) {
+app.run( function ( $log, $rootScope , $http, toastr) {
 
     $log.info( "Asahi is pouring!" );
 
@@ -41,16 +41,15 @@ app.run( function ( $log, $rootScope , $http) {
     $rootScope.$on( '$stateChangeError',
         function ( event, toState, toParams, fromState, fromParams, error ) {
             $log.error( "State change fail!" );
+            toastr.error("Could not change page", "Error");
         } )
-
-
 
 
 } );
 
 app.filter('capitalize', function() {
     return function(input, scope) {
-        if (input!=null)
+        if (input!==null)
             input = input.toLowerCase();
         return input.substring(0,1).toUpperCase()+input.substring(1);
     }

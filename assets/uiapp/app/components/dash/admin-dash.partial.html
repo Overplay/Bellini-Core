@@ -13,13 +13,13 @@
                 <td>{{deviceCount}}</td>
             </tr>
             <tr>
-                <td>Advertisement Count:</td>
+                <td>Sponsorship Count:</td>
                 <td>{{adCount}}</td>
             </tr>
         </table>
     </div>
     <div class="col-md-6 col-sm-10 col-sm-offset-1 col-md-offset-0">
-        <h2>Ads for review</h2>
+        <h2>Sponsorships for review</h2>
 
         <table class="table table-striped top15">
             <tr ng-if="ads.length" ng-repeat="ad in ads">
@@ -29,7 +29,7 @@
                 </td>
             </tr>
             <tr ng-if="!ads.length">
-                <td>No ads to review!</td>
+                <td>No sponsorships to review!</td>
             </tr>
         </table>
     </div>
