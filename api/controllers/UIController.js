@@ -14,6 +14,11 @@ module.exports = {
     uiApp: function ( req, res ) {
 
         return res.view("ui/uiapp", {layout: 'ui/uilayout'});
+    },
+
+    ui2App: function ( req, res ) {
+
+        return res.view( "ui/ui2AppBody", { layout: 'ui/ui2template' } );
     }
 
 };

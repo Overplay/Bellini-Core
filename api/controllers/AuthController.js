@@ -89,10 +89,10 @@ module.exports = require( 'waterlock' ).waterlocked( {
 
     },
 
+    // TODO: deprecated
     addUser: function ( req, res ) {
         //sails.log.debug(req)
         var params = req.allParams();
-
 
         //handle no password if facebook this is ugly 
         if (( params.email === undefined) || (params.password === undefined) || (params.user === undefined) || (params.password === '' && !params.facebookId))
@@ -129,6 +129,40 @@ module.exports = require( 'waterlock' ).waterlocked( {
                 else
                     return res.badRequest({error: err.message})
             })
+
+
+    },
+
+    newUser: function ( req, res ) {
+        //sails.log.debug(req)
+        var params = req.allParams();
+
+        //handle no password if facebook this is ugly
+        if ( ( params.email === undefined) || (params.password === undefined) || (params.user === undefined) || (params.password === '' && !params.facebookId) )
+            return res.badRequest( { error: "Missing email, password or user object" } );
+
+
+        AdminService.addUser( params.email, params.password, params.user, params.facebookId, params.validate ) //TRUE requires validation
+            .then( function ( data ) {
+                //sails.log.debug(data)
+                return res.ok( data )
+
+            } )
+            .catch( function ( err ) {
+                if ( err.code && err.code === "E_VALIDATION" ) {
+                    var messages = {}
+                    var badEmail = false; // most common validation issue
+                    _.forEach( err.invalidAttributes, function ( att ) {
+                        att.forEach( function ( e ) {
+                            messages[ e.rule ] = e.message;
+                            if (e.rule=='email') badEmail = true;
+                        } )
+                    } )
+                    return res.badRequest( { errors: messages, badEmail: badEmail } )//{'message': 'Adding user failed'});
+                }
+                else
+                    return res.badRequest( { errors: err.message } )
+            } )
 
 
     },

@@ -191,6 +191,7 @@ app.controller('listVenueController', function ($scope, venues, $log, links, rol
     $scope.admin = role === "admin";
 })
 app.controller('viewVenueController', function ($scope, venue, $log, uiGmapGoogleMapApi, uibHelper, nucleus, user, $http, toastr, links, role, $uibModal) {
+
     $scope.venue = venue;
     $scope.$parent.ui.pageTitle = "Venue Overview";
     $scope.$parent.ui.panelHeading = venue.name;
@@ -211,41 +212,52 @@ app.controller('viewVenueController', function ($scope, venue, $log, uiGmapGoogl
             return "user.editUserAdmin({id: user.auth})";
         return "user.editUserOwner({id: user.auth})";
     }
-    $scope.map = {
-        center: {
-            latitude: venue.geolocation.latitude,
-            longitude: venue.geolocation.longitude
-        },
-        marker: {
-            latitude: venue.geolocation.latitude,
-            longitude: venue.geolocation.longitude
-        },
-        zoom: 18,
-        address: addressify(venue.address),
-        markerId: 0
-    };
-    uiGmapGoogleMapApi.then(function (maps) {
-        $scope.maps = maps;
 
-        if (venue.geolocation && venue.geolocation.latitude && venue.geolocation.longitude) {
-            $scope.map.marker.latitude = $scope.map.center.latitude = venue.geolocation.latitude;
-            $scope.map.marker.longitude = $scope.map.center.longitude = venue.geolocation.longitude;
-        }
-        else {
-            var geocode = new maps.Geocoder();
-            geocode.geocode({
-                address: $scope.map.address
-            }, function (res, stat) {
-                $scope.venue.geolocation = {
-                    latitude: $scope.map.center.latitude = res[0].geometry.location.lat(),
-                    longitude: $scope.map.center.longitude = res[0].geometry.location.lng()
-                };
-                nucleus.updateVenue($scope.venue.id, $scope.venue)
-                    .then(function () {
-                    })
-            })
-        }
-    })
+    // Check to make sure venue actually is geocoded
+    $scope.hasGeolocation = true; //!!(venue.geolocation && venue.geolocation.latitude && venue.geolocation.longitude );
+
+    //if ($scope.hasGeolocation){
+
+        $scope.map = {
+            center:   {
+                latitude: venue.geolocation && venue.geolocation.latitude || 0.0,
+                longitude: venue.geolocation && venue.geolocation.longitude || 0.0
+            },
+            marker:   {
+                latitude: venue.geolocation && venue.geolocation.latitude || 0.0,
+                longitude: venue.geolocation && venue.geolocation.longitude || 0.0
+            },
+            zoom:     18,
+            address:  addressify( venue.address ),
+            markerId: 0
+        };
+
+        uiGmapGoogleMapApi.then( function ( maps ) {
+            $scope.maps = maps;
+
+            if ( venue.geolocation && venue.geolocation.latitude && venue.geolocation.longitude ) {
+                $scope.map.marker.latitude = $scope.map.center.latitude = venue.geolocation.latitude;
+                $scope.map.marker.longitude = $scope.map.center.longitude = venue.geolocation.longitude;
+            }
+            else {
+                var geocode = new maps.Geocoder();
+                geocode.geocode( {
+                    address: $scope.map.address
+                }, function ( res, stat ) {
+                    $scope.venue.geolocation = {
+                        latitude:  $scope.map.center.latitude = res[ 0 ].geometry.location.lat(),
+                        longitude: $scope.map.center.longitude = res[ 0 ].geometry.location.lng()
+                    };
+                    $scope.map.marker = _.cloneDeep($scope.venue.geolocation);
+                    nucleus.updateVenue( $scope.venue.id, $scope.venue )
+                        .then( function () {
+                        } )
+                } )
+            }
+        } )
+
+    //}
+
     $scope.proprietor = {email: ''}
     $scope.form = {}
     $scope.addProprietor = function (type) {

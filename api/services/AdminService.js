@@ -121,7 +121,13 @@ module.exports = require('waterlock').waterlocked({
                                     if (err) {
                                         sails.log.error('AdminService.addUser: Error attaching auth to user');
                                         sails.log.error(err);
-                                        reject(err);
+                                        User.destroy(user.id)
+                                            .then( function(){
+                                                reject( err );
+                                            })
+                                            .catch( function(){
+                                                reject( err );
+                                            })
                                     } else {
                                         if (requireValidation) {
                                             sails.log.info("AdminService.addUser: adding validation token");

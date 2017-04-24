@@ -65,6 +65,9 @@ module.exports.routes = {
   
   '/ui': "UIController.uiApp",
 
+  // New UI
+  '/ui2': "UIController.ui2App",
+
   '/validated' : 'AuthController.validatedOk'
   
 };

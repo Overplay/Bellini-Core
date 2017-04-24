@@ -1,0 +1,11 @@
+@import "colors";
+
+.ibut {
+  padding: 5px;
+  background-color: $primary-color;
+  color: white;
+  border-radius: 3px;
+  &:hover {
+    background-color: darken($primary-color, 10%);
+  }
+}

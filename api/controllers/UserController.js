@@ -430,7 +430,38 @@ module.exports = require('waterlock').actions.user({
             })
             .catch(res.serverError)
         
-    }
+    },
+
+    checkSession: function(req, res){
+
+        if (req.session && req.session.user){
+            var user = _.cloneDeep(req.session.user);
+            user.email = user.auth && user.auth.email;
+            delete user.auth;
+            delete user.roles;
+            delete user.metadata;
+            delete user.legal;
+            return res.ok(user);
+        }
+
+        return res.forbidden({ error: 'no session'});
+    },
+
+    // setroles: function(req, res){
+    //
+    //     var params = req.allParams();
+    //
+    //     if ( !params.id ) {
+    //         return res.badRequest( { error: "no user specified" } );
+    //     }
+    //
+    //     if ( !params.roles ) {
+    //         return res.badRequest( { error: "no roles specified" } );
+    //     }
+    //
+    //     // TODO check if array of Roles are valid roles
+    //
+    // }
 
 });
 

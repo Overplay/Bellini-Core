@@ -9,22 +9,25 @@
     <a ui-sref="{{ admin ? 'venue.adminEdit({id: venue.id})' : 'venue.edit({id: venue.id})'}}"
        class="btn btn-primary pull-right">Edit</a>
 
-    <a ng-click="showMap = !showMap;" class="btn btn-primary" style="margin-bottom: 15px" ng-init="showMap = true">
-        {{!showMap ? "Show" : "Hide"}} Map
-    </a>
+    <div ng-if="hasGeolocation">
+        <a ng-click="showMap = !showMap;" class="btn btn-primary" style="margin-bottom: 15px" ng-init="showMap = true">
+            {{!showMap ? "Show" : "Hide"}} Map
+        </a>
 
-    <div uib-collapse="!showMap">
-        <ui-gmap-google-map center="map.center" zoom="map.zoom">
-            <ui-gmap-marker idKey="map.markerId" coords="map.marker">
-                <ui-gmap-window show="true">
-                    <div style="text-align: center">
-                        <h3>{{ venue.name }}</h3>
-                        <p style="font-size: 14px">{{ map.address }}</p>
-                    </div>
-                </ui-gmap-window>
-            </ui-gmap-marker>
-        </ui-gmap-google-map>
+        <div uib-collapse="!showMap">
+            <ui-gmap-google-map center="map.center" zoom="map.zoom">
+                <ui-gmap-marker idKey="map.markerId" coords="map.marker">
+                    <ui-gmap-window show="true">
+                        <div style="text-align: center">
+                            <h3>{{ venue.name }}</h3>
+                            <p style="font-size: 14px">{{ map.address }}</p>
+                        </div>
+                    </ui-gmap-window>
+                </ui-gmap-marker>
+            </ui-gmap-google-map>
+        </div>
     </div>
+
 
     <h3 ng-show="venue.devices.length">Devices</h3>
 
@@ -148,4 +151,7 @@
         </div>
     </uib-accordion>
     <button class="btn btn-sm btn-success" ng-click="addSponsorship()">Add Sponsorship</button>
+    <div ng-if="!hasGeolocation" style="background-color: #c60007; color: white; margin-top: 15px; padding: 15px"><p>NOTE: This venue does not have valid
+        geolocation info!</p></div>
+
 </div> 
