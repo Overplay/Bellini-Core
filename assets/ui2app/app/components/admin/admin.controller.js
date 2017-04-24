@@ -173,6 +173,27 @@ app.controller( 'adminUserEditController', function ( $scope, user, $log, uibHel
 
     $scope.addVenue = function(kind){
 
+        var vnames = _.map(allVenues, 'name');
+
+        uibHelper.selectListModal('Pick a Venue', '', vnames, 0)
+            .then( function(chosenOne){
+
+                $log.debug("Chose "+chosenOne);
+            })
+            .catch( function(err){
+
+            })
+
+        switch (kind){
+            case 'owned':
+
+            break;
+
+            case 'managed':
+
+            break;
+
+        }
 
     }
 
