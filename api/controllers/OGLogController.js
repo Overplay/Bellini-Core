@@ -41,6 +41,19 @@ module.exports = {
                 return res.json(data.body)
             })
             .catch( res.serverError )
+    },
+
+    find: function (req, res) {
+        var params = req.allParams();
+
+        if (!params.deviceUDID)
+            res.badRequest({error: "Missing deviceUDID"});
+
+        return ProxyService.get(sails.config.localIp + ":2001/OGLog", params)
+            .then( function (data) {
+                return res.json(data.body);
+            })
+            .catch( res.serverError )
     }
 
 
