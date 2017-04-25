@@ -96,5 +96,16 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             }
         })
 
+        .state( 'admin.editvenue', {
+            url:         '/editvenue/:id',
+            templateUrl: '/ui2app/app/components/admin/editvenue.partial.html',
+            controller:  'adminVenueEditController',
+            resolve: {
+                venue: function ( sailsVenues, $stateParams ) {
+                    return sailsVenues.get( $stateParams.id );
+                }
+            }
+        })
+
 
 } );

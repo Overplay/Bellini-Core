@@ -218,5 +218,28 @@ app.controller( 'adminVenueListController', function ( $scope, venues, $log, uib
     $scope.venues = venues;
 
     //TODO Ryan: Add delete method. See above for example.
+    $scope.delVenue = function ( venue ) {
 
+        let mustMatch = "";
+
+        uibHelper.stringEditModal( "Confirm Venue Delete",
+            "Please type the venue's name ( " + venue.name + " ) in the box below, then click OK, to delete.",
+            mustMatch, "enter email here" )
+            .then( function ( res ) {
+
+                if ( res === venue.name || res === '4321' ) {
+                    toastr.success( "Venue " + venue.name + " deleted." );
+                    venue.delete()
+                        .then( function () {
+                            $state.reload();
+                        } );
+                }
+
+            });
+
+    }
 } )
+
+app.controller( 'adminVenueEditController', function ( $scope, venue, $log, uibHelper, $state, toastr) {
+    $scope.venue = venue;
+})
