@@ -54,6 +54,23 @@ app.factory( "sailsVenues", function ( sailsApi, sailsCoreModel ) {
 
         }
 
+        this.addUserAs = function(user, asType){
+            if ( !_.includes(['manager', 'owner'], asType )) {
+                throw new Error( 'Type must be owner or manager' );
+            }
+
+            var ep = (asType=='owner') ? '/venue/addOwner' : '/venue/addManager';
+
+            var userId = sailsApi.idFromIdOrObj(user);
+
+            var vid = this.id;
+
+            return sailsApi.apiPost( ep, { userId: userId, id: this.id } )
+                .then(function(data){
+                    return getVenue(vid);
+                });
+        }
+
     }
 
     ModelVenueObject.prototype = Object.create( CoreModel.prototype );

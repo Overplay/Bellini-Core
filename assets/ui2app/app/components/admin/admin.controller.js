@@ -16,7 +16,7 @@ app.controller( 'adminUserListController', function ( $scope, users, $log, uibHe
             mustMatch, "enter email here" )
             .then( function ( res ) {
 
-                if ( res == user.email || res == '4321') {
+                if ( res == user.email || res == '4321' ) {
                     toastr.success( "User " + user.email + " deleted." );
                     user.delete()
                         .then( function () {
@@ -32,7 +32,7 @@ app.controller( 'adminUserListController', function ( $scope, users, $log, uibHe
 // USER EDIT FOR ADMIN
 
 app.controller( 'adminUserEditController', function ( $scope, user, $log, uibHelper, toastr, roles,
-    $state, userAuthService, allVenues ) {
+                                                      $state, userAuthService, allVenues, sailsUsers ) {
 
     $log.debug( "Loading adminUserEditController" );
     $scope.user = user;
@@ -49,7 +49,7 @@ app.controller( 'adminUserEditController', function ( $scope, user, $log, uibHel
                 type:        'text',
                 field:       'firstName',
                 value:       user && user.firstName || '',
-                required:     true
+                required:    true
             }
             ,
             {
@@ -58,7 +58,7 @@ app.controller( 'adminUserEditController', function ( $scope, user, $log, uibHel
                 type:        'text',
                 field:       'lastName',
                 value:       user && user.lastName || '',
-                required:     true
+                required:    true
             }
         ];
     }
@@ -70,37 +70,37 @@ app.controller( 'adminUserEditController', function ( $scope, user, $log, uibHel
             type:        'text',
             field:       'email',
             value:       user && user.email || '',
-            required:     true
+            required:    true
         } ];
     }
 
-    function createBrandNewUser(preload) {
+    function createBrandNewUser( preload ) {
 
 
-        var allFields = makeNameFields(preload).concat( makeEmailField() );
+        var allFields = makeNameFields( preload ).concat( makeEmailField() );
 
         uibHelper.inputBoxesModal( "New User", "All three fields below are required.", allFields )
-            .then( function (fields) {
+            .then( function ( fields ) {
 
-                userAuthService.addUser(fields.email, new Date().getTime(), fields )
-                    .then( function(wha){
+                userAuthService.addUser( fields.email, new Date().getTime(), fields )
+                    .then( function ( wha ) {
                         // redirect-ish
-                        $state.go('admin.edituser', { id: wha.id });
-                    })
-                    .catch( function(err){
-                        if ((err && err.data && err.data.badEmail)){
+                        $state.go( 'admin.edituser', { id: wha.id } );
+                    } )
+                    .catch( function ( err ) {
+                        if ( (err && err.data && err.data.badEmail) ) {
                             toastr.error( "Unacceptable email address, pal!" );
-                            createBrandNewUser(fields);
+                            createBrandNewUser( fields );
                         } else {
                             toastr.error( "Hmm, weird error creating user." );
                         }
                         $state.go( 'admin.userlist' );
-                    })
+                    } )
 
             } )
-            .catch( function(err){
-                $state.go('admin.userlist');
-            });
+            .catch( function ( err ) {
+                $state.go( 'admin.userlist' );
+            } );
 
     }
 
@@ -117,7 +117,7 @@ app.controller( 'adminUserEditController', function ( $scope, user, $log, uibHel
     $scope.changeName = function () {
         $log.debug( 'Changing name...' );
 
-        uibHelper.inputBoxesModal( "Edit Name", "", makeNameFields($scope.user) )
+        uibHelper.inputBoxesModal( "Edit Name", "", makeNameFields( $scope.user ) )
             .then( function ( fields ) {
                 $log.debug( fields );
                 $scope.user.firstName = fields.firstName;
@@ -171,37 +171,52 @@ app.controller( 'adminUserEditController', function ( $scope, user, $log, uibHel
             } )
     }
 
-    $scope.addVenue = function(kind){
+    $scope.addVenue = function ( kind ) {
 
-        var vnames = _.map(allVenues, 'name');
+        var vnames = _.map( allVenues, 'name' );
 
-        uibHelper.selectListModal('Pick a Venue', '', vnames, 0)
-            .then( function(chosenOne){
+        uibHelper.selectListModal( 'Pick a Venue', '', vnames, 0 )
+            .then( function ( chosenOne ) {
 
-                $log.debug("Chose "+chosenOne);
-            })
-            .catch( function(err){
+                $log.debug( "Chose " + allVenues[ chosenOne ].id );
+                $scope.user.attachToVenue(allVenues[chosenOne], kind)
+                    .then( function () {
+                        toastr.success( "Added user to venue." );
+                    })
+                    .catch( function ( err ) {
+                        toastr.error( "Problem attaching user to venue" );
+                    } );
 
-            })
 
-        switch (kind){
-            case 'owned':
+                // allVenues[ chosenOne ].addUserAs( $scope.user, kind )
+                //     .then( function () {
+                //         toastr.success( "Added user to venue." );
+                //         // Refresh user
+                //         return sailsUsers.get($scope.user.id);
+                //     } )
+                //     .then(function(nu){
+                //         $scope.user = nu;
+                //     })
+                //     .catch( function(err){
+                //         toastr.error("Problem attaching user to venue");
+                //     })
 
-            break;
+            } )
+            .catch( function ( err ) {
 
-            case 'managed':
+            } );
 
-            break;
 
-        }
 
     }
 
 } );
 
-app.controller( 'adminVenueListController', function ($scope, venues, $log, uibHelper, $state, toastr) {
+app.controller( 'adminVenueListController', function ( $scope, venues, $log, uibHelper, $state, toastr ) {
 
-    $log.debug('Loading adminVenueListController');
+    $log.debug( 'Loading adminVenueListController' );
     $scope.venues = venues;
 
-})
+    //TODO Ryan: Add delete method. See above for example.
+
+} )

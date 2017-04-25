@@ -6,6 +6,9 @@
  */
 
 var yelp = require( 'yelp-fusion' );
+var _ = require('lodash');
+var Promise = require('bluebird');
+
 var client;
 
 yelp.accessToken( "CHNAkuUQFFBtEFoNMUPM1Q", "eT1w1XHbuZ2wEh3Bqqd1Qy5SfwLcaDXapAKrIN6BEfS81AU6U8RHLmfwpZl6Y2Sn" )
@@ -189,6 +192,9 @@ module.exports = {
 
     },
 
+
+
+    // TODO there is a lot of replicated code beteeen add manager and add owner (MAK 4-17)
     addManager: function ( req, res ) {
         //params : user ID , venue ID
         var params = req.allParams();

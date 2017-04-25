@@ -86,7 +86,7 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
         } )
 
         .state( 'admin.venuelist', {
-            url:         '.venuelist',
+            url:         '/venuelist',
             templateUrl: '/ui2app/app/components/admin/venuelist.partial.html',
             controller:  'adminVenueListController',
             resolve:     {

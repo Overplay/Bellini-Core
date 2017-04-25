@@ -444,8 +444,73 @@ module.exports = require('waterlock').actions.user({
             return res.ok(user);
         }
 
-        return res.forbidden({ error: 'no session'});
+        // send back nothing
+        return res.notAuthorized({ error: 'not logged in'});
     },
+
+    // New by MAK 4-2017
+    attachUserToVenue: function ( req, res ) {
+
+        if ( req.method != 'POST' )
+            return res.badRequest( { error: "Bad Verb" } );
+
+        //OK, we need a venueId
+        var params = req.allParams();
+
+        var uid = params.id || params.userId;
+
+        if ( !uid ) {
+            res.badRequest( { error: 'no user id' } );
+        }
+
+        if ( !params.venueId ) {
+            res.badRequest( { error: 'no venue id' } );
+        }
+
+        if ( !params.userType || !_.includes( [ 'manager', 'owner' ], params.userType ) ) {
+            res.badRequest( { error: 'no, or invalid, user user type' } );
+        }
+
+        // Prerequisites are a user and a venue, get both
+        var prereqs = {
+            user: User.findOne( uid ).populate( [ "managedVenues", "ownedVenues" ] ),
+            venue: Venue.findOne( params.venueId )
+        };
+
+        Promise.props( prereqs )
+            .then( function ( props ) {
+
+                if ( !props.user ) {
+                    return req.badRequest( { error: "no user for that id" } );
+                }
+
+                if ( !props.venue ) {
+                    return req.badRequest( { error: "no venue for that id" } );
+                }
+
+                switch ( params.userType ) {
+                    case 'manager':
+                        props.user.managedVenues.add( props.venue.id );
+                        break;
+                    case 'owner':
+                        props.user.ownedVenues.add( props.venue.id );
+                        break;
+                }
+
+                // Reload the benue
+                return Promise.props( {
+                    shit: props.user.save(),
+                    user: User.findOne( props.user.id ).populate( [ "managedVenues", "ownedVenues" ] )
+                } );
+
+            } )
+            .then( function ( props ) {
+                return res.ok( props.user );
+            } )
+            .catch( res.serverError );
+
+
+    }
 
     // setroles: function(req, res){
     //

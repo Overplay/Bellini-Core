@@ -60,6 +60,22 @@ app.factory( "sailsUsers", function ( sailsApi, sailsCoreModel, sailsAuth ) {
             return this.auth.save();
         }
 
+        this.attachToVenue = function( venue, asType ){
+
+            if ( !_.includes( [ 'manager', 'owner' ], asType ) ) {
+                throw new Error( 'Type must be owner or manager' );
+            }
+
+            var params = {
+                venueId: sailsApi.idFromIdOrObj(venue),
+                userId: this.id,
+                userType: asType
+            };
+
+            return sailsApi.apiPost('/user/attachUserToVenue', params )
+                .then(this.parseInbound);
+        }
+
     }
 
     ModelUserObject.prototype = Object.create( CoreModel.prototype );

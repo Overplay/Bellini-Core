@@ -2,11 +2,11 @@
  * Created by mkahn on 4/6/16.
  */
 
-var app = angular.module('uiApp', [ 'ui.router', 'ui.bootstrap', 'toastr', 'ui.og' ]);
+var app = angular.module( 'uiApp', [ 'ui.router', 'ui.bootstrap', 'toastr', 'ui.og' ] );
 
 app.config( function ( toastrConfig ) {
     angular.extend( toastrConfig, {
-        positionClass:         'toast-bottom-center'
+        positionClass: 'toast-bottom-center'
     } );
 } );
 
@@ -24,42 +24,59 @@ app.config( function ( toastrConfig ) {
 // }])
 
 
-app.run( function ( $log, $rootScope , $http) {
+app.run( function ( $log, $rootScope, toastr ) {
 
     $log.info( "Bellini is pouring!" );
 
     $rootScope.$on( '$stateChangeError',
         function ( event, toState, toParams, fromState, fromParams, error ) {
             $log.error( "State change fail!" );
-        } )
-    
+            if ( error && error.status ) {
+
+                switch ( error.status ) {
+                    case 401:
+                        $log.debug( 'not logged in' );
+                        window.location = '/';
+                        break;
+
+                    case 403:
+                        $log.debug( 'forbidden fruit' );
+                        toastr.error( "Yeah, we're gonna need you not to do that.", "Not Authorized" );
+                        event.preventDefault();
+                        break;
+                }
+
+            }
+
+        } );
+
 } );
 
-app.filter('capitalize', function() {
-    return function(input, scope) {
-        if (input!=null)
+app.filter( 'capitalize', function () {
+    return function ( input, scope ) {
+        if ( input != null )
             input = input.toLowerCase();
-        return input.substring(0,1).toUpperCase()+input.substring(1);
+        return input.substring( 0, 1 ).toUpperCase() + input.substring( 1 );
     }
-});
+} );
 
-app.filter('startFrom', function () {
-    return function (input, start) {
-//        start = parseInt(start);
-        if (input)
-            return input.slice(start);
+app.filter( 'startFrom', function () {
+    return function ( input, start ) {
+        //        start = parseInt(start);
+        if ( input )
+            return input.slice( start );
         return null;
     }
-});
+} );
 
-app.filter('addressify', function(){
-    return function(addressJson) {
+app.filter( 'addressify', function () {
+    return function ( addressJson ) {
         var newAddr = addressJson.street + ' ';
         newAddr += addressJson.city + ', ';
         newAddr += addressJson.state + ' ';
         newAddr += addressJson.zip;
         return newAddr;
     }
-});
+} );
 
 function stripHttpData( data ) { return data.data };
