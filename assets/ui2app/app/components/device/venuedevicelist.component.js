@@ -11,10 +11,15 @@ app.component( 'venueDeviceList', {
 
         var ctrl = this;
 
-
-
+        this.$onInit =  function () {
+            ctrl.venue.populateDevices()
+                .then( function ( populated ) {
+                    ctrl.venue = populated;
+                } )
+        }
 
     },
+
 
     template: `<div class="ogcard">
         <div class="venueside">

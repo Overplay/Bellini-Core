@@ -121,6 +121,21 @@ app.factory( "sailsUsers", function ( sailsApi, sailsCoreModel, sailsAuth, userA
             .then( newUser );
     }
 
+    var getByEmail = function( emailAddress ){
+        return sailsApi.getModels( 'auth', 'email='+emailAddress)
+            .then( function(models){
+                if (!models.length){
+                    var eobj = { status: 404, body: { error: 'no such user' } };
+                    throw new Error();
+                }
+
+                return models[0].user.id;
+            })
+            .then( function(id){
+                return getUser(id);
+            })
+    }
+
     var analyze = function(){
         return sailsApi.apiGet('/user/analyze');
     }
@@ -132,7 +147,8 @@ app.factory( "sailsUsers", function ( sailsApi, sailsCoreModel, sailsAuth, userA
         new:    newUser,
         get:    getUser,
         getMe:  getMe,
-        analyze: analyze
+        analyze: analyze,
+        getByEmail: getByEmail
     }
 
 } );

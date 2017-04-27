@@ -108,10 +108,10 @@ module.exports.policies = {
 
     UserController: {
         '*': true,
-        'find': ['sessionAuth', 'isAdmin'],
-        'findOne': ['sessionAuth', 'isVenueOwnerMeOrAdmin'],
-        'update':  [ 'sessionAuth', 'isMeOrAdmin' ],
-        'destroy': [ 'sessionAuth', 'isAdmin' ],
+        'find': ['sessionAuth'],
+        'findOne': ['sessionAuth'],
+        'update':  [ 'sessionAuth'],
+        'destroy': [ 'isAdmin' ],
         'inviteUser': ['sessionAuth', 'isProprietorOwner'],
         'inviteRole': ['sessionAuth', 'isProprietorOwner'],
         'findByEmail': ['sessionAuth', 'isProprietorOwner'],
@@ -128,10 +128,10 @@ module.exports.policies = {
     
     VenueController: {
         '*': ['sessionAuth'],
-        'find': ['sessionAuth', 'isVenueOwnerMeOrAdmin'],
+        'find': ['sessionAuth'],
         'findOne': ['sessionAuth'], //issues with this one for device population
-        'update': ['sessionAuth', 'isVenueOwnerMeOrAdmin'],
-        'destroy': ['sessionAuth', 'isVenueOwnerMeOrAdmin'],
+        'update': ['sessionAuth'],
+        'destroy': ['isAdmin'],
         // New by Mitch 4-2017
         'all': ['isAdmin'],
         'getVenueManagers': ['sessionAuth', 'isVenueOwnerMeOrAdmin'],

@@ -307,8 +307,7 @@ app.controller( 'adminVenueListController', function ( $scope, venues, $log, uib
 
 app.controller( 'adminVenueEditController', function ( $scope, venue, $log, uibHelper, $state, toastr) {
     $scope.venue = venue;
-})
-} );
+});
 
 app.controller( 'adminDeviceListController', function ( $scope, venues, $log, sailsOGDevice ) {
 
@@ -319,8 +318,8 @@ app.controller( 'adminDeviceListController', function ( $scope, venues, $log, sa
 } );
 
 
-app.controller( 'adminDashController', [ '$scope', '$log', 'userinfo', 'venueinfo',
-    function ( $scope, $log, userinfo, venueinfo ) {
+app.controller( 'adminDashController', [ '$scope', '$log', 'userinfo', 'venueinfo', 'rando',
+    function ( $scope, $log, userinfo, venueinfo, rando ) {
 
         $scope.userinfo = userinfo;
         $scope.venueinfo = venueinfo;

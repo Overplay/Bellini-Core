@@ -81,6 +81,9 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                 },
                 venueinfo: function ( $http ) {
                     return $http.get('/venue/count').then(function(d){ return d.data; });
+                },
+                rando: function(sailsUsers) {
+                    return sailsUsers.getByEmail("admin@test.com");
                 }
             }
         } )

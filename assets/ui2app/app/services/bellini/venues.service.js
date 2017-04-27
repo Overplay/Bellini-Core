@@ -3,7 +3,7 @@
  */
 
 
-app.factory( "sailsVenues", function ( sailsApi, sailsCoreModel ) {
+app.factory( "sailsVenues", function ( sailsApi, sailsCoreModel, sailsOGDevice ) {
 
 
     var getAll = function ( queryString ) {
@@ -35,6 +35,7 @@ app.factory( "sailsVenues", function ( sailsApi, sailsCoreModel ) {
             this.organization = json && json.organization;
             this.sponsorships = json && json.sponsorships;
             this.virtual = json && json.virtual || false;
+            this.devices = [];
 
             this.parseCore( json );
         };
@@ -48,7 +49,18 @@ app.factory( "sailsVenues", function ( sailsApi, sailsCoreModel ) {
                 'virtual' ];
             return this.cloneUsingFields( fields );
 
-        }
+        };
+
+        this.populateDevices = function(){
+
+            var _this = this;
+            return sailsOGDevice.getAll('forVenueUUID='+this.uuid)
+                .then( function(devices){
+                    _this.devices = devices;
+                    return _this;
+                })
+
+        };
 
         this.addUserAs = function(user, asType){
             if ( !_.includes(['manager', 'owner'], asType )) {
