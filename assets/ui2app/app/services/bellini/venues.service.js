@@ -67,6 +67,18 @@ app.factory( "sailsVenues", function ( sailsApi, sailsCoreModel ) {
                 });
         }
 
+        this.addressString = function () {
+            if (this.address) {
+                var addr = this.address;
+
+                return addr.street + " " +
+                        (addr.street2 ? addr.street2 + " " : "") +
+                        addr.city + ", " +
+                        addr.state + " " +
+                        addr.zip;
+            }
+        }
+
     }
 
     ModelVenueObject.prototype = Object.create( CoreModel.prototype );
