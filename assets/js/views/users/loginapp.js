@@ -16,7 +16,7 @@ app.controller("loginController", function ($scope, $log, $http, $window, $timeo
         nucleus.authorize($scope.user.email, $scope.user.password)
             .then(function (res) {
                 $log.info("Logged in");
-                $window.location.href = '/ui';
+                $window.location.href = '/ui2';
             })
             .catch(function (err) {
                 $log.error("Could not log in");

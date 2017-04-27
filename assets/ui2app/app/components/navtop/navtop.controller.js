@@ -2,7 +2,7 @@
  * Created by mkahn on 4/21/17.
  */
 
-app.controller( "navTopController", function ( $scope, $log, user, $rootScope ) {
+app.controller( "navTopController", function ( $scope, $log, user, $rootScope, userAuthService ) {
 
     $log.debug( "Loading navTopController" );
 
@@ -16,28 +16,31 @@ app.controller( "navTopController", function ( $scope, $log, user, $rootScope ) 
 
 
         var managerLinks = [
-            { label: "venues", sref: "venues", icon: "building" },
-            { label: "devices", sref: "devices", icon: "television" }
+            { label: "venues", sref: "manager.venues", icon: "building" },
+            { label: "devices", sref: "manager.devices", icon: "television" }
         ];
 
         var ownerLinks = [
-            { label: "managers", sref: "managers", icon: "users" }
+            { label: "venues", sref: "owner.venues", icon: "building" },
+            { label: "devices", sref: "owner.devices", icon: "television" },
+            { label: "managers", sref: "owner.managers", icon: "users" }
         ];
 
         var advertiserLinks = [
-            { label: "ads", sref: "sponsorships", icon: "bullhorn" }
+            { label: "ads", sref: "sponsor.dashboard", icon: "bullhorn" }
         ];
 
         var adminLinks = [
-            { label: "admin dashboard", sref: "adminroot", icon: "cube" }
+            { label: "admin dashboard", sref: "admin.dashboard", icon: "cube" }
         ];
 
         if ( _.includes( user.roleTypes, 'proprietor.manager' ) ) {
-            $scope.links = $scope.links.concat( managerLinks );
+            $scope.links =  managerLinks ;
         }
 
+        // Don't want dupes, just the more powerful links
         if ( _.includes( user.roleTypes, 'proprietor.owner' ) ) {
-            $scope.links = $scope.links.concat( ownerLinks );
+            $scope.links = ownerLinks;
         }
 
         if ( _.includes( user.roleTypes, 'advertiser' ) ) {
@@ -51,7 +54,9 @@ app.controller( "navTopController", function ( $scope, $log, user, $rootScope ) 
 
     }
 
-
+    $scope.logout = function(){
+        userAuthService.logout();
+    }
 
 
     

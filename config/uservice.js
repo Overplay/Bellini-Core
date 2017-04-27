@@ -20,6 +20,9 @@ module.exports = {
     mirror: {
         venues: {
             route: 'http://localhost:2001/venue/replicate'
+        },
+        ogdevice: {
+            route: 'http://localhost:2001/ogdevice'
         }
     }
 

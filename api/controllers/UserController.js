@@ -435,17 +435,33 @@ module.exports = require('waterlock').actions.user({
     checkSession: function(req, res){
 
         if (req.session && req.session.user){
-            var user = _.cloneDeep(req.session.user);
-            user.email = user.auth && user.auth.email;
-            delete user.auth;
-            delete user.roles;
-            delete user.metadata;
-            delete user.legal;
-            return res.ok(user);
+            var uid = req.session.user.id;
+            User.findOne({ id: uid })
+                .populate('auth')
+                .then(function(user){
+                    if (!user){
+                        // You can end up here is the user has been whacked, or dbid changed. Either way,
+                        // you need to respond notAuthorized and clear the session.
+                        sails.log.error("User has been deleted but is still in session!");
+                        req.session.destroy();
+                        return res.notAuthorized( { error: 'user does not exist' } );
+                    }
+
+                    var juser = user.toJSON();
+                    juser.email = user.auth && user.auth.email;
+                    // delete user.auth;
+                    delete juser.roles;
+                    delete juser.auth.password;
+                    // delete user.metadata;
+                    // delete user.legal;
+                    return res.ok( juser );
+                })
+                .catch( res.serverError )
+        } else {
+            return res.notAuthorized( { error: 'not logged in' } );
         }
 
-        // send back nothing
-        return res.notAuthorized({ error: 'not logged in'});
+
     },
 
     // New by MAK 4-2017
@@ -481,33 +497,167 @@ module.exports = require('waterlock').actions.user({
             .then( function ( props ) {
 
                 if ( !props.user ) {
-                    return req.badRequest( { error: "no user for that id" } );
+                    return res.badRequest( { error: "no user for that id" } );
                 }
 
                 if ( !props.venue ) {
-                    return req.badRequest( { error: "no venue for that id" } );
+                    return res.badRequest( { error: "no venue for that id" } );
+                }
+
+                // Add new roles, if needed
+                switch ( params.userType ) {
+                    case 'manager':
+                        props.user.managedVenues.add( props.venue.id );
+                        props.user.roles = _.union( props.user.roles, [ RoleCacheService.roleByName( "proprietor", "manager" ) ] )
+                        break;
+                    case 'owner':
+                        props.user.ownedVenues.add( props.venue.id );
+                        props.user.roles = _.union( props.user.roles, [ RoleCacheService.roleByName( "proprietor", "owner" ) ] )
+                        break;
+                }
+
+                return props.user.save();
+
+            } )
+            .then( function () {
+
+                // Reload the user because Waterline is fucking stupid and does not return the modded object on save
+                return User.findOne( uid ).populate( [ "managedVenues", "ownedVenues" ] )
+                    .then( function(user){
+                        return res.ok(user);
+                    });
+
+            } )
+            .catch( res.serverError );
+
+
+    },
+
+    // New by MAK 4-2017
+    removeUserFromVenue: function ( req, res ) {
+
+        if ( req.method != 'POST' )
+            return res.badRequest( { error: "Bad Verb" } );
+
+        //OK, we need a venueId
+        var params = req.allParams();
+
+        var uid = params.id || params.userId;
+
+        if ( !uid ) {
+            res.badRequest( { error: 'no user id' } );
+        }
+
+        if ( !params.venueId ) {
+            res.badRequest( { error: 'no venue id' } );
+        }
+
+        if ( !params.userType || !_.includes( [ 'manager', 'owner' ], params.userType ) ) {
+            res.badRequest( { error: 'no, or invalid, user user type' } );
+        }
+
+        // Prerequisites are a user and a venue, get both
+        var prereqs = {
+            user:  User.findOne( uid ).populate( [ "managedVenues", "ownedVenues" ] ),
+            venue: Venue.findOne( params.venueId )
+        };
+
+        Promise.props(prereqs)
+            .then( function ( props ) {
+
+                if ( !props.user ) {
+                    return res.badRequest( { error: "no user for that id" } );
+                }
+
+                if ( !props.venue ) {
+                    return res.badRequest( { error: "no venue for that id" } );
                 }
 
                 switch ( params.userType ) {
                     case 'manager':
-                        props.user.managedVenues.add( props.venue.id );
+                        props.user.managedVenues.remove( props.venue.id );
                         break;
                     case 'owner':
-                        props.user.ownedVenues.add( props.venue.id );
+                        props.user.ownedVenues.remove( props.venue.id );
                         break;
                 }
 
                 // Reload the benue
-                return Promise.props( {
-                    shit: props.user.save(),
-                    user: User.findOne( props.user.id ).populate( [ "managedVenues", "ownedVenues" ] )
-                } );
+                return props.user.save();
 
             } )
-            .then( function ( props ) {
-                return res.ok( props.user );
+            .then( function () {
+                // model save is fucked and does not return the modded object, which
+                return User.findOne( uid ).populate( [ "managedVenues", "ownedVenues" ] );
             } )
+            .then( function (user){
+
+                // Fix up the roles
+                if (!user.managedVenues.length){
+                    _.remove( user.roles, function ( r ) {
+                        return r == RoleCacheService.roleByName( "proprietor", "manager" )
+                    } )
+                }
+
+                if ( !user.ownedVenues.length ) {
+                    _.remove( user.roles, function ( r ) {
+                        return r == RoleCacheService.roleByName( "proprietor", "owner" )
+                    } )
+                }
+
+                return user.save()
+                    .then( function(){
+                        return User.findOne( uid ).populate( [ "managedVenues", "ownedVenues" ] );
+                    })
+
+            })
+            .then( res.ok ) // wow that sucked
             .catch( res.serverError );
+
+
+    },
+
+    // replaces blueprint, easier to secure
+    all: function ( req, res ) {
+
+        if ( req.method != 'GET' )
+            return res.badRequest( { error: "Bad Verb" } );
+
+        User.find( req.query )
+            .populate('auth')
+            .then( res.ok )
+            .catch( res.serverError );
+
+    },
+
+    analyze: function(req, res){
+
+        if ( req.method != 'GET' )
+            return res.badRequest( { error: "Bad Verb" } );
+
+        var rval = { total: 0, admin: 0, po: 0, pm: 0, u: 0, sponsor: 0 };
+        User.find({})
+            .then( function(users){
+
+                rval.total = users.length;
+
+                users.forEach( function ( u ) {
+                    if (RoleCacheService.hasRole(u.roles, 'admin', '')){
+                        rval.admin++;
+                    } else if ( RoleCacheService.hasRole( u.roles, 'sponsor', '' ) ){
+                        rval.sponsor++;
+                    } else if ( RoleCacheService.hasRole( u.roles, 'proprietor', 'owner' ) ) {
+                        rval.po++;
+                    } else if ( RoleCacheService.hasRole( u.roles, 'proprietor', 'manager' ) ) {
+                        rval.pm++;
+                    } else {
+                        rval.u++;
+                    }
+                })
+
+                return res.ok(rval);
+            })
+            .catch(res.serverError);
 
 
     }

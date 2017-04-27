@@ -2,7 +2,7 @@
  * Created by mkahn on 4/6/16.
  */
 
-var app = angular.module( 'uiApp', [ 'ui.router', 'ui.bootstrap', 'toastr', 'ui.og' ] );
+var app = angular.module( 'uiApp', [ 'ui.router', 'ui.bootstrap', 'toastr', 'ui.og', 'googlechart' ] );
 
 app.config( function ( toastrConfig ) {
     angular.extend( toastrConfig, {
@@ -24,7 +24,7 @@ app.config( function ( toastrConfig ) {
 // }])
 
 
-app.run( function ( $log, $rootScope, toastr ) {
+app.run( function ( $log, $rootScope, toastr, $state ) {
 
     $log.info( "Bellini is pouring!" );
 
@@ -43,6 +43,7 @@ app.run( function ( $log, $rootScope, toastr ) {
                         $log.debug( 'forbidden fruit' );
                         toastr.error( "Yeah, we're gonna need you not to do that.", "Not Authorized" );
                         event.preventDefault();
+                        $state.go('welcome');
                         break;
                 }
 

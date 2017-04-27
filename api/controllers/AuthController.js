@@ -51,14 +51,16 @@ module.exports = require( 'waterlock' ).waterlocked( {
 
         var params = req.allParams();
 
-        if ( params.newpass === undefined ) {
+        var newpass = params.newpass || params.password; //either is fine
+
+        if ( !newpass ) {
             // Must have a password or this is a waste of time
             res.badRequest({error: "No new password specified"});
 
         } else if ( params.email ) {
 
             // Email based reset
-            AdminService.changePwd( { email: params.email, password: params.newpass } )
+            AdminService.changePwd( { email: params.email, password: newpass } )
                 .then( function () {
                     return res.json( { "message": "Password changed" } );
                 } )

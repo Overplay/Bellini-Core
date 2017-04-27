@@ -120,6 +120,8 @@ module.exports.policies = {
         'getManagedDevices': ['sessionAuth', 'isProprietorManager'],
         'getAlist': ['sessionAuth', 'isAdvertiser'],
         'becomeAdvertiser': ['sessionAuth'],
+        // New by Mitch 4-2017
+        'all': [ 'isAdmin' ],
         'checkjwt': ['hasJsonWebToken']
 
     },
@@ -130,6 +132,8 @@ module.exports.policies = {
         'findOne': ['sessionAuth'], //issues with this one for device population
         'update': ['sessionAuth', 'isVenueOwnerMeOrAdmin'],
         'destroy': ['sessionAuth', 'isVenueOwnerMeOrAdmin'],
+        // New by Mitch 4-2017
+        'all': ['isAdmin'],
         'getVenueManagers': ['sessionAuth', 'isVenueOwnerMeOrAdmin'],
         'addManager': ['sessionAuth', 'isVenueOwnerMeOrAdmin'],
         'addOwner': ['sessionAuth', 'isVenueOwnerMeOrAdmin'],

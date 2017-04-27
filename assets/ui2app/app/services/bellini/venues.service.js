@@ -7,12 +7,8 @@ app.factory( "sailsVenues", function ( sailsApi, sailsCoreModel ) {
 
 
     var getAll = function ( queryString ) {
-        return sailsApi.getModels( 'venue', queryString )
-            // TODO this should be done on server side....
-            .then( function(venues){
-                var zed = _.filter(venues, function (v){ return !v.virtual; });
-                return zed;
-            })
+        // using non blueprint getter for security
+        return sailsApi.apiGet( '/venue/all', queryString )
             .then( function ( venues ) {
                 return venues.map( newVenue );
             } )

@@ -32,14 +32,21 @@ app.controller( 'adminUserListController', function ( $scope, users, $log, uibHe
 // USER EDIT FOR ADMIN
 
 app.controller( 'adminUserEditController', function ( $scope, user, $log, uibHelper, toastr, roles,
-                                                      $state, userAuthService, allVenues, sailsUsers ) {
+                                                      $state, userAuthService, allVenues, sailsUsers, dialogService ) {
 
     $log.debug( "Loading adminUserEditController" );
     $scope.user = user;
-    $scope.roles = roles.map( function ( r ) {
-        r.selected = _.includes( user.roleTypes, r.roleKey );
-        return r;
-    } );
+    var _newUser;
+
+
+    function refreshRoles() {
+        $scope.roles = roles.map( function ( r ) {
+            r.selected = _.includes( $scope.user.roleTypes, r.roleKey );
+            return r;
+        } );
+    }
+
+    refreshRoles();
 
     function makeNameFields( user ) {
         return [
@@ -63,6 +70,11 @@ app.controller( 'adminUserEditController', function ( $scope, user, $log, uibHel
         ];
     }
 
+    function genRandomPassword() {
+        var words = [ 'bunny', 'fish', 'puppy', 'taco', 'bottle', 'tumbler', 'spoon' ];
+        return _.sample( words ) + _.random( 100, 999 ) + _.sample( [ '!', '@', '#', '$', '^' ] );
+    }
+
     function makeEmailField( user ) {
         return [ {
             label:       "Email",
@@ -74,15 +86,26 @@ app.controller( 'adminUserEditController', function ( $scope, user, $log, uibHel
         } ];
     }
 
+    function makeTempPasswordField() {
+        return [ {
+            label:       "Temporary Password",
+            placeholder: "password",
+            type:        'text',
+            field:       'password',
+            value:       genRandomPassword(),
+            required:    true
+        } ];
+    }
+
     function createBrandNewUser( preload ) {
 
 
-        var allFields = makeNameFields( preload ).concat( makeEmailField() );
+        var allFields = makeNameFields( preload ).concat( makeEmailField() ).concat( makeTempPasswordField() );
 
-        uibHelper.inputBoxesModal( "New User", "All three fields below are required.", allFields )
+        uibHelper.inputBoxesModal( "New User", "All fields are required.", allFields )
             .then( function ( fields ) {
 
-                userAuthService.addUser( fields.email, new Date().getTime(), fields )
+                userAuthService.addUser( fields.email, fields.password, fields )
                     .then( function ( wha ) {
                         // redirect-ish
                         $state.go( 'admin.edituser', { id: wha.id } );
@@ -179,35 +202,77 @@ app.controller( 'adminUserEditController', function ( $scope, user, $log, uibHel
             .then( function ( chosenOne ) {
 
                 $log.debug( "Chose " + allVenues[ chosenOne ].id );
-                $scope.user.attachToVenue(allVenues[chosenOne], kind)
-                    .then( function () {
+                $scope.user.attachToVenue( allVenues[ chosenOne ], kind )
+                    .then( function ( modifiedUser ) {
                         toastr.success( "Added user to venue." );
-                    })
+                        $scope.user = modifiedUser;
+                        refreshRoles();
+                    } )
                     .catch( function ( err ) {
                         toastr.error( "Problem attaching user to venue" );
                     } );
-
-
-                // allVenues[ chosenOne ].addUserAs( $scope.user, kind )
-                //     .then( function () {
-                //         toastr.success( "Added user to venue." );
-                //         // Refresh user
-                //         return sailsUsers.get($scope.user.id);
-                //     } )
-                //     .then(function(nu){
-                //         $scope.user = nu;
-                //     })
-                //     .catch( function(err){
-                //         toastr.error("Problem attaching user to venue");
-                //     })
-
             } )
             .catch( function ( err ) {
 
             } );
 
+    }
 
+    function doVenueRemove( venue, asType ) {
 
+        uibHelper.confirmModal( "Confirm", "Are you sure you want to remove this user from the " + asType + " role on venue: " +
+            venue.name + "?" )
+            .then( function () {
+
+                $scope.user.removeFromVenue( venue, asType )
+                    .then( function ( user ) {
+                        $scope.user = user;
+                        refreshRoles();
+                        toastr.success( "User Removed" );
+                    } )
+                    .catch( function ( err ) {
+                        toastr.error( "Problem removing user from venue" );
+                    } );
+
+            } )
+
+    }
+
+    $scope.removeOwnedVenue = function ( venue ) {
+        doVenueRemove( venue, 'owner' );
+    }
+
+    $scope.removeManagedVenue = function ( venue ) {
+        doVenueRemove( venue, 'manager' );
+    }
+
+    function changePassword( newPass ) {
+        userAuthService.changePassword( { email: $scope.user.email, password: newPass } )
+            .then( function () {
+                toastr.success( "Don't forget it!", "Password Changed" );
+            } )
+            .catch( function ( err ) {
+                toastr.error( "Here's what happened: " + err.data.error, "Password Change Fail!!" );
+            } )
+    }
+
+    $scope.changePassword = function () {
+
+        dialogService.passwordDialog()
+            .then( function ( newPass ) {
+                changePassword( newPass );
+            } );
+    }
+
+    $scope.tempPassword = function () {
+
+        var tempPwd = genRandomPassword();
+
+        uibHelper.confirmModal( "Set Temporary Password?", 'Are you sure you want to set the user\'s password to: "' + tempPwd + '"', tempPwd )
+            .then( changePassword )
+            .catch( function () {
+                toastr.warning( "Password not changed.", "OK, Cancel That!" );
+            } );
     }
 
 } );
@@ -219,4 +284,73 @@ app.controller( 'adminVenueListController', function ( $scope, venues, $log, uib
 
     //TODO Ryan: Add delete method. See above for example.
 
-} )
+} );
+
+app.controller( 'adminDeviceListController', function ( $scope, venues, $log, sailsOGDevice ) {
+
+    $log.debug( 'Loading adminDeviceListController' );
+    $scope.venues = venues;
+
+
+} );
+
+
+app.controller( 'adminDashController', [ '$scope', '$log', 'userinfo', 'venueinfo',
+    function ( $scope, $log, userinfo, venueinfo ) {
+
+        $scope.userinfo = userinfo;
+        $scope.venueinfo = venueinfo;
+
+        $scope.userChartObj = {};
+
+        $scope.userChartObj.type = "PieChart";
+
+        $scope.onions = [
+            { v: "Onions" },
+            { v: 3 },
+        ];
+
+        $scope.userChartObj.data = {
+            "cols":    [
+                { id: "p", label: "Permission", type: "string" },
+                { id: "c", label: "Count", type: "number" }
+            ], "rows": [
+                {
+                    c: [
+                        { v: "Admin" },
+                        { v: userinfo.admin },
+                    ]
+                },
+                {
+                    c: [
+                        { v: "Sponsor" },
+                        { v: userinfo.sponsor }
+                    ]
+                },
+                {
+                    c: [
+                        { v: "Owner" },
+                        { v: userinfo.po },
+                    ]
+                },
+                {
+                    c: [
+                        { v: "Manager" },
+                        { v: userinfo.pm },
+                    ]
+                },
+                {
+                    c: [
+                        { v: "Patron" },
+                        { v: userinfo.u },
+                    ]
+                }
+            ]
+        };
+
+        $scope.userChartObj.options = {
+            'title': 'User Breakdown by Highest Permission'
+        };
+
+
+    } ] )

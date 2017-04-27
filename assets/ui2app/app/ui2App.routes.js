@@ -34,24 +34,53 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
 
         .state( 'welcome', {
             url:   '/',
-            views: buildCompleteView( {
-                templateUrl: '/ui2app/app/components/layouttest/layouttest.partial.html'
-            } )
+            views: buildCompleteView( { template: '<og-spinner></og-spinner>', controller: 'redirectController' } )
 
         } )
+
+        // ACCOUNT
+
+        .state( 'myaccount', {
+            url:   '/myaccount',
+            views: buildCompleteView( {
+                templateUrl: '/ui2app/app/components/account/myaccount.partial.html',
+                controller: 'myAccountController'
+                 }),
+            resolve: {
+                me: function ( sailsUsers ) {
+                    return sailsUsers.getMe();
+                },
+                sm: function ( sideMenu ) {
+                    sideMenu.change( 'accountMenu' );
+                }
+            }
+
+        })
 
         // ADMIN ROUTES
 
         .state( 'admin', {
             abstract: true,
             url:      '/admin',
-            views:    buildCompleteView( {
-                template: '<ui-view></ui-view>',
-            } ),
+            views:    buildCompleteView( { template: '<ui-view></ui-view>', } ),
             // This little hack sets the side menu for each major state
             resolve:  {
                 sm: function ( sideMenu ) {
                     sideMenu.change( 'adminMenu' );
+                }
+            }
+        } )
+
+        .state( 'admin.dashboard', {
+            url:      '/dashboard',
+            templateUrl: '/ui2app/app/components/admin/admindash.partial.html',
+            controller: 'adminDashController',
+            resolve: {
+                userinfo: function(sailsUsers){
+                    return sailsUsers.analyze();
+                },
+                venueinfo: function ( $http ) {
+                    return $http.get('/venue/count').then(function(d){ return d.data; });
                 }
             }
         } )
@@ -72,18 +101,19 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             templateUrl: '/ui2app/app/components/admin/edituser.partial.html',
             controller:  'adminUserEditController',
             resolve:     {
-                user:  function ( sailsUsers, $stateParams ) {
+                user:      function ( sailsUsers, $stateParams ) {
                     return sailsUsers.get( $stateParams.id );
                 },
-                roles: function ( userAuthService ) {
+                roles:     function ( userAuthService ) {
                     return userAuthService.getRoles();
                 },
-                allVenues: function( sailsVenues ){
+                allVenues: function ( sailsVenues ) {
                     return sailsVenues.getAll();
                 }
             }
 
         } )
+
 
         .state( 'admin.venuelist', {
             url:         '/venuelist',
@@ -94,7 +124,67 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                     return sailsVenues.getAll();
                 }
             }
-        })
+        } )
 
+        .state( 'admin.devicelist', {
+            url:         '/devicelist',
+            templateUrl: '/ui2app/app/components/admin/devicelist.partial.html',
+            controller:  'adminDeviceListController',
+            resolve:     {
+                venues: function ( sailsVenues ) {
+                    return sailsVenues.getAll();
+                }
+            }
+        } )
+
+
+        // Proprietor Owner Links
+
+        .state( 'owner', {
+            abstract: true,
+            url:      '/owner',
+            views: buildCompleteView( { template: '<ui-view></ui-view>', } ),
+            // This little hack sets the side menu for each major state
+            resolve:  {
+                sm: function ( sideMenu ) {
+                    sideMenu.change( 'ownerMenu' );
+                }
+            }
+        } )
+
+        .state( 'owner.dashboard', {
+            url:         '/dashboard',
+            templateUrl: '/ui2app/app/components/roles/owner/ownerdash.partial.html',
+            resolve:     {
+                myVenues: function ( sailsVenues ) {
+                    return sailsVenues.getAll();
+                },
+                myUsers:  function ( sailsUsers ) {
+                    return sailsUsers.getAll();
+                }
+            }
+
+        } )
+
+        // User routes
+
+        // ADMIN ROUTES
+
+        .state( 'user', {
+            abstract: true,
+            url:      '/user',
+            views:    buildCompleteView( { template: '<ui-view></ui-view>', } ),
+            // This little hack sets the side menu for each major state
+            resolve:  {
+                sm: function ( sideMenu ) {
+                    sideMenu.change( 'patronMenu' );
+                }
+            }
+        } )
+
+        .state( 'user.dashboard', {
+            url:         '/dashboard',
+            templateUrl: '/ui2app/app/components/roles/patron/patrondash.partial.html'
+        } )
 
 } );

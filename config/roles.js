@@ -3,10 +3,10 @@
 
 module.exports.roles = {
     coreRoles: [
-        { roleName: "admin", subRole: "" },
-        { roleName: "user",  subRole: "" },
-        { roleName: "proprietor", subRole: "owner"},
-        {roleName: "proprietor", subRole: "manager"},
-        {roleName: "sponsor", subRole: ""}
+        { roleName: "admin", subRole: "", roleKey: "admin" },
+        { roleName: "user",  subRole: "", roleKey: "user" },
+        { roleName: "proprietor", subRole: "owner", roleKey: "proprietor.owner"},
+        { roleName: "proprietor", subRole: "manager", roleKey: "proprietor.manager"},
+        { roleName: "sponsor", subRole: "", roleKey: "sponsor"}
         ]
 };

@@ -311,7 +311,6 @@ module.exports = {
                         _.remove( user.roles, function ( r ) {
                             return r == RoleCacheService.roleByName( "proprietor", "manager" )
                         } )
-
                     }
 
                     user.managedVenues.remove( params.id )
@@ -431,6 +430,25 @@ module.exports = {
     },
 
     // Added by Mitch
+
+
+    // replaces blueprint, easier to secure
+    all: function( req, res ) {
+
+        if ( req.method != 'GET' )
+            return res.badRequest( { error: "Bad Verb" } );
+
+        // With an existing database this is an ass-painer becuase some have virtual as undefined
+        // var query = { virtual: false };
+        // if ( req.allParams().virtual && req.allParams().virtual==true ){
+        //     query = {}
+        // }
+
+        Venue.find({ virtual: false })
+            .then(res.ok)
+            .catch(res.serverError);
+
+    },
 
     findByUUID: function ( req, res ) {
 

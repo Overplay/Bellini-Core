@@ -3,11 +3,11 @@
  */
 
 
-app.factory( "sailsUsers", function ( sailsApi, sailsCoreModel, sailsAuth ) {
+app.factory( "sailsUsers", function ( sailsApi, sailsCoreModel, sailsAuth, userAuthService ) {
 
 
     var getAll = function ( queryString ) {
-        return sailsApi.getModels( 'user', queryString )
+        return sailsApi.apiGet( '/user/all', queryString )
             .then( function ( users ) {
                 return users.map( newUser );
             } )
@@ -60,6 +60,7 @@ app.factory( "sailsUsers", function ( sailsApi, sailsCoreModel, sailsAuth ) {
             return this.auth.save();
         }
 
+        // TODO: lots of replicated code below
         this.attachToVenue = function( venue, asType ){
 
             if ( !_.includes( [ 'manager', 'owner' ], asType ) ) {
@@ -73,7 +74,27 @@ app.factory( "sailsUsers", function ( sailsApi, sailsCoreModel, sailsAuth ) {
             };
 
             return sailsApi.apiPost('/user/attachUserToVenue', params )
-                .then(this.parseInbound);
+                .then(function(updatedUser){
+                    return newUser(updatedUser);
+                });
+        }
+
+        this.removeFromVenue = function ( venue, asType ) {
+
+            if ( !_.includes( [ 'manager', 'owner' ], asType ) ) {
+                throw new Error( 'Type must be owner or manager' );
+            }
+
+            var params = {
+                venueId:  sailsApi.idFromIdOrObj( venue ),
+                userId:   this.id,
+                userType: asType
+            };
+
+            return sailsApi.apiPost( '/user/removeUserFromVenue', params )
+                .then( function ( updatedUser ) {
+                    return newUser( updatedUser );
+                } );
         }
 
     }
@@ -95,12 +116,23 @@ app.factory( "sailsUsers", function ( sailsApi, sailsCoreModel, sailsAuth ) {
             .then( newUser );
     }
 
+    var getMe = function(){
+        return userAuthService.getCurrentUser()
+            .then( newUser );
+    }
+
+    var analyze = function(){
+        return sailsApi.apiGet('/user/analyze');
+    }
+
 
     // Exports...new pattern to prevent this/that crap
     return {
         getAll: getAll,
         new:    newUser,
-        get:    getUser
+        get:    getUser,
+        getMe:  getMe,
+        analyze: analyze
     }
 
 } );

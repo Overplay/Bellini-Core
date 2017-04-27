@@ -6,12 +6,14 @@ app.factory('userAuthService', function($http, $log ){
 
     $log.debug("Loading userAuthService");
 
+    var userPromise = $http.get( '/user/checksession' ).then( stripHttpData );
+
     function stripData(data){ return data.data; }
 
     service = {};
 
     service.getCurrentUser = function(){
-        return $http.get('/user/checksession').then(stripHttpData);
+        return userPromise;
     };
 
     // =========== ROLES ==========
@@ -21,7 +23,7 @@ app.factory('userAuthService', function($http, $log ){
     };
     
     service.getRoles = function(){
-        return service.getRole();
+        return this.getRole();
     };
 
     // ========== ADDING USERS ===========
@@ -37,7 +39,30 @@ app.factory('userAuthService', function($http, $log ){
         } )
             .then( stripData );
 
-    }
+    };
+
+    service.logout = function(){
+
+        return $http.post( '/auth/logout', {} )
+            .then( function ( resp ) {
+                $log.debug( "User is logged out." );
+                window.location = '/';
+            } )
+            .catch( function ( err ) {
+                $log.error( "User could not be logged out." );
+                throw err;
+            } );
+    };
+
+    /**
+     * Change password. Must include either email or resetToken in the params
+     * @param { email: emailAddr, password: password }
+     * @returns {HttpPromise}
+     */
+    service.changePassword = function ( params ) {
+        return $http.post( '/auth/changePwd', params );
+    };
+
 
     return service;
 })

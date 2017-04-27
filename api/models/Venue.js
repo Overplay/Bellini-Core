@@ -91,9 +91,10 @@ module.exports = {
             defaultsTo: []
         },
 
-        // used for "Virtual Venues" like "Limbo" where devices are before associated.
+        // used for "Virtual Venues" like "Bullpen" where devices are before associated.
         virtual: {
             type:       'boolean',
+            required:   true,
             defaultsTo: false
         }
     },

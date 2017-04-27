@@ -6,6 +6,12 @@
  */
 
 module.exports = {
-	
+
+	getRoles: function(req, res){
+
+	    return res.ok(sails.config.roles.coreRoles);
+
+	}
+
 };
 
