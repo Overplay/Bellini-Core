@@ -28,7 +28,6 @@ var self = module.exports.testdata = {
                 Auth.destroy({}),
                 User.destroy({}),
                 Venue.destroy({}),
-                Device.destroy({}),
                 Media.destroy({}),
                 Ad.destroy({})
             ];
@@ -40,29 +39,7 @@ var self = module.exports.testdata = {
                     });
             })
         }
-        self.organizations.forEach(function (o) {
-            chain = chain.then(function () {
-                return Organization.findOne(o)
-                    .then(function (org) {
-                        if (org) {
-                            reject(new Error("Organization exists, skipping creation"))
-                        }
-                        else {
-                            return Organization.create(o)
-                                .then(function (o) {
-                                    sails.log.debug("Organization created")
-                                })
-                                .catch(function (err) {
-                                    sails.log.debug("Organization Error Caught" + err)
-                                })
-                        }
-                    })
-                    .catch(function (err) {
-                        sails.log.debug(err);
-                    })
-            })
 
-        });
 
         self.users.forEach(function (u) {
             var email = u.email;
@@ -226,157 +203,9 @@ var self = module.exports.testdata = {
 
         });
 
-        chain = chain.then(function () {
-            return User.find()
-                .populate('ownedVenues')
-                .then(function () {
-                    sails.log.debug("Owned Venues populated");
-                })
-        });
-
-        chain = chain.then(function () {
-            return User.find()
-                .populate('managedVenues')
-                .then(function () {
-                    sails.log.debug("Managed Venues populated");
-                })
-        });
-
-        self.devices.forEach(function (d) {
-            var venueName = d.venueName; //be careful there can be multiple venues with the same name....
-            delete d.venueName;
-            var device;
-
-            chain = chain.then(function () {
-                return Venue.findOne({name: venueName}) //venues can have the same name!
-                    .then(function (venue) {
-                        d.venue = venue;
-                        //sails.log.debug(d)
-                        return Device.findOne({name: d.name, venue: venue.id}) //TODO use venue id and user id
-                            .then(function (dev) {
-                                //sails.log.debug(dev)
-
-                                if (dev) {
-                                    device = dev;
-                                    return new Error("Device Exists, skipping creation")
-                                }
-                                else {
-                                    return Device.create(d)
-                                        .then(function (newDev) {
-                                            device = newDev;
-                                            sails.log.debug("Device created at location: " + d.locationWithinVenue);
-                                        })
-                                        .catch(function (err) {
-                                            sails.log.debug(err)
-                                        })
-                                }
-
-                            })
-                            .catch(function (err) {
-                                sails.log.debug(err)
-                            })
-
-                    })
-            })
-        });
-
-        chain = chain.then(function () {
-            return Venue.find()
-                .populate('devices')
-                .then(function () {
-                    sails.log.debug("Venues' devices populated");
-                })
-        });
-
-        self.logs.forEach(function (log) {
-            var device = log.device;
-            delete log.device;
-
-            chain = chain.then(function () {
-                return Venue.findOne({name: device.venue})
-                    .populate('devices')
-                    .then(function (v) {
-                        log.deviceUniqueId = _.find(v.devices, function (o) {
-                            return o.name === device.name
-                        }).id
-                    })
-                    .then(function () {
-                        if (log.message.adName) {
-                            //add the time and the adId
-                            return Ad.findOne({name: log.message.adName})
-                                .then(function (ad) {
-                                    delete log.message.adName;
-                                    log.message.adId = ad.id;
-                                })
-                        }
-                        else {
-                            return;
-                        }
-
-                    })
-                    .then(function () {
-                        return OGLog.create(log)
-                            .then(function () {
-                                sails.log.debug("Log created");
-                            })
-
-                    })
-                    .catch(function (err) {
-                        sails.log.debug(err);
-                    })
-            })
-        })
-
-        chain = chain.then(function () {
-            //sails.config.testdata.generateLogs();
-            
-        })
 
     },
-    generateLogs: function () {
-        sails.log.debug("generating hahahahaha fuck")
-        var logs = []
-        Device.find()
-            .then(function (devices) {
-                return Ad.find()
-                    .then(function (ads) {
-                        async.each(ads,
-                            function (ad, cb) {
-                                sails.log.debug(ad.name)
-                                var log = {
-                                    logType: 'impression',
-                                    message: {
-                                        adId: ad.id
-                                    }
-                                }
-                                var times = _.random(100)
-                                var chain = Promise.resolve()
-                                _.times(times, function () {
-                                    //generate log with random device
-                                    log.deviceUniqueId = devices[_.random(devices.length -1)].id
-                                    log.loggedAt = new Date(moment().hours(_.random(23))).toISOString()//.add(1, 'days')) //TODO randomize hours
-                                    //sails.log.debug(log.loggedAt)
-                                    OGLog.create(log).then(function(l){})
-                                })
-                                cb();
-                            },
-                            function (err) {
-                                if (err)
-                                    sails.log.debug("fuck", err)
-                                else{
-                                    sails.log.debug("Done")
-                                    //OGLog.create(logs).then(function(l){sails.log.debug(l)})
-                                }
-                            })
-                    })
-            })
-            .catch(function (err) {
-                sails.log.debug(err)
-            })
 
-        //setTimeout(sails.config.testdata.generateLogs, 10000000);
-
-    },
     users: [
         {
             firstName: 'Johnny',
