@@ -30,23 +30,31 @@ module.exports = function geocodeHook(sails) {
         code: function () {
             //step through devices and delete ones that aren't registered after the timeout
 
+            sails.log.silly("Doing some geocoding");
+
             // TODO
             Venue.find({})
                 .then( function(allvs){
 
                     allvs.forEach( function(v){
 
+                        sails.log.silly("Checking geocoding on: "+v.name);
                         var isGeocoded = v.geolocation && v.geolocation.latitude;
                         if (!isGeocoded){
                             var address = v.address.street + ',' +
                                 v.address.city + ',' +
                                 v.address.state + ' ' +
                                 v.address.zip;
+                            sails.log.silly( "Geocoding on: " + address );
+
                             GeocodeService.geocode(address)
                                 .then( function(results){
                                     if (!results.length){
+                                        sails.log.silly( "Bad geocode result!" );
                                         return;
                                     }
+
+                                    sails.log.silly( "Geocode returned this many hits: "+results.length );
 
                                     var gv = results[0];
                                     v.geolocation = { latitude: gv.geometry.location.lat,
