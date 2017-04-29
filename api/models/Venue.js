@@ -23,6 +23,11 @@ module.exports = {
             defaultsTo: ''
         },
 
+        googlePlaceId: {
+            type:       'string',
+            defaultsTo: ''
+        },
+
         uuid: {
             type: 'string',
             unique: true
