@@ -68,13 +68,13 @@ module.exports.policies = {
     },
     
     AuthController: {
-        '*': true, //really protect auth
-        'find':    [ 'sessionAuth', 'isAdmin' ],
-        'findOne': ['sessionAuth', 'isVenueOwnerMeOrAdmin'], //tricky for manager list and whatnot
-        'update':  [ 'sessionAuth', 'isAdmin' ],
-        'destroy': ['sessionAuth', 'isAdmin'], //maybe me?
-        'register': ['sessionAuth', 'isAdmin'], //not even used anywhere
-        'addUser': true, //used in SignupApp through nucleus service
+        '*': 'isRingAdmin',
+        // 'find':    [ 'sessionAuth', 'isAdmin' ],
+        // 'findOne': ['sessionAuth', 'isVenueOwnerMeOrAdmin'], //tricky for manager list and whatnot
+        'update':  [ 'authProtection' ],
+        'destroy': ['authProtection' ], //maybe me?
+        //'register': ['sessionAuth', 'isAdmin'], //not even used anywhere
+        //'addUser': true, //used in SignupApp through nucleus service
         'resetPwd': ['passwordReset'],
         'register': false, //we use a differnet registration than waterlock
         //changePw own policy because it could be an authenticated user OR a reset token 

@@ -662,21 +662,6 @@ module.exports = require('waterlock').actions.user({
 
     }
 
-    // setroles: function(req, res){
-    //
-    //     var params = req.allParams();
-    //
-    //     if ( !params.id ) {
-    //         return res.badRequest( { error: "no user specified" } );
-    //     }
-    //
-    //     if ( !params.roles ) {
-    //         return res.badRequest( { error: "no roles specified" } );
-    //     }
-    //
-    //     // TODO check if array of Roles are valid roles
-    //
-    // }
 
 });
 
