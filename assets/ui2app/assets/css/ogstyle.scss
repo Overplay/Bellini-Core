@@ -4,9 +4,11 @@
 @import "../../app/components/navside/navside";
 @import "../../app/components/device/device";
 
-
-
 $corner-radius: 3px;
+
+body {
+  //background-color: $light-grey !important;
+}
 
 .subhead {
   margin-top: 15px;
@@ -37,6 +39,7 @@ $corner-radius: 3px;
   border-radius: 3px !important;
 }
 
+// Material look
 
 // Spinner animation
 

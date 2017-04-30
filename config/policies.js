@@ -133,7 +133,7 @@ module.exports.policies = {
         'update': ['sessionAuth'],
         'destroy': ['isAdmin'],
         // New by Mitch 4-2017
-        'all': ['isAdmin'],
+        'all': ['sessionAuth'],
         'getVenueManagers': ['sessionAuth', 'isVenueOwnerMeOrAdmin'],
         'addManager': ['sessionAuth', 'isVenueOwnerMeOrAdmin'],
         'addOwner': ['sessionAuth', 'isVenueOwnerMeOrAdmin'],

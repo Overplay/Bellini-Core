@@ -10,11 +10,11 @@ module.exports = {
 
     attributes: require( 'waterlock' ).models.auth.attributes( {
 
-        // privilege ring. 1 is GOD, 5 is regular user.
+        // privilege ring. 1 is GOD, 2 device, 3 user, 4 user+advert
         ring: {
             type: 'integer',
             required: true,
-            defaultsTo: 5
+            defaultsTo: 3
         },
 
         toJSON: function () {
