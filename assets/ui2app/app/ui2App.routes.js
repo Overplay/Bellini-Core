@@ -196,5 +196,15 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             }
         })
 
+        .state( 'admin.addvenue', {
+            url:         '/addvenue',
+            templateUrl: '/ui2app/app/components/admin/addvenue.partial.html',
+            controller:  'adminVenueAddController',
+            resolve: {
+                venue: function ( sailsVenues ) {
+                    return sailsVenues.new();
+                }
+            }
+        })
 
 } );

@@ -283,7 +283,7 @@ app.controller( 'adminVenueListController', function ( $scope, venues, $log, uib
 
         uibHelper.stringEditModal( "Confirm Venue Delete",
             "Please type the venue's name ( " + venue.name + " ) in the box below, then click OK, to delete.",
-            mustMatch, "enter email here" )
+            mustMatch, "enter venue name here" )
             .then( function ( res ) {
 
                 if ( res === venue.name || res === '4321' ) {
@@ -297,10 +297,34 @@ app.controller( 'adminVenueListController', function ( $scope, venues, $log, uib
             });
 
     }
-} )
+});
 
 app.controller( 'adminVenueEditController', function ( $scope, venue, $log, uibHelper, $state, toastr) {
+    $log.debug("Loading adminVenueEditController");
     $scope.venue = venue;
+});
+
+app.controller( 'adminVenueAddController', function ( $scope, $log, venue, $state, toastr) {
+    $log.debug("Loading adminVenueAddController");
+    $scope.zipRegex = "\\d{5}([\\-]\\d{4})?";
+    $scope.venue = venue;
+    $scope.validForm = false;
+
+    $scope.setForm = function (form) {
+        $scope.form = form;
+    };
+
+    $scope.create = function () {
+        venue.create()
+            .then( function (res) {
+                toastr.success(res.name + " created!", "Success");
+                $state.go('admin.editvenue', { id: res.id });
+            })
+            .catch( function (err) {
+                $log.debug(err);
+                toastr.error("Venue could not be created", "Error");
+            })
+    }
 });
 
 app.controller( 'adminDeviceListController', function ( $scope, venues, $log, sailsOGDevice ) {
