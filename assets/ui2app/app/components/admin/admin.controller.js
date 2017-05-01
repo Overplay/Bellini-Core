@@ -303,10 +303,27 @@ app.controller( 'adminVenueEditController', function ( $scope, venue, $log, uibH
     $scope.venue = venue;
 });
 
-app.controller( 'adminDeviceListController', function ( $scope, venues, $log, sailsOGDevice ) {
+app.controller( 'adminDeviceListController', function ( $scope, venues, devices, $log, $state ) {
 
     $log.debug( 'Loading adminDeviceListController' );
     $scope.venues = venues;
+    $scope.devices = devices;
+
+    $scope.goDetail = function(d){
+        $state.go('admin.devicedetail', { id: d.deviceUDID });
+    }
+
+
+} );
+
+app.controller( 'adminDeviceDetailController', function ( $scope, device, $log, $state ) {
+
+    $log.debug( 'Loading adminDeviceDetailController' );
+    $scope.ogdevice = device;
+    $scope.ogdevice.populateVenue();
+
+
+
 
 
 } );

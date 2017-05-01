@@ -3,7 +3,7 @@
  */
 
 
-app.factory( "sailsVenues", function ( sailsApi, sailsCoreModel, sailsOGDevice ) {
+app.factory( "sailsVenues", function ( sailsApi, sailsCoreModel, sailsOGDeviceRemote ) {
 
 
     var getAll = function ( queryString ) {
@@ -54,7 +54,7 @@ app.factory( "sailsVenues", function ( sailsApi, sailsCoreModel, sailsOGDevice )
         this.populateDevices = function(){
 
             var _this = this;
-            return sailsOGDevice.getAll('forVenueUUID='+this.uuid)
+            return sailsOGDeviceRemote.getAll('forVenueUUID='+this.uuid)
                 .then( function(devices){
                     _this.devices = devices;
                     return _this;

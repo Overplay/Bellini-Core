@@ -130,6 +130,20 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             resolve:     {
                 venues: function ( sailsVenues ) {
                     return sailsVenues.getAll();
+                },
+                devices: function( sailsOGDeviceRemote ) {
+                    return sailsOGDeviceRemote.getAll();
+                }
+            }
+        } )
+
+        .state( 'admin.devicedetail', {
+            url:         '/device/:id',
+            templateUrl: '/ui2app/app/components/admin/devicedetail.partial.html',
+            controller:  'adminDeviceDetailController',
+            resolve:     {
+                device: function ( sailsOGDeviceRemote, $stateParams ) {
+                    return sailsOGDeviceRemote.get( $stateParams.id );
                 }
             }
         } )

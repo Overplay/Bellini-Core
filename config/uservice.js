@@ -29,7 +29,7 @@ module.exports = {
     uservice: {
 
         deviceManager: {
-            url: 'http://localhost:2001'
+            url: 'http://138.68.230.239:2001'
         }
 
     }

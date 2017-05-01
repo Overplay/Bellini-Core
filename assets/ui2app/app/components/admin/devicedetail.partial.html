@@ -1,0 +1,50 @@
+<div class="row">
+    <div class="col-10 col-offset-1">
+        <uib-tabset>
+            <uib-tab heading="Overview">
+                <device-basic-edit-pane device="ogdevice"></device-basic-edit-pane>
+            </uib-tab>
+            <uib-tab heading="Remote Control">
+
+
+                <div style="margin-top: 10px; padding: 10px; background-color: #ECE9E9">
+                    <p><a class="btn btn-default"
+                          href="/blueline/control/index.html?deviceUDID={{ ogdevice.deviceUDID }}"
+                          target="_blank">START CONTROL APP</a>
+                        &nbsp;<i>App will open in another tab.</i></p>
+                </div>
+
+                <!------- PING ------------>
+                <div style="margin-top: 10px; display: flex; padding: 10px; background-color: #ECE9E9">
+                    <div style="flex:1; margin-right: 10px;">
+                        <button class="btn btn-success" style="width: 100%;" ng-click="ping()">PING</button>
+                    </div>
+                    <div style="flex: 4;">
+                        <pre>{{ pingResponse.response }}</pre>
+                    </div>
+
+                </div>
+                <!-------- IDENT ---------->
+                <div style="margin-top: 10px; display: flex; padding: 10px; background-color: #ECE9E9">
+                    <div style="flex:1; margin-right: 10px;">
+                        <button class="btn btn-success" style="width: 100%;" ng-click="identify()">IDENTIFY</button>
+                    </div>
+                    <div style="flex: 4;">
+                        <pre>{{ identResponse | json }}</pre>
+                    </div>
+                </div>
+
+            </uib-tab>
+            <uib-tab heading="Logs">
+
+            </uib-tab>
+
+            <uib-tab heading="Raw JSON Object">
+                <div class="well">
+                    <pre>{{ ogdevice | json }}</pre>
+                </div>
+            </uib-tab>
+        </uib-tabset>
+    </div>
+
+</div>

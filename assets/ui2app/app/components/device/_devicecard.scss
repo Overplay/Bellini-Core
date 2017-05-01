@@ -1,0 +1,44 @@
+.device-card {
+
+  border-radius: 3px;
+  display: flex;
+  &:hover {
+    -webkit-box-shadow: 1px 1px 1px 0px rgba(168, 168, 168, 1);
+    -moz-box-shadow: 1px 1px 1px 0px rgba(168, 168, 168, 1);
+    box-shadow: 1px 1px 1px 0px rgba(168, 168, 168, 1);
+  }
+
+}
+
+.dccell {
+  padding: 10px;
+
+}
+
+.dc-icon {
+  background-color: $brand-green;
+  color: white;
+  font-weight: bold;
+
+}
+
+.dc-udid {
+  background-color: lighten($brand-green, 10%);
+  color: white;
+  flex: 3;
+}
+
+.dc-name {
+  flex: 5;
+  border-top: 1px solid $light-grey;
+  border-bottom: 1px solid $light-grey;
+
+}
+
+.dc-venue {
+  background-color: $brand-blue;
+  text-align: right;
+  margin-left: auto;
+  color: white;
+  flex: 5;
+}

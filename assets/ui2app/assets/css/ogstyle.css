@@ -127,6 +127,39 @@
   text-align: center;
   display: inline-block; }
 
+.device-card {
+  border-radius: 3px;
+  display: flex; }
+  .device-card:hover {
+    -webkit-box-shadow: 1px 1px 1px 0px #a8a8a8;
+    -moz-box-shadow: 1px 1px 1px 0px #a8a8a8;
+    box-shadow: 1px 1px 1px 0px #a8a8a8; }
+
+.dccell {
+  padding: 10px; }
+
+.dc-icon {
+  background-color: #51b85e;
+  color: white;
+  font-weight: bold; }
+
+.dc-udid {
+  background-color: #75c780;
+  color: white;
+  flex: 3; }
+
+.dc-name {
+  flex: 5;
+  border-top: 1px solid #f0f0f0;
+  border-bottom: 1px solid #f0f0f0; }
+
+.dc-venue {
+  background-color: #20B8EB;
+  text-align: right;
+  margin-left: auto;
+  color: white;
+  flex: 5; }
+
 .subhead {
   margin-top: 15px;
   font-weight: bold; }

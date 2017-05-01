@@ -11,29 +11,32 @@ module.exports = {
         if ( req.method != 'GET' )
             return res.badRequest( { error: "Bad Verb" } );
 
-        var allParams = req.allParams();
-
-        if ( !req.deviceUDID ) {
-            res.badRequest( { error: 'no device UDID' } );
-        }
-
-        BDMService.OGDevice.findByUDID()
+        BDMService.OGDevice.findByUDID(req.allParams().deviceUDID)
             .then( res.ok )
             .catch( res.proxyError );
 
     },
 
-    findAll: function ( req, res ) {
+    all: function ( req, res ) {
 
         if ( req.method != 'GET' )
             return res.badRequest( { error: "Bad Verb" } );
 
 
-        BDMService.OGDevice.findAll()
+        BDMService.OGDevice.findAll(req.query)
+            .then( res.ok )
+            .catch( res.proxyError );
+
+    },
+
+    update: function( req, res ){
+
+        var params = req.allParams();
+
+        BDMService.OGDevice.update( params.id, params )
             .then( res.ok )
             .catch( res.proxyError );
 
     }
-
 }
 

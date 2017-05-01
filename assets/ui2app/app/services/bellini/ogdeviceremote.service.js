@@ -3,7 +3,7 @@
  */
 
 
-app.factory( "sailsOGDevice", function ( sailsApi, sailsCoreModel ) {
+app.factory( "sailsOGDeviceRemote", function ( sailsApi, sailsCoreModel, $q, $http ) {
 
 
     var getAll = function ( queryString ) {
@@ -54,6 +54,30 @@ app.factory( "sailsOGDevice", function ( sailsApi, sailsCoreModel ) {
             var fields = [ 'atVenueUUID', 'name', 'favoriteChannels', 'hideChannels' ];
             return this.cloneUsingFields( fields );
         }
+
+        this.populateVenue = function () {
+
+            if (!this.atVenueUUID){
+                this.atVenue = { name: 'Unassigned', uuid: '' }
+                return $q.when(this);
+            }
+
+            var _this = this;
+            return sailsApi.apiGet( '/venue/findByUUID?uuid=' + this.atVenueUUID )
+                .then( function ( v ) {
+                    _this.atVenue = v;
+                    return _this;
+                } )
+        }
+
+        // This should only be in the BC version that works models from BC->BDM
+        this.update = function ( params ) {
+            //$log.debug('Using overriden ogDevice putter')
+            return $http.put( '/ogdevice/update/'+this.id, params || this.getPostObj() )
+                .then(stripHttpData)
+                .then(newOGDevice);
+        }
+
 
     }
 

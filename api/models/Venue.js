@@ -106,8 +106,12 @@ module.exports = {
 
 
     beforeCreate: function( values, cb ){
-        // Generate UUID
-        values.uuid = uuid();
+        // Generate UUID if a forced one is not there.
+        // Only provide UUID for test purposes
+        if (!values.uuid){
+            values.uuid = uuid();
+
+        }
         cb();
     },
 

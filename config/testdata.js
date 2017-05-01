@@ -140,7 +140,7 @@ var self = module.exports.testdata = {
             chain = chain.then(function (user) {
                 //v.venueOwners.push(user.user);
                 //sails.log.debug(venueManagers)
-                return Venue.findOne({name: v.name}) //this will work but venues could be double named (not unique)
+                return Venue.findOne({uuid: v.uuid})
                     .then(function (ven) {
                         //sails.log.debug(ven);
                         if (ven) {
@@ -345,45 +345,52 @@ var self = module.exports.testdata = {
             name: "Blue Line Pizza",
             address: {street: "415 E Campbell Ave", city: "Campbell", state: "CA", zip: "95008"},
             ownerEmails: ["john@test.com"],
-            managerEmails: ["silvanus@test.com", "jerref@test.com"]
+            managerEmails: ["silvanus@test.com", "jerref@test.com"],
+            uuid: 'test-001'
         },
         {
             name: "Ajito",
             address: {street: "7335 Bollinger Rd", city: "Cupertino", state: "CA", zip: "95014"},
             ownerEmails: ["john@test.com"],
-            managerEmails: ["silvanus@test.com", "unice@test.com"]
+            managerEmails: ["silvanus@test.com", "unice@test.com"],
+            uuid:          'test-002'
         },
         {
             name: "The Sink",
             address: {street: "1165 13th St.", city: "Boulder", state: "CO", zip: "80302"},
             ownerEmails: ["vogel@test.com"],
-            managerEmails: ["annegret@test.com", "caterina@test.com"]
+            managerEmails: ["annegret@test.com", "caterina@test.com"],
+            uuid:          'test-003'
         },
         {
             name: "B Bar & Grill",
             address: {street: "40 E 4th St", city: "New York", state: "NY", zip: "10003"},
             ownerEmails: ["ryan@test.com"],
-            managerEmails: ["unice@test.com", "jerref@test.com"]
+            managerEmails: ["unice@test.com", "jerref@test.com"],
+            uuid:          'test-004'
         },
         {
             name: "Novo",
             address: {street: "726 Higuera St", city: "San Luis Obispo", state: "CA", zip: "93401"},
             ownerEmails: ["elizabeth@test.com"],
             organizationEmail: "dr@test.com",
-            managerEmails: ["caterina@test.com", "annegret@test.com", "silvanus@test.com"]
+            managerEmails: ["caterina@test.com", "annegret@test.com", "silvanus@test.com"],
+            uuid:          'test-005'
         },
         {
             name: "Not Your Average Joe's",
             address: {street: "305 Main St", city: "Acton", state: "MA", zip: "01720"},
             ownerEmails: ["elizabeth@test.com"],
             organizationEmail: "dr@test.com",
-            managerEmails: ["jerref@test.com", "silvanus@test.com"]
+            managerEmails: ["jerref@test.com", "silvanus@test.com"],
+            uuid:          'test-006'
         },
         {
             name: "Islands",
             address: {street: "20750 Stevens Creek Blvd", city: "Cupertino", state: "CA", zip: "95014"},
             ownerEmails: ["carina@test.com"],
-            managerEmails: ["annegret@test.com", "silvanus@test.com"]
+            managerEmails: ["annegret@test.com", "silvanus@test.com"],
+            uuid:          'test-001'
         }
     ],
 

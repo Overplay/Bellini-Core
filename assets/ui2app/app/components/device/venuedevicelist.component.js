@@ -7,7 +7,7 @@ app.component( 'venueDeviceList', {
     bindings:   {
         venue: '='
     },
-    controller: function ( sailsOGDevice, $log ) {
+    controller: function ()  {
 
         var ctrl = this;
 
