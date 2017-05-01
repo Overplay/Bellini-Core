@@ -11,13 +11,10 @@
                     <user-basic-info class="top15" user="user"></user-basic-info>
                 </uib-tab>
                 <uib-tab heading="Permissions and Password">
-                    <h5 class="subhead">Roles</h5>
-
-                    <div ng-repeat="role in roles" >
-                        <input ng-disabled="role.roleKey !='admin' && role.roleKey!='sponsor'" type="checkbox" ng-model="role.selected" ng-click="roleChange()"/>&nbsp;{{ role.roleKey
-                        }}
-                    </div>
-                    <p style="font-style: italic; margin-top: 5px;"> Note: The Proprietor Manager and Proprietor Owner roles are controlled by adding and removing venues.</p>
+                    <h5 class="subhead">Ring Level</h5>
+                    <p><ring-badge ring="user.ring"></ring-badge></p>
+                    <button ng-click="changeRing()" class="btn btn-sm btn-warning">CHANGE RING</button>
+                    </p>
                     <hr>
                     <h5 class="subhead">Password</h5>
                     <button class="btn btn-sm btn-primary" ng-click="changePassword()">CHANGE PASSWORD</button>

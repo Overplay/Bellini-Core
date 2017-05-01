@@ -422,40 +422,37 @@ module.exports = require('waterlock').actions.user({
         }
 
         var user = req.session.user;
-        Role.find(user.roles)
-            .then(function(roles){
-                var rval = user.toJSON();
-                //rval.roles = roles.map( function(r){ return r.roleName;});
-                res.ok(rval);
-            })
-            .catch(res.serverError)
+        res.ok(user);
         
     },
 
     checkSession: function(req, res){
 
-        if (req.session && req.session.user){
+        if ( req.session && req.session.user ) {
             var uid = req.session.user.id;
-            User.findOne({ id: uid })
-                .populate('auth')
-                .then(function(user){
-                    if (!user){
+            User.findOne( { id: uid } )
+                .populate( [ 'auth', 'managedVenues', 'ownedVenues' ] )
+                .then( function ( user ) {
+                    if ( !user ) {
                         // You can end up here is the user has been whacked, or dbid changed. Either way,
                         // you need to respond notAuthorized and clear the session.
-                        sails.log.error("User has been deleted but is still in session!");
+                        sails.log.error( "User has been deleted but is still in session!" );
                         req.session.destroy();
                         return res.notAuthorized( { error: 'user does not exist' } );
                     }
 
                     var juser = user.toJSON();
                     juser.email = user.auth && user.auth.email;
+                    juser.isAdmin = !!(user.auth && (user.auth.ring == 1) )
+                    juser.isManager = !user.managedVenues.length;
+                    juser.isOwner =  !user.ownedVenues.length;
                     // delete user.auth;
-                    delete juser.roles;
+                    //delete juser.roles;
                     delete juser.auth.password;
                     // delete user.metadata;
                     // delete user.legal;
                     return res.ok( juser );
-                })
+                } )
                 .catch( res.serverError )
         } else {
             return res.notAuthorized( { error: 'not logged in' } );
@@ -508,11 +505,9 @@ module.exports = require('waterlock').actions.user({
                 switch ( params.userType ) {
                     case 'manager':
                         props.user.managedVenues.add( props.venue.id );
-                        props.user.roles = _.union( props.user.roles, [ RoleCacheService.roleByName( "proprietor", "manager" ) ] )
                         break;
                     case 'owner':
                         props.user.ownedVenues.add( props.venue.id );
-                        props.user.roles = _.union( props.user.roles, [ RoleCacheService.roleByName( "proprietor", "owner" ) ] )
                         break;
                 }
 
@@ -590,28 +585,7 @@ module.exports = require('waterlock').actions.user({
                 // model save is fucked and does not return the modded object, which
                 return User.findOne( uid ).populate( [ "managedVenues", "ownedVenues" ] );
             } )
-            .then( function (user){
-
-                // Fix up the roles
-                if (!user.managedVenues.length){
-                    _.remove( user.roles, function ( r ) {
-                        return r == RoleCacheService.roleByName( "proprietor", "manager" )
-                    } )
-                }
-
-                if ( !user.ownedVenues.length ) {
-                    _.remove( user.roles, function ( r ) {
-                        return r == RoleCacheService.roleByName( "proprietor", "owner" )
-                    } )
-                }
-
-                return user.save()
-                    .then( function(){
-                        return User.findOne( uid ).populate( [ "managedVenues", "ownedVenues" ] );
-                    })
-
-            })
-            .then( res.ok ) // wow that sucked
+            .then( res.ok )
             .catch( res.serverError );
 
 
@@ -624,7 +598,7 @@ module.exports = require('waterlock').actions.user({
             return res.badRequest( { error: "Bad Verb" } );
 
         User.find( req.query )
-            .populate('auth')
+            .populate(['auth', 'managedVenues', 'ownedVenues'])
             .then( res.ok )
             .catch( res.serverError );
 
@@ -637,18 +611,19 @@ module.exports = require('waterlock').actions.user({
 
         var rval = { total: 0, admin: 0, po: 0, pm: 0, u: 0, sponsor: 0 };
         User.find({})
+            .populate(['auth', 'managedVenues', 'ownedVenues'])
             .then( function(users){
 
                 rval.total = users.length;
 
                 users.forEach( function ( u ) {
-                    if (RoleCacheService.hasRole(u.roles, 'admin', '')){
+                    if ( u.auth.ring==1 ){
                         rval.admin++;
-                    } else if ( RoleCacheService.hasRole( u.roles, 'sponsor', '' ) ){
+                    } else if ( u.auth.ring==4){
                         rval.sponsor++;
-                    } else if ( RoleCacheService.hasRole( u.roles, 'proprietor', 'owner' ) ) {
+                    } else if ( u.auth.ring==3 && u.ownedVenues.length ) {
                         rval.po++;
-                    } else if ( RoleCacheService.hasRole( u.roles, 'proprietor', 'manager' ) ) {
+                    } else if ( u.auth.ring == 3 && u.managedVenues.length ) {
                         rval.pm++;
                     } else {
                         rval.u++;

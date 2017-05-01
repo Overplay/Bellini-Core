@@ -17,7 +17,7 @@ module.exports = function ( req, res, next ) {
             return next();
         }
 
-        // Must be getting own auth and not trying to set the body!
+        // Must be getting own auth and not trying to set ring in the body!
         var allp = req.allParams();
         var legitUrl = ( allp.id == req.session.user.auth.id );
         var legitBody = !req.body.ring;

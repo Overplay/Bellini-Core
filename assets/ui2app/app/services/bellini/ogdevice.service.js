@@ -8,7 +8,10 @@ app.factory( "sailsOGDevice", function ( sailsApi, sailsCoreModel ) {
 
     var getAll = function ( queryString ) {
         // using non blueprint getter for security
-        return sailsApi.apiGet( '/devicemanager/alldevices', queryString )
+
+        var ep = '/ogdevice/all' + ( queryString ? "?" + queryString : '');
+
+        return sailsApi.apiGet( ep )
             .then( function ( ogdevices ) {
                 return ogdevices.map( newOGDevice );
             } )
@@ -50,7 +53,6 @@ app.factory( "sailsOGDevice", function ( sailsApi, sailsCoreModel ) {
         this.getPostObj = function () {
             var fields = [ 'atVenueUUID', 'name', 'favoriteChannels', 'hideChannels' ];
             return this.cloneUsingFields( fields );
-
         }
 
     }
@@ -63,7 +65,7 @@ app.factory( "sailsOGDevice", function ( sailsApi, sailsCoreModel ) {
     }
 
     var getOGDevice = function ( udid ) {
-        return sailsApi.apiGet( '/devicemanager/findByUDID?deviceUDID='+udid )
+        return sailsApi.apiGet( '/ogdevice/findByUDID?deviceUDID='+udid )
             .then( newOGDevice );
     }
 

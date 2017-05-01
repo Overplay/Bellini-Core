@@ -7,7 +7,10 @@ app.factory( "sailsApi", function ( $http ) {
 
     service = {};
 
-    var _apiPath = '/api/v1';
+    //var _apiPath = '/api/v1';
+
+    var _apiPath = '';
+
 
     function stripData(data){
         return data.data;

@@ -26,15 +26,15 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
         return _.extend( navViews, { "appbody": withView } );
     }
 
-    var apiPath = 'api/v1';
-
     $urlRouterProvider.otherwise( '/' );
 
     $stateProvider
 
         .state( 'welcome', {
             url:   '/',
-            views: buildCompleteView( { template: '<og-spinner></og-spinner>', controller: 'redirectController' } )
+            views: buildCompleteView( {
+                template: '<og-spinner></og-spinner>',
+                controller: 'redirectController' } )
 
         } )
 
@@ -50,8 +50,8 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                 me: function ( sailsUsers ) {
                     return sailsUsers.getMe();
                 },
-                sm: function ( sideMenu ) {
-                    sideMenu.change( 'accountMenu' );
+                sm: function ( navService ) {
+                    navService.sidemenu.change( 'accountMenu' );
                 }
             }
 
@@ -65,8 +65,8 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             views:    buildCompleteView( { template: '<ui-view></ui-view>', } ),
             // This little hack sets the side menu for each major state
             resolve:  {
-                sm: function ( sideMenu ) {
-                    sideMenu.change( 'adminMenu' );
+                sm: function ( navService ) {
+                    navService.sideMenu.change( 'adminMenu' );
                 }
             }
         } )
@@ -81,9 +81,6 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                 },
                 venueinfo: function ( $http ) {
                     return $http.get('/venue/count').then(function(d){ return d.data; });
-                },
-                rando: function(sailsUsers) {
-                    return sailsUsers.getByEmail("admin@test.com");
                 }
             }
         } )
@@ -106,9 +103,6 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             resolve:     {
                 user:      function ( sailsUsers, $stateParams ) {
                     return sailsUsers.get( $stateParams.id );
-                },
-                roles:     function ( userAuthService ) {
-                    return userAuthService.getRoles();
                 },
                 allVenues: function ( sailsVenues ) {
                     return sailsVenues.getAll();
@@ -149,8 +143,8 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             views: buildCompleteView( { template: '<ui-view></ui-view>', } ),
             // This little hack sets the side menu for each major state
             resolve:  {
-                sm: function ( sideMenu ) {
-                    sideMenu.change( 'ownerMenu' );
+                sm: function ( navService ) {
+                    navService.sideMenu.change( 'ownerMenu' );
                 }
             }
         } )
@@ -179,8 +173,8 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             views:    buildCompleteView( { template: '<ui-view></ui-view>', } ),
             // This little hack sets the side menu for each major state
             resolve:  {
-                sm: function ( sideMenu ) {
-                    sideMenu.change( 'patronMenu' );
+                sm: function ( navService ) {
+                    navService.sideMenu.change( 'patronMenu' );
                 }
             }
         } )
@@ -189,6 +183,8 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             url:         '/dashboard',
             templateUrl: '/ui2app/app/components/roles/patron/patrondash.partial.html'
         } )
+
+
         .state( 'admin.editvenue', {
             url:         '/editvenue/:id',
             templateUrl: '/ui2app/app/components/admin/editvenue.partial.html',

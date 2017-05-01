@@ -2,11 +2,13 @@
  * Created by mkahn on 4/22/17.
  */
 
-app.factory( 'sideMenu', function ( $rootScope ) {
+app.factory( 'navService', function ( $rootScope ) {
 
-    var currentKey = '';
+    var currentSideKey = '';
+    var currentTopKey = '';
 
-    var menuGroups = {
+
+    var sideMenuGroups = {
         adminMenu:   [
             { label: "All Users", sref: "admin.userlist", icon: "users" },
             { label: "Add User", sref: "admin.edituser({id: 'new'})", icon: "user" },
@@ -20,18 +22,82 @@ app.factory( 'sideMenu', function ( $rootScope ) {
         ]
     };
 
+    var topMenuGroups = {
+
+        managerMenu: [
+            { label: "venues", sref: "manager.venues", icon: "building" },
+            { label: "devices", sref: "manager.devices", icon: "television" }
+        ],
+
+        ownerMenu: [
+            { label: "venues", sref: "owner.venues", icon: "building" },
+            { label: "devices", sref: "owner.devices", icon: "television" },
+            { label: "patrons", sref: "owner.patrons", icon: "users" }
+        ],
+
+        advertiserMenu: [
+            { label: "ads", sref: "sponsor.dashboard", icon: "bullhorn" }
+        ],
+
+        adminMenu: [
+            { label: "admin dashboard", sref: "admin.dashboard", icon: "cube" }
+        ]
+
+    }
+
     return {
 
-        change: function ( group ) {
-            currentKey = group;
+        sideMenu: {
+
+            change: function ( group ) {
+                currentSideKey = group;
+            },
+
+            getMenu: function () {
+                if ( currentSideKey )
+                    return sideMenuGroups[ currentSideKey ];
+
+                return [];
+            }
         },
 
-        getMenu: function () {
-            if ( currentKey )
-                return menuGroups[ currentKey ];
+        topMenu: {
 
-            return [];
-        }
+            buildForUser: function ( user ) {
+
+                var menu = [];
+
+                // TODO maybe this should be if-then since fallthrough is weird
+                switch (user.auth.ring){
+
+                    case 1:
+                        // Admin
+                        menu = menu.concat(topMenuGroups.adminMenu);
+                        //menu = menu.concat(topMenuGroups.advertiserMenu);
+                        //menu = menu.concat(topMenuGroups.ownerMenu);
+                        break;
+
+                    case 4:
+                        menu = menu.concat(topMenuGroups.advertiserMenu);
+                        // intentionally no break to add these if needed
+                    case 3:
+                        // User
+                        if ( user.isOwner ) {
+                            menu = menu.concat(topMenuGroups.ownerMenu)
+                        } else if ( user.isManager ){
+                            menu = menu.concat(topMenuGroups.managerMenu);
+                        }
+                        break;
+
+                }
+
+                return menu;
+
+            }
+
+
+        },
+
 
     }
 
@@ -43,7 +109,7 @@ app.controller( 'redirectController', [ 'userAuthService', '$state', function ( 
     userAuthService.getCurrentUser()
         .then( function ( user ) {
 
-            if ( _.includes( user.roleTypes, 'admin' ) ) {
+            if ( user.isAdmin ) {
                 $state.go( 'admin.dashboard' );
             }
 

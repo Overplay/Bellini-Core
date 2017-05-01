@@ -42,45 +42,22 @@ var self = module.exports.testdata = {
 
 
         self.users.forEach(function (u) {
-            var email = u.email;
-            var password = u.password;
-            delete u.email;
-            delete u.password;
-            // find role IDs
-            u.roles = [];
-            u.roleNames.forEach(function (role) {
-                u.roles.push(RoleCacheService.roleByName(role.role, role.subRole));
-            });
-            delete u.roleNames;
-            if (u.organizationEmail) {
-                var organizationEmail = u.organizationEmail;
-                chain = chain.then(function () {
-                    return Organization.findOne({email: organizationEmail})
-                        .then(function (o) {
-                            u.organization = o;
-                        })
-                })
-                delete u.organizationEmail;
-            }
+
+            // if (u.organizationEmail) {
+            //     var organizationEmail = u.organizationEmail;
+            //     chain = chain.then(function () {
+            //         return Organization.findOne({email: organizationEmail})
+            //             .then(function (o) {
+            //                 u.organization = o;
+            //             })
+            //     })
+            //     delete u.organizationEmail;
+            // }
             chain = chain.then(function () {
-                return Auth.findOne({email: email})
-                    .then(function (a) {
-                        if (a) {
-                            sails.log.debug("User exists");
-                            return new Error("user already in system")
-                        }
-                        else {
-                            return AdminService.addUser(email, password, u)
-                                .then(function () {
-                                    sails.log.debug("Created user " + email)
-                                })
-                                .catch(function (err) {
-                                    sails.log.debug("error caught: " + err)
-                                })
-                        }
-
-                    })
-
+                return AdminService.addUserAtRing( u.email, u.password, u.ring,
+                    { firstName: u.firstName, lastName: u.lastName }, false )
+                    .then( function () { sails.log.debug( "User created." )} )
+                    .catch( function () { sails.log.warn( "User NOT created. Probably already existed." )} );
             })
         });
 
@@ -212,134 +189,133 @@ var self = module.exports.testdata = {
             lastName: 'McAdmin',
             email: 'admin@test.com',
             password: 'beerchugs',
-            roleNames: [{role: "admin", subRole: ""}, {role: "user", subRole: ""}]
+            ring: 1
         },
         {
             firstName: 'Ryan',
             lastName: 'Smith',
             email: 'ryan@test.com',
             password: 'pa$$word',
-            roleNames: [{role: "proprietor", subRole: "owner"}, {role: "user", subRole: ""}]
+            ring: 3
         },
         {
             firstName: 'Vid',
             lastName: 'Baum',
             email: 'vid@test.com',
             password: 'pa$$word',
-            roleNames: [{role: "user", subRole: ""}]
+            ring: 3
         },
         {
             firstName: 'Silvanus',
             lastName: 'Conner',
             email: 'silvanus@test.com',
             password: 'pa$$word',
-            roleNames: [{role: "proprietor", subRole: "manager"}, {role: "user", subRole: ""}]
+            ring: 3
         },
         {
             firstName: 'Kajetan',
             lastName: 'McNeil',
             email: 'kajetan@test.com',
             password: 'pa$$word',
-            roleNames: [{role: "user", subRole: ""}]
+            ring: 3
         },
         {
             firstName: 'John',
             lastName: 'Alfredson',
             email: 'john@test.com',
             password: 'pa$$word',
-            roleNames: [{role: "proprietor", subRole: "owner"}, {role: "user", subRole: ""}]
+            ring: 3
         },
         {
             firstName: 'Antonina',
             lastName: 'Burton',
             email: 'antonina@test.com',
             password: 'pa$$word',
-            roleNames: [{role: "user", subRole: ""}]
+            ring: 3
         },
         {
             firstName: 'Caterina',
             lastName: 'Cvetkov',
             email: 'caterina@test.com',
             password: 'pa$$word',
-            roleNames: [{role: "proprietor", subRole: "manager"}, {role: "user", subRole: ""}]
+            ring: 3
         },
         {
             firstName: 'Joe',
             lastName: 'Rogers',
             email: 'joe@test.com',
             password: 'pa$$word',
-            roleNames: [{role: "user", subRole: ""}]
+            ring: 3
         },
         {
             firstName: 'Jerref',
             lastName: 'Gardiner',
             email: 'jerref@test.com',
             password: 'pa$$word',
-            roleNames: [{role: "proprietor", subRole: "manager"}, {role: "user", subRole: ""}],
-            organizationEmail: "dr@test.com"
+            ring: 3
         },
         {
             firstName: 'Carina',
             lastName: 'Fay',
             email: 'carina@test.com',
             password: 'pa$$word',
-            roleNames: [{role: "proprietor", subRole: "owner"}, {role: "user", subRole: ""}]
+            ring: 3
         },
         {
             firstName: 'Nereus',
             lastName: 'Macar',
             email: 'nereus@test.com',
             password: 'pa$$word',
-            roleNames: [{role: "user", subRole: ""}]
+            ring: 3
         },
         {
             firstName: 'Abel',
             lastName: 'Filipovic',
             email: 'abel@test.com',
             password: 'pa$$word',
-            roleNames: [{role: "user", subRole: ""}]
+            ring: 3
         },
         {
             firstName: 'Patricia',
             lastName: 'Jarrett',
             email: 'patricia@test.com',
             password: 'pa$$word',
-            roleNames: [{role: "user", subRole: ""}]
+            ring: 3
         },
         {
             firstName: 'Unice',
             lastName: 'Ashley',
             email: 'unice@test.com',
             password: 'pa$$word',
-            roleNames: [{role: "proprietor", subRole: "manager"}, {role: "user", subRole: ""}]
+            ring: 3
         },
         {
             firstName: 'Paulene',
             lastName: 'Vogel',
             email: 'vogel@test.com',
             password: 'pa$$word',
-            roleNames: [{role: "proprietor", subRole: "owner"}, {role: "user", subRole: ""}]
+            ring: 3
         },
         {
             firstName: 'Sloane',
             lastName: 'Irwin',
             email: 'sloane@test.com',
             password: 'pa$$word',
-            roleNames: [{role: "user", subRole: ""}]
+            ring: 3
         },
         {
             firstName: 'Lon',
             lastName: 'Plaskett',
             email: 'lon@test.com',
             password: 'pa$$word',
-            roleNames: [{role: "user", subRole: ""}]
+            ring: 3
         },
         {
             firstName: 'Annegret',
             lastName: 'Henderson',
             email: 'annegret@test.com',
             password: 'pa$$word',
-            roleNames: [{role: "proprietor", subRole: "manager"}, {role: "user", subRole: ""}]
+            ring: 3
 
         },
         {
@@ -347,22 +323,21 @@ var self = module.exports.testdata = {
             lastName: 'Reed',
             email: 'hend@test.com',
             password: 'pa$$word',
-            roleNames: [{role: "user", subRole: ""}]
+            ring: 3
         },
         {
             firstName: 'Elizabeth',
             lastName: 'Salas',
             email: 'elizabeth@test.com',
             password: 'pa$$word',
-            roleNames: [{role: "proprietor", subRole: "owner"}, {role: "user", subRole: ""}, {role: "sponsor", subRole: ""}],
-            organizationEmail: "dr@test.com"
+            ring: 4
         },
         {
             firstName: 'Advertiser',
             lastName: 'Smith',
             email: 'ad@test.com',
             password: 'pa$$word',
-            roleNames: [{role: "sponsor", subRole: ""}, {role: "user", subRole: ""}]
+            ring: 4
         }
     ],
     venues: [
@@ -411,59 +386,7 @@ var self = module.exports.testdata = {
             managerEmails: ["annegret@test.com", "silvanus@test.com"]
         }
     ],
-    devices: [
-        {
-            name: "Bar Box",
-            locationWithinVenue: "bar",
-            venueName: "Blue Line Pizza"
-        },
-        {
-            name: "Bar Box",
-            locationWithinVenue: "bar",
-            venueName: "The Sink"
-        },
-        {
-            name: "Bar Box",
-            locationWithinVenue: "bar",
-            venueName: "B Bar & Grill"
-        },
-        {
-            name: "Bar Box",
-            locationWithinVenue: "bar",
-            venueName: "Not Your Average Joe's"
-        },
-        {
-            name: "Bar Box",
-            locationWithinVenue: "bar",
-            venueName: "Islands"
-        },
-        {
-            name: "Entrance Box",
-            locationWithinVenue: "entrance",
-            venueName: "Blue Line Pizza"
-        },
-        {
-            name: "Entrance Box",
-            locationWithinVenue: "entrance",
-            venueName: "The Sink"
-        },
-        {
-            name: "Entrance Box",
-            locationWithinVenue: "entrance",
-            venueName: "B Bar & Grill"
-        },
-        {
-            name: "Entrance Box",
-            locationWithinVenue: "entrance",
-            venueName: "Not Your Average Joe's"
-        },
-        {
-            name: "Entrance Box",
-            locationWithinVenue: "entrance",
-            venueName: "Islands"
-        }
 
-    ],
     organizations: [
         {
             name: "Delicious Restaurants",
@@ -492,319 +415,5 @@ var self = module.exports.testdata = {
             creatorEmail: "elizabeth@test.com",
             description: "noooooo"
         }
-    ],
-
-    logs: [
-        {
-            logType: "heartbeat",
-            message: {
-                uptime: "32:15:08",
-                softwareVersions: {
-                    amstelBright: "1.0.0",
-                    aqui: "1.0.0",
-                    android: "MMB29M"
-                },
-                installedApps: []
-            },
-            device: {
-                name: "Bar Box",
-                venue: "B Bar & Grill"
-            },
-            loggedAt: new Date().toISOString()
-        },
-        {
-            logType: "impression",
-            message: {
-                adName: adName
-
-            },
-            device: {
-                name: "Bar Box",
-                venue: "B Bar & Grill"
-            },
-            loggedAt: new Date(adDate + ", 2016 12:13:00").toISOString()
-        }
-        ,
-        {
-            logType: "impression",
-            message: {
-                adName: adName
-
-            },
-            device: {
-                name: "Bar Box",
-                venue: "B Bar & Grill"
-            },
-            loggedAt: new Date(adDate + ", 2016 12:20:00").toISOString()
-        }
-        ,
-        {
-            logType: "impression",
-            message: {
-                adName: adName
-
-            },
-            device: {
-                name: "Bar Box",
-                venue: "B Bar & Grill"
-            },
-            loggedAt: new Date(adDate + ", 2016 11:30:00").toISOString()
-        }
-        ,
-        {
-            logType: "impression",
-            message: {
-                adName: adName
-
-            },
-            device: {
-                name: "Bar Box",
-                venue: "Not Your Average Joe's"
-            },
-            loggedAt: new Date(adDate + ", 2016 11:37:00").toISOString()
-        }
-        ,
-        {
-            logType: "impression",
-            message: {
-                adName: adName
-
-            },
-            device: {
-                name: "Bar Box",
-                venue: "Not Your Average Joe's"
-            },
-            loggedAt: new Date(adDate + ", 2016 21:40:00").toISOString()
-        },
-        {
-            logType: "impression",
-            message: {
-                adName: adName,
-
-            },
-            device: {
-                name: "Bar Box",
-                venue: "B Bar & Grill"
-            },
-            loggedAt: new Date(adDate + ", 2016 22:13:00").toISOString()
-        }
-        ,
-        {
-            logType: "impression",
-            message: {
-                adName: adName,
-
-            },
-            device: {
-                name: "Bar Box",
-                venue: "B Bar & Grill"
-            },
-            loggedAt: new Date(adDate + ", 2016 21:20:00").toISOString()
-        }
-        ,
-        {
-            logType: "impression",
-            message: {
-                adName: adName,
-
-            },
-            device: {
-                name: "Bar Box",
-                venue: "B Bar & Grill"
-            },
-            loggedAt: new Date(adDate + ", 2016 19:30:00").toISOString()
-        }
-        ,
-        {
-            logType: "impression",
-            message: {
-                adName: adName,
-
-            },
-            device: {
-                name: "Bar Box",
-                venue: "Not Your Average Joe's"
-            },
-            loggedAt: new Date(adDate + ", 2016 18:37:00").toISOString()
-        }
-        ,
-        {
-            logType: "impression",
-            message: {
-                adName: adName,
-
-            },
-            device: {
-                name: "Bar Box",
-                venue: "Not Your Average Joe's"
-            },
-            loggedAt: new Date(adDate + ", 2016 13:40:00").toISOString()
-        },
-        {
-            logType: "impression",
-            message: {
-                adName: adName,
-
-            },
-            device: {
-                name: "Bar Box",
-                venue: "B Bar & Grill"
-            },
-            loggedAt: new Date(adDate + ", 2016 16:13:00").toISOString()
-        }
-        ,
-        {
-            logType: "impression",
-            message: {
-                adName: adName,
-
-            },
-            device: {
-                name: "Bar Box",
-                venue: "B Bar & Grill"
-            },
-            loggedAt: new Date(adDate + ", 2016 16:20:00").toISOString()
-        }
-        ,
-        {
-            logType: "impression",
-            message: {
-                adName: adName,
-
-            },
-            device: {
-                name: "Bar Box",
-                venue: "B Bar & Grill"
-            },
-            loggedAt: new Date(adDate + ", 2016 16:30:00").toISOString()
-        }
-        ,
-        {
-            logType: "impression",
-            message: {
-                adName: adName,
-
-            },
-            device: {
-                name: "Bar Box",
-                venue: "Not Your Average Joe's"
-            },
-            loggedAt: new Date(adDate + ", 2016 21:37:00").toISOString()
-        }
-        ,
-        {
-            logType: "impression",
-            message: {
-                adName: adName,
-
-            },
-            device: {
-                name: "Bar Box",
-                venue: "Not Your Average Joe's"
-            },
-            loggedAt: new Date(adDate + ", 2016 21:40:00").toISOString()
-        },
-
-        {
-            logType: "impression",
-            message: {
-                adName: adName,
-
-            },
-            device: {
-                name: "Bar Box",
-                venue: "B Bar & Grill"
-            },
-            loggedAt: new Date(adDate + ", 2016 22:13:00").toISOString()
-        }
-        ,
-        {
-            logType: "impression",
-            message: {
-                adName: adName,
-
-            },
-            device: {
-                name: "Bar Box",
-                venue: "B Bar & Grill"
-            },
-            loggedAt: new Date(adDate + ", 2016 20:20:00").toISOString()
-        }
-        ,
-        {
-            logType: "impression",
-            message: {
-                adName: adName,
-
-            },
-            device: {
-                name: "Bar Box",
-                venue: "B Bar & Grill"
-            },
-            loggedAt: new Date(adDate + ", 2016 18:30:00").toISOString()
-        }
-        ,
-        {
-            logType: "impression",
-            message: {
-                adName: adName,
-
-            },
-            device: {
-                name: "Bar Box",
-                venue: "Not Your Average Joe's"
-            },
-            loggedAt: new Date(adDate + ", 2016 17:37:00").toISOString()
-        }
-        ,
-        {
-            logType: "impression",
-            message: {
-                adName: adName,
-
-            },
-            device: {
-                name: "Bar Box",
-                venue: "Not Your Average Joe's"
-            },
-            loggedAt: new Date(adDate + ", 2016 17:40:00").toISOString()
-        },
-        {
-            logType: "impression",
-            message: {
-                adName: adName,
-
-            },
-            device: {
-                name: "Bar Box",
-                venue: "B Bar & Grill"
-            },
-            loggedAt: new Date(adDate + ", 2016 13:13:00").toISOString()
-        },
-        {
-            logType: "impression",
-            message: {
-                adName: adName,
-
-            },
-            device: {
-                name: "Bar Box",
-                venue: "B Bar & Grill"
-            },
-            loggedAt: new Date(adDate + ", 2016 1:13:00").toISOString()
-        },
-        {
-            logType: "impression",
-            message: {
-                adName: adName,
-
-            },
-            device: {
-                name: "Bar Box",
-                venue: "B Bar & Grill"
-            },
-            loggedAt: new Date(adDate + ", 2016 0:13:00").toISOString()
-        }
-
     ]
 };

@@ -82,7 +82,7 @@ module.exports = {
             .populate('auth')
             .then(function (users) {
                 return _.filter(users, function (u) {
-                    return RoleCacheService.hasAdminRole(u.roles)
+                    return u.auth.ring == 1;
                 })
             })
             .then(function (us) {

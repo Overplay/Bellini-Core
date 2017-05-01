@@ -86,4 +86,11 @@ app.filter( 'addressify', function () {
     }
 } );
 
+app.filter( 'ringToHuman', function () {
+    return function ( ring ) {
+        var rings = [ 'Admin', 'Device', 'User', 'Advertiser', 'Other (unused)' ];
+        return rings[ ring - 1 ];
+    }
+} );
+
 function stripHttpData( data ) { return data.data };

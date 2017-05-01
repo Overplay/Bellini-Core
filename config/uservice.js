@@ -24,7 +24,14 @@ module.exports = {
         ogdevice: {
             route: 'http://localhost:2001/ogdevice'
         }
-    }
+    },
 
+    uservice: {
+
+        deviceManager: {
+            url: 'http://localhost:2001'
+        }
+
+    }
 
 };

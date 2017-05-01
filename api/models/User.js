@@ -77,10 +77,10 @@ module.exports = {
 
         // Array of ids of roles. Not a collection because we don't want all the relation stuff slowing us 
         // down.
-        roles: {
-            type: 'array',
-            defaultsTo: []
-        },
+        // roles: {
+        //     type: 'array',
+        //     defaultsTo: []
+        // },
         
         ownedVenues: {
             collection: 'Venue',
@@ -100,55 +100,28 @@ module.exports = {
         toJSON: function() {
 
             var obj = this.toObject();
-            var roleArray = [];
-
-            if (!obj.roles){
-
-                sails.log.debug('Dinglehead roles is missing on user')
-                obj.roles = "MIA";
-
-            } else {
-
-                obj.roles.forEach( function ( roleId ) {
-                    if ( roleId )
-                        roleArray.push( RoleCacheService.roleStringForId( roleId ) );
-                } );
-                obj.roleTypes = roleArray;
-
-            }
+            // var roleArray = [];
+            //
+            // if (!obj.roles){
+            //
+            //     sails.log.debug('Dinglehead roles is missing on user')
+            //     obj.roles = "MIA";
+            //
+            // } else {
+            //
+            //     obj.roles.forEach( function ( roleId ) {
+            //         if ( roleId )
+            //             roleArray.push( RoleCacheService.roleStringForId( roleId ) );
+            //     } );
+            //     obj.roleTypes = roleArray;
+            //
+            // }
 
             return obj;
         }
 
 
     } ),
-
-
-    rolesAsStrings: function(userId){
-
-        return Promise( function(resolve, reject){
-
-            User.findOne(userId)
-                .then( function(user){
-                    if (!user)
-                        return reject( new Error('No such user id'));
-                    
-                    var rval = [];
-                    user.roles.forEach( function(roleId){
-                        Role.findOneById(roleId)
-                            .then( function(role){
-                                // So in theory we could have a role get deleted out and not fixed in the db
-                                // we will ignore that here and just not return ot throw such
-                                if (role)
-                                    rval.push(role);
-                            });
-                    })
-
-                })
-            
-
-        })
-    },
 
 
     beforeCreate: require( 'waterlock' ).models.user.beforeCreate,

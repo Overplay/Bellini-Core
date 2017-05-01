@@ -7,5 +7,6 @@
  */
 
 module.exports.theme = {
-    themeName: "ourglass"
+    themeName: "ourglass",
+    uiAppRoute: '/ui2'
 };

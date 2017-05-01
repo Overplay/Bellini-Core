@@ -32,13 +32,13 @@ module.exports.policies = {
     BlogPostController: {
         restricted: [ 'sessionAuth' ],
         open:       true,
-        admin:      [ 'isAdmin' ]
+        admin:      [ 'isRingAdmin' ]
     },
 
     EJSExampleController: {
         restricted: [ 'authDecorator', 'sessionAuth' ],
         open:       true,
-        admin:      [ 'authDecorator', 'isAdmin' ]
+        admin:      [ 'authDecorator', 'isRingAdmin' ]
     },
 
     /**
@@ -59,10 +59,10 @@ module.exports.policies = {
         '*': true,
         'update': ['sessionAuth', 'isAdOwner'],
         'destroy': ['sessionAuth', 'isAdOwner'],
-        'review': ['sessionAuth', 'isAdmin'],
+        'review': ['sessionAuth', 'isRingAdmin'],
         'pauseOrResume': ['sessionAuth', 'isAdOwner'],
         'setDelete': ['sessionAuth', 'isAdOwner'],
-        'forReview': ['sessionAuth', 'isAdmin'],
+        'forReview': ['sessionAuth', 'isRingAdmin'],
         'editAd': ['sessionAuth', 'isAdOwner'],
         'getAccepted': true //TODO 
     },
@@ -78,7 +78,11 @@ module.exports.policies = {
         'resetPwd': ['passwordReset'],
         'register': false, //we use a differnet registration than waterlock
         //changePw own policy because it could be an authenticated user OR a reset token 
-        'changePwd': ['passwordChange'] //this is tricky becuase of pw reset... 
+        'changePwd': ['passwordChange'], //this is tricky becuase of pw reset...
+        // Checked by MAK April 2017
+        // anyone can go to the login page
+        'loginPage': true,
+        'login': true // anyone can post to the login endpoint, though we may want to add an IP range restriction
     },
 
     DeviceController: {
@@ -111,7 +115,7 @@ module.exports.policies = {
         'find': ['sessionAuth'],
         'findOne': ['sessionAuth'],
         'update':  [ 'sessionAuth'],
-        'destroy': [ 'isAdmin' ],
+        'destroy': [ 'isRingAdmin' ],
         'inviteUser': ['sessionAuth', 'isProprietorOwner'],
         'inviteRole': ['sessionAuth', 'isProprietorOwner'],
         'findByEmail': ['sessionAuth', 'isProprietorOwner'],
@@ -121,7 +125,7 @@ module.exports.policies = {
         'getAlist': ['sessionAuth', 'isAdvertiser'],
         'becomeAdvertiser': ['sessionAuth'],
         // New by Mitch 4-2017
-        'all': [ 'isAdmin' ],
+        'all': [ 'isRingAdmin' ],
         'checkjwt': ['hasJsonWebToken']
 
     },
@@ -131,7 +135,7 @@ module.exports.policies = {
         'find': ['sessionAuth'],
         'findOne': ['sessionAuth'], //issues with this one for device population
         'update': ['sessionAuth'],
-        'destroy': ['isAdmin'],
+        'destroy': ['isRingAdmin'],
         // New by Mitch 4-2017
         'all': ['sessionAuth'],
         'getVenueManagers': ['sessionAuth', 'isVenueOwnerMeOrAdmin'],
@@ -140,16 +144,6 @@ module.exports.policies = {
         'removeManager': ['sessionAuth', 'isVenueOwnerMeOrAdmin'],
         'removeOwner': ['sessionAuth', 'isVenueOwnerMeOrAdmin'],
         'getMobileView': true //TODO 
-    },
-    
-
-    RoleController: {
-        '*':       true,
-        'find':    [ 'sessionAuth', 'isAdmin' ],
-        'findOne': [ 'sessionAuth', 'isAdmin' ],
-        'update':  [ 'sessionAuth', 'isAdmin' ],
-        'destroy': [ 'sessionAuth', 'isAdmin' ]
-
     },
 
 

@@ -31,22 +31,13 @@ app.controller( 'adminUserListController', function ( $scope, users, $log, uibHe
 
 // USER EDIT FOR ADMIN
 
-app.controller( 'adminUserEditController', function ( $scope, user, $log, uibHelper, toastr, roles,
+app.controller( 'adminUserEditController', function ( $scope, user, $log, uibHelper, toastr,
                                                       $state, userAuthService, allVenues, sailsUsers, dialogService ) {
 
     $log.debug( "Loading adminUserEditController" );
     $scope.user = user;
     var _newUser;
 
-
-    function refreshRoles() {
-        $scope.roles = roles.map( function ( r ) {
-            r.selected = _.includes( $scope.user.roleTypes, r.roleKey );
-            return r;
-        } );
-    }
-
-    refreshRoles();
 
     function makeNameFields( user ) {
         return [
@@ -172,17 +163,6 @@ app.controller( 'adminUserEditController', function ( $scope, user, $log, uibHel
             } )
     };
 
-    $scope.roleChange = function () {
-
-        var newRoles = _.filter( $scope.roles, function ( r ) { return r.selected; } );
-        $scope.user.updateRoles( newRoles );
-        $scope.user.save()
-            .then( function () { toastr.success( "Role changed" )} )
-            .catch( function ( err ) { toastr.failure( "Role Change Failed", err.message )} );
-
-
-    };
-
 
     $scope.blockedChange = function () {
         $scope.user.updateBlocked()
@@ -206,7 +186,6 @@ app.controller( 'adminUserEditController', function ( $scope, user, $log, uibHel
                     .then( function ( modifiedUser ) {
                         toastr.success( "Added user to venue." );
                         $scope.user = modifiedUser;
-                        refreshRoles();
                     } )
                     .catch( function ( err ) {
                         toastr.error( "Problem attaching user to venue" );
@@ -227,7 +206,6 @@ app.controller( 'adminUserEditController', function ( $scope, user, $log, uibHel
                 $scope.user.removeFromVenue( venue, asType )
                     .then( function ( user ) {
                         $scope.user = user;
-                        refreshRoles();
                         toastr.success( "User Removed" );
                     } )
                     .catch( function ( err ) {
@@ -275,6 +253,22 @@ app.controller( 'adminUserEditController', function ( $scope, user, $log, uibHel
             } );
     }
 
+    $scope.changeRing = function () {
+
+        uibHelper.selectListModal( "Change Ring", "Select a new security ring below.", [ 'Admin', 'Device',
+            'User', 'Advertiser', 'Other (unused)' ], $scope.user.ring - 1 )
+            .then( function ( choice ) {
+                return $scope.user.setRing( choice + 1 );
+            } )
+            .then( function ( newUser ) {
+                toastr.success( "User's ring level was changed" );
+            } )
+            .catch( function ( err ) {
+                toastr.error( err.message );
+            } )
+
+    }
+
 } );
 
 app.controller( 'adminVenueListController', function ( $scope, venues, $log, uibHelper, $state, toastr ) {
@@ -318,8 +312,8 @@ app.controller( 'adminDeviceListController', function ( $scope, venues, $log, sa
 } );
 
 
-app.controller( 'adminDashController', [ '$scope', '$log', 'userinfo', 'venueinfo', 'rando',
-    function ( $scope, $log, userinfo, venueinfo, rando ) {
+app.controller( 'adminDashController', [ '$scope', '$log', 'userinfo', 'venueinfo',
+    function ( $scope, $log, userinfo, venueinfo ) {
 
         $scope.userinfo = userinfo;
         $scope.venueinfo = venueinfo;

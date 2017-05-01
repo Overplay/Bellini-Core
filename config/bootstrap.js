@@ -13,73 +13,69 @@ var Promises = require( 'bluebird' );
 
 module.exports.bootstrap = function ( cb ) {
 
-
-    var coreRoles = sails.config.roles.coreRoles;
-
     var chain = Promise.resolve();
 
-    coreRoles.forEach( function ( role ) {
+    var coreAdmins = [
 
-        chain = chain.then( function () {
-            return Role.findOrCreate( role )
-                .then( function ( r ) {
-                    if ( r ) {
-                        sails.log.debug( "Role created: " + r.roleName );
-                        return r;
-                    }
-                    throw new Error( "Could not create role: " + role.roleName );
+        {
+            user: {
+                firstName: 'Admin',
+                lastName:  'McDeviceadmin',
+                metadata:  { preinstall: true }
+            },
+            auth: {
+                email:    'admin@test.com',
+                password: 'beerchugs'
+            }
+        },
+        {
+            user: {
+                firstName: 'Mitch',
+                lastName:  'Kahn',
+                metadata:  { preinstall: true }
+            },
+            auth: {
+                email:    'mitch+a@ourglass.tv',
+                password: 'D@rkB0ck!'
+            }
+        },
+        {
+            user: {
+                firstName: 'Treb',
+                lastName:  'Ryan',
+                metadata:  { preinstall: true },
+            },
+            auth: {
+                email:    'treb+a@ourglass.tv',
+                password: 'D@rkB0ck!'
+            }
+        }
 
-                } );
-        } );
+    ];
 
-    } );
 
     chain = chain
-        .then( RoleCacheService.sync )
         .then( function () {
 
-            var adminUser = {
-                firstName: 'Admin',
-                lastName: 'Pre-installed',
-                metadata: {preinstall: true},
-                roles: [RoleCacheService.roleByName("admin", ''), RoleCacheService.roleByName("user", '')]
-            }
+            var parr = coreAdmins.map( function ( admin ) {
+                return AdminService.addUserAtRing( admin.auth.email, admin.auth.password, 1, admin.user, false )
+                    .then( function () { sails.log.debug( "Admin user created." )} )
+                    .catch( function () { sails.log.warn( "Admin user NOT created. Probably already existed." )} );
+            } )
 
-            return AdminService.addUser('admin@test.com', 'beerchugs', adminUser, false)
-                .then( function () { sails.log.debug( "Admin user created." )} )
-                .catch( function () { sails.log.warn( "Admin user NOT created. Probably already existed." )} );
-
-        } )
-        .then( function () {
-
-            var roles = [ RoleCacheService.roleByName( "admin", '' ) , RoleCacheService.roleByName("user", '')];
-
-            return AdminService.addUser( 'admin2@test.com', 'beerchugs', { roles: roles } )
-                .then( function () { sails.log.debug( "Admin user created." )} )
-                .catch( function () { sails.log.warn( "Admin user NOT created. Probably already existed." )} );
-
-        } )
-
-        .then( function () {
-
-            var roles = [ RoleCacheService.roleByName( "user", '' ) ];
-
-            return AdminService.addUser( 'general@test.com', 'beerchugs', { roles: roles } )
-                .then( function () { sails.log.debug( "General user created." )} )
-                .catch( function () { sails.log.warn( "General user NOT created. Probably already existed." )} );
+            return Promise.all( parr );
 
         } )
 
         .then( function() {
 
-            sails.log.silly("Creating Limbo venue");
+            sails.log.silly("Creating Bullpen venue");
             return Venue.updateOrCreate({ name: 'Bullpen', uuid: 'bullpen-hey-battabatta', virtual: true },
                 { name: 'Bullpen', uuid: 'bullpen-hey-battabatta',
                 virtual: true, showInMobileApp: false
                  });
 
         })
-
         .then( function () {
             sails.config.testdata.install();
             sails.log.debug( "Inserts done" );

@@ -12,7 +12,8 @@
                 <tr>
                     <th>Name</th>
                     <th>Email</th>
-                    <th>Roles</th>
+                    <th uib-tooltip="1=Admin, 2=Device, 3=User, 4=Sponsor">Ring</th>
+                    <th>Venues</th>
                     <th></th>
                 </tr>
                 </thead>
@@ -25,13 +26,29 @@
                     </td>
                     <td>{{ user.email }}</td>
                     <!--<td ng-if="admin">{{ user.createdAt | date }}</td>-->
-                    <td><span ng-repeat="t in user.roleTypes">{{t}}<br></span></td>
-                    <td><span ng-repeat="venue in user.managedVenues">{{venue.name}}<br></span></td>
                     <td>
+                        <ring-badge ring="user.ring"></ring-badge>
+                    </td>
+                    <td>
+                        <p ng-if="user.ownedVenues.length" style="font-weight: bold; text-decoration: underline;">
+                            Owned</p>
+                        <ul ng-if="user.ownedVenues.length">
+                            <li ng-repeat="venue in user.ownedVenues">{{venue.name}}</li>
+                        </ul>
+                        <!-- managed venues -->
+                        <p ng-if="user.managedVenues.length" style="font-weight: bold; text-decoration: underline;">
+                            Managed</p>
+                        <ul ng-if="user.managedVenues.length">
+                            <li ng-repeat="venue in user.managedVenues">{{venue.name}}</li>
+                        </ul>
+                    </td>
+                    <td>
+
                         <a ui-sref="admin.edituser({ id: user.id })"
                            class="btn btn-sm btn-primary"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>&nbsp;EDIT</a>
-                           <button class="btn btn-sm btn-danger" ng-click="delUser(user)"><i class="fa fa-times-circle"
-                                                                                         aria-hidden="true"></i>&nbsp;DELETE</button>
+                        <button class="btn btn-sm btn-danger" ng-click="delUser(user)"><i class="fa fa-times-circle"
+                                                                                          aria-hidden="true"></i>&nbsp;DELETE
+                        </button>
                     </td>
                 </tr>
                 </tbody>
