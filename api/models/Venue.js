@@ -104,45 +104,12 @@ module.exports = {
         }
     },
 
-    replicateToDM: function( record, cb, isNew ){
-
-        // bail on replication now. This will all be removed!
-        // TODO clean this up once we're coolio with everything!
-        cb();
-
-        // var mirrorDest = sails.config.mirror && sails.config.mirror.venues && sails.config.mirror.venues.route;
-        // if ( mirrorDest ){
-        //     sails.log.silly( "Replicating venue to peer Bellini-DM" );
-        //     var liteVenue = _.pick(record, ['name', 'address', 'uuid', 'virtual']);
-        //
-        //     request
-        //         .post(mirrorDest)
-        //         .send(liteVenue)
-        //         .then(function(resp){
-        //             sails.log.silly("Replicated");
-        //         })
-        //         .catch(function(err){
-        //             sails.log.silly("Rep failed");
-        //         })
-        // }
-        //
-        // cb();
-
-    },
 
     beforeCreate: function( values, cb ){
         // Generate UUID
         values.uuid = uuid();
         cb();
     },
-
-    afterCreate: function( record, cb ){
-        this.replicateToDM( record, cb, true );
-    },
-
-    afterUpdate: function ( record, cb ) {
-        this.replicateToDM( record, cb );
-    }
 
 
 };
