@@ -14,6 +14,8 @@ app.factory( 'navService', function ( $rootScope ) {
             { label: "Add User", sref: "admin.edituser({id: 'new'})", icon: "user" },
             { label: "All Venues", sref: "admin.venuelist", icon: "globe" },
             { label: "Add Venue", sref: "admin.addvenue({id: 'new'})", icon: "building-o" },
+            { label: "All Ads", sref: "admin.adlist", icon: "bullhorn"},
+            { label: "Create Ad", sref: "admin.newad", icon: "paint-brush" },
             { label: "Devices", sref: "admin.devicelist", icon: "television" },
             { label: "Maintenance", sref: "admin.maint", icon: "gears" }
         ],

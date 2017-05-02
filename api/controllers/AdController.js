@@ -291,13 +291,11 @@ module.exports = {
     },
 
     forReview: function (req, res) {
+
         Ad.find({where: {reviewed: false}, sort: 'createdAt ASC'})
-            .then(function (ads) {
-                return res.ok(ads)
-            })
-            .catch(function (err) {
-                return res.serverError({error: err})
-            })
+            .then(res.ok)
+            .catch( res.serverError );
+
     },
 
     //use this for when an advertiser updates ads == gets sent to admin for review
@@ -621,6 +619,9 @@ module.exports = {
             })
             .catch( res.serverError )
     }
+
+    // New Mitch 5-2017
+
 
 
 };

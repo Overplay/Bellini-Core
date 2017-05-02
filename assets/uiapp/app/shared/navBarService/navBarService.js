@@ -259,7 +259,9 @@ app.factory('navBarService', function ($log) {
     service.getMenuForRoles = function (r) {
         //init menus so that it can be merged with
         var menus = {};
-        var roles = r || nucleus.roles;
+        //var roles = r || nucleus.roles;
+
+        var roles = ['admin', 'proprietor.owner', 'proprietor.manager', 'sponsor']
 
         //helper method to combine arrays within the object
         //basically it prevents duplicate tabs and combines sub links

@@ -322,18 +322,15 @@ app.controller( 'adminDeviceDetailController', function ( $scope, device, $log, 
     $scope.ogdevice = device;
     $scope.ogdevice.populateVenue();
 
-
-
-
-
 } );
 
 
-app.controller( 'adminDashController', [ '$scope', '$log', 'userinfo', 'venueinfo',
-    function ( $scope, $log, userinfo, venueinfo ) {
+app.controller( 'adminDashController', [ '$scope', '$log', 'userinfo', 'venueinfo', 'ads', 'toastr',
+    function ( $scope, $log, userinfo, venueinfo, ads, toastr ) {
 
         $scope.userinfo = userinfo;
         $scope.venueinfo = venueinfo;
+        $scope.adsToReview = ads;
 
         $scope.userChartObj = {};
 
@@ -387,4 +384,33 @@ app.controller( 'adminDashController', [ '$scope', '$log', 'userinfo', 'venueinf
         };
 
 
-    } ] )
+    } ] );
+
+
+app.controller( 'adminAdListController', ['$scope','ads', '$log', 'toastr', function( $scope, ads, $log, toastr ){
+
+    $log.debug('adminAdListController loading');
+    $scope.advertisements = ads;
+
+    $scope.togglePause = function(ad){
+
+        ad.paused = !ad.paused;
+        ad.save()
+            .then(function(){
+                toastr.success("Pause state changed")
+            })
+            .catch( function(err){
+                toastr.error("Problem changing pause state");
+            })
+    }
+
+}]);
+
+app.controller( 'adminAdEditController', [ '$scope', '$log', 'ad', 'toastr',
+    function ( $scope, $log, ad, toastr ) {
+
+        $scope.advertisement = ad;
+
+
+    } ] );
+

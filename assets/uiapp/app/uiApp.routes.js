@@ -883,7 +883,7 @@ app.config(function ($stateProvider, $urlRouterProvider) {
             controller: 'manageAdvertisementController',
             resolve: {
                 ads: function ($http) {
-                    return $http.get(apiPath + "/ad").then(function (ads) {
+                    return $http.get("/ad").then(function (ads) {
                         return ads.data;
                     })
                 },

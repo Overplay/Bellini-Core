@@ -1,8 +1,19 @@
 <div class="container">
     <div class="row">
         <h1>Admin Dashboard</h1>
-        <div class="col-lg-6 col-md-6">
+        <div class="col-lg-5 col-md-5 material-panel">
+            <h4>System Status</h4>
             <div google-chart chart="userChartObj" style="height:300px; width:100%;"></div>
         </div>
+        <div class="col-md-5 col-lg-5 material-panel">
+            <h4>To Do</h4>
+                <div ng-if="adsToReview.length">
+                    <h5>Ads to Review</h5>
+                    <ul>
+                        <li ng-repeat="ad in adsToReview"><a ui-sref="">{{ ad.name }}</a> </li>
+                    </ul>
+                </div>
+        </div>
+
     </div>
 </div>

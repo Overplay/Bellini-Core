@@ -7,6 +7,10 @@
   min-height: 300px;
   padding: 0 30px 30px 30px; }
 
+h4 {
+  border-bottom: 1px solid #b7b7b7;
+  padding-bottom: 5px; }
+
 .ognavbar {
   position: relative;
   top: 0;
@@ -72,7 +76,9 @@
   display: flex;
   padding: 10px 0 10px 0;
   background-color: white;
-  color: #707070; }
+  color: #707070;
+  transition: all 0.5s;
+  position: relative; }
 
 .sidelink:hover {
   background-color: #e6e6e6; }
@@ -87,6 +93,21 @@
 
 .hideMenu {
   left: -300px; }
+
+.sidelink.ng-enter {
+  opacity: 0;
+  top: -100px; }
+
+.sidelink.ng-enter.ng-enter-active {
+  opacity: 1;
+  top: 0; }
+
+.fade-in-out {
+  transition: 1s linear all;
+  opacity: 1; }
+
+.fade-in-out.ng-hide {
+  opacity: 0; }
 
 .ogcard {
   -webkit-box-shadow: 1px 1px 1px 0px #a8a8a8;
@@ -183,6 +204,11 @@
 .error-border {
   border: 2px solid #ff0051 !important;
   border-radius: 3px !important; }
+
+.btn-thin {
+  padding: 5px 10px 5px 10px !important;
+  font-size: 10px;
+  color: white; }
 
 .spinner-holder {
   width: 80px;

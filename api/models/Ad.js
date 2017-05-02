@@ -38,21 +38,22 @@ module.exports = {
             type: 'boolean',
             defaultsTo: false
         },
-        reviewed: {
-            type: 'boolean',
-            defaultsTo: false
-        },
-        accepted: {
-            type: 'boolean',
-            defaultsTo: false
-        },
+
         deleted: {
             type: 'boolean',
             defaultsTo: false
         },
+
         metaData: {
             type: 'json',
             defaultsTo: {}
+        },
+
+        // intended to replace the above binary states
+        reviewState: {
+            type: 'string',
+            enum: ['Not Submitted', 'Waiting for Review', 'Rejected', 'Accepted'],
+            defaultsTo: 'Not Submitted'
         }
 
 

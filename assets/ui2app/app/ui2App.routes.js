@@ -81,7 +81,10 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                 },
                 venueinfo: function ( $http ) {
                     return $http.get('/venue/count').then(function(d){ return d.data; });
-                }
+                },
+                ads: function ( sailsAds ) {
+                    return sailsAds.getForReview();
+                },
             }
         } )
 
@@ -148,6 +151,27 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             }
         } )
 
+        .state( 'admin.adlist', {
+            url:         '/adlist',
+            templateUrl: '/ui2app/app/components/admin/adlist.partial.html',
+            controller:  'adminAdListController',
+            resolve:     {
+                ads: function ( sailsAds ) {
+                    return sailsAds.getAll();
+                }
+            }
+        } )
+
+        .state( 'admin.editad', {
+            url:         '/edit/:id',
+            templateUrl: '/ui2app/app/components/admin/adedit.partial.html',
+            controller:  'adminAdEditController',
+            resolve:     {
+                ad: function ( sailsAds, $stateParams ) {
+                    return sailsAds.get( $stateParams.id );
+                }
+            }
+        } )
 
         // Proprietor Owner Links
 

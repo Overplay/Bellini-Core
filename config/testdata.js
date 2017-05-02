@@ -409,18 +409,21 @@ var self = module.exports.testdata = {
         {
             name: "Advertisement One!",
             creatorEmail: "ad@test.com",
-            description: "an ad"
+            description: "Still working on this!",
+            reviewState: 'Not Submitted'
         },
         {
             name: "Advertisement Two!",
             creatorEmail: "ad@test.com",
-            description: "anotha one"
+            description: "I am waiting to be reviewed",
+            reviewState: 'Waiting for Review'
         }
         ,
         {
             name: "Advertisement Three!",
             creatorEmail: "elizabeth@test.com",
-            description: "noooooo"
+            description: "I have been accepted",
+            reviewState: 'Accepted'
         }
     ]
 };
