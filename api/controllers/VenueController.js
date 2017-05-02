@@ -144,6 +144,8 @@ module.exports = {
     },
 
     yelpSearch: function ( req, res ) {
+        var params = req.allParams();
+
         client.search( req.allParams() )
             .then( function ( data ) {
                 res.ok( data.body );

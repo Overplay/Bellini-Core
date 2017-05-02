@@ -2,7 +2,7 @@
  * Created by mkahn on 4/6/16.
  */
 
-var app = angular.module( 'uiApp', [ 'ui.router', 'ui.bootstrap', 'toastr', 'ui.og', 'googlechart' ] );
+var app = angular.module( 'uiApp', [ 'ui.router', 'ui.bootstrap', 'toastr', 'ui.og', 'googlechart', 'uiGmapgoogle-maps' ] );
 
 app.config( function ( toastrConfig ) {
     angular.extend( toastrConfig, {
@@ -10,11 +10,11 @@ app.config( function ( toastrConfig ) {
     } );
 } );
 
-// app.config( function ( uiGmapGoogleMapApiProvider) {
-//     uiGmapGoogleMapApiProvider.configure({
-//         key: 'AIzaSyCrbE5uwJxaBdT7bXTGpes3F3VmQ5K9nXE'
-//     })
-// })
+ app.config( function ( uiGmapGoogleMapApiProvider) {
+     uiGmapGoogleMapApiProvider.configure({
+         key: 'AIzaSyCrbE5uwJxaBdT7bXTGpes3F3VmQ5K9nXE'
+     })
+ })
 //
 // app.config(['ChartJsProvider', function (ChartJsProvider) {
 //     // Configure all charts

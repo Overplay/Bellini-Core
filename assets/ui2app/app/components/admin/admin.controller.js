@@ -304,14 +304,23 @@ app.controller( 'adminVenueEditController', function ( $scope, venue, $log, uibH
     $scope.venue = venue;
 });
 
-app.controller( 'adminVenueAddController', function ( $scope, $log, venue, $state, toastr) {
+app.controller( 'adminVenueAddController', function ( $scope, $log, venue, $state, toastr, geocode) {
     $log.debug("Loading adminVenueAddController");
     $scope.zipRegex = "\\d{5}([\\-]\\d{4})?";
     $scope.venue = venue;
     $scope.validForm = false;
+    $scope.parameters = {};
 
     $scope.setForm = function (form) {
         $scope.form = form;
+    };
+
+    $scope.initializeLocation = function () {
+        geocode.locate()
+            .then( geocode.revGeocode )
+            .then( function (loc) {
+                $scope.parameters.location = loc.city + ", " + loc.state;
+            })
     };
 
     $scope.create = function () {
