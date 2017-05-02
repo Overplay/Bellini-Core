@@ -9,17 +9,19 @@
  */
 module.exports = function (req, res, next) {
 
+    // ring 1 is cool
+    if ( req.session.authenticated && !req.session.user.auth.blocked && req.session.user.auth.ring == 1 ) {
+        return next();
+    }
 
     // User is allowed, proceed to the next policy, 
     // or if this is the last policy, the controller
-    if (req.session.authenticated && req.session.user) {
-        if (RoleCacheService.hasAdminRole(req.session.user.roles)) {
-            return next();
-        }
-        else if (req.session.user.auth.email === req.allParams().email)
-            return next()
+    if (req.session.authenticated && req.session.user && req.session.user.auth.email === req.allParams().email) {
+        return next();
     }
-    else if (req.session.resetToken) {
+
+
+    if (req.session.resetToken) {
         return next();
     }
 

@@ -18,6 +18,13 @@ app.component( 'deviceCard', {
 
         ctrl.$onChanges = update;
 
+        ctrl.formattedNameAddress = function(){
+            var fm = ctrl.device.atVenue.name;
+            if (ctrl.device.atVenue.address){
+                fm = fm + ' | '+ ctrl.device.atVenue.address.city + ', ' + ctrl.device.atVenue.address.state;
+            }
+            return fm;
+        }
 
     },
 
@@ -26,7 +33,7 @@ app.component( 'deviceCard', {
             <div class="dccell dc-icon"><i class="fa fa-television" aria-hidden="true"></i></div>
             <div class="dccell dc-udid">{{ $ctrl.device.deviceUDID }}</div>
             <div class="dccell dc-name">{{ $ctrl.device.name }}</div>
-            <div class="dccell dc-venue">{{ $ctrl.device.atVenue.name }}</div>
+            <div class="dccell dc-venue">{{ $ctrl.formattedNameAddress() }}</div>
         </div>  
     `
 

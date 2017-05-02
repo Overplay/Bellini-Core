@@ -10,7 +10,7 @@ var adDate = 'September 7'; //TODO
 var self = module.exports.testdata = {
 
     installTestData: true,
-    eraseOldData: true,
+    eraseOldData: false,
 
     install: function () {
 
@@ -185,13 +185,6 @@ var self = module.exports.testdata = {
 
     users: [
         {
-            firstName: 'Johnny',
-            lastName: 'McAdmin',
-            email: 'admin@test.com',
-            password: 'beerchugs',
-            ring: 1
-        },
-        {
             firstName: 'Ryan',
             lastName: 'Smith',
             email: 'ryan@test.com',
@@ -338,6 +331,13 @@ var self = module.exports.testdata = {
             email: 'ad@test.com',
             password: 'pa$$word',
             ring: 4
+        },
+        {
+            firstName: 'Tester',
+            lastName:  "O'Admin",
+            email:     'admin99@test.com',
+            password:  'pa$$word',
+            ring:      1
         }
     ],
     venues: [

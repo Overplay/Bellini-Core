@@ -12,13 +12,13 @@
 
 
 module.exports = {
-    
+
     // Main port this service runs on
     port: process.env.PORT || 2000,
 
     // Where to mirror stuff to (bad architecture?) and not implemented yet
     mirror: {
-        venues: {
+        venues:   {
             route: 'http://localhost:2001/venue/replicate'
         },
         ogdevice: {
@@ -32,6 +32,11 @@ module.exports = {
             url: 'http://138.68.230.239:2001'
         }
 
+    },
+
+    security: {
+        // This should be commented out for production. Bypasses JWT check and only looks for the signature below.
+        magicJwt: 'Bearer of_good_tidings'
     }
 
 };

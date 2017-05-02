@@ -129,7 +129,8 @@
 
 .device-card {
   border-radius: 3px;
-  display: flex; }
+  display: flex;
+  margin-bottom: 5px; }
   .device-card:hover {
     -webkit-box-shadow: 1px 1px 1px 0px #a8a8a8;
     -moz-box-shadow: 1px 1px 1px 0px #a8a8a8;

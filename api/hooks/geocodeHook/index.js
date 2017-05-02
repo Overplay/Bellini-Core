@@ -40,7 +40,7 @@ module.exports = function geocodeHook(sails) {
 
                         sails.log.silly("Checking geocoding on: "+v.name);
                         var isGeocoded = v.geolocation && v.geolocation.latitude;
-                        if (!isGeocoded){
+                        if (!isGeocoded && ( v.address && v.address.city)){
                             var address = v.address.street + ',' +
                                 v.address.city + ',' +
                                 v.address.state + ' ' +

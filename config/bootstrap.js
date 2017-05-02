@@ -11,16 +11,16 @@
 
 var Promises = require( 'bluebird' );
 
+
 module.exports.bootstrap = function ( cb ) {
 
-    var chain = Promise.resolve();
 
     var coreAdmins = [
 
         {
             user: {
                 firstName: 'Admin',
-                lastName:  'McDeviceadmin',
+                lastName:  'Pukeface',
                 metadata:  { preinstall: true }
             },
             auth: {
@@ -35,7 +35,7 @@ module.exports.bootstrap = function ( cb ) {
                 metadata:  { preinstall: true }
             },
             auth: {
-                email:    'mitch+a@ourglass.tv',
+                email:    'mitcha@ourglass.tv',
                 password: 'D@rkB0ck!'
             }
         },
@@ -46,48 +46,34 @@ module.exports.bootstrap = function ( cb ) {
                 metadata:  { preinstall: true },
             },
             auth: {
-                email:    'treb+a@ourglass.tv',
+                email:    'treba@ourglass.tv',
                 password: 'D@rkB0ck!'
             }
         }
 
     ];
 
+    coreAdmins.forEach(function(admin){
+        AdminService.addUserAtRing( admin.auth.email, admin.auth.password, 1, admin.user, false )
+            .then( function () { sails.log.debug( "Admin user created." )} )
+            .catch( function ( err ) {
+                    sails.log.warn( "Admin user NOT created. Probably already existed." )
+                }
+            );
+    });
 
-    chain = chain
-        .then( function () {
 
-            var parr = coreAdmins.map( function ( admin ) {
-                return AdminService.addUserAtRing( admin.auth.email, admin.auth.password, 1, admin.user, false )
-                    .then( function () { sails.log.debug( "Admin user created." )} )
-                    .catch( function () { sails.log.warn( "Admin user NOT created. Probably already existed." )} );
-            } )
-
-            return Promise.all( parr );
-
-        } )
-
-        .then( function() {
-
-            sails.log.silly("Creating Bullpen venue");
-            return Venue.updateOrCreate({ name: 'Bullpen', uuid: 'bullpen-hey-battabatta', virtual: true },
-                { name: 'Bullpen', uuid: 'bullpen-hey-battabatta',
-                virtual: true, showInMobileApp: false
-                 });
-
-        })
-        .then( function () {
-            sails.config.testdata.install();
-            sails.log.debug( "Inserts done" );
-            return true;
-        } )
-        .then( function () {
-            sails.log.debug( "Bootstrapping SAILS done" );
+    Venue.updateOrCreate( { name: 'Bullpen', uuid: 'bullpen-hey-battabatta', virtual: true },
+        {
+            name:    'Bullpen', uuid: 'bullpen-hey-battabatta',
+            virtual: true, showInMobileApp: false
         } );
 
 
-    // It's very important to trigger this callback method when you are finished
-    // with the bootstrap!  (otherwise your server will never lift, since it's waiting on the bootstrap)
-    
+    sails.config.testdata.install();
+
+    sails.log.debug( "Bootstrapping SAILS done" );
+
     cb();
-};
+}
+;
