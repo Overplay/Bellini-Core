@@ -10,7 +10,7 @@
                 <div ng-if="adsToReview.length">
                     <h5>Ads to Review</h5>
                     <ul>
-                        <li ng-repeat="ad in adsToReview"><a ui-sref="">{{ ad.name }}</a> </li>
+                        <li ng-repeat="ad in adsToReview"><a ui-sref="admin.editad({id:ad.id})">{{ ad.name }}</a> </li>
                     </ul>
                 </div>
         </div>

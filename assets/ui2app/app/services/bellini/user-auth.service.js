@@ -2,7 +2,7 @@
  * Created by mkahn on 4/21/17.
  */
 
-app.factory('userAuthService', function($http, $log ){
+app.factory('userAuthService', function($http, $log){
 
     $log.debug("Loading userAuthService");
 
@@ -16,15 +16,13 @@ app.factory('userAuthService', function($http, $log ){
         return userPromise;
     };
 
-    // =========== ROLES ==========
-    service.getRole = function ( userId ) {
-        var endPoint = '/api/v1/role' + (userId ? '/' + userId : '');
-        return $http.get( endPoint ).then(stripData);
+    service.getCurrentUserRing = function () {
+        return userPromise
+            .then( function(user){
+                return user.auth && user.auth.ring;
+            });
     };
-    
-    service.getRoles = function(){
-        return this.getRole();
-    };
+
 
     // ========== ADDING USERS ===========
     //TODO test validate TODO handle facebookId

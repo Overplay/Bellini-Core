@@ -292,7 +292,7 @@ module.exports = {
 
     forReview: function (req, res) {
 
-        Ad.find({where: {reviewed: false}, sort: 'createdAt ASC'})
+        Ad.find({where: {reviewState: 'Waiting for Review'}, sort: 'createdAt ASC'})
             .then(res.ok)
             .catch( res.serverError );
 

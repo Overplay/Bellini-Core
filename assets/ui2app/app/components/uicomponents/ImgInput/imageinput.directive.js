@@ -2,16 +2,16 @@
  * Created by mkahn on 6/20/16.
  */
 
-app.directive('imgInput', function($log, $timeout){
+app.directive( 'imgInput', function ( $log, $timeout, $rootScope ) {
     return {
-        restrict: 'E',
-        scope: {
-            dirty: '=?',
+        restrict:    'E',
+        scope:       {
+            dirty:    '=?',
             srcField: '=?',
-            prompt: '@'
+            prompt:   '@'
         },
-        link: function ( scope, elem, attrs ){
-            
+        link:        function ( scope, elem, attrs ) {
+
             var w = attrs.width || '128';
             var h = attrs.height || '128';
 
@@ -21,56 +21,59 @@ app.directive('imgInput', function($log, $timeout){
             scope.ratio = attrs.ratio;
             scope.maxSize = attrs.maxSize !== undefined;
 
-            var ratio = w/h;
-            var reset = function(error) {
-                showWarning(error);
-                scope.img.mediaSrc = scope.srcField ? '/media/download/'+scope.srcField : placeholder;
+            var ratio = w / h;
+            var reset = function ( error ) {
+                showWarning( error );
+                scope.img.mediaSrc = scope.srcField ? '/media/download/' + scope.srcField : placeholder;
                 scope.dirty = null;
             };
 
             scope.warning = '';
             scope.img = {
-                widthPx: w+'px',
-                heightPx: h+'px',
-                style: { "max-width": "50%" },
-                mediaSrc: scope.srcField ? '/media/download/'+scope.srcField : placeholder
+                widthPx:  w + 'px',
+                heightPx: h + 'px',
+                style:    { "max-width": "50%" },
+                mediaSrc: scope.srcField ? scope.srcField.url : placeholder
             }
 
-            scope.filesDropped = function(files){
+            scope.filesDropped = function ( files ) {
 
-                $log.debug("Files dropped!");
+                $log.debug( "Files dropped!" );
                 var fr = new FileReader();
-                var acceptedTypes = ["image/png", "image/jpeg", "image/gif"]; //TODO gif???
+                var acceptedTypes = [ "image/png", "image/jpeg", "image/gif" ];
                 var img = new Image();
 
-                img.onload = function() {
-                    scope.$apply( function() {
-                        if (scope.exact && (img.width != w || img.height != h))
-                            reset("Image has invalid dimensions.");
-                        else if (scope.ratio && img.width / img.height != ratio)
-                            reset("Image does not match specified ratio.");
-                        else if (scope.maxSize && (img.width > w || img.height > h))
-                            reset("Image is too large.");
+                img.onload = function () {
+                    scope.$apply( function () {
+                        if ( scope.exact && (img.width != w || img.height != h) )
+                            reset( "Image has invalid dimensions." );
+                        else if ( scope.ratio && img.width / img.height != ratio )
+                            reset( "Image does not match specified ratio." );
+                        else if ( scope.maxSize && (img.width > w || img.height > h) )
+                            reset( "Image is too large." );
                         else
                             scope.img.mediaSrc = fr.result;
-                    })
+                    } )
                 };
 
                 fr.onload = function () {
 
                     // Must force digest since onload event is outside of angular
-                    scope.$apply( function() {
-                        img.src = window.URL.createObjectURL(files[0]);
+                    scope.$apply( function () {
+                        img.src = window.URL.createObjectURL( files[ 0 ] );
                         // scope.img.mediaSrc = fr.result;
-                        scope.dirty = files[0]; // it's truthy and the file we want the Controller to upload
+                        scope.dirty = files[ 0 ]; // it's truthy and the file we want the Controller to upload
                     })
+
+                    $rootScope.$broadcast( 'FILE_DROPPED', { tag: attrs.tag || 'imgInput', file: files[0] } );
+
                 };
 
-                if (acceptedTypes.indexOf(files[0].type) <= -1) {
+                if ( acceptedTypes.indexOf( files[ 0 ].type ) <= -1 ) {
                     showWarning( "Error: invalid file type" );
                 }
                 else {
-                    fr.readAsDataURL( files[0] );
+                    fr.readAsDataURL( files[ 0 ] );
 
                     // For testing only.
                     // showWarning( files[ 0 ].name );
@@ -80,19 +83,19 @@ app.directive('imgInput', function($log, $timeout){
 
 
             // This would be used to signal bad files, bad sizes.
-            function showWarning(message) {
+            function showWarning( message ) {
                 scope.warning = message;
-                $timeout( function(){ scope.warning="" }, 2000);
+                $timeout( function () { scope.warning = "" }, 2000 );
             }
-        
+
         },
-        templateUrl: '/uiapp/app/components/directives/ImgInput/imageinput.template.html'
+        templateUrl: '/ui2app/app/components/uicomponents/ImgInput/imageinput.template.html'
     }
 
-})
+} )
 
 // lets you give a dbid as source
-app.directive('nMedia', function(){
+app.directive( 'nMedia', function () {
 
     return {
         restrict: 'A',
@@ -103,4 +106,4 @@ app.directive('nMedia', function(){
         }
     }
 
-})
+} )

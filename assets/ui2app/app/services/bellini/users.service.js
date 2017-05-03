@@ -30,12 +30,10 @@ app.factory( "sailsUsers", function ( sailsApi, sailsCoreModel, sailsAuth, userA
             this.address = json && json.address;
             this.demographics = json && json.demographics;
             this.registeredAt = json && json.registeredAt;
-            this.roles = json && json.roles;
             this.ownedVenues = json && json.ownedVenues;
             this.managedVenues = json && json.managedVenues;
             this.organization = json && json.organization;
             this.email = json && json.auth && json.auth.email;
-            this.roleTypes = json && json.roleTypes;
             this.auth = json && json.auth && sailsAuth.new( json.auth );
             this.blocked = this.auth && this.auth.blocked;
             this.ring = this.auth && this.auth.ring;

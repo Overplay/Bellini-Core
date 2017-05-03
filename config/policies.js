@@ -32,13 +32,13 @@ module.exports.policies = {
     BlogPostController: {
         restricted: [ 'sessionAuth' ],
         open:       true,
-        admin:      [ 'isRingAdmin' ]
+        admin:      [ 'isAdmin' ]
     },
 
     EJSExampleController: {
         restricted: [ 'authDecorator', 'sessionAuth' ],
         open:       true,
-        admin:      [ 'authDecorator', 'isRingAdmin' ]
+        admin:      [ 'authDecorator', 'isAdmin' ]
     },
 
     /**
@@ -59,16 +59,16 @@ module.exports.policies = {
         '*': true,
         'update': ['sessionAuth', 'isAdOwner'],
         'destroy': ['sessionAuth', 'isAdOwner'],
-        'review': ['sessionAuth', 'isRingAdmin'],
+        'review': ['sessionAuth', 'isAdmin'],
         'pauseOrResume': ['sessionAuth', 'isAdOwner'],
         'setDelete': ['sessionAuth', 'isAdOwner'],
-        'forReview': ['sessionAuth', 'isRingAdmin'],
+        'forReview': ['sessionAuth', 'isAdmin'],
         'editAd': ['sessionAuth', 'isAdOwner'],
         'getAccepted': true //TODO 
     },
     
     AuthController: {
-        '*': 'isRingAdmin',
+        '*': 'isAdmin',
         // 'find':    [ 'sessionAuth', 'isAdmin' ],
         // 'findOne': ['sessionAuth', 'isVenueOwnerMeOrAdmin'], //tricky for manager list and whatnot
         'update':  [ 'authProtection' ],
@@ -115,7 +115,7 @@ module.exports.policies = {
         'find': ['sessionAuth'],
         'findOne': ['sessionAuth'],
         'update':  [ 'sessionAuth'],
-        'destroy': [ 'isRingAdmin' ],
+        'destroy': [ 'isAdmin' ],
         'inviteUser': ['sessionAuth', 'isProprietorOwner'],
         'inviteRole': ['sessionAuth', 'isProprietorOwner'],
         'findByEmail': ['sessionAuth', 'isProprietorOwner'],
@@ -125,7 +125,7 @@ module.exports.policies = {
         'getAlist': ['sessionAuth', 'isAdvertiser'],
         'becomeAdvertiser': ['sessionAuth'],
         // New by Mitch 4-2017
-        'all': [ 'isRingAdmin' ],
+        'all': [ 'isAdmin' ],
         'checkjwt': ['hasJsonWebToken']
 
     },
@@ -135,7 +135,7 @@ module.exports.policies = {
         'find': ['sessionAuth'],
         'findOne': ['sessionAuth'], //issues with this one for device population
         'update': ['sessionAuth'],
-        'destroy': ['isRingAdmin'],
+        'destroy': ['isAdmin'],
         // New by Mitch 4-2017
         'all': ['sessionAuth'],
         'getVenueManagers': ['sessionAuth', 'isVenueOwnerMeOrAdmin'],

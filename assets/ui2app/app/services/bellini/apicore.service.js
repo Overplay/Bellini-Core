@@ -3,7 +3,7 @@
  */
 
 
-app.factory( "sailsApi", function ( $http ) {
+app.factory( "sailsApi", function ( $http, $log ) {
 
     service = {};
 
@@ -12,7 +12,7 @@ app.factory( "sailsApi", function ( $http ) {
     var _apiPath = '';
 
 
-    function stripData(data){
+    function stripData( data ) {
         return data.data;
     }
 
@@ -81,6 +81,43 @@ app.factory( "sailsApi", function ( $http ) {
         return source && source.id;
     }
 
+    /**
+     * Upload a media file. If there is an experience Id, then the photo is attached to the
+     * experience.
+     * @param file
+     * @returns {deferred.promise|*}
+     */
+    service.uploadMedia = function ( file ) {
+
+        if ( !(file instanceof File) ) {
+            $log.error("file is not actually a File!!!");
+        }
+
+        if ( !(file instanceof Blob) ) {
+            $log.error( "file is not actually a Blob!!!" );
+        }
+
+        if ( file===undefined){
+            $log.error( "file is undefined!!!" );
+        }
+
+        var fd = new FormData();
+
+        fd.append( 'file', file );
+
+
+        // Content-Type undefined supposedly required here, transformed elsewhere
+        return $http.post( 'media/upload', fd, {
+            transformRequest: angular.identity,
+            headers:          { 'Content-Type': undefined }
+        } )
+            .then( function ( data ) {
+                $log.debug( "media uploaded thru sailsApi" );
+                return data.data;
+            } );
+
+    }
+
     return service;
 
 } );
@@ -121,21 +158,21 @@ app.factory( "sailsCoreModel", function ( sailsApi ) {
     CoreModel.prototype.refresh = function () {
         return sailsApi.getModel( this.modelType, this.id );
     }
-    
-    CoreModel.prototype.cloneUsingFields = function(fields){
-    
+
+    CoreModel.prototype.cloneUsingFields = function ( fields ) {
+
         var clone = {};
-        fields.forEach( function(field){
+        fields.forEach( function ( field ) {
             // Special syntax to pull dbid from object, or pass thru if already string dbId
-            if (field.startsWith('@id:')){
-                field = field.replace('@id:','');
-                clone[field] = sailsApi.idFromIdOrObj(this[ field ]);
+            if ( field.startsWith( '@id:' ) ) {
+                field = field.replace( '@id:', '' );
+                clone[ field ] = sailsApi.idFromIdOrObj( this[ field ] );
             } else {
                 clone[ field ] = this[ field ];
             }
 
-        }, this); // 'this' as second parameter makes sure 'this' is not global window 'this' in loop.
-        
+        }, this ); // 'this' as second parameter makes sure 'this' is not global window 'this' in loop.
+
         return clone;
     }
 

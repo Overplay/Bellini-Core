@@ -23,6 +23,7 @@ app.factory( "sailsMedia", function ( sailsApi, sailsCoreModel ) {
             this.createdAt = json && json.createdAt;
             this.updatedAt = json && json.updatedAt;
             this.id = json && json.id;
+            this.url = 'media/download/'+this.id;
         }
         
 
@@ -49,11 +50,17 @@ app.factory( "sailsMedia", function ( sailsApi, sailsCoreModel ) {
             .then( newMedia );
     };
 
+    var newMediaWithFile = function(file){
+        return sailsApi.uploadMedia(file)
+            .then(newMedia);
+    }
+
     // Exports...new pattern to prevent this/that crap
     return {
         getAll: getAll,
         get: getMedia,
-        new: newMedia
+        new: newMedia,
+        newWithFile: newMediaWithFile
     }
 });
 

@@ -1,34 +1,22 @@
 /**
- * adminAuth
+ * sessionAuth
  *
  * @module      :: Policy
- * @description :: Simple policy to allow authenticated admin user
+ * @description :: Simple policy to allow authenticated user
  *                 Assumes that your login action in one of your controllers sets `req.session.authenticated = true;`
  * @docs        :: http://sailsjs.org/#!/documentation/concepts/Policies
  *
  */
+
 module.exports = function ( req, res, next ) {
 
-    if ( sails.config.policies.wideOpen )
+
+    if ( PolicyService.isLoggedIn( req ) ||
+        PolicyService.isPeerToPeer( req ) ||
+        PolicyService.isMagicJwt( req ) )
         return next();
 
-    // User is allowed, proceed to the next policy,
-    // or if this is the last policy, the controller
-    if ( req.session.authenticated && !req.session.user.auth.blocked ) {
-        return next();
-    }
-
-    var headers = req.headers;
-
-    // TODO temporary hack to authenticate peer-to-peer from BelliniDM
-    if ( headers[ 'user-agent' ] && headers[ 'user-agent' ].startsWith( 'node-superagent' ) ) {
-        return next();
-    }
-
-    if ( sails.config.security.magicJwt && (headers['authorization']== sails.config.security.magicJwt)){
-        return next();
-    }
     // User is not allowed
-    // (default res.forbidden() behavior can be overridden in `config/403.js`)
-        return res.forbidden( 'You are not permitted to perform this action.' );
+    return res.forbidden( { error: 'not logged in'} );
+
 };

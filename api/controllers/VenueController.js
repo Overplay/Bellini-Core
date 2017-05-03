@@ -480,6 +480,34 @@ module.exports = {
             } )
             .catch( res.serverError );
 
+    },
+
+    geocode: function(req, res){
+
+        if ( req.method != 'GET' )
+            return res.badRequest( { error: "Bad Verb" } );
+
+        //OK, we need a venueId
+        var params = req.allParams();
+
+        if ( !params.address )
+            return res.badRequest( { error: "address" } );
+
+
+        GeocodeService.geocode( params.address )
+            .then( function ( results ) {
+                if ( !results.length ) {
+                    sails.log.silly( "Bad geocode result!" );
+                    return res.badRequest({error: 'no result'})
+                }
+
+                sails.log.silly( "Geocode returned this many hits: " + results.length );
+                return res.ok( results );
+            } )
+            .catch( function ( err ) {
+                return res.badRequest(err);
+            } )
+
     }
 };
 

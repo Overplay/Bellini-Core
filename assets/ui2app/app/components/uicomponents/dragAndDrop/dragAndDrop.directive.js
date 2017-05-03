@@ -1,37 +1,45 @@
-/*app.directive('dragAndDrop', [
-    '$rootScope', function ($rootScope) {
+app.directive( 'dragAndDrop', [
+    '$log', function ( $log ) {
         return {
             restrict: 'A',
-            link: function (scope, elem, attr) {
-                elem.bind('dragover', function (e) {
+            scope:    {
+                onDrop: '='
+            },
+            link:     function ( scope, elem, attr ) {
+
+                elem.bind( 'dragover', function ( e ) {
                     e.stopPropagation();
                     e.preventDefault();
                     e.dataTransfer.dropEffect = 'copy';
-                });
-                elem.bind('dragenter', function (e) {
+                } );
+                elem.bind( 'dragenter', function ( e ) {
                     e.stopPropagation();
                     e.preventDefault();
 
-                });
-                elem.bind('dragleave', function (e) {
+                } );
+                elem.bind( 'dragleave', function ( e ) {
                     e.stopPropagation();
                     e.preventDefault();
 
-                });
-                elem.bind('drop', function (e) {
+                } );
+                elem.bind( 'drop', function ( e ) {
 
                     var droppedFiles = e.dataTransfer.files;
 
                     e.stopPropagation();
                     e.preventDefault();
 
-                    if (droppedFiles) {
-                        $rootScope.$broadcast('droppedFile', droppedFiles);
+                    if ( droppedFiles ) {
+                        if ( scope.onDrop )
+                            scope.onDrop( droppedFiles );
+                        else
+                            throw new Error( "No drop callback you dingus!" );
                     }
 
 
-                });
+                } );
 
             }
         };
-    }]);*/
+
+    } ] );

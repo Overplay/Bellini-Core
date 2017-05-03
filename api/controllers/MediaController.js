@@ -10,6 +10,20 @@ var verror = require( 'verror' );
 var promise = require( "bluebird" );
 
 
+
+
+function killMediaArrayThenRespond( array, response, count ) {
+    if ( array.length ) {
+        Media.destroy( array[ 0 ].id ).then( function ( data ) {
+            array.splice( 0, 1 );
+            killMediaArrayThenRespond( array, response, count + 1 );
+        }, response.negotiate );
+    }
+    else {
+        response.ok( "Successfully deleted " + count + " media" );
+    }
+}
+
 module.exports = {
 
     /**
@@ -19,58 +33,51 @@ module.exports = {
      */
     count: function ( req, res ) {
 
+        if ( req.method != 'GET' ) {
+            return res.badRequest( "Must use GET" );
+        }
+
+        var params = req.allParams();
+
+        var query = {};
+
         //Count in time window
-        if ( req.body && req.body.start && req.body.end ) {
+        if ( params.start && params.end ) {
 
-            var count = 0, now = Date.now();
+            query = {
+                createdAt: { '<=': new Date( params.end ), '>': new Date( params.start ) }
+            };
+        }
 
-            //TODO can't this be done with a straight waterlin query?
-            Media.find()
-                .then( function ( data ) {
-                data.forEach( function ( media ) {
-                    media.createdAt = new Date( media.createdAt );
-                    if ( media.createdAt > req.body.start && media.createdAt < req.body.end ) {
-                        count++;
-                    }
-                } );
 
-                res.ok( { count: count } );
-
-            }, function ( err ) {
-
-                var err1 = new verror( err, "count failed" );
-                err1.status = 500;
-                sails.log.error( err1.message );
-                res.negotiate( err1 );
-
+        Media.count( query )
+            .then( function ( count ) {
+                return res.ok( { count: count } );
             } )
-        }
-        else {
-
-            Media.count( {} )
-                .then( function ( found ) { return res.ok( { count: found } ) } )
-                .catch( function ( err ) {
-                    var err1 = new verror( err, "count failed" );
-                    err1.status = 500;
-                    sails.log.error( err1.message );
-                    return res.negotiate( err1 );
-
-                } );
-
-
-        }
+            .catch( res.serverError )
 
     },
 
-
     /*
-    uploads a file and creates it as a Media instance 
+     uploads a file and creates it as a Media instance
      */
     upload: function ( req, res ) {
 
+        if ( req.method != 'POST' ) {
+            return res.badRequest( { error: "Must use POST" } );
+        }
 
-        //TODO media path config CEG
-        var destinationFolder = require( 'path' ).resolve(sails.config.appPath, 'data/uploads/media');
+        // The code below can take down sails because SkipperDisk is shitty
+
+        // var numFiles = req.file( 'file' )._files.length;
+        //
+        // if ( numFiles == 0 )
+        //     return res.badRequest( { error: "No files in POST" } );
+        //
+        // if ( numFiles > 1 )
+        //     return res.badRequest( { error: "This endpoint only does single files, try media/uploadmultiple." } );
+
+        var destinationFolder = require( 'path' ).resolve( sails.config.paths.media );
 
         var uploadOptions = {
             dirname:  destinationFolder,
@@ -81,59 +88,96 @@ module.exports = {
 
             if ( err ) {
                 sails.log.error( "Media upload error: " + util.inspect( err ) );
-                res.serverError( {error: err} );
+                return res.serverError( { error: err } );
             }
 
             // If no files were uploaded, respond with an error.
-            else if ( (uploadedFiles === undefined) || (uploadedFiles.length === 0) ) {
-                res.badRequest( {error: 'No file(s) uploaded.'} );
+            if ( (uploadedFiles === undefined) || (uploadedFiles.length === 0) ) {
+                return res.badRequest( { error: 'No file(s) uploaded.' } );
             }
 
-            else {
+            sails.log.silly( "Processing uploaded file." );
 
-                sails.log.silly( "Processing uploaded files." );
+            var localFile = uploadedFiles[ 0 ];
 
-                var ops = [];
+            var mObj = {
+                path: localFile.fd,
+                file: {
+                    size: localFile.size,
+                    type: localFile.type
+                },
+                metadata: req.param( 'metadata' ),
+                source: req.param( 'source' )
+            };
 
-                for ( var uploadedFile in uploadedFiles ) {
+            Media.create( mObj )
+                .then( function ( newMedia ) {
+                    if ( !newMedia )
+                        throw new Error( "Could not create new Media!" );
 
-                    //TODO need hasOwnProperty check here?
-                    var localFile = uploadedFiles[ uploadedFile ];
+                    sails.log.silly( "Media.create: [ " + newMedia.id + " ]" );
+                    return res.ok(newMedia);
+                } )
+                .catch( function ( err ) {
+                    return res.badRequest( { error: err.message } );
+                } );
 
-                    var mObj = {
-                        path:     localFile.fd,
-                        file:     {
-                            size: localFile.size,
-                            type: localFile.type
-                        },
-                        metadata: req.param( 'metadata' ),
-                        source:   req.param( 'source' )
-                    };
+        } );
 
-                    ops.push( Media.create( mObj ) );
-                }
+    },
 
-                //Resolve creation of all media
-                promise.all( ops )
-                    .then(
-                        function ( newMedias ) {
+    // Split off by MAK pulled from Wandr
+    uploadMultiple: function ( req, res ) {
 
-                            sails.log.silly( "Media.create: [ " + util.inspect( _.pluck( newMedias, 'id' ) ) + " ]" );
+        if ( req.method != 'POST' ) {
+            return res.badRequest( { error: "Must use POST" } );
+        }
 
-                            //TODO are all these checks really necessary?
-                            if ( _.isArray( newMedias ) && (_.size( newMedias ) === 0) ) res.status( 201 ).json( {} );
-                            else if ( _.isArray( newMedias ) && (_.size( newMedias ) === 1) ) res.status( 201 ).json( newMedias[ 0 ] );
-                            else res.status( 201 ).json( newMedias );
+        req.file( 'file' ).upload( uploadOptions, function whenDone( err, uploadedFiles ) {
 
-
-                        } )
-                    .catch(
-                        function ( err ) {
-                            sails.log.error( "Media.create (error): " + util.inspect( err ) );
-                            res.serverError( {error: err} );
-                        } );
-
+            if ( err ) {
+                sails.log.error( "Media upload error: " + util.inspect( err ) );
+                return res.serverError( err );
             }
+
+            // If no files were uploaded, respond with an error.
+            if ( (uploadedFiles === undefined) || (uploadedFiles.length === 0) ) {
+                return res.badRequest( { error: 'No file(s) uploaded.' } );
+            }
+
+            sails.log.silly( "Processing uploaded files." );
+
+            var ops = [];
+
+            uploadedFiles.forEach( function ( localFile ) {
+
+                var mObj = {
+                    path:     localFile.fd,
+                    file:     {
+                        size: localFile.size,
+                        type: localFile.type
+                    },
+                    metadata: req.param( 'metadata' ),
+                    source:   req.param( 'source' )
+                };
+
+                ops.push( Media.create( mObj ) );
+
+            } );
+
+            //Resolve creation of all media
+            Promise.all( ops )
+                .then(
+                    function ( newMedias ) {
+                        sails.log.silly( "Media.create: [ " + util.inspect( _.pluck( newMedias, 'id' ) ) + " ]" );
+                        return res.ok( newMedias );
+                    } )
+                .catch(
+                    function ( err ) {
+                        sails.log.error( "Media.create (error): " + util.inspect( err ) );
+                        return res.serverError( err );
+                    } );
+
 
         } );
 
@@ -210,25 +254,13 @@ module.exports = {
     // TODO: This is very dangerous in Asahi. Maybe we should remove?
     deleteAllEntries: function ( req, res ) {
         if ( req.method != "DELETE" ) {
-            res.negotiate( new verror( "This endpoint is only available for DELETE" ) );
+            res.badRequest( { error: 'bad verb'} );
             return;
         }
         Media.find().then( function ( data ) {
             killMediaArrayThenRespond( data, res, 0 );
         }, res.negotiate );
 
-
     }
 };
 
-function killMediaArrayThenRespond( array, response, count ) {
-    if ( array.length ) {
-        Media.destroy( array[ 0 ].id ).then( function ( data ) {
-            array.splice( 0, 1 );
-            killMediaArrayThenRespond( array, response, count + 1 );
-        }, response.negotiate );
-    }
-    else {
-        response.ok( "Successfully deleted " + count + " media" );
-    }
-}

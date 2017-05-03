@@ -1,5 +1,5 @@
 /**
- * sessionAuth
+ * isAdmin
  *
  * @module      :: Policy
  * @description :: Simple policy to allow authenticated admin user
@@ -7,21 +7,16 @@
  * @docs        :: http://sailsjs.org/#!/documentation/concepts/Policies
  *
  */
+
+// Policy code = 100.
+
 module.exports = function ( req, res, next ) {
 
 
-    if ( sails.config.policies.wideOpen ) {
-        sails.log.debug("In wideOpen policy mode, so skipping this policy!");
+    if (PolicyService.isAdmin(req))
         return next();
-    }
-  
-    // User is allowed, proceed to the next policy, 
-    // or if this is the last policy, the controller
-    if ( req.session.authenticated && !req.session.user.auth.blocked && RoleCacheService.hasAdminRole( req.session.user.roles ) ) {
-        return next();
-    }
 
     // User is not allowed
-    // (default res.forbidden() behavior can be overridden in `config/403.js`)
-    return res.forbidden( 'You are not permitted to perform this action.' );
+    return res.forbidden( { error: 'not authorized. Policy 100.' } );
+
 };

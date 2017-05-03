@@ -7,9 +7,6 @@ app.factory('asahiService', function ($log, $http) {
      * @param file
      * @returns {deferred.promise|*}
      */
-
-
-    //TODO limit file size stuff ???
     service.uploadMedia = function (file) {
 
         var fd = new FormData();

@@ -24,10 +24,157 @@ app.component( 'adStats', {
     },
 
     template: `
-    
-    
-    
-    
+        <div>
+        <h4>Not Ported Yet</h4>
+        <p>Stats for {{ $ctrl.advert.name }} will be here soon!</p>
+        </div>
     `
 
 });
+
+// Original HTML below for reference...
+
+/*
+ <div class="top15" style="padding: 20px; border: 2px solid #cacaca; border-radius: 5px;">
+ <div class="panel-body">
+ <div ng-if="!impressions.length && !impressionsLoading">
+ <h2>No Impression Data</h2>
+ </div>
+ <div class="text-center" ng-if="impressionsLoading"><br>
+ <h5>Loading...</h5>
+ <br>
+ <i class="fa fa-spinner fa-spin fa-pulse fa-fw"></i>
+ </div>
+ <div ng-if="impressions.length">
+ <div class="text-center" ng-if="impressionsLoading"><br>
+ <h5>Loading...</h5>
+ <br>
+ <i class="fa fa-spinner fa-spin fa-pulse fa-fw"></i>
+ </div>
+ <div ng-if="!impressionsLoading">
+
+ <div class="text-center">
+ <h4>Total Impressions: {{impressions.length}}</h4>
+
+ <h4>Total Screen Time: {{data.screenTime}} Hours</h4>
+ </div>
+ <br>
+ <div ng-if="venues.length">
+ <div class="text-center">
+ Impressions
+ by
+ Venue
+ </div>
+ <table class="table table-striped top15">
+ <thead>
+ <tr>
+ <td><b>Venue</b></td>
+ <td><b>Impressions</b></td>
+ <td><b>Screen Time</b></td>
+ </tr>
+ </thead>
+ <tbody>
+ <tr ng-repeat="l in venues">
+ <td>{{l[0].venue.name}}</td>
+ <td>{{l.length}}</td>
+ <td>{{l.length }} made up Hours</td>
+ </tr>
+
+ </tbody>
+ </table>
+ </div>
+
+ </div>
+ <div class="row">
+ <div class="col-md-12">
+ <div class="text-center">
+ <h4>Hourly Impressions</h4>
+ </div>
+ <div ng-show="loadingDaily" class="text-center">
+ <br>
+ <h5>Loading...</h5>
+ <br>
+ <i class="fa fa-spinner fa-spin fa-pulse fa-fw"></i>
+ </div>
+ <canvas id="bar" class="chart chart-line"
+ chart-data="graphdata" chart-labels="labels" chart-series="series"
+ chart-options="options">
+ </canvas>
+ </div>
+
+ </div>
+ <div class="row">
+ <div class="col-md-3"></div>
+ <div class="col-md-6">
+ <p class="input-group">
+ <input type="text" class="form-control" uib-datepicker-popup="{{format}}"
+ ng-model="dt.daily" is-open="datePopup.daily"
+ datepicker-options="dateOptions"
+ ng-required="true" close-text="Close"
+ alt-input-formats="altInputFormats" ng-change="newDate()"/>
+ <span class="input-group-btn">
+ <button type="button" class="btn btn-default" ng-click="open('daily')"><i
+ class="glyphicon glyphicon-calendar"></i></button>
+ </span>
+ </p>
+ </div>
+ <div class="col-md-3"></div>
+
+ </div>
+ <hr>
+
+ <div class="row">
+ <div class="col-md-12">
+ <div class="text-center">
+ <h4>Impressions Over Time</h4>
+ </div>
+ <div ng-show="loadingTimeSpan" class="text-center">
+ <br>
+ <h5>Loading...</h5>
+ <br>
+ <i class="fa fa-spinner fa-spin fa-pulse fa-fw"></i>
+ </div>
+ <canvas id="intervalbar" class="chart chart-line"
+ chart-data="timeData" chart-labels="timeSpanLabels"
+ chart-series="timeSeries"
+ chart-options="options">
+ </canvas>
+ </div>
+
+ </div>
+ <div class="row">
+ <div class="col-md-1"></div>
+ <div class="col-md-10">
+ <div class="input-group">
+ <input type="text" class="form-control" uib-datepicker-popup="{{format}}"
+ ng-model="dt.start" is-open="datePopup.start"
+ datepicker-options="startOptions"
+ ng-required="true" close-text="Close"
+ alt-input-formats="altInputFormats" ng-change="newTimeSpan()"/>
+ <span class="input-group-btn">
+ <button type="button" class="btn btn-default" ng-click="open('start')"><i
+ class="glyphicon glyphicon-calendar"></i></button>
+ </span>
+ <input type="text" class="form-control" uib-datepicker-popup="{{format}}"
+ ng-model="dt.end" is-open="datePopup.end"
+ datepicker-options="dateOptions"
+ ng-required="true" close-text="Close"
+ alt-input-formats="altInputFormats" ng-change="newTimeSpan()"/>
+ <span class="input-group-btn">
+ <button type="button" class="btn btn-default" ng-click="open('end')"><i
+ class="glyphicon glyphicon-calendar"></i></button>
+ </span>
+ </div>
+
+ </div>
+ <div class="col-md-1"></div>
+
+
+ </div>
+
+ <button ng-click="exportExcel()" class="btn btn-success top15">Export to Excel</button>
+ </div>
+
+ </div>
+ </div>
+ */

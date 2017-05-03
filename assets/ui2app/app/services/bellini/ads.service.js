@@ -40,9 +40,24 @@ app.factory( "sailsAds", function ( sailsApi, sailsCoreModel ) {
         };
 
         this.getPostObj = function () {
-            var fields = [ 'name', 'description', '@id:createrId', 'advert', 'paused', 'reviewed',
-                'accepted', 'deleted', 'metaData' ];
+            var fields = [ 'name', 'description', '@id:createrId', 'advert', 'paused', 'reviewState', 'deleted', 'metaData' ];
             return this.cloneUsingFields( fields );
+        };
+
+        this.nextLegalReviewStates = function(){
+
+            switch (this.reviewState){
+                case 'Not Submitted':
+                    return ['Waiting for Review']; // Submit
+
+                case 'Waiting for Review':
+                    return ['Not Submitted']; // decide to cancel review
+
+                case 'Rejected':
+                case 'Accepted':
+                    return ['Not Submitted', 'Waiting for Review'];
+            }
+
         };
 
         this.parseInbound( json );
@@ -51,6 +66,8 @@ app.factory( "sailsAds", function ( sailsApi, sailsCoreModel ) {
 
     ModelAdObject.prototype = Object.create( CoreModel.prototype );
     ModelAdObject.prototype.constructor = ModelAdObject;
+
+    var legalReviewStates = [ 'Not Submitted', 'Waiting for Review', 'Rejected', 'Accepted' ];
 
     var newAd = function ( params ) {
         return new ModelAdObject( params );
@@ -71,11 +88,14 @@ app.factory( "sailsAds", function ( sailsApi, sailsCoreModel ) {
     }
 
 
+
     return {
         getAll:        getAll,
         new:           newAd,
         get:           getAd,
-        getForReview:  getUnreviewed
+        getForReview:  getUnreviewed,
+        legalReviewStates: legalReviewStates,
+
         }
 
 } );
