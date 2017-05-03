@@ -17,8 +17,8 @@ app.factory( "sailsApi", function ( $http ) {
     }
 
     // This little chunk of code is used all the time, just different endpoints
-    service.apiGet = function ( endPoint ) {
-        return $http.get( endPoint )
+    service.apiGet = function ( endPoint, params ) {
+        return $http.get( endPoint, params )
             .then( stripData );
     }
 

@@ -111,6 +111,10 @@ app.component( 'venueBasicInfo', {
                                        ng-click="$ctrl.changeName()"></i>
                                 </td>
                             </tr>
+                            <tr ng-show="$ctrl.venue.logo">
+                                <td>Logo</td>
+                                <td></td>
+                            </tr>
                             <tr>
                                 <td>Address</td>
                                 <td>{{ $ctrl.venue.addressString() }}    
