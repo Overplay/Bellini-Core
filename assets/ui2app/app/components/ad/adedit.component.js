@@ -2,13 +2,15 @@
  * Created by mkahn on 4/24/17.
  */
 
+ // 1=admin, 2=divice, 3=user, 4=advertiser
+
 app.component( 'adEdit', {
 
     bindings:   {
         advert: '=',
         ring: '<'
     },
-    controller: function ( uibHelper, toastr, $log, $rootScope, sailsMedia, sailsAds ) {
+    controller: function ( uibHelper, toastr, $log, $rootScope, sailsMedia, sailsAds, $state, userAuthService ) {
 
         var ctrl = this;
 
@@ -49,6 +51,15 @@ app.component( 'adEdit', {
                 successMsg: 'Description changed',
                 errMsg:     'There was a problem changing the ad description'
             } );
+
+        }
+
+        function saveAdModel() {
+
+
+            if (!ctrl.advert.creator){
+
+            }
 
         }
 
@@ -167,6 +178,22 @@ app.component( 'adEdit', {
 
         }
 
+        this.deleteAd = function(){
+
+            var confirmValue = '';
+
+            uibHelper.stringEditModal("Confirm", "To confirm deletion, type the ad name below and then click OK.", confirmValue)
+                .then( function(rval){
+                    if (rval==ctrl.advert.name){
+                        ctrl.advert.delete()
+                            .then( function(){
+                                toastr.success("Ad Deleted");
+                                $state.go( ctrl.ring==1 ? 'admin.adlist' : 'sponsor.adlist');
+                            })
+                    }
+                })
+        }
+
 
     },
 
@@ -217,13 +244,15 @@ app.component( 'adEdit', {
         </tbody>
         </table>
         
-         <div ng-if="$ctrl.advert.advert.media">
+         <div>
             <h4>Media</h4>
                     <img-input prompt="Widget" width="256" height="256" dirty="$ctrl.mediaDirty.widget"
                                src-field="$ctrl.advert.advert.media.widget" exact tag="widget"></img-input>
                     <img-input prompt="Crawler" width="440" height="100" dirty="$ctrl.mediaDirty.crawler"
                                src-field="$ctrl.advert.advert.media.crawler" exact tag="crawler"></img-input>
         </div>    
+        
+        <button class="btn btn-danger" style="width: 100%" ng-click="$ctrl.deleteAd()">DELETE AD</button>
     
     `
 

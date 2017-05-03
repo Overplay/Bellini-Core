@@ -38,6 +38,15 @@ module.exports = {
     // For testing purposes. This will normally be turned off
     isMagicJwt: function(req){
         return sails.config.security.magicJwt && (req.headers[ 'authorization' ] == sails.config.security.magicJwt);
+    },
+
+    getUserForReq: function(req){
+
+        var hasValidUser = !!req.session && !!req.session.user;
+        if (hasValidUser)
+            return req.session.user;
+
+        return false;
     }
 
 };

@@ -444,8 +444,8 @@ module.exports = require('waterlock').actions.user({
                     var juser = user.toJSON();
                     juser.email = user.auth && user.auth.email;
                     juser.isAdmin = !!(user.auth && (user.auth.ring == 1) )
-                    juser.isManager = !user.managedVenues.length;
-                    juser.isOwner =  !user.ownedVenues.length;
+                    juser.isManager = !!user.managedVenues.length;
+                    juser.isOwner =  !!user.ownedVenues.length;
                     // delete user.auth;
                     //delete juser.roles;
                     delete juser.auth.password;

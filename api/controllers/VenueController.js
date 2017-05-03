@@ -18,27 +18,6 @@ yelp.accessToken( "CHNAkuUQFFBtEFoNMUPM1Q", "eT1w1XHbuZ2wEh3Bqqd1Qy5SfwLcaDXapAK
 
 module.exports = {
 
-    myvenues: function ( req, res ) {
-
-        if ( !(req.session && req.session.user) ) {
-            res.forbidden( { error: "Try logging in, dipshit " } );
-        }
-
-
-        User.findOne( req.session.user.id )
-            .populate( [ 'ownedVenues' ] )
-            .then( function ( user ) {
-
-                if ( !user ) {
-                    res.serverError( { error: "Session has user ID but no such user ID in db. This is crazy." } );
-                }
-
-                var vs = { managed: user.managedVenues, owned: user.ownedVenues };
-                res.ok( vs );
-
-            } );
-
-    },
 
     // creates a new venue
     // rewritten by MAK
@@ -433,6 +412,25 @@ module.exports = {
 
     // Added by Mitch
 
+    myvenues: function(req, res){
+        // GET check handled in policies MAK 5-2017
+
+        var thisUser = PolicyService.getUserForReq(req);
+
+        if (!thisUser)
+            return res.badRequest({ error: 'There is no user for the session'});
+
+        User.findOne(thisUser.id)
+            .populate(['managedVenues', 'ownedVenues'])
+            .then( function(user){
+                if (!user){
+                    return res.badRequest({ error: 'This one is weird. The user for this session does not exist. Database inconsistency?'});
+                }
+
+                return res.ok({ owned: user.ownedVenues, managed: user.managedVenues });
+            });
+
+    },
 
     // replaces blueprint, easier to secure
     all: function( req, res ) {

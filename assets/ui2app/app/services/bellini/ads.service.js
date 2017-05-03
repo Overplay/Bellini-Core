@@ -3,7 +3,7 @@
  */
 
 
-app.factory( "sailsAds", function ( sailsApi, sailsCoreModel ) {
+app.factory( "sailsAds", function ( sailsApi, sailsCoreModel, userAuthService ) {
 
 
     var getAll = function ( queryString ) {
@@ -24,8 +24,8 @@ app.factory( "sailsAds", function ( sailsApi, sailsCoreModel ) {
         this.parseInbound = function ( json ) {
             this.name = json && json.name || '';
             this.description = json && json.description || '';
-            this.createrId = json && json.creater;
-            this.advert = json && json.advert || {};
+            this.creator = json && json.creator; // This is a straight ID
+            this.advert = json && json.advert || { text: [], media:[], type: "2g3t" };
             this.paused = json && json.paused;
             this.reviewState = json && json.reviewState;
             this.deleted = json && json.deleted;
@@ -40,7 +40,7 @@ app.factory( "sailsAds", function ( sailsApi, sailsCoreModel ) {
         };
 
         this.getPostObj = function () {
-            var fields = [ 'name', 'description', '@id:createrId', 'advert', 'paused', 'reviewState', 'deleted', 'metaData' ];
+            var fields = [ 'name', 'description', 'creator', 'advert', 'paused', 'reviewState', 'deleted', 'metaData' ];
             return this.cloneUsingFields( fields );
         };
 
@@ -62,6 +62,23 @@ app.factory( "sailsAds", function ( sailsApi, sailsCoreModel ) {
 
         this.parseInbound( json );
 
+        this.create = function(){
+
+            // Override the create method to add a creator, if none exists
+            if (!this.creator){
+                var _this = this;
+                return userAuthService.getCurrentUser()
+                    .then( function ( u ) {
+                        _this.creator = u.id;
+                        return CoreModel.prototype.create.call(_this);
+                    } )
+            } else {
+                // This is unlikely to ever be called, but here you go.
+                return CoreModel.prototype.create.call(_this);
+            }
+
+        }
+
     }
 
     ModelAdObject.prototype = Object.create( CoreModel.prototype );
@@ -76,7 +93,7 @@ app.factory( "sailsAds", function ( sailsApi, sailsCoreModel ) {
     var getAd = function ( id ) {
 
         if ( id == 'new' ) {
-            return newAd( { name: 'New Ad' } ); // empty user
+            return newAd( { name: 'New Ad' } ); // empty ad
         }
 
         return sailsApi.getModel( 'ad', id )

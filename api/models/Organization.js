@@ -57,6 +57,9 @@ module.exports = {
             via: 'organization'
         }
 
+        // TODO Ryan add UUID. See how it works in Venue.js
+        // Add find-by-UUID method in OrganizationController.js and test it, go over with Mitch
+
 
     }
 };

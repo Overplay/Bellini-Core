@@ -173,6 +173,28 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             }
         } )
 
+        .state( 'admin.editvenue', {
+            url:         '/editvenue/:id',
+            templateUrl: '/ui2app/app/components/admin/editvenue.partial.html',
+            controller:  'adminVenueEditController',
+            resolve:     {
+                venue: function ( sailsVenues, $stateParams ) {
+                    return sailsVenues.get( $stateParams.id );
+                }
+            }
+        } )
+
+        .state( 'admin.addvenue', {
+            url:         '/addvenue',
+            templateUrl: '/ui2app/app/components/admin/addvenue.partial.html',
+            controller:  'adminVenueAddController',
+            resolve:     {
+                venue: function ( sailsVenues ) {
+                    return sailsVenues.new();
+                }
+            }
+        } )
+
         // Proprietor Owner Links
 
         .state( 'owner', {
@@ -203,7 +225,6 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
 
         // User routes
 
-        // ADMIN ROUTES
 
         .state( 'user', {
             abstract: true,
@@ -223,26 +244,6 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
         } )
 
 
-        .state( 'admin.editvenue', {
-            url:         '/editvenue/:id',
-            templateUrl: '/ui2app/app/components/admin/editvenue.partial.html',
-            controller:  'adminVenueEditController',
-            resolve: {
-                venue: function ( sailsVenues, $stateParams ) {
-                    return sailsVenues.get( $stateParams.id );
-                }
-            }
-        })
 
-        .state( 'admin.addvenue', {
-            url:         '/addvenue',
-            templateUrl: '/ui2app/app/components/admin/addvenue.partial.html',
-            controller:  'adminVenueAddController',
-            resolve: {
-                venue: function ( sailsVenues ) {
-                    return sailsVenues.new();
-                }
-            }
-        })
 
 } );

@@ -110,7 +110,6 @@ module.exports = {
         // Only provide UUID for test purposes
         if (!values.uuid){
             values.uuid = uuid();
-
         }
         cb();
     },

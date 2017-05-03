@@ -25,7 +25,7 @@ module.exports.policies = {
     '*': true,
 
     LandingController: {
-        landing: ['authDecorator', 'authRedirect']
+        landing: [ 'authDecorator', 'authRedirect' ]
     },
 
     // Let's tighten down a bit on blog posts
@@ -52,110 +52,112 @@ module.exports.policies = {
 
 
     ActivationController: {
-        '*': false,
-        'generateCode': ['sessionAuth'] //just need to be logged in as any user 
+        '*':            false,
+        'generateCode': [ 'sessionAuth' ] //just need to be logged in as any user
     },
-    AdController: {
-        '*': true,
-        'update': ['sessionAuth', 'isAdOwner'],
-        'destroy': ['sessionAuth', 'isAdOwner'],
-        'review': ['sessionAuth', 'isAdmin'],
-        'pauseOrResume': ['sessionAuth', 'isAdOwner'],
-        'setDelete': ['sessionAuth', 'isAdOwner'],
-        'forReview': ['sessionAuth', 'isAdmin'],
-        'editAd': ['sessionAuth', 'isAdOwner'],
-        'getAccepted': true //TODO 
+    AdController:         {
+        '*':             true,
+        'update':        [ 'sessionAuth', 'isAdOwner' ],
+        'destroy':       [ 'sessionAuth', 'isAdOwner' ],
+        'review':        [ 'sessionAuth', 'isAdmin' ],
+        'pauseOrResume': [ 'sessionAuth', 'isAdOwner' ],
+        'setDelete':     [ 'sessionAuth', 'isAdOwner' ],
+        'forReview':     [ 'sessionAuth', 'isAdmin' ],
+        'editAd':        [ 'sessionAuth', 'isAdOwner' ],
+        'getAccepted':   true //TODO
     },
-    
+
     AuthController: {
-        '*': 'isAdmin',
+        '*':         'isAdmin',
         // 'find':    [ 'sessionAuth', 'isAdmin' ],
         // 'findOne': ['sessionAuth', 'isVenueOwnerMeOrAdmin'], //tricky for manager list and whatnot
-        'update':  [ 'authProtection' ],
-        'destroy': ['authProtection' ], //maybe me?
+        'update':    [ 'authProtection' ],
+        'destroy':   [ 'authProtection' ], //maybe me?
         //'register': ['sessionAuth', 'isAdmin'], //not even used anywhere
         //'addUser': true, //used in SignupApp through nucleus service
-        'resetPwd': ['passwordReset'],
-        'register': false, //we use a differnet registration than waterlock
+        'resetPwd':  [ 'passwordReset' ],
+        'register':  false, //we use a differnet registration than waterlock
         //changePw own policy because it could be an authenticated user OR a reset token 
-        'changePwd': ['passwordChange'], //this is tricky becuase of pw reset...
+        'changePwd': [ 'passwordChange' ], //this is tricky becuase of pw reset...
         // Checked by MAK April 2017
         // anyone can go to the login page
         'loginPage': true,
-        'login': true // anyone can post to the login endpoint, though we may want to add an IP range restriction
+        'login':     true,
+        'logout':    true // anyone can post to the login endpoint, though we may want to add an IP range restriction
     },
 
     DeviceController: {
-        '*': true,
-        'find': ['sessionAuth', 'isDeviceManagerOrOwner'],
-        'findOne': ['sessionAuth', 'isDeviceManagerOrOwner'],
-        'update': ['sessionAuth', 'isDeviceOwner'],
-        'destroy': ['sessionAuth', 'isDeviceOwner'],
-        'registerDevice': ['sessionAuth'],
-        'testDevice': ['sessionAuth'],
+        '*':                     true,
+        'find':                  [ 'sessionAuth', 'isDeviceManagerOrOwner' ],
+        'findOne':               [ 'sessionAuth', 'isDeviceManagerOrOwner' ],
+        'update':                [ 'sessionAuth', 'isDeviceOwner' ],
+        'destroy':               [ 'sessionAuth', 'isDeviceOwner' ],
+        'registerDevice':        [ 'sessionAuth' ],
+        'testDevice':            [ 'sessionAuth' ],
         //backup and restore todo
-        'getUserRolesForDevice': ['GETOnly', 'hasJsonWebToken'],
-        'verifyRequest': ['hasSameIP']
+        'getUserRolesForDevice': [ 'GETOnly', 'hasJsonWebToken' ],
+        'verifyRequest':         [ 'hasSameIP' ]
 
     },
 
     MediaController: {
-        '*': true,
-        'upload': ['sessionAuth'],
+        '*':                true,
+        'upload':           [ 'sessionAuth' ],
         'deleteAllEntries': false
     },
 
     SMSController: {
-        '*': true,
-        'notify': ['limitSMS', 'tempAuth']
+        '*':      true,
+        'notify': [ 'limitSMS', 'tempAuth' ]
     },
 
     UserController: {
-        '*': true,
-        'find': ['sessionAuth'],
-        'findOne': ['sessionAuth'],
-        'update':  [ 'sessionAuth'],
-        'destroy': [ 'isAdmin' ],
-        'inviteUser': ['sessionAuth', 'isProprietorOwner'],
-        'inviteRole': ['sessionAuth', 'isProprietorOwner'],
-        'findByEmail': ['sessionAuth', 'isProprietorOwner'],
-        'getVenues': ['sessionAuth', 'isProprietorOwner'],
-        'getDevices': ['sessionAuth', 'isProprietorOwner'],
-        'getManagedDevices': ['sessionAuth', 'isProprietorManager'],
-        'getAlist': ['sessionAuth', 'isAdvertiser'],
-        'becomeAdvertiser': ['sessionAuth'],
+        '*':                 true,
+        'find':              [ 'sessionAuth' ],
+        'findOne':           [ 'sessionAuth' ],
+        'update':            [ 'sessionAuth' ],
+        'destroy':           [ 'isAdmin' ],
+        'inviteUser':        [ 'sessionAuth', 'isProprietorOwner' ],
+        'inviteRole':        [ 'sessionAuth', 'isProprietorOwner' ],
+        'findByEmail':       [ 'sessionAuth', 'isProprietorOwner' ],
+        'getVenues':         [ 'sessionAuth', 'isProprietorOwner' ],
+        'getDevices':        [ 'sessionAuth', 'isProprietorOwner' ],
+        'getManagedDevices': [ 'sessionAuth', 'isProprietorManager' ],
+        'getAlist':          [ 'sessionAuth', 'isAdvertiser' ],
+        'becomeAdvertiser':  [ 'sessionAuth' ],
         // New by Mitch 4-2017
-        'all': [ 'isAdmin' ],
-        'checkjwt': ['hasJsonWebToken']
+        'all':               [ 'isAdmin' ],
+        'checkjwt':          [ 'hasJsonWebToken' ]
 
     },
-    
+
     VenueController: {
-        '*': ['sessionAuth'],
-        'find': ['sessionAuth'],
-        'findOne': ['sessionAuth'], //issues with this one for device population
-        'update': ['sessionAuth'],
-        'destroy': ['isAdmin'],
+        '*':                [ 'sessionAuth' ],
+        'find':             [ 'sessionAuth' ],
+        'findOne':          [ 'sessionAuth' ], //issues with this one for device population
+        'update':           [ 'sessionAuth' ],
+        'destroy':          [ 'isAdmin' ],
         // New by Mitch 4-2017
-        'all': ['sessionAuth'],
-        'getVenueManagers': ['sessionAuth', 'isVenueOwnerMeOrAdmin'],
-        'addManager': ['sessionAuth', 'isVenueOwnerMeOrAdmin'],
-        'addOwner': ['sessionAuth', 'isVenueOwnerMeOrAdmin'],
-        'removeManager': ['sessionAuth', 'isVenueOwnerMeOrAdmin'],
-        'removeOwner': ['sessionAuth', 'isVenueOwnerMeOrAdmin'],
-        'getMobileView': true //TODO 
+        'all':              [ 'sessionAuth' ],
+        'myvenues':         [ 'GETOnly', 'sessionAuth' ],
+        'getVenueManagers': [ 'sessionAuth', 'isVenueOwnerMeOrAdmin' ],
+        'addManager':       [ 'sessionAuth', 'isVenueOwnerMeOrAdmin' ],
+        'addOwner':         [ 'sessionAuth', 'isVenueOwnerMeOrAdmin' ],
+        'removeManager':    [ 'sessionAuth', 'isVenueOwnerMeOrAdmin' ],
+        'removeOwner':      [ 'sessionAuth', 'isVenueOwnerMeOrAdmin' ],
+        'getMobileView':    true //TODO
     },
 
 
     //AuthController: [ 'sessionAuth', 'meOrAdmin' ],
 
     UIController: {
-        'uiApp': ['forceAnonToLogin', 'authDecorator', 'sessionAuth']
+        'uiApp': [ 'forceAnonToLogin', 'authDecorator', 'sessionAuth' ]
     },
 
     // Override this in local.js for testing
     wideOpen: false,
-    
+
     // HUGE security hole, close after test. Enables "God" JWT that always passes
     godToken: true
 

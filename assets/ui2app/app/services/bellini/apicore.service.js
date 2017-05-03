@@ -132,7 +132,7 @@ app.factory( "sailsCoreModel", function ( sailsApi ) {
         this.parseCore = function ( json ) {
             this.createdAt = json && json.createdAt;
             this.updatedAt = json && json.updatedAt;
-            this.id = json && json.id;
+            this.id = json && json.id;  // this will end up undefined for new models, which is what we want!
         }
 
     }

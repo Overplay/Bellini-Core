@@ -25,6 +25,7 @@ app.factory( "sailsVenues", function ( sailsApi, sailsCoreModel, sailsOGDeviceRe
         this.parseInbound = function ( json ) {
             this.name = json && json.name || '';
             this.yelpId = json && json.yelpId || '';
+            this.googlePlaceId = json && json.googlePlaceId || '';
             this.uuid = json && json.uuid;
             this.address = json && json.address;
             this.logo = json && json.logo;
@@ -46,7 +47,7 @@ app.factory( "sailsVenues", function ( sailsApi, sailsCoreModel, sailsOGDeviceRe
         // TODO will need to determine how to handle the relation fields as we work on the UI
         this.getPostObj = function () {
             var fields = [ 'name', 'yelpId', 'address', 'geolocation', 'showInMobileApp',
-                'virtual' ];
+                'virtual', '@id:logo', 'googlePlaceId' ];
             return this.cloneUsingFields( fields );
 
         };
@@ -89,6 +90,17 @@ app.factory( "sailsVenues", function ( sailsApi, sailsCoreModel, sailsOGDeviceRe
                         addr.state + " " +
                         addr.zip;
             }
+        }
+
+        this.attachLogo = function ( file ) {
+
+            var _this = this;
+
+            return sailsApi.uploadMedia( file )
+                .then( function(mediaJson){
+                    _this.logo = mediaJson.id;
+                    return _this;
+                }); // TODO left off here with Ryan
         }
 
     }
