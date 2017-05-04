@@ -13,6 +13,14 @@ app.factory( "sailsAds", function ( sailsApi, sailsCoreModel, userAuthService ) 
             } )
     }
 
+    var bareAdvert = {
+        name:   'New Ad',
+        advert: {
+            type: '2g3t', media: { widget: '', crawler: '' },
+            text: []
+        }
+    };
+
     var CoreModel = sailsCoreModel.CoreModel;
 
     function ModelAdObject( json ) {
@@ -25,15 +33,15 @@ app.factory( "sailsAds", function ( sailsApi, sailsCoreModel, userAuthService ) 
             this.name = json && json.name || '';
             this.description = json && json.description || '';
             this.creator = json && json.creator; // This is a straight ID
-            this.advert = json && json.advert || { text: [], media:[], type: "2g3t" };
+            this.advert = json && json.advert || _.cloneDeep(bareAdvert);
             this.paused = json && json.paused;
             this.reviewState = json && json.reviewState;
             this.deleted = json && json.deleted;
             this.metaData = json && json.metaData;
 
             // Clean up missing entries in advert.text (HACK)
-            if (this.advert && this.advert.text){
-                this.advert.text = _.compact(this.advert.text);
+            if ( this.advert && this.advert.text ) {
+                this.advert.text = _.compact( this.advert.text );
             }
 
             this.parseCore( json );
@@ -44,37 +52,37 @@ app.factory( "sailsAds", function ( sailsApi, sailsCoreModel, userAuthService ) 
             return this.cloneUsingFields( fields );
         };
 
-        this.nextLegalReviewStates = function(){
+        this.nextLegalReviewStates = function () {
 
-            switch (this.reviewState){
+            switch ( this.reviewState ) {
                 case 'Not Submitted':
-                    return ['Waiting for Review']; // Submit
+                    return [ 'Waiting for Review' ]; // Submit
 
                 case 'Waiting for Review':
-                    return ['Not Submitted']; // decide to cancel review
+                    return [ 'Not Submitted' ]; // decide to cancel review
 
                 case 'Rejected':
                 case 'Accepted':
-                    return ['Not Submitted', 'Waiting for Review'];
+                    return [ 'Not Submitted', 'Waiting for Review' ];
             }
 
         };
 
         this.parseInbound( json );
 
-        this.create = function(){
+        this.create = function () {
 
             // Override the create method to add a creator, if none exists
-            if (!this.creator){
+            if ( !this.creator ) {
                 var _this = this;
                 return userAuthService.getCurrentUser()
                     .then( function ( u ) {
                         _this.creator = u.id;
-                        return CoreModel.prototype.create.call(_this);
+                        return CoreModel.prototype.create.call( _this );
                     } )
             } else {
                 // This is unlikely to ever be called, but here you go.
-                return CoreModel.prototype.create.call(_this);
+                return CoreModel.prototype.create.call( _this );
             }
 
         }
@@ -92,27 +100,25 @@ app.factory( "sailsAds", function ( sailsApi, sailsCoreModel, userAuthService ) 
 
     var getAd = function ( id ) {
 
-        if ( id == 'new' ) {
-            return newAd( { name: 'New Ad', advert: { type: '2g3t', media:[], text:[]} } ); // empty ad
-        }
+        if ( id == 'new' )
+            return newAd(bareAdvert);
 
         return sailsApi.getModel( 'ad', id )
             .then( newAd );
     }
 
-    var getUnreviewed = function(){
-        return sailsApi.apiGet('/ad/forReview');
+    var getUnreviewed = function () {
+        return sailsApi.apiGet( '/ad/forReview' );
     }
 
 
-
     return {
-        getAll:        getAll,
-        new:           newAd,
-        get:           getAd,
-        getForReview:  getUnreviewed,
+        getAll:            getAll,
+        new:               newAd,
+        get:               getAd,
+        getForReview:      getUnreviewed,
         legalReviewStates: legalReviewStates,
 
-        }
+    }
 
 } );
