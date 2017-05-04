@@ -201,7 +201,7 @@ app.controller( 'adminVenueAddController', function ( $scope, $log, venue, $stat
     }
 
     $scope.create = function () {
-        venue.create()
+        $scope.venue.save()
             .then( function (res) {
                 toastr.success(res.name + " created!", "Success");
                 $state.go('admin.editvenue', { id: res.id });
