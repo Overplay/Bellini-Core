@@ -127,7 +127,7 @@ app.factory( "sailsVenues", function ( sailsApi, sailsCoreModel, sailsOGDeviceRe
     }
 
     var yelpSearch = function ( params, timeout ) {
-        return sailsApi.apiGet('/venue/yelpSearch/', {params: params, timeout: timeout || 2000})
+        return sailsApi.apiGet('/venue/yelpSearch/', { params: params })
             .then(function (data) {
                 return data.businesses;
             });

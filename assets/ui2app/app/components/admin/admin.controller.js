@@ -213,7 +213,7 @@ app.controller( 'adminVenueAddController', function ( $scope, $log, venue, $stat
     }
 
     $scope.yelpSearch = function () {
-        return sailsVenues.yelp($scope.parameters, 2000)
+        return sailsVenues.yelp($scope.parameters)
             .catch( function (err) {
                 $log.error(err);
             });
