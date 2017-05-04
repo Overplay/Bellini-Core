@@ -158,24 +158,47 @@ app.controller( 'adminVenueEditController', function ( $scope, venue, $log, uibH
     $scope.venue = venue;
 });
 
-app.controller( 'adminVenueAddController', function ( $scope, $log, venue, $state, toastr, geocode) {
+app.controller( 'adminVenueAddController', function ( $scope, $log, venue, $state, toastr, geocode, ring, sailsVenues) {
     $log.debug("Loading adminVenueAddController");
     $scope.zipRegex = "\\d{5}([\\-]\\d{4})?";
     $scope.venue = venue;
     $scope.validForm = false;
-    $scope.parameters = {};
+    $scope.parameters = { limit: 10, location: "" };
+    $scope.ring = ring;
 
     $scope.setForm = function (form) {
         $scope.form = form;
     };
 
     $scope.initializeLocation = function () {
+        $scope.parameters.location = "Locating...";
         geocode.locate()
             .then( geocode.revGeocode )
             .then( function (loc) {
                 $scope.parameters.location = loc.city + ", " + loc.state;
+                toastr.success("", "Located successfully!");
+            })
+            .catch( function (err) {
+                $log.error(err);
+                $scope.parameters.location = "";
             })
     };
+
+    $scope.geoCheck = function () {
+        if ($scope.form.$valid) {
+            toastr.success("", "Geocoding...");
+            sailsVenues.geocode($scope.venue.addressString())
+                .then( function (res) {
+                    toastr.success(res[0].formatted_address, "Geocoded successfully");
+                    $scope.venue.geolocation.longitude = res[0].geometry.location.lng;
+                    $scope.venue.geolocation.latitude = res[0].geometry.location.lat;
+                    $scope.venue.googlePlaceId = res[0].place_id;
+                })
+                .catch( function (err) {
+                    toastr.error(err.toString(), "Error geocoding");
+                })
+        }
+    }
 
     $scope.create = function () {
         venue.create()
@@ -188,6 +211,31 @@ app.controller( 'adminVenueAddController', function ( $scope, $log, venue, $stat
                 toastr.error("Venue could not be created", "Error");
             })
     }
+
+    $scope.yelpSearch = function () {
+        return sailsVenues.yelp($scope.parameters, 2000)
+            .catch( function (err) {
+                $log.error(err);
+            });
+    }
+
+    $scope.yelpCopy = function ($item, $model) {
+        $scope.venue.name = $model.name;
+        $scope.venue.address = {
+            street: $model.location.address1,
+            street2: $model.location.address2,
+            city: $model.location.city,
+            state: $model.location.state,
+            zip: $model.location.zip_code
+        };
+
+        $scope.venue.geolocation = {
+            latitude: $model.coordinates.latitude,
+            longitude: $model.coordinates.longitude
+        };
+        $scope.venue.yelpId = $model.id;
+    };
+
 });
 
 app.controller( 'adminDeviceListController', function ( $scope, venues, devices, $log, $state ) {

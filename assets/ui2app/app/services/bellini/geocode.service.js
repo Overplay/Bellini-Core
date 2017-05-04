@@ -4,50 +4,24 @@
 
 app.factory( "geocode", function (sailsApi, uiGmapGoogleMapApi, $q) {
 
-    var geocodePromise = function (address) {
-        return uiGmapGoogleMapApi.then( function (maps) {
-            return new maps.Geocoder();
-        })
-            .then( function (geocoder) {
-                return $q(function (resolve, reject) {
-                    geocoder.geocode( {
-                        address: address
-                    }, resolve);
-                })
-            })
-    }
-
-    var geocode = function (address) {
-
-        return geocodePromise(address)
-            .then( function (res, stat) {
-                var latLong = {};
-
-                if (res.length) {
-                    latLong.latitude = res[0].geometry.location.lat();
-                    latLong.longitude = res[0].geometry.location.lng();
-                }
-
-                return latLong;
-            })
-    };
-
     var locate = function () {
 
         return $q( function (resolve, reject) {
             if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition( resolve );
+                navigator.geolocation.getCurrentPosition(function (loc) {
+                    resolve({
+                        longitude: loc.coords.longitude.toString(),
+                        latitude: loc.coords.latitude.toString()
+                    })
+                });
             }
             else {
-                resolve()
+                resolve({
+                    longitude: 37.2805413,
+                    latitude: -121.973019
+                })
             }
         })
-            .then( function (loc) {
-                return {
-                    longitude: loc.coords.longitude.toString() || 37.2805413,
-                    latitude: loc.coords.latitude.toString() || -121.973019
-                }
-            });
 
     };
 
@@ -64,7 +38,6 @@ app.factory( "geocode", function (sailsApi, uiGmapGoogleMapApi, $q) {
     }
 
     return {
-        geocode: geocode,
         revGeocode: revGeocode,
         locate: locate
     }

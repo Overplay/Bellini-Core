@@ -178,23 +178,26 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             url:         '/editvenue/:id',
             templateUrl: '/ui2app/app/components/admin/editvenue.partial.html',
             controller:  'adminVenueEditController',
-            resolve:     {
+            resolve: {
                 venue: function ( sailsVenues, $stateParams ) {
                     return sailsVenues.get( $stateParams.id );
                 }
             }
-        } )
+        })
 
         .state( 'admin.addvenue', {
             url:         '/addvenue',
             templateUrl: '/ui2app/app/components/admin/addvenue.partial.html',
             controller:  'adminVenueAddController',
-            resolve:     {
+            resolve: {
                 venue: function ( sailsVenues ) {
                     return sailsVenues.new();
+                },
+                ring: function ( userAuthService ) {
+                    return userAuthService.getCurrentUserRing();
                 }
             }
-        } )
+        })
 
         // Proprietor Owner Links
 

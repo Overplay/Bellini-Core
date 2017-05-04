@@ -17,27 +17,30 @@
                 </div>
                 <div class="col-md-5">
                     <div class="input-group top15">
+                        <span class="input-group-addon">Near</span>
+                        <input type="text" ng-model="parameters.location" placeholder="Location" class="form-control"/>
+                        <div class="input-group-addon" ng-show="parameters.location === 'Locating...'">
+                            <i class="fa fa-spinner fa-spin fa-pulse fa-fw"></i>
+                        </div>
+                        <div class="input-group-btn">
+                            <button class="btn-default btn" ng-click="initializeLocation()" ng-show="parameters.location !== 'Locating...'">
+                                <i class="fa fa-location-arrow fa-fw" ng-class="{ 'location-init' : parameters.location }"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="input-group top15">
                         <div class="input-group-addon">Find</div>
-                        <input type="text" ng-model="parameters.term" placeholder="Search Term" uib-typeahead="result as result.name for result in getResults($viewValue)"
+                        <input type="text" ng-model="parameters.term" placeholder="Search Term" uib-typeahead="result as result.name for result in yelpSearch($viewValue)"
                                typeahead-loading="loadingResults" typeahead-no-results="noResults" class="form-control" typeahead-template-url="yelpSuggest.html"
-                               typeahead-on-select="selected($item, $model, $label)" typeahead-show-hint="true" typeahead-wait-ms="500"/>
+                               typeahead-on-select="yelpCopy($item, $model, $label)" typeahead-show-hint="true" typeahead-wait-ms="500"/>
                         <div class="input-group-addon" ng-show="loadingResults">
                             <i ng-show="loadingResults" class="fa fa-spinner fa-spin fa-pulse fa-fw"></i>
                         </div>
                         <div class="input-group-addon" ng-show="noResults">
                             <i class="glyphicon glyphicon-remove" style="color:#c40000;"></i>
                         </div>
-                    </div>
-                </div>
-                <div class="col-md-5">
-                    <div class="input-group top15">
-                        <span class="input-group-addon">Near</span>
-                        <input type="text" ng-model="parameters.location" placeholder="Location" class="form-control"/>
-                        <span class="input-group-btn">
-                        <button class="btn-default btn" ng-click="initializeLocation()">
-                            <i class="fa fa-location-arrow fa-fw" ng-class="{ 'location-init' : parameters.location }"></i>
-                        </button>
-                    </span>
                     </div>
                 </div>
             </div>
@@ -69,7 +72,7 @@
                                 <div class="col-sm-9">
                                     <input type="text" class="form-control" id="address-street" name="street"
                                            placeholder="Address"
-                                           ng-model="venue.address.street" required/>
+                                           ng-model="venue.address.street" required ng-change="geoCheck()"/>
                                 </div>
                             </fieldset>
                             <fieldset class="form-group">
@@ -77,38 +80,38 @@
                                 <div class="col-sm-9">
                                     <input type="text" class="form-control" id="address-street2" name="street2"
                                            placeholder="Address Line 2"
-                                           ng-model="venue.address.street2"/>
+                                           ng-model="venue.address.street2" ng-change="geoCheck()"/>
                                 </div>
                             </fieldset>
                             <fieldset class="form-group" ng-class="{'has-error' : !form.city.$valid && form.city.$touched, 'has-success' : form.city.$valid && form.city.$touched}">
                                 <label for="address-city" class="col-sm-3 control-label">City *</label>
                                 <div class="col-sm-9">
                                     <input type="text" class="form-control" id="address-city" name="city" placeholder="City"
-                                           ng-model="venue.address.city" required/>
+                                           ng-model="venue.address.city" required ng-change="geoCheck()"/>
                                 </div>
                             </fieldset>
                             <fieldset class="form-group" ng-class="{'has-error' : !form.state.$valid && form.state.$touched, 'has-success' : form.state.$valid && form.state.$touched}">
                                 <label for="address-state" class="col-sm-3 control-label">State/Province *</label>
                                 <div class="col-sm-3">
                                     <input type="text" class="form-control" id="address-state" name="state" placeholder="State"
-                                           ng-model="venue.address.state" maxlength="2" ng-maxlength="2" required/>
+                                           ng-model="venue.address.state" maxlength="2" ng-maxlength="2" required ng-change="geoCheck()"/>
                                 </div>
                             </fieldset>
                             <fieldset class="form-group" ng-class="{'has-error' : !form.zip.$valid && form.zip.$touched, 'has-success' : form.zip.$valid && form.zip.$touched}">
                                 <label for="address-zip" class="col-sm-3 control-label">Postal/Zip Code *</label>
                                 <div class="col-sm-5">
                                     <input type="text" class="form-control" id="address-zip" name="zip" placeholder="ex: 80304"
-                                           ng-model="venue.address.zip" ng-pattern="zipRegex" required/>
+                                           ng-model="venue.address.zip" ng-pattern="zipRegex" required ng-change="geoCheck()"/>
                                 </div>
                             </fieldset>
-                            <fieldset class="form-group" ng-class="{'has-error' : !form.latitude.$valid && form.latitude.$touched}">
+                            <fieldset class="form-group" ng-class="{'has-error' : !form.latitude.$valid && form.latitude.$touched}" ng-if="ring===1">
                                 <label for="latitude" class="col-sm-3 control-label">Latitude</label>
                                 <div class="col-sm-6">
                                     <input type="number" step="any" class="form-control" id="latitude" name="latitude"
                                            ng-model="venue.geolocation.latitude" placeholder="ex: 35.272491"/>
                                 </div>
                             </fieldset>
-                            <fieldset class="form-group" ng-class="{'has-error' : !form.longitude.$valid && form.longitude.$touched}">
+                            <fieldset class="form-group" ng-class="{'has-error' : !form.longitude.$valid && form.longitude.$touched}" ng-if="ring===1">
                                 <label for="longitude" class="col-sm-3 control-label">Longitude</label>
                                 <div class="col-sm-6">
                                     <input type="number" step="any" class="form-control" id="longitude" name="longitude"
