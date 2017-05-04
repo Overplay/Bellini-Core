@@ -52,43 +52,43 @@ app.factory( "sailsVenues", function ( sailsApi, sailsCoreModel, sailsOGDeviceRe
 
         };
 
-        this.populateDevices = function(){
+        this.populateDevices = function () {
 
             var _this = this;
-            return sailsOGDeviceRemote.getAll('forVenueUUID='+this.uuid)
-                .then( function(devices){
+            return sailsOGDeviceRemote.getAll( 'forVenueUUID=' + this.uuid )
+                .then( function ( devices ) {
                     _this.devices = devices;
                     return _this;
-                })
+                } )
 
         };
 
-        this.addUserAs = function(user, asType){
-            if ( !_.includes(['manager', 'owner'], asType )) {
+        this.addUserAs = function ( user, asType ) {
+            if ( !_.includes( [ 'manager', 'owner' ], asType ) ) {
                 throw new Error( 'Type must be owner or manager' );
             }
 
-            var ep = (asType=='owner') ? '/venue/addOwner' : '/venue/addManager';
+            var ep = (asType == 'owner') ? '/venue/addOwner' : '/venue/addManager';
 
-            var userId = sailsApi.idFromIdOrObj(user);
+            var userId = sailsApi.idFromIdOrObj( user );
 
             var vid = this.id;
 
             return sailsApi.apiPost( ep, { userId: userId, id: this.id } )
-                .then(function(data){
-                    return getVenue(vid);
-                });
+                .then( function ( data ) {
+                    return getVenue( vid );
+                } );
         }
 
         this.addressString = function () {
-            if (this.address) {
+            if ( this.address ) {
                 var addr = this.address;
 
                 return addr.street + " " +
-                        (addr.street2 ? addr.street2 + " " : "") +
-                        addr.city + ", " +
-                        addr.state + " " +
-                        addr.zip;
+                    (addr.street2 ? addr.street2 + " " : "") +
+                    addr.city + ", " +
+                    addr.state + " " +
+                    addr.zip;
             }
         }
 
@@ -97,10 +97,10 @@ app.factory( "sailsVenues", function ( sailsApi, sailsCoreModel, sailsOGDeviceRe
             var _this = this;
 
             return sailsApi.uploadMedia( file )
-                .then( function(mediaJson){
+                .then( function ( mediaJson ) {
                     _this.logo = mediaJson.id;
                     return _this;
-                }); // TODO left off here with Ryan
+                } ); // TODO left off here with Ryan
         }
 
     }
@@ -122,12 +122,23 @@ app.factory( "sailsVenues", function ( sailsApi, sailsCoreModel, sailsOGDeviceRe
             .then( newVenue );
     }
 
+    var getMyVenues = function () {
+        return sailsApi.apiGet( '/venue/myvenues' )
+            .then( function ( vjson ) {
+                return {
+                    managed: vjson.managed.map( newVenue ),
+                    owned: vjson.owned.map( newVenue )
+                }
+            } )
+    }
+
     // Exports...new pattern to prevent this/that crap
     return {
-        getAll:    getAll,
-        new:       newVenue,
-        get:       getVenue,
-        getByUUID: getByUUID
+        getAll:      getAll,
+        new:         newVenue,
+        get:         getVenue,
+        getByUUID:   getByUUID,
+        getMyVenues: getMyVenues
     }
 
 } )

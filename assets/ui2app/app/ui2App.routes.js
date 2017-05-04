@@ -33,29 +33,30 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
         .state( 'welcome', {
             url:   '/',
             views: buildCompleteView( {
-                template: '<og-spinner></og-spinner>',
-                controller: 'redirectController' } )
+                template:   '<og-spinner></og-spinner>',
+                controller: 'redirectController'
+            } )
 
         } )
 
         // ACCOUNT
 
         .state( 'myaccount', {
-            url:   '/myaccount',
-            views: buildCompleteView( {
+            url:     '/myaccount',
+            views:   buildCompleteView( {
                 templateUrl: '/ui2app/app/components/account/myaccount.partial.html',
-                controller: 'myAccountController'
-                 }),
+                controller:  'myAccountController'
+            } ),
             resolve: {
                 me: function ( sailsUsers ) {
                     return sailsUsers.getMe();
                 },
                 sm: function ( navService ) {
-                    navService.sidemenu.change( 'accountMenu' );
+                    navService.sideMenu.change( 'accountMenu' );
                 }
             }
 
-        })
+        } )
 
         // ADMIN ROUTES
 
@@ -72,17 +73,17 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
         } )
 
         .state( 'admin.dashboard', {
-            url:      '/dashboard',
+            url:         '/dashboard',
             templateUrl: '/ui2app/app/components/admin/admindash.partial.html',
-            controller: 'adminDashController',
-            resolve: {
-                userinfo: function(sailsUsers){
+            controller:  'adminDashController',
+            resolve:     {
+                userinfo:  function ( sailsUsers ) {
                     return sailsUsers.analyze();
                 },
                 venueinfo: function ( $http ) {
-                    return $http.get('/venue/count').then(function(d){ return d.data; });
+                    return $http.get( '/venue/count' ).then( function ( d ) { return d.data; } );
                 },
-                ads: function ( sailsAds ) {
+                ads:       function ( sailsAds ) {
                     return sailsAds.getForReview();
                 },
             }
@@ -131,10 +132,10 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             templateUrl: '/ui2app/app/components/admin/devicelist.partial.html',
             controller:  'adminDeviceListController',
             resolve:     {
-                venues: function ( sailsVenues ) {
+                venues:  function ( sailsVenues ) {
                     return sailsVenues.getAll();
                 },
-                devices: function( sailsOGDeviceRemote ) {
+                devices: function ( sailsOGDeviceRemote ) {
                     return sailsOGDeviceRemote.getAll();
                 }
             }
@@ -200,7 +201,7 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
         .state( 'owner', {
             abstract: true,
             url:      '/owner',
-            views: buildCompleteView( { template: '<ui-view></ui-view>', } ),
+            views:    buildCompleteView( { template: '<ui-view></ui-view>', } ),
             // This little hack sets the side menu for each major state
             resolve:  {
                 sm: function ( navService ) {
@@ -212,12 +213,10 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
         .state( 'owner.dashboard', {
             url:         '/dashboard',
             templateUrl: '/ui2app/app/components/roles/owner/ownerdash.partial.html',
+            controller:  'ownerDashController',
             resolve:     {
                 myVenues: function ( sailsVenues ) {
-                    return sailsVenues.getAll();
-                },
-                myUsers:  function ( sailsUsers ) {
-                    return sailsUsers.getAll();
+                    return sailsVenues.getMyVenues();
                 }
             }
 
@@ -243,7 +242,17 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             templateUrl: '/ui2app/app/components/roles/patron/patrondash.partial.html'
         } )
 
+        .state( 'user.edit', {
+            url:         '/edit/:id',
+            templateUrl: '/ui2app/app/components/user/edituser.partial.html',
+            controller:  'userEditController',
+            resolve:     {
+                user: function ( sailsUsers, $stateParams ) {
+                    return sailsUsers.get( $stateParams.id );
+                }
+            }
 
+        } )
 
 
 } );

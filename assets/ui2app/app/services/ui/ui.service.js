@@ -115,15 +115,15 @@ app.controller( 'redirectController', [ 'userAuthService', '$state', function ( 
                 $state.go( 'admin.dashboard' );
             }
 
-            else if ( _.includes( user.roleTypes, 'advertiser' ) ) {
+            else if ( user.isSponsor ) {
                 $state.go( 'sponsor.dashboard' );
             }
 
-            else if ( _.includes( user.roleTypes, 'proprietor.owner' ) ) {
+            else if ( user.isOwner ) {
                 $state.go( 'owner.dashboard' );
             }
 
-            else if ( _.includes( user.roleTypes, 'proprietor.manager' ) ) {
+            else if ( user.isManager ) {
                 $state.go( 'manager.dashboard' );
             }
 

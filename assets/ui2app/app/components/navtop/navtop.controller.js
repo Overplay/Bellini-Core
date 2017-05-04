@@ -2,7 +2,7 @@
  * Created by mkahn on 4/21/17.
  */
 
-app.controller( "navTopController", function ( $scope, $log, user, $rootScope, navService, userAuthService ) {
+app.controller( "navTopController", function ( $scope, $log, user, $rootScope, navService, userAuthService, $state ) {
 
     $log.debug( "Loading navTopController" );
 
@@ -16,6 +16,10 @@ app.controller( "navTopController", function ( $scope, $log, user, $rootScope, n
 
     $scope.logout = function(){
         userAuthService.logout();
+    }
+
+    $scope.account = function(){
+        $state.go('user.edit', { id: user.id });
     }
 
     $scope.toggleSideMenu = function(){

@@ -10,18 +10,19 @@ app.controller("navSideController", function($scope, $log, navService, $timeout)
     $scope.menuVisible = true;
 
     var links = navService.sideMenu.getMenu();
-    var delay = 0;
     var idx = 0;
 
     function addNextLink(){
         $scope.sidelinks.push(links[idx]);
         idx++;
         if (idx<links.length)
-            $timeout(addNextLink, 100);
+            $timeout(addNextLink, 150);
     }
 
     $scope.sidelinks = [];
-    addNextLink();
+
+    if (links.length)
+        addNextLink();
     
     $scope.$on('TOGGLE_SIDEMENU', function(ev){
         $scope.menuVisible = !$scope.menuVisible;

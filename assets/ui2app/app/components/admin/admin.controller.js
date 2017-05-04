@@ -32,10 +32,11 @@ app.controller( 'adminUserListController', function ( $scope, users, $log, uibHe
 // USER EDIT FOR ADMIN
 
 app.controller( 'adminUserEditController', function ( $scope, user, $log, uibHelper, toastr,
-                                                      $state, userAuthService, allVenues, sailsUsers, dialogService ) {
+                                                      $state, userAuthService, allVenues ) {
 
     $log.debug( "Loading adminUserEditController" );
     $scope.user = user;
+    $scope.venues = allVenues; // gets passed to venue component
     var _newUser;
 
 
@@ -61,10 +62,7 @@ app.controller( 'adminUserEditController', function ( $scope, user, $log, uibHel
         ];
     }
 
-    function genRandomPassword() {
-        var words = [ 'bunny', 'fish', 'puppy', 'taco', 'bottle', 'tumbler', 'spoon' ];
-        return _.sample( words ) + _.random( 100, 999 ) + _.sample( [ '!', '@', '#', '$', '^' ] );
-    }
+
 
     function makeEmailField( user ) {
         return [ {
@@ -122,152 +120,8 @@ app.controller( 'adminUserEditController', function ( $scope, user, $log, uibHel
         createBrandNewUser();
     }
 
-    $scope.changeEmail = function () {
-        $log.debug( 'Changing email...' )
-        uibHelper.headsupModal( 'Not Implemented', 'Changing email address for an account is not implemented yet. Sorry!' )
-            .then( function () {} );
-    };
-
-    $scope.changeName = function () {
-        $log.debug( 'Changing name...' );
-
-        uibHelper.inputBoxesModal( "Edit Name", "", makeNameFields( $scope.user ) )
-            .then( function ( fields ) {
-                $log.debug( fields );
-                $scope.user.firstName = fields.firstName;
-                $scope.user.lastName = fields.lastName;
-                $scope.user.save()
-                    .then( function () {
-                        toastr.success( "Name changed" );
-                    } )
-                    .catch( function () {
-                        toastr.error( "Problem changing name!" );
-                    } );
-            } )
-
-    };
-
-    $scope.changePhone = function () {
-        $log.debug( 'Changing phone...' );
-
-        uibHelper.stringEditModal( 'Change Phone Number', '', $scope.user.mobilePhone )
-            .then( function ( phone ) {
-                $scope.user.mobilePhone = phone;
-                $scope.user.save()
-                    .then( function () {
-                        toastr.success( "Phone number changed" );
-                    } )
-                    .catch( function () {
-                        toastr.error( "Problem changing phone number!" );
-                    } );
-            } )
-    };
 
 
-    $scope.blockedChange = function () {
-        $scope.user.updateBlocked()
-            .then( function () {
-                toastr.success( "Block state updated" );
-            } )
-            .catch( function ( err ) {
-                toastr.failure( "Could not change block state. " + err.message );
-            } )
-    }
-
-    $scope.addVenue = function ( kind ) {
-
-        var vnames = _.map( allVenues, 'name' );
-
-        uibHelper.selectListModal( 'Pick a Venue', '', vnames, 0 )
-            .then( function ( chosenOne ) {
-
-                $log.debug( "Chose " + allVenues[ chosenOne ].id );
-                $scope.user.attachToVenue( allVenues[ chosenOne ], kind )
-                    .then( function ( modifiedUser ) {
-                        toastr.success( "Added user to venue." );
-                        $scope.user = modifiedUser;
-                    } )
-                    .catch( function ( err ) {
-                        toastr.error( "Problem attaching user to venue" );
-                    } );
-            } )
-            .catch( function ( err ) {
-
-            } );
-
-    }
-
-    function doVenueRemove( venue, asType ) {
-
-        uibHelper.confirmModal( "Confirm", "Are you sure you want to remove this user from the " + asType + " role on venue: " +
-            venue.name + "?" )
-            .then( function () {
-
-                $scope.user.removeFromVenue( venue, asType )
-                    .then( function ( user ) {
-                        $scope.user = user;
-                        toastr.success( "User Removed" );
-                    } )
-                    .catch( function ( err ) {
-                        toastr.error( "Problem removing user from venue" );
-                    } );
-
-            } )
-
-    }
-
-    $scope.removeOwnedVenue = function ( venue ) {
-        doVenueRemove( venue, 'owner' );
-    }
-
-    $scope.removeManagedVenue = function ( venue ) {
-        doVenueRemove( venue, 'manager' );
-    }
-
-    function changePassword( newPass ) {
-        userAuthService.changePassword( { email: $scope.user.email, password: newPass } )
-            .then( function () {
-                toastr.success( "Don't forget it!", "Password Changed" );
-            } )
-            .catch( function ( err ) {
-                toastr.error( "Here's what happened: " + err.data.error, "Password Change Fail!!" );
-            } )
-    }
-
-    $scope.changePassword = function () {
-
-        dialogService.passwordDialog()
-            .then( function ( newPass ) {
-                changePassword( newPass );
-            } );
-    }
-
-    $scope.tempPassword = function () {
-
-        var tempPwd = genRandomPassword();
-
-        uibHelper.confirmModal( "Set Temporary Password?", 'Are you sure you want to set the user\'s password to: "' + tempPwd + '"', tempPwd )
-            .then( changePassword )
-            .catch( function () {
-                toastr.warning( "Password not changed.", "OK, Cancel That!" );
-            } );
-    }
-
-    $scope.changeRing = function () {
-
-        uibHelper.selectListModal( "Change Ring", "Select a new security ring below.", [ 'Admin', 'Device',
-            'User', 'Advertiser', 'Other (unused)' ], $scope.user.ring - 1 )
-            .then( function ( choice ) {
-                return $scope.user.setRing( choice + 1 );
-            } )
-            .then( function ( newUser ) {
-                toastr.success( "User's ring level was changed" );
-            } )
-            .catch( function ( err ) {
-                toastr.error( err.message );
-            } )
-
-    }
 
 } );
 
