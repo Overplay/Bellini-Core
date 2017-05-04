@@ -2,13 +2,13 @@
  * Created by mkahn on 4/24/17.
  */
 
- // 1=admin, 2=divice, 3=user, 4=advertiser
+// 1=admin, 2=divice, 3=user, 4=advertiser
 
 app.component( 'adEdit', {
 
     bindings:   {
         advert: '=',
-        ring: '<'
+        ring:   '<'
     },
     controller: function ( uibHelper, toastr, $log, $rootScope, sailsMedia, sailsAds, $state, userAuthService ) {
 
@@ -56,9 +56,14 @@ app.component( 'adEdit', {
 
         function saveAdModel() {
 
-
-            if (!ctrl.advert.creator){
-
+            if ( !ctrl.advert.creator ) {
+                return userAuthService.getCurrentUser()
+                    .then( function ( user ) {
+                        ctrl.advert.creator = user.id;
+                        return ctrl.advert.save();
+                    } )
+            } else {
+                return ctrl.advert.save();
             }
 
         }
@@ -128,9 +133,9 @@ app.component( 'adEdit', {
             crawler: null
         };
 
-        $rootScope.$on( 'FILE_DROPPED', function ( ev, data ) {
-            $log.debug( "File dropped!" );
+        var dropper = $rootScope.$on( 'FILE_DROPPED', function ( ev, data ) {
             var imgdest = data.tag;
+            $log.debug( "image dropped for: " + imgdest + ". " + data.file.name );
             sailsMedia.newWithFile( data.file )
                 .then( function ( media ) {
                     ctrl.advert.advert.media[ imgdest ] = media;
@@ -140,16 +145,20 @@ app.component( 'adEdit', {
                     toastr.success( "Image updated" );
                 } )
                 .catch( function ( err ) {
-                    toastr.error( "Image update failed" );
+                    toastr.error( "Image update failed Reason: ", err.message );
                 } );
 
         } );
 
-        this.changeAdState = function(){
+        this.$onDestroy = function(){
+            dropper(); //unreg
+        }
+
+        this.changeAdState = function () {
 
             var availableStates = [];
 
-            switch (ctrl.ring) {
+            switch ( ctrl.ring ) {
 
                 case 1:
                     // can go anywhere
@@ -161,37 +170,37 @@ app.component( 'adEdit', {
                     break;
 
                 default:
-                    availableStates = ['broken'];
+                    availableStates = [ 'broken' ];
             }
 
-            uibHelper.selectListModal("Choose New Review State", "Choose from the list below.", availableStates, 0)
-                .then( function(idx){
-                    ctrl.advert.reviewState = availableStates[idx];
+            uibHelper.selectListModal( "Choose New Review State", "Choose from the list below.", availableStates, 0 )
+                .then( function ( idx ) {
+                    ctrl.advert.reviewState = availableStates[ idx ];
                     ctrl.advert.save()
-                        .then(function(){
-                            toastr.success('State Changed');
-                        })
-                        .catch( function(err){
-                            toastr.error('State Could not be changed.');
-                        })
-                })
+                        .then( function () {
+                            toastr.success( 'State Changed' );
+                        } )
+                        .catch( function ( err ) {
+                            toastr.error( 'State Could not be changed.' );
+                        } )
+                } )
 
         }
 
-        this.deleteAd = function(){
+        this.deleteAd = function () {
 
             var confirmValue = '';
 
-            uibHelper.stringEditModal("Confirm", "To confirm deletion, type the ad name below and then click OK.", confirmValue)
-                .then( function(rval){
-                    if (rval==ctrl.advert.name){
+            uibHelper.stringEditModal( "Confirm", "To confirm deletion, type the ad name below and then click OK.", confirmValue )
+                .then( function ( rval ) {
+                    if ( !rval || rval == ctrl.advert.name ) {
                         ctrl.advert.delete()
-                            .then( function(){
-                                toastr.success("Ad Deleted");
-                                $state.go( ctrl.ring==1 ? 'admin.adlist' : 'sponsor.adlist');
-                            })
+                            .then( function () {
+                                toastr.success( "Ad Deleted" );
+                                $state.go( ctrl.ring == 1 ? 'admin.adlist' : 'sponsor.adlist' );
+                            } )
                     }
-                })
+                } )
         }
 
 

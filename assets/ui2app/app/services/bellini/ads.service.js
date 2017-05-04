@@ -13,12 +13,10 @@ app.factory( "sailsAds", function ( sailsApi, sailsCoreModel, userAuthService ) 
             } )
     }
 
-    var bareAdvert = {
-        name:   'New Ad',
-        advert: {
-            type: '2g3t', media: { widget: '', crawler: '' },
-            text: []
-        }
+    function TwoGraphicsThreeText() {
+        this.type = '2g3t';
+        this.media = { widget: '', crawler: '' };
+        this.text = []
     };
 
     var CoreModel = sailsCoreModel.CoreModel;
@@ -33,7 +31,7 @@ app.factory( "sailsAds", function ( sailsApi, sailsCoreModel, userAuthService ) 
             this.name = json && json.name || '';
             this.description = json && json.description || '';
             this.creator = json && json.creator; // This is a straight ID
-            this.advert = json && json.advert || _.cloneDeep(bareAdvert);
+            this.advert = json && json.advert || new TwoGraphicsThreeText();
             this.paused = json && json.paused;
             this.reviewState = json && json.reviewState;
             this.deleted = json && json.deleted;
@@ -70,6 +68,8 @@ app.factory( "sailsAds", function ( sailsApi, sailsCoreModel, userAuthService ) 
 
         this.parseInbound( json );
 
+        // TODO calling up the proro chain is fucked in JS.
+
         this.create = function () {
 
             // Override the create method to add a creator, if none exists
@@ -82,7 +82,7 @@ app.factory( "sailsAds", function ( sailsApi, sailsCoreModel, userAuthService ) 
                     } )
             } else {
                 // This is unlikely to ever be called, but here you go.
-                return CoreModel.prototype.create.call( _this );
+                return CoreModel.prototype.create.call( this );
             }
 
         }
@@ -101,7 +101,7 @@ app.factory( "sailsAds", function ( sailsApi, sailsCoreModel, userAuthService ) 
     var getAd = function ( id ) {
 
         if ( id == 'new' )
-            return newAd(bareAdvert);
+            return newAd( { name: 'New Ad' } );
 
         return sailsApi.getModel( 'ad', id )
             .then( newAd );
