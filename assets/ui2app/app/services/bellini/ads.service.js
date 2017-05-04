@@ -93,7 +93,7 @@ app.factory( "sailsAds", function ( sailsApi, sailsCoreModel, userAuthService ) 
     var getAd = function ( id ) {
 
         if ( id == 'new' ) {
-            return newAd( { name: 'New Ad' } ); // empty ad
+            return newAd( { name: 'New Ad', advert: { type: '2g3t', media:[], text:[]} } ); // empty ad
         }
 
         return sailsApi.getModel( 'ad', id )
