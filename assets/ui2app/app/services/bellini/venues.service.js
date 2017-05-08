@@ -123,14 +123,14 @@ app.factory( "sailsVenues", function ( sailsApi, sailsCoreModel, sailsOGDeviceRe
     }
 
     var geocode = function ( address ) {
-        return sailsApi.apiGet( '/venue/geocode/', { params: { address: address }});
+        return sailsApi.apiGet( '/venue/geocode/', { params: { address: address } } );
     }
 
     var yelpSearch = function ( params, timeout ) {
-        return sailsApi.apiGet('/venue/yelpSearch/', { params: params })
-            .then(function (data) {
+        return sailsApi.apiGet( '/venue/yelpSearch/', { params: params } )
+            .then( function ( data ) {
                 return data.businesses;
-            });
+            } );
     }
 
     var getMyVenues = function () {
@@ -138,7 +138,7 @@ app.factory( "sailsVenues", function ( sailsApi, sailsCoreModel, sailsOGDeviceRe
             .then( function ( vjson ) {
                 return {
                     managed: vjson.managed.map( newVenue ),
-                    owned: vjson.owned.map( newVenue )
+                    owned:   vjson.owned.map( newVenue )
                 }
             } )
     }
@@ -150,8 +150,8 @@ app.factory( "sailsVenues", function ( sailsApi, sailsCoreModel, sailsOGDeviceRe
         get:         getVenue,
         getByUUID:   getByUUID,
         getMyVenues: getMyVenues,
-        geocode:   geocode,
-        yelp:      yelpSearch
+        geocode:     geocode,
+        yelp:        yelpSearch
     }
 
 } )
