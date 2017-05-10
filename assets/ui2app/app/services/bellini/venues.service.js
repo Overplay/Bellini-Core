@@ -143,6 +143,14 @@ app.factory( "sailsVenues", function ( sailsApi, sailsCoreModel, sailsOGDeviceRe
             } )
     }
 
+    var addressToString = function (addr) {
+        return addr.street + " " +
+            (addr.street2 ? addr.street2 + " " : "") +
+            addr.city + ", " +
+            addr.state + " " +
+            addr.zip;
+    }
+
     // Exports...new pattern to prevent this/that crap
     return {
         getAll:      getAll,
@@ -151,7 +159,8 @@ app.factory( "sailsVenues", function ( sailsApi, sailsCoreModel, sailsOGDeviceRe
         getByUUID:   getByUUID,
         getMyVenues: getMyVenues,
         geocode:     geocode,
-        yelp:        yelpSearch
+        yelp:        yelpSearch,
+        addressStr:  addressToString,
     }
 
 } )

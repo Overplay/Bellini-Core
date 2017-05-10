@@ -1,10 +1,10 @@
 <div class="container">
-    <h1><i class="fa fa-building-o" aria-hidden="true" style="color: #999999"></i>&nbsp;&nbsp;Edit Venue: {{ venue.name }}</h1>
+    <h1><i class="fa fa-building-o" aria-hidden="true" style="color: #999999"></i>&nbsp;Venue: <span style="color: #8a8a8a; font-style: italic;">{{ venue.name }}</span></h1>
     <div class="row">
         <div class="col-md-8 col-lg-8">
             <uib-tabset class="top30">
                 <uib-tab heading="Basic Venue Info">
-                    <venue-basic-info venue="venue"></venue-basic-info>
+                    <venue-basic-info venue="venue" geocode="true" ring="1" yelp="true"></venue-basic-info>
                 </uib-tab>
                 <uib-tab heading="Owners & Managers">
                     <h2>Owners</h2>

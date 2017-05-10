@@ -153,7 +153,7 @@ app.controller( 'adminVenueListController', function ( $scope, venues, $log, uib
     }
 });
 
-app.controller( 'adminVenueEditController', function ( $scope, venue, $log, uibHelper, $state, toastr) {
+app.controller( 'adminVenueEditController', function ( $scope, venue, $log, $state, toastr) {
     $log.debug("Loading adminVenueEditController");
     $scope.venue = venue;
 });
