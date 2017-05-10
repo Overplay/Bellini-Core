@@ -60,6 +60,16 @@ app.component( 'venueBasicInfo', {
 
         }
 
+        this.showInApp = function () {
+            ctrl.venue.save()
+                .then( function () {
+                    toastr.success("Will " + (ctrl.venue.showInMobileApp ? "" : "not ") + "be shown in mobile app");
+                })
+                .catch( function () {
+                    toastr.error("Error saving setting");
+                })
+        }
+
     },
 
     template: `<table class="table table-striped table-bordered top15">
@@ -84,7 +94,14 @@ app.component( 'venueBasicInfo', {
                             </tr>
                             <tr>
                                 <td>Show in Mobile App</td>
-                                <td></td>
+                                <td>
+                                    <div class="checkbox" style="margin: 0;">
+                                        <label>
+                                            <input type="checkbox" ng-model="$ctrl.venue.showInMobileApp" ng-change="$ctrl.showInApp()">
+                                            {{ $ctrl.venue.showInMobileApp ? 'Will be shown' : 'Will not be shown'}}
+                                        </label>
+                                    </div>
+                                </td>
                             </tr>
                             <tr>
                                 <td>Registered On</td>
@@ -95,4 +112,4 @@ app.component( 'venueBasicInfo', {
     `
 
 
-} );
+});
