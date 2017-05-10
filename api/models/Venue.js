@@ -11,6 +11,8 @@ var request = require( 'superagent-bluebird-promise' );
 
 module.exports = {
 
+    schema: true,
+
     attributes: {
 
         name: {
