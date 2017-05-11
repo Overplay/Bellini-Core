@@ -184,6 +184,9 @@ h4 {
   color: white;
   flex: 5; }
 
+.angular-google-map-container {
+  height: 400px; }
+
 .noselect {
   -webkit-touch-callout: none;
   /* iOS Safari */
