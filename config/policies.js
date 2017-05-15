@@ -55,17 +55,7 @@ module.exports.policies = {
         '*':            false,
         'generateCode': [ 'sessionAuth' ] //just need to be logged in as any user
     },
-    AdController:         {
-        '*':             true,
-        'update':        [ 'sessionAuth', 'isAdOwner' ],
-        'destroy':       [ 'sessionAuth', 'isAdOwner' ],
-        'review':        [ 'sessionAuth', 'isAdmin' ],
-        'pauseOrResume': [ 'sessionAuth', 'isAdOwner' ],
-        'setDelete':     [ 'sessionAuth', 'isAdOwner' ],
-        'forReview':     [ 'sessionAuth', 'isAdmin' ],
-        'editAd':        [ 'sessionAuth', 'isAdOwner' ],
-        'getAccepted':   true //TODO
-    },
+
 
     AuthController: {
         '*':         'isAdmin',

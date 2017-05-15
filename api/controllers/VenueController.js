@@ -6,8 +6,8 @@
  */
 
 var yelp = require( 'yelp-fusion' );
-var _ = require('lodash');
-var Promise = require('bluebird');
+var _ = require( 'lodash' );
+var Promise = require( 'bluebird' );
 
 var client;
 
@@ -172,7 +172,6 @@ module.exports = {
         return chain;
 
     },
-
 
 
     // TODO there is a lot of replicated code beteeen add manager and add owner (MAK 4-17)
@@ -412,28 +411,28 @@ module.exports = {
 
     // Added by Mitch
 
-    myvenues: function(req, res){
+    myvenues: function ( req, res ) {
         // GET check handled in policies MAK 5-2017
 
-        var thisUser = PolicyService.getUserForReq(req);
+        var thisUser = PolicyService.getUserForReq( req );
 
-        if (!thisUser)
-            return res.badRequest({ error: 'There is no user for the session'});
+        if ( !thisUser )
+            return res.badRequest( { error: 'There is no user for the session' } );
 
-        User.findOne(thisUser.id)
-            .populate(['managedVenues', 'ownedVenues'])
-            .then( function(user){
-                if (!user){
-                    return res.badRequest({ error: 'This one is weird. The user for this session does not exist. Database inconsistency?'});
+        User.findOne( thisUser.id )
+            .populate( [ 'managedVenues', 'ownedVenues' ] )
+            .then( function ( user ) {
+                if ( !user ) {
+                    return res.badRequest( { error: 'This one is weird. The user for this session does not exist. Database inconsistency?' } );
                 }
 
-                return res.ok({ owned: user.ownedVenues, managed: user.managedVenues });
-            });
+                return res.ok( { owned: user.ownedVenues, managed: user.managedVenues } );
+            } );
 
     },
 
     // replaces blueprint, easier to secure
-    all: function( req, res ) {
+    all: function ( req, res ) {
 
         if ( req.method != 'GET' )
             return res.badRequest( { error: "Bad Verb" } );
@@ -444,9 +443,9 @@ module.exports = {
         //     query = {}
         // }
 
-        Venue.find({ virtual: false })
-            .then(res.ok)
-            .catch(res.serverError);
+        Venue.find( { virtual: false } )
+            .then( res.ok )
+            .catch( res.serverError );
 
     },
 
@@ -480,7 +479,7 @@ module.exports = {
 
     },
 
-    geocode: function(req, res){
+    geocode: function ( req, res ) {
 
         if ( req.method != 'GET' )
             return res.badRequest( { error: "Bad Verb" } );
@@ -496,15 +495,36 @@ module.exports = {
             .then( function ( results ) {
                 if ( !results.length ) {
                     sails.log.silly( "Bad geocode result!" );
-                    return res.badRequest({error: 'no result'})
+                    return res.badRequest( { error: 'no result' } )
                 }
 
                 sails.log.silly( "Geocode returned this many hits: " + results.length );
                 return res.ok( results );
             } )
             .catch( function ( err ) {
-                return res.badRequest(err);
+                return res.badRequest( err );
             } )
+
+    },
+
+    create: function ( req, res ) {
+
+        var thisUser = PolicyService.getUserForReq( req );
+
+        if ( !thisUser )
+            return res.badRequest( { error: 'There is no user for the session' } );
+
+        var params = req.allParams();
+
+        Venue.create( params )
+            .then( function ( venue ) {
+                venue.venueOwners.add( thisUser.id );
+                return Promise.props( { venue: venue, save: venue.save() } );
+            } )
+            .then( function ( props ) {
+                return res.ok( props.venue );
+            } )
+            .catch(res.serverError);
 
     }
 };
