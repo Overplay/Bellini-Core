@@ -13,7 +13,7 @@ app.factory( 'navService', function ( $rootScope ) {
             { label: "All Users", sref: "admin.userlist", icon: "users" },
             { label: "Add User", sref: "admin.edituser({id: 'new'})", icon: "user" },
             { label: "All Venues", sref: "admin.venuelist", icon: "globe" },
-            { label: "Add Venue", sref: "admin.addvenue({id: 'new'})", icon: "building-o" },
+            { label: "Add Venue", sref: "admin.editvenue({id: 'new'})", icon: "building-o" },
             { label: "All Ads", sref: "admin.adlist", icon: "bullhorn"},
             { label: "Create Ad", sref: "admin.editad({id: 'new'})", icon: "paint-brush" },
             { label: "Devices", sref: "admin.devicelist", icon: "television" },

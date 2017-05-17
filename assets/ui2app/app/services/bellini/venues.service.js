@@ -113,6 +113,9 @@ app.factory( "sailsVenues", function ( sailsApi, sailsCoreModel, sailsOGDeviceRe
     }
 
     var getVenue = function ( id ) {
+        if (id === 'new')
+            return newVenue({ name: 'New Venue' });
+
         return sailsApi.getModel( 'venue', id )
             .then( newVenue );
     }
@@ -144,6 +147,9 @@ app.factory( "sailsVenues", function ( sailsApi, sailsCoreModel, sailsOGDeviceRe
     }
 
     var addressToString = function (addr) {
+        if (!addr)
+            return null;
+
         return addr.street + " " +
             (addr.street2 ? addr.street2 + " " : "") +
             addr.city + ", " +

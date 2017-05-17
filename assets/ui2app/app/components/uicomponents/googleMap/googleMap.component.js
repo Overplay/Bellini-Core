@@ -43,7 +43,7 @@ app.component( 'googleMap', {
     },
 
     template: `    
-    <div>
+    <div ng-if="$ctrl.map.center && $ctrl.map.center.latitude && $ctrl.map.center.longitude">
         <ui-gmap-google-map center="$ctrl.map.center" zoom="$ctrl.map.zoom" refresh="$ctrl.map.change">
             <ui-gmap-marker idKey="$ctrl.map.markerId" coords="$ctrl.map.marker" ng-if="$ctrl.map.address && $ctrl.map.name">
                 <ui-gmap-window show="true">
