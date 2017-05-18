@@ -80,6 +80,23 @@ app.factory( "sailsVenues", function ( sailsApi, sailsCoreModel, sailsOGDeviceRe
                 } );
         }
 
+        this.removeUserAs = function ( user, asType ) {
+            if (!_.includes( ['manager', 'owner' ], asType ) ) {
+                throw new Error( 'Type must be owner or manager');
+            }
+
+            var ep = (asType === 'owner') ? '/venue/removeOwner' : '/venue/removeManager';
+
+            var userId = sailsApi.idFromIdOrObj( user );
+
+            var vid = this.id;
+
+            return sailsApi.apiPost( ep, { userId: userId, id: this.id })
+                .then( function (data) {
+                    return getVenue(vid);
+                })
+        }
+
         this.addressString = function () {
             if ( this.address ) {
                 var addr = this.address;

@@ -281,6 +281,7 @@ module.exports = {
 
         //have to remove from many to many and possibly role
         User.findOne( params.userId )
+            .populate( "auth" )
             .populate( "managedVenues" )
             .populate( "ownedVenues" )
             .then( function ( user ) {
@@ -288,9 +289,8 @@ module.exports = {
 
                     //remove their role as a manager if they are no longer managing any venues
                     if ( user.managedVenues.length < 2 ) {
-                        _.remove( user.roles, function ( r ) {
-                            return r == RoleCacheService.roleByName( "proprietor", "manager" )
-                        } )
+                        user.auth.ring = 3;
+                        user.auth.save();
                     }
 
                     user.managedVenues.remove( params.id )
