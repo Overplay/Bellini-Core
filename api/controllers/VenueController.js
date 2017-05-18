@@ -363,9 +363,8 @@ module.exports = {
 
                                 //remove their role as a manager if they are no longer managing any venues
                                 if ( user.ownedVenues.length < 2 ) {
-                                    _.remove( user.roles, function ( r ) {
-                                        return r == RoleCacheService.roleByName( "proprietor", "owner" )
-                                    } )
+                                    user.auth.ring = 3;
+                                    user.auth.save();
 
                                 }
 
