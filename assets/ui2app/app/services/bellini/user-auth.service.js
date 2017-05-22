@@ -62,5 +62,11 @@ app.factory('userAuthService', function($http, $log){
     };
 
 
+    service.genRandomPassword = function()
+    {
+        var words = [ 'bunny', 'fish', 'puppy', 'taco', 'bottle', 'tumbler', 'spoon' ];
+        return _.sample( words ) + _.random( 100, 999 ) + _.sample( [ '!', '@', '#', '$', '^' ] );
+    }
+
     return service;
 })

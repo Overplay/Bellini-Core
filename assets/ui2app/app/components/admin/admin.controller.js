@@ -63,7 +63,6 @@ app.controller( 'adminUserEditController', function ( $scope, user, $log, uibHel
     }
 
 
-
     function makeEmailField( user ) {
         return [ {
             label:       "Email",
@@ -81,7 +80,7 @@ app.controller( 'adminUserEditController', function ( $scope, user, $log, uibHel
             placeholder: "password",
             type:        'text',
             field:       'password',
-            value:       genRandomPassword(),
+            value:       userAuthService.genRandomPassword(),
             required:    true
         } ];
     }
@@ -121,8 +120,6 @@ app.controller( 'adminUserEditController', function ( $scope, user, $log, uibHel
     }
 
 
-
-
 } );
 
 app.controller( 'adminVenueListController', function ( $scope, venues, $log, uibHelper, $state, toastr ) {
@@ -148,25 +145,25 @@ app.controller( 'adminVenueListController', function ( $scope, venues, $log, uib
                         } );
                 }
 
-            });
+            } );
 
     }
-});
+} );
 
-app.controller( 'adminVenueEditController', function ( $scope, venue, $log, $state, toastr) {
-    $log.debug("Loading adminVenueEditController");
+app.controller( 'adminVenueEditController', function ( $scope, venue, $log, $state, toastr ) {
+    $log.debug( "Loading adminVenueEditController" );
     $scope.venue = venue;
-});
+} );
 
-app.controller( 'adminVenueAddController', function ( $scope, $log, venue, $state, toastr, geocode, ring, sailsVenues) {
-    $log.debug("Loading adminVenueAddController");
+app.controller( 'adminVenueAddController', function ( $scope, $log, venue, $state, toastr, geocode, ring, sailsVenues ) {
+    $log.debug( "Loading adminVenueAddController" );
     $scope.zipRegex = "\\d{5}([\\-]\\d{4})?";
     $scope.venue = venue;
     $scope.validForm = false;
     $scope.parameters = { limit: 10, location: "" };
     $scope.ring = ring;
 
-    $scope.setForm = function (form) {
+    $scope.setForm = function ( form ) {
         $scope.form = form;
     };
 
@@ -174,69 +171,69 @@ app.controller( 'adminVenueAddController', function ( $scope, $log, venue, $stat
         $scope.parameters.location = "Locating...";
         geocode.locate()
             .then( geocode.revGeocode )
-            .then( function (loc) {
+            .then( function ( loc ) {
                 $scope.parameters.location = loc.city + ", " + loc.state;
-                toastr.success("", "Located successfully!");
-            })
-            .catch( function (err) {
-                $log.error(err);
+                toastr.success( "", "Located successfully!" );
+            } )
+            .catch( function ( err ) {
+                $log.error( err );
                 $scope.parameters.location = "";
-            })
+            } )
     };
 
     $scope.geoCheck = function () {
-        if ($scope.form.$valid) {
-            toastr.success("", "Geocoding...");
-            sailsVenues.geocode($scope.venue.addressString())
-                .then( function (res) {
-                    toastr.success(res[0].formatted_address, "Geocoded successfully");
-                    $scope.venue.geolocation.longitude = res[0].geometry.location.lng;
-                    $scope.venue.geolocation.latitude = res[0].geometry.location.lat;
-                    $scope.venue.googlePlaceId = res[0].place_id;
-                })
-                .catch( function (err) {
-                    toastr.error(err.toString(), "Error geocoding");
-                })
+        if ( $scope.form.$valid ) {
+            toastr.success( "", "Geocoding..." );
+            sailsVenues.geocode( $scope.venue.addressString() )
+                .then( function ( res ) {
+                    toastr.success( res[ 0 ].formatted_address, "Geocoded successfully" );
+                    $scope.venue.geolocation.longitude = res[ 0 ].geometry.location.lng;
+                    $scope.venue.geolocation.latitude = res[ 0 ].geometry.location.lat;
+                    $scope.venue.googlePlaceId = res[ 0 ].place_id;
+                } )
+                .catch( function ( err ) {
+                    toastr.error( err.toString(), "Error geocoding" );
+                } )
         }
     }
 
     $scope.create = function () {
         $scope.venue.save()
-            .then( function (res) {
-                toastr.success(res.name + " created!", "Success");
-                $state.go('admin.editvenue', { id: res.id });
-            })
-            .catch( function (err) {
-                $log.debug(err);
-                toastr.error("Venue could not be created", "Error");
-            })
+            .then( function ( res ) {
+                toastr.success( res.name + " created!", "Success" );
+                $state.go( 'admin.editvenue', { id: res.id } );
+            } )
+            .catch( function ( err ) {
+                $log.debug( err );
+                toastr.error( "Venue could not be created", "Error" );
+            } )
     }
 
     $scope.yelpSearch = function () {
-        return sailsVenues.yelp($scope.parameters)
-            .catch( function (err) {
-                $log.error(err);
-            });
+        return sailsVenues.yelp( $scope.parameters )
+            .catch( function ( err ) {
+                $log.error( err );
+            } );
     }
 
-    $scope.yelpCopy = function ($item, $model) {
+    $scope.yelpCopy = function ( $item, $model ) {
         $scope.venue.name = $model.name;
         $scope.venue.address = {
-            street: $model.location.address1,
+            street:  $model.location.address1,
             street2: $model.location.address2,
-            city: $model.location.city,
-            state: $model.location.state,
-            zip: $model.location.zip_code
+            city:    $model.location.city,
+            state:   $model.location.state,
+            zip:     $model.location.zip_code
         };
 
         $scope.venue.geolocation = {
-            latitude: $model.coordinates.latitude,
+            latitude:  $model.coordinates.latitude,
             longitude: $model.coordinates.longitude
         };
         $scope.venue.yelpId = $model.id;
     };
 
-});
+} );
 
 app.controller( 'adminDeviceListController', function ( $scope, venues, devices, $log, $state ) {
 
@@ -244,8 +241,8 @@ app.controller( 'adminDeviceListController', function ( $scope, venues, devices,
     $scope.venues = venues;
     $scope.devices = devices;
 
-    $scope.goDetail = function(d){
-        $state.go('admin.devicedetail', { id: d.deviceUDID });
+    $scope.goDetail = function ( d ) {
+        $state.go( 'admin.devicedetail', { id: d.deviceUDID } );
     }
 
 
@@ -322,24 +319,24 @@ app.controller( 'adminDashController', [ '$scope', '$log', 'userinfo', 'venueinf
     } ] );
 
 
-app.controller( 'adminAdListController', ['$scope','ads', '$log', 'toastr', function( $scope, ads, $log, toastr ){
+app.controller( 'adminAdListController', [ '$scope', 'ads', '$log', 'toastr', function ( $scope, ads, $log, toastr ) {
 
-    $log.debug('adminAdListController loading');
+    $log.debug( 'adminAdListController loading' );
     $scope.advertisements = ads;
 
-    $scope.togglePause = function(ad){
+    $scope.togglePause = function ( ad ) {
 
         ad.paused = !ad.paused;
         ad.save()
-            .then(function(){
-                toastr.success("Pause state changed")
-            })
-            .catch( function(err){
-                toastr.error("Problem changing pause state");
-            })
+            .then( function () {
+                toastr.success( "Pause state changed" )
+            } )
+            .catch( function ( err ) {
+                toastr.error( "Problem changing pause state" );
+            } )
     }
 
-}]);
+} ] );
 
 app.controller( 'adminAdEditController', [ '$scope', '$log', 'ad', 'toastr',
     function ( $scope, $log, ad, toastr ) {

@@ -12,10 +12,7 @@ app.component( 'userAuth', {
 
         var ctrl = this;
 
-        function genRandomPassword() {
-            var words = [ 'bunny', 'fish', 'puppy', 'taco', 'bottle', 'tumbler', 'spoon' ];
-            return _.sample( words ) + _.random( 100, 999 ) + _.sample( [ '!', '@', '#', '$', '^' ] );
-        }
+
 
         ctrl.blockedChange = function () {
             ctrl.user.updateBlocked()
@@ -46,7 +43,7 @@ app.component( 'userAuth', {
 
         ctrl.tempPassword = function () {
 
-            var tempPwd = genRandomPassword();
+            var tempPwd = userAuthService.genRandomPassword();
 
             uibHelper.confirmModal( "Set Temporary Password?", 'Are you sure you want to set the user\'s password to: "' + tempPwd + '"', tempPwd )
                 .then( changePassword )
