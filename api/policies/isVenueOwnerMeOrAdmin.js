@@ -22,7 +22,7 @@ module.exports = function (req, res, next) {
     }
 
     //is admin
-    if (RoleCacheService.hasAdminRole(req.session.user.roles))
+    if (req.session.user.auth.ring === 1)
         return next();
 
     // Need to dump roles and/or block if non-admin attempt to change level
@@ -59,7 +59,7 @@ module.exports = function (req, res, next) {
     }
 
     //is PO
-    if (RoleCacheService.hasRole(req.session.user.roles, "proprietor", "owner")) {
+    if (req.session.user.auth.ring === 2) {
 
         //is PO of venue manager 
 

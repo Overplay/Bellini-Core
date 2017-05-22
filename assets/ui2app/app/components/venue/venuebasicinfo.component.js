@@ -5,9 +5,12 @@
 app.component( 'venueBasicInfo', {
 
     bindings:   {
-        venue: '='
+        venue: '=',
+        ring: '<',
+        geocode: '<',
+        yelp: '<'
     },
-    controller: function ( uibHelper, toastr, $log ) {
+    controller: function ( uibHelper, toastr, $log, dialogService ) {
 
         var ctrl = this;
 
@@ -41,64 +44,31 @@ app.component( 'venueBasicInfo', {
         };
 
         this.changeAddress = function () {
-            $log.debug( 'Changing address...' );
-            var fields = [
-                {
-                    label:       "Street Address",
-                    placeholder: "street address",
-                    type:        'text',
-                    field:       'street',
-                    value:       ctrl.venue.address.street
-                },
-                {
-                    label:       "Address Line 2",
-                    placeholder: "address line 2",
-                    type:        'text',
-                    field:       'street2',
-                    value:       ctrl.venue.address.street2
-                },
-                {
-                    label:       "City",
-                    placeholder: "city",
-                    type:        'text',
-                    field:       'city',
-                    value:       ctrl.venue.address.city
-                },
-                {
-                    label:       "State",
-                    placeholder: "state",
-                    type:        'text',
-                    field:       'state',
-                    value:       ctrl.venue.address.state
-                },
-                {
-                    label:       "ZIP Code",
-                    placeholder: "ZIP code",
-                    type:        'text',
-                    field:       'zip',
-                    value:       ctrl.venue.address.zip
-                }
-
-            ];
-
-            uibHelper.inputBoxesModal( 'Change Venue Address', '', fields)
-                .then( function ( fields ) {
-                    ctrl.venue.address.street = fields.street;
-                    ctrl.venue.address.street2 = fields.street2;
-                    ctrl.venue.address.city = fields.city;
-                    ctrl.venue.address.state = fields.state;
-                    ctrl.venue.address.zip = fields.zip;
-
+            dialogService.addressDialog({ address: ctrl.venue.address, geolocation: ctrl.venue.geolocation },
+                                        ctrl.geocode, ctrl.ring, ctrl.yelp)
+                .then( function (locData) {
+                    ctrl.venue.address = locData.address;
+                    ctrl.venue.geolocation = locData.geolocation;
                     ctrl.venue.save()
                         .then( function () {
                             toastr.success( "Address changed" );
-                        } )
+                        })
                         .catch( function () {
-                            toastr.error( "Problem changing address!" );
-                        } );
-                } )
-        };
+                            toastr.error( "Problem changing address" );
+                        })
+                })
 
+        }
+
+        this.showInApp = function () {
+            ctrl.venue.save()
+                .then( function () {
+                    toastr.success("Will " + (ctrl.venue.showInMobileApp ? "" : "not ") + "be shown in mobile app");
+                })
+                .catch( function () {
+                    toastr.error("Error saving setting");
+                })
+        }
 
     },
 
@@ -123,11 +93,23 @@ app.component( 'venueBasicInfo', {
                                 </td>
                             </tr>
                             <tr>
+                                <td>Show in Mobile App</td>
+                                <td>
+                                    <div class="checkbox" style="margin: 0;">
+                                        <label>
+                                            <input type="checkbox" ng-model="$ctrl.venue.showInMobileApp" ng-change="$ctrl.showInApp()">
+                                            {{ $ctrl.venue.showInMobileApp ? 'Will be shown' : 'Will not be shown'}}
+                                        </label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
                                 <td>Registered On</td>
                                 <td>{{ $ctrl.venue.createdAt | date : "MMMM d, yyyy" }}</td>
                             </tr>
                             </tbody>
-                        </table>`
+                        </table>
+    `
 
 
-} );
+});

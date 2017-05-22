@@ -1,0 +1,108 @@
+<script type="text/ng-template" id="yelpSuggest.html">
+    <a>
+        <img ng-src="{{ match.model.image_url }}" style="width: 40px; margin-right: 10px">
+        <span>
+            {{ match.label }} - {{ match.model.location.display_address[0] }}
+        </span>
+    </a>
+</script>
+
+<div class="modal-header">
+    <h3 class="modal-title">Address</h3>
+</div>
+<div class="modal-body">
+    <div class="row" ng-if="yelp">
+        <div class="col-md-2">
+            <img class="top15 pull-right" src="images/yelp-logo-small.png"/>
+        </div>
+        <div class="col-md-5">
+            <div class="input-group top15">
+                <span class="input-group-addon">Near</span>
+                <input type="text" ng-model="parameters.location" placeholder="Location" class="form-control"/>
+                <div class="input-group-addon" ng-show="parameters.location === 'Locating...'">
+                    <i class="fa fa-spinner fa-spin fa-pulse fa-fw"></i>
+                </div>
+                <div class="input-group-btn">
+                    <button class="btn-default btn" ng-click="initializeLocation()" ng-show="parameters.location !== 'Locating...'">
+                        <i class="fa fa-location-arrow fa-fw" ng-class="{ 'location-init' : parameters.location }"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-5">
+            <div class="input-group top15">
+                <div class="input-group-addon">Find</div>
+                <input type="text" ng-model="parameters.term" placeholder="Search Term" uib-typeahead="result as result.name for result in yelpSearch($viewValue)"
+                       typeahead-loading="loadingResults" typeahead-no-results="noResults" class="form-control" typeahead-template-url="yelpSuggest.html"
+                       typeahead-on-select="yelpCopy($item, $model, $label)" typeahead-show-hint="true" typeahead-wait-ms="500"/>
+                <div class="input-group-addon" ng-show="loadingResults">
+                    <i ng-show="loadingResults" class="fa fa-spinner fa-spin fa-pulse fa-fw"></i>
+                </div>
+                <div class="input-group-addon" ng-show="noResults">
+                    <i class="glyphicon glyphicon-remove" style="color:#c40000;"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-10 col-md-offset-2"><hr></div>
+    </div>
+
+    <form name="form" ng-submit="ok()" class="form-horizontal top15" novalidate>
+        <div ng-init="setForm(form)"></div>
+        <fieldset class="form-group" ng-class="{'has-error' : !form.street.$valid && form.street.$touched, 'has-success' : form.street.$valid && form.street.$touched}">
+            <label for="address-street" class="col-sm-3 col-md-2 control-label">Street Address *</label>
+            <div class="col-sm-9">
+                <input type="text" class="form-control" id="address-street" name="street"
+                       placeholder="Address"
+                       ng-model="data.address.street" required ng-change="geoCheck()"/>
+            </div>
+        </fieldset>
+        <fieldset class="form-group">
+            <label for="address-street2" class="col-sm-3 col-md-2 control-label"></label>
+            <div class="col-sm-9">
+                <input type="text" class="form-control" id="address-street2" name="street2"
+                       placeholder="Address Line 2"
+                       ng-model="data.address.street2" ng-change="geoCheck()"/>
+            </div>
+        </fieldset>
+        <fieldset class="form-group" ng-class="{'has-error' : !form.city.$valid && form.city.$touched, 'has-success' : form.city.$valid && form.city.$touched}">
+            <label for="address-city" class="col-sm-3 col-md-2 control-label">City *</label>
+            <div class="col-sm-9 col-md-4">
+                <input type="text" class="form-control" id="address-city" name="city" placeholder="City"
+                       ng-model="data.address.city" required ng-change="geoCheck()"/>
+            </div>
+        </fieldset>
+        <fieldset class="form-group" ng-class="{'has-error' : !form.state.$valid && form.state.$touched, 'has-success' : form.state.$valid && form.state.$touched}">
+            <label for="address-state" class="col-sm-3 col-md-2 control-label">State/Province *</label>
+            <div class="col-sm-3 col-md-2">
+                <input type="text" class="form-control" id="address-state" name="state" placeholder="State"
+                       ng-model="data.address.state" maxlength="2" ng-maxlength="2" required ng-change="geoCheck()"/>
+            </div>
+        </fieldset>
+        <fieldset class="form-group" ng-class="{'has-error' : !form.zip.$valid && form.zip.$touched, 'has-success' : form.zip.$valid && form.zip.$touched}">
+            <label for="address-zip" class="col-sm-3 col-md-2 control-label">Postal/Zip Code *</label>
+            <div class="col-sm-5 col-md-3">
+                <input type="text" class="form-control" id="address-zip" name="zip" placeholder="ex: 80304"
+                       ng-model="data.address.zip" ng-pattern="zipRegex" required ng-change="geoCheck()"/>
+            </div>
+        </fieldset>
+        <fieldset class="form-group" ng-class="{'has-error' : !form.latitude.$valid && form.latitude.$touched}" ng-if="ring===1">
+            <label for="latitude" class="col-sm-3 col-md-2 control-label">Latitude</label>
+            <div class="col-sm-6">
+                <input type="number" step="any" class="form-control" id="latitude" name="latitude"
+                       ng-model="data.geolocation.latitude" placeholder="ex: 35.272491"/>
+            </div>
+        </fieldset>
+        <fieldset class="form-group" ng-class="{'has-error' : !form.longitude.$valid && form.longitude.$touched}" ng-if="ring===1">
+            <label for="longitude" class="col-sm-3 col-md-2 control-label">Longitude</label>
+            <div class="col-sm-6">
+                <input type="number" step="any" class="form-control" id="longitude" name="longitude"
+                       ng-model="data.geolocation.longitude" placeholder="ex: -120.7054912"/>
+            </div>
+        </fieldset>
+    </form>
+</div>
+
+<div class="modal-footer">
+    <button class="btn btn-primary" type="button" ng-click="ok()" ng-disabled="form.$invalid">OK</button>
+    <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+</div>

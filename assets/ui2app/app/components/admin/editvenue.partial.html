@@ -1,16 +1,13 @@
 <div class="container">
-    <h1><i class="fa fa-building-o" aria-hidden="true" style="color: #999999"></i>&nbsp;&nbsp;Edit Venue: {{ venue.name }}</h1>
+    <h1><i class="fa fa-building-o" aria-hidden="true" style="color: #999999"></i>&nbsp;Venue: <span style="color: #8a8a8a; font-style: italic;">{{ venue.name }}</span></h1>
     <div class="row">
         <div class="col-md-8 col-lg-8">
             <uib-tabset class="top30">
                 <uib-tab heading="Basic Venue Info">
-                    <venue-basic-info venue="venue"></venue-basic-info>
-                </uib-tab>
-                <uib-tab heading="Owners & Managers">
-                    <h2>Owners</h2>
-                    <h3 ng-hide="venue.venueOwners.length">This venue has no owners.</h3>
-                    <h2>Managers</h2>
-                    <h3 ng-hide="venue.venueManagers.length">This venue has no managers.</h3>
+                    <venue-basic-info venue="venue" geocode="true" ring="1" yelp="true"></venue-basic-info>
+                    <google-map address="venue.address" geolocation="venue.geolocation" name="venue.name"></google-map>
+                    <venue-users venue="venue"></venue-users>
+                    <hr>
                 </uib-tab>
                 <uib-tab heading="Sponsorships">
                     <h3 ng-hide="venue.sponsorships.length">No sponsorships have been added to this venue.</h3>

@@ -13,7 +13,7 @@ app.factory( 'navService', function ( $rootScope ) {
             { label: "All Users", sref: "admin.userlist", icon: "users" },
             { label: "Add User", sref: "admin.edituser({id: 'new'})", icon: "user" },
             { label: "All Venues", sref: "admin.venuelist", icon: "globe" },
-            { label: "Add Venue", sref: "admin.addvenue({id: 'new'})", icon: "building-o" },
+            { label: "Add Venue", sref: "admin.editvenue({id: 'new'})", icon: "building-o" },
             { label: "All Ads", sref: "admin.adlist", icon: "bullhorn"},
             { label: "Create Ad", sref: "admin.editad({id: 'new'})", icon: "paint-brush" },
             { label: "Devices", sref: "admin.devicelist", icon: "television" },
@@ -161,6 +161,91 @@ app.factory( 'dialogService', function ( $uibModal, uibHelper, $log ) {
 
         return modalInstance.result;
 
+    }
+
+    service.addressDialog = function (location, geocode, ring, yelp) {
+        var modalInstance = $uibModal.open( {
+            templateUrl: '/ui2app/app/services/ui/addresschange.dialog.html',
+            controller: function ( $scope, $uibModalInstance, sailsVenues, toastr, geocode ) {
+                $scope.data = {
+                    address: location.address || {},
+                    geolocation: location.geolocation || {},
+                    yelpId: "",
+                    googlePlaceId: ""
+                };
+                $scope.ring = ring;
+                $scope.yelp = yelp;
+                $scope.parameters = {limit: 8};
+                $scope.zipRegex = "\\d{5}([\\-]\\d{4})?";
+                $scope.setForm = function(form) { $scope.form = form; };
+
+                $scope.initializeLocation = function() {
+                    $scope.parameters.location = "Locating...";
+                    geocode.locate()
+                        .then( geocode.revGeocode )
+                        .then( function (loc) {
+                            $scope.parameters.location = loc.city + ", " + loc.state;
+                            toastr.success("Successfully located!");
+                        })
+                        .catch( function (err) {
+                            $scope.parameters.location = "";
+                            $log.error(err);
+                            toastr.error("Could not find your location");
+                        })
+                };
+
+                $scope.yelpSearch = function () {
+                    return sailsVenues.yelp($scope.parameters)
+                        .catch( function (err) {
+                            toastr.error("Error fetching Yelp suggestions");
+                            $log.error(err);
+                        });
+                };
+
+                $scope.yelpCopy = function ($item, $model) {
+                    $scope.data.address = {
+                        street: $model.location.address1,
+                        street2: $model.location.address2,
+                        city: $model.location.city,
+                        state: $model.location.state,
+                        zip: $model.location.zip_code
+                    };
+                    $scope.data.geolocation = {
+                        latitude: $model.coordinates.latitude,
+                        longitude: $model.coordinates.longitude
+                    };
+                    $scope.data.yelpId = $model.id;
+                };
+
+                $scope.geoCheck = function() {
+                    if (geocode && $scope.form.$valid) {
+                        toastr.success("", "Geocoding...");
+                        sailsVenues.geocode(sailsVenues.addressStr($scope.data.address))
+                            .then( function (res) {
+                                toastr.success(res[0].formatted_address, "Geocoded successfully");
+                                $scope.data.geolocation.longitude = res[0].geometry.location.lng;
+                                $scope.data.geolocation.latitude = res[0].geometry.location.lat;
+                                $scope.data.googlePlaceId = res[0].place_id;
+                            })
+                            .catch( function (err) {
+                                toastr.error(err.toString(), "Error geocoding");
+                            })
+                    }
+                }
+
+                $scope.ok = function () {
+                    $uibModalInstance.close( $scope.data );
+                }
+
+                $scope.cancel = function () {
+                    $uibModalInstance.dismiss( 'cancel' );
+                }
+            },
+            size: 'lg'
+
+        });
+
+        return modalInstance.result;
     }
 
     return service;

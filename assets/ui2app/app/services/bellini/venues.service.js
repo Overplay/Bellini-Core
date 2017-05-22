@@ -80,6 +80,23 @@ app.factory( "sailsVenues", function ( sailsApi, sailsCoreModel, sailsOGDeviceRe
                 } );
         }
 
+        this.removeUserAs = function ( user, asType ) {
+            if (!_.includes( ['manager', 'owner' ], asType ) ) {
+                throw new Error( 'Type must be owner or manager');
+            }
+
+            var ep = (asType === 'owner') ? '/venue/removeOwner' : '/venue/removeManager';
+
+            var userId = sailsApi.idFromIdOrObj( user );
+
+            var vid = this.id;
+
+            return sailsApi.apiPost( ep, { userId: userId, id: this.id })
+                .then( function (data) {
+                    return getVenue(vid);
+                })
+        }
+
         this.addressString = function () {
             if ( this.address ) {
                 var addr = this.address;
@@ -113,6 +130,9 @@ app.factory( "sailsVenues", function ( sailsApi, sailsCoreModel, sailsOGDeviceRe
     }
 
     var getVenue = function ( id ) {
+        if (id === 'new')
+            return newVenue({ name: 'New Venue' });
+
         return sailsApi.getModel( 'venue', id )
             .then( newVenue );
     }
@@ -143,6 +163,17 @@ app.factory( "sailsVenues", function ( sailsApi, sailsCoreModel, sailsOGDeviceRe
             } )
     }
 
+    var addressToString = function (addr) {
+        if (!addr)
+            return null;
+
+        return addr.street + " " +
+            (addr.street2 ? addr.street2 + " " : "") +
+            addr.city + ", " +
+            addr.state + " " +
+            addr.zip;
+    }
+
     // Exports...new pattern to prevent this/that crap
     return {
         getAll:      getAll,
@@ -151,7 +182,8 @@ app.factory( "sailsVenues", function ( sailsApi, sailsCoreModel, sailsOGDeviceRe
         getByUUID:   getByUUID,
         getMyVenues: getMyVenues,
         geocode:     geocode,
-        yelp:        yelpSearch
+        yelp:        yelpSearch,
+        addressStr:  addressToString,
     }
 
 } )
