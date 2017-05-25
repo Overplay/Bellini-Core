@@ -329,7 +329,7 @@ module.exports = {
             return res.badRequest( { error: "Missing params" } );
 
         //prevent self removal from venue owner
-        if ( params.userId == req.session.user.id ) {
+        if ( params.userId === req.session.user.id ) {
             return res.badRequest( { error: "Cannot remove self from owning venue" } )
         }
 

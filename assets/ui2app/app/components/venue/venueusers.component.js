@@ -14,7 +14,7 @@ app.component('venueUsers', {
             var confirmValue = '';
 
             uibHelper.stringEditModal( "Confirm",
-                                       "To confirm deletion, type the user's first name (" + user.firstName + ") below and then click OK.",
+                                       "To confirm " + asType + " removal, type the user's first name (" + user.firstName + ") below and then click OK.",
                                        confirmValue )
                 .then( function ( rval ) {
                     if ( rval && rval === user.firstName ) {

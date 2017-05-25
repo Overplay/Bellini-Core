@@ -6,8 +6,9 @@
                 <uib-tab heading="Basic Venue Info">
                     <venue-basic-info venue="venue" geocode="true" ring="1" yelp="true"></venue-basic-info>
                     <google-map address="venue.address" geolocation="venue.geolocation" name="venue.name"></google-map>
+                </uib-tab>
+                <uib-tab heading="Personnel">
                     <venue-users venue="venue"></venue-users>
-                    <hr>
                 </uib-tab>
                 <uib-tab heading="Sponsorships">
                     <h3 ng-hide="venue.sponsorships.length">No sponsorships have been added to this venue.</h3>
