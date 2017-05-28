@@ -22,6 +22,7 @@ module.exports.session = {
   *                                                                          *
   ***************************************************************************/
   secret: 'ddc8d0aa785ece2f935cc4a74cdb680f',
+  key: 'bc.sid',
 
 
   /***************************************************************************
@@ -41,7 +42,7 @@ module.exports.session = {
   * session store that can be shared across multiple Sails.js servers        *
   ***************************************************************************/
 
-  // adapter: 'redis',
+  adapter: 'redis',
 
   /***************************************************************************
   *                                                                          *
@@ -67,11 +68,11 @@ module.exports.session = {
   *          TODO adapt this to make sure sessions are correct time          *
   ***************************************************************************/
 
-  adapter: 'mongo',
-  host: 'localhost',
-  port: 27017,
-  db: 'asahi',
-  collection: 'sessions',
+  // adapter: 'mongo',
+  // host: 'localhost',
+  // port: 27017,
+  // db: 'bellinisessions',
+  // collection: 'sessions',
 
   /***************************************************************************
   *                                                                          *
