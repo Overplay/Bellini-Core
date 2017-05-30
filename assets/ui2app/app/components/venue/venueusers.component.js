@@ -5,10 +5,29 @@
 app.component('venueUsers', {
 
     bindings:   {
-        venue: '='
+        venue: '=',
+        users: '<'
     },
     controller: function ( uibHelper, toastr ) {
         var ctrl = this;
+
+        this.addUser = function (type) {
+            var list = type === 'manager' ? ctrl.venue.venueManagers : ctrl.venue.venueOwners;
+            list = _.differenceBy(ctrl.users, list, function (o) { return o.id; });
+            list = _.sortBy(list, ['lastName', 'firstName', 'email']);
+            list = _.map(list, function (o) { return o.lastName + ", " + o.firstName + " - " + o.email});
+
+
+            var params = {
+                title: type === 'manager' ? 'Add Manager' : 'Add Owner',
+                body: "Select a user to add as a" + (type === 'manager' ? " manager" : "n owner"),
+                choices: list,
+                selected: null
+            }
+
+            uibHelper.selectListModal(params.title, params.body, params.choices, params.selected)
+
+        }
 
         this.remove = function (user, asType) {
             var confirmValue = '';
@@ -29,7 +48,11 @@ app.component('venueUsers', {
     },
 
     template: `
-    <h2>Owners</h2>
+    <h2>
+        Owners
+        <button class="btn btn-sm btn-success pull-right" style="display: inline-block" ng-click="$ctrl.addUser('owner')">Add Owner</button>
+    </h2>
+
     <h3 ng-hide="$ctrl.venue.venueOwners.length">This venue has no owners</h3>
 
     <table class="table table-striped top15" ng-show="$ctrl.venue.venueOwners.length">
@@ -53,8 +76,13 @@ app.component('venueUsers', {
         </tbody>
 
     </table>
+    <br>    
+    <hr>
     
-    <h2>Managers</h2>
+    <h2>
+        Managers
+        <button class="btn btn-sm pull-right btn-success" style="display: inline-block" ng-click="$ctrl.addUser('manager')">Add Manager</button>        
+    </h2>
     <h3 ng-hide="$ctrl.venue.venueManagers.length">This venue has no managers</h3>
     
     <table class="table table-striped top15" ng-show="$ctrl.venue.venueManagers.length">

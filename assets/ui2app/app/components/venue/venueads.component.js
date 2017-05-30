@@ -2,12 +2,14 @@
 app.component("venueAds", {
 
     bindings: {
-        venue: '='
+        venue: '=',
+        ads: '<'
     },
     controller: function () {
 
     },
     template: `
+    <h3 ng-hide="$ctrl.venue.sponsorships.length">This venue has no sponsorships yet</h3>
     <uib-accordion ng-show="$ctrl.venue.sponsorships.length" class="top30">
         <div uib-accordion-group class="panel-default" is-open="status.isOpen" ng-repeat="s in $ctrl.venue.sponsorships | orderBy:'name'">
             <uib-accordion-heading>

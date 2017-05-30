@@ -525,6 +525,29 @@ module.exports = {
             } )
             .catch(res.serverError);
 
+    },
+
+    getVenueAds: function ( req, res ) {
+
+        if (req.method !== 'GET')
+            return res.badRequest("Wrong verb");
+
+        if (!req.allParams().id)
+            return res.badRequest("No venue id");
+
+        Venue.findOne(req.allParams().id)
+            .then( function (venue) {
+                if (!venue)
+                    return res.notFound();
+
+                return venue.sponsorships;
+            })
+            .then( function (ads) {
+                return Ad.find(ads)
+            })
+            .then( function (ads) {
+                res.ok(ads);
+            })
     }
 };
 

@@ -150,11 +150,13 @@ app.controller( 'adminVenueListController', function ( $scope, venues, $log, uib
     }
 } );
 
-app.controller( 'adminVenueEditController', function ( $scope, venue, $log, $state, toastr, dialogService ) {
+app.controller( 'adminVenueEditController', function ( $scope, venue, $log, $state, toastr, dialogService, ads, users ) {
     $log.debug( "Loading adminVenueEditController" );
     $scope.venue = venue;
+    $scope.ads = ads;
+    $scope.users = users;
 
-    function createBrandNewVenue( preload ) {
+    function createBrandNewVenue() {
 
         dialogService.addressDialog("", {}, {}, true, 1, true)
             .then( function ( locData ) {
@@ -178,6 +180,7 @@ app.controller( 'adminVenueEditController', function ( $scope, venue, $log, $sta
             } );
 
     }
+
     if (!venue.id) {
         createBrandNewVenue();
     }

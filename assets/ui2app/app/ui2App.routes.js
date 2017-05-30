@@ -181,6 +181,12 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             resolve: {
                 venue: function ( sailsVenues, $stateParams ) {
                     return sailsVenues.get( $stateParams.id );
+                },
+                ads: function ( sailsAds ) {
+                    return sailsAds.getAll();
+                },
+                users: function ( sailsUsers ) {
+                    return sailsUsers.getAll();
                 }
             }
         })
