@@ -26,8 +26,12 @@
 <div class="modal-body" ng-hide="showChoice">
     {{ modalUi.body }}
 </div>
+<div class="input-group">
+    <span class="input-group-addon" id="search-icon"></span>
+    <input type="text" class="form-control" placeholder="Search" ng-model="searchTerm">
+</div>
 <ol class="slm-no-num" style="margin: 10px; border: 1px solid #cacaca;">
-    <li ng-repeat="choice in modalUi.choices track by $index" class="slm-pick-item"
+    <li ng-repeat="choice in modalUi.choices track by $index | searchTerm" class="slm-pick-item"
         ng-class="{ 'slm-picked': modalUi.currentChoice==$index}"
         ng-click="modalUi.currentChoice = $index">{{ choice }}</li>
 </ol>

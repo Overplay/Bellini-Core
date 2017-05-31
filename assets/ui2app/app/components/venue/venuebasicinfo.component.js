@@ -44,7 +44,7 @@ app.component( 'venueBasicInfo', {
         };
 
         this.changeAddress = function () {
-            dialogService.addressDialog({ name: ctrl.venue.name, address: ctrl.venue.address, geolocation: ctrl.venue.geolocation },
+            dialogService.addressDialog(ctrl.venue.name, {address: ctrl.venue.address, geolocation: ctrl.venue.geolocation} ,
                                         ctrl.geocode, ctrl.ring, ctrl.yelp)
                 .then( function (locData) {
                     ctrl.venue.name = locData.name || ctrl.venue.name;

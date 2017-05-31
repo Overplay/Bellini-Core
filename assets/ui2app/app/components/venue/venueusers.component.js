@@ -8,24 +8,38 @@ app.component('venueUsers', {
         venue: '=',
         users: '<'
     },
-    controller: function ( uibHelper, toastr ) {
+    controller: function ( uibHelper, toastr, $filter ) {
         var ctrl = this;
 
+        this.$onInit = function () {
+            ctrl.allUsers = _.sortBy(ctrl.users, ['lastName',  'firstName', 'email']);
+        }
+
+
         this.addUser = function (type) {
-            var list = type === 'manager' ? ctrl.venue.venueManagers : ctrl.venue.venueOwners;
-            list = _.differenceBy(ctrl.users, list, function (o) { return o.id; });
-            list = _.sortBy(list, ['lastName', 'firstName', 'email']);
-            list = _.map(list, function (o) { return o.lastName + ", " + o.firstName + " - " + o.email});
+            var exclude = type === 'manager' ? ctrl.venue.venueManagers : ctrl.venue.venueOwners;
+            var options = _.differenceBy(ctrl.allUsers, exclude, function (o) { return o.id; });
+            var strings = _.map(options, function (o) { return o.lastName + ", " + o.firstName + " - " + o.email});
 
 
             var params = {
                 title: type === 'manager' ? 'Add Manager' : 'Add Owner',
                 body: "Select a user to add as a" + (type === 'manager' ? " manager" : "n owner"),
-                choices: list,
+                choices: strings,
                 selected: null
             }
 
             uibHelper.selectListModal(params.title, params.body, params.choices, params.selected)
+                .then( function (result) {
+                    ctrl.venue.addUserAs(options[result], type)
+                        .then( function (newVenue) {
+                            ctrl.venue = newVenue;
+                            toastr.success("User successfully added as a " + type);
+                        })
+                })
+                .catch( function (err) {
+
+                })
 
         }
 
@@ -33,15 +47,18 @@ app.component('venueUsers', {
             var confirmValue = '';
 
             uibHelper.stringEditModal( "Confirm",
-                                       "To confirm " + asType + " removal, type the user's first name (" + user.firstName + ") below and then click OK.",
+                                       "To confirm " + asType + " removal, type the user's last name (" + user.lastName + ") below and then click OK.",
                                        confirmValue )
                 .then( function ( rval ) {
-                    if ( rval && rval === user.firstName ) {
+                    if ( rval && rval === user.lastName ) {
                         ctrl.venue.removeUserAs(user, asType)
                             .then( function (venue) {
-                                toastr.success( asType.toUpperCase() + " Removed" );
+                                toastr.success( $filter('capitalize')(asType) + " Removed" );
                                 ctrl.venue = venue;
                             } )
+                    }
+                    else {
+                        toastr.error("Names don't match");
                     }
                 } )
         }
@@ -67,7 +84,7 @@ app.component('venueUsers', {
         <tr ng-repeat="user in $ctrl.venue.venueOwners">
             <td>{{user.firstName}}&nbsp;{{user.lastName}}</td>
             <td>
-                <button class="btn btn-sm btn-danger pull-right" ng-disabled="$ctrl.venue.venueOwners.length <= 1" ng-click="remove(user, 'owner')">Remove
+                <button class="btn btn-sm btn-danger pull-right" ng-disabled="$ctrl.venue.venueOwners.length <= 1" ng-click="$ctrl.remove(user, 'owner')">Remove
                 </button>
             </td>
             <td width="10%"><a class="btn btn-sm btn-warning pull-right" ui-sref="admin.edituser({id: user.id})">More

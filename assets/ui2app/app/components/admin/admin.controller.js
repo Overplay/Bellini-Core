@@ -158,7 +158,7 @@ app.controller( 'adminVenueEditController', function ( $scope, venue, $log, $sta
 
     function createBrandNewVenue() {
 
-        dialogService.addressDialog("", {}, {}, true, 1, true)
+        dialogService.addressDialog("", {}, true, 1, true)
             .then( function ( locData ) {
                 $scope.venue.name = locData.name;
                 $scope.venue.address = locData.address;
