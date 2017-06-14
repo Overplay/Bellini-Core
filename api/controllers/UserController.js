@@ -424,7 +424,7 @@ module.exports = require('waterlock').actions.user({
         //var user = req.session.user;
 
         User.findOne(req.session.user.id)
-            .populate(["ownedVenues", "managedVenues"])
+            .populate(["ownedVenues", "managedVenues", "auth"])
             .then(function(u){
                 if (!u){
                     return res.notAuthorized();
