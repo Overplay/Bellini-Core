@@ -421,9 +421,19 @@ module.exports = require('waterlock').actions.user({
             });
         }
 
-        var user = req.session.user;
-        res.ok(user);
-        
+        //var user = req.session.user;
+
+        User.findOne(req.session.user.id)
+            .populate(["ownedVenues", "managedVenues"])
+            .then(function(u){
+                if (!u){
+                    return res.notAuthorized();
+                }
+
+                return res.ok(u);
+            })
+            .catch(res.serverError)
+
     },
 
     checkSession: function(req, res){
