@@ -82,7 +82,7 @@ module.exports.waterlock = {
         secret:   'HiggsBoson',
         expiry:   {
             unit:   'days',
-            length: '7'
+            length: '365'
         },
         audience: 'Nucleus',
         subject:  'Proton',

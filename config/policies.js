@@ -64,7 +64,7 @@ module.exports.policies = {
         'update':    [ 'authProtection' ],
         'destroy':   [ 'authProtection' ], //maybe me?
         //'register': ['sessionAuth', 'isAdmin'], //not even used anywhere
-        //'addUser': true, //used in SignupApp through nucleus service
+        'addUser':   true, //used by mobile app
         'resetPwd':  [ 'passwordReset' ],
         'register':  false, //we use a differnet registration than waterlock
         //changePw own policy because it could be an authenticated user OR a reset token 
