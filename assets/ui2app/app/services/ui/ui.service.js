@@ -163,6 +163,24 @@ app.factory( 'dialogService', function ( $uibModal, uibHelper, $log ) {
 
     }
 
+    service.adSelect = function (ads) {
+        var modalInstance = $uibModal.open( {
+            templateUrl: '/ui2app/app/services/ui/adselect.template.html',
+            controller: function ( $scope, $uibModalInstance ) {
+                $scope.modalUi = {
+                    sponsorships: ads,
+                    mediaSizes: ['widget', 'crawler']
+                }
+                $scope.ok = function (sponsorship) {
+                    $uibModalInstance.close(sponsorship);
+                };
+                $scope.cancel = function () {
+                    $uibModalInstance.dismiss('cancel');
+                }
+            }
+        })
+    }
+
     service.addressDialog = function (name, location, geocode, ring, yelp) {
         var modalInstance = $uibModal.open( {
             templateUrl: '/ui2app/app/services/ui/addresschange.dialog.html',

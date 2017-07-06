@@ -116,7 +116,7 @@ app.component( 'adEdit', {
                 .then( function ( fields ) {
                     $log.debug( fields );
                     ctrl.advert.advert.text = _.compact( _.flatMap( fields ) );
-                    ctrl.user.save()
+                    ctrl.advert.save()
                         .then( function () {
                             toastr.success( "Text ads changed" );
                         } )
