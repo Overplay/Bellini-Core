@@ -179,6 +179,8 @@ app.factory( 'dialogService', function ( $uibModal, uibHelper, $log ) {
                 }
             }
         })
+
+        return modalInstance.result;
     }
 
     service.addressDialog = function (name, location, geocode, ring, yelp) {

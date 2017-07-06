@@ -19,7 +19,7 @@
                     <b>{{size | capitalize}}</b><br>
                     <img style="width:100%"
                          class="media-prev"
-                         ng-src="media/download/{{s.advert.media[size]}}"/>
+                         ng-src="{{s.advert.media[size].url}}"/>
                 </div>
                 <div class="col-xs-12 top15">
                     <button class="btn btn-success" type="button" ng-click="ok(s)">Add this sponsorship</button>
