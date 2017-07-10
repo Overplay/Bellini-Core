@@ -342,6 +342,13 @@ var self = module.exports.testdata = {
     ],
     venues: [
         {
+            name:          "Simulation Station",
+            address:       { street: "600 E Campbell Ave", city: "Campbell", state: "CA", zip: "95008" },
+            ownerEmails:   [ "john@test.com" ],
+            managerEmails: [ "silvanus@test.com", "jerref@test.com" ],
+            uuid:          'sim-001'
+        },
+        {
             name: "Blue Line Pizza",
             address: {street: "415 E Campbell Ave", city: "Campbell", state: "CA", zip: "95008"},
             ownerEmails: ["john@test.com"],

@@ -104,6 +104,10 @@ app.component( 'venueBasicInfo', {
                                 </td>
                             </tr>
                             <tr>
+                                <td>Venue ID</td>
+                                <td>{{ $ctrl.venue.uuid }}</td>
+                            </tr>
+                            <tr>
                                 <td>Registered On</td>
                                 <td>{{ $ctrl.venue.createdAt | date : "MMMM d, yyyy" }}</td>
                             </tr>
