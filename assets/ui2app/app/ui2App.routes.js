@@ -26,6 +26,15 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
         return _.extend( navViews, { "appbody": withView } );
     }
 
+    function withUserResolve( resolvers ) {
+        return _.extend( resolvers, {
+            user: function ( userAuthService ) {
+                return userAuthService.getCurrentUser();
+            }
+        } );
+    }
+
+
     $urlRouterProvider.otherwise( '/' );
 
     $stateProvider
@@ -47,14 +56,11 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                 templateUrl: '/ui2app/app/components/account/myaccount.partial.html',
                 controller:  'myAccountController'
             } ),
-            resolve: {
-                me: function ( sailsUsers ) {
-                    return sailsUsers.getMe();
-                },
+            resolve: withUserResolve( {
                 sm: function ( navService ) {
                     navService.sideMenu.change( 'accountMenu' );
                 }
-            }
+            } )
 
         } )
 
@@ -120,11 +126,11 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             url:         '/venuelist',
             templateUrl: '/ui2app/app/components/admin/venuelist.partial.html',
             controller:  'adminVenueListController',
-            resolve:     {
+            resolve:    withUserResolve( {
                 venues: function ( sailsVenues ) {
                     return sailsVenues.getAll();
                 }
-            }
+            })
         } )
 
         .state( 'admin.devicelist', {
@@ -178,7 +184,7 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             url:         '/editvenue/:id',
             templateUrl: '/ui2app/app/components/admin/editvenue.partial.html',
             controller:  'adminVenueEditController',
-            resolve: {
+            resolve:     {
                 venue: function ( sailsVenues, $stateParams ) {
                     return sailsVenues.get( $stateParams.id );
                 },
@@ -189,21 +195,21 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                     return sailsUsers.getAll();
                 }
             }
-        })
+        } )
 
         .state( 'admin.addvenue', {
             url:         '/addvenue',
             templateUrl: '/ui2app/app/components/admin/addvenue.partial.html',
             controller:  'adminVenueAddController',
-            resolve: {
+            resolve:     {
                 venue: function ( sailsVenues ) {
                     return sailsVenues.new();
                 },
-                ring: function ( userAuthService ) {
+                ring:  function ( userAuthService ) {
                     return userAuthService.getCurrentUserRing();
                 }
             }
-        })
+        } )
 
         // Proprietor Owner Links
 

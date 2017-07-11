@@ -2,11 +2,9 @@
  * Created by mkahn on 4/26/17.
  */
 
-app.controller('myAccountController', ['$scope','me', '$log', function($scope, me, $log){
+app.controller('myAccountController', ['$scope','user', '$log', function($scope, user, $log){
 
     $log.debug("Loading myAccountController");
-    $scope.me = me;
-
-
+    $scope.me = user;
 
 }]);
