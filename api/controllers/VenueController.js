@@ -184,6 +184,7 @@ module.exports = {
 
         //have to add proprietor.manager role to user if not already there.
         User.findOne( params.userId )
+            .populate( "auth" )
             .populate( "managedVenues" )
             .populate( "ownedVenues" )
             .then( function ( user ) {
@@ -198,7 +199,10 @@ module.exports = {
                     }
                     else {
                         //thought - own OR manage , not both
-                        user.roles = _.union( user.roles, [ RoleCacheService.roleByName( "proprietor", "manager" ) ] )
+                        if (user.auth.ring > 2) {
+                            user.auth.ring = 2;
+                            user.auth.save();
+                        }
                         user.managedVenues.add( params.id )
                         user.save( function ( err ) {
                             if ( err ) {
@@ -232,6 +236,7 @@ module.exports = {
 
         //have to add proprietor.owner role to user if not already there.
         User.findOne( params.userId )
+            .populate( "auth" )
             .populate( "managedVenues" )
             .populate( "ownedVenues" )
             .then( function ( user ) {
@@ -246,7 +251,10 @@ module.exports = {
                     }
                     else {
                         //thought - own OR manage , not both
-                        user.roles = _.union( user.roles, [ RoleCacheService.roleByName( "proprietor", "owner" ) ] )
+                        if (user.auth.ring > 2) {
+                            user.auth.ring = 2;
+                            user.auth.save();
+                        }
                         user.ownedVenues.add( params.id )
                         user.save( function ( err ) {
                             if ( err )
@@ -329,7 +337,7 @@ module.exports = {
             return res.badRequest( { error: "Missing params" } );
 
         //prevent self removal from venue owner
-        if ( params.userId == req.session.user.id ) {
+        if ( params.userId === req.session.user.id ) {
             return res.badRequest( { error: "Cannot remove self from owning venue" } )
         }
 
@@ -525,6 +533,29 @@ module.exports = {
             } )
             .catch(res.serverError);
 
+    },
+
+    getVenueAds: function ( req, res ) {
+
+        if (req.method !== 'GET')
+            return res.badRequest("Wrong verb");
+
+        if (!req.allParams().id)
+            return res.badRequest("No venue id");
+
+        Venue.findOne(req.allParams().id)
+            .then( function (venue) {
+                if (!venue)
+                    return res.notFound();
+
+                return venue.sponsorships;
+            })
+            .then( function (ads) {
+                return Ad.find(ads)
+            })
+            .then( function (ads) {
+                res.ok(ads);
+            })
     }
 };
 

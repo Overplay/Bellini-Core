@@ -163,13 +163,34 @@ app.factory( 'dialogService', function ( $uibModal, uibHelper, $log ) {
 
     }
 
-    service.addressDialog = function (location, geocode, ring, yelp) {
+    service.adSelect = function (ads) {
+        var modalInstance = $uibModal.open( {
+            templateUrl: '/ui2app/app/services/ui/adselect.template.html',
+            controller: function ( $scope, $uibModalInstance ) {
+                $scope.modalUi = {
+                    sponsorships: ads,
+                    mediaSizes: ['widget', 'crawler']
+                }
+                $scope.ok = function (sponsorship) {
+                    $uibModalInstance.close(sponsorship);
+                };
+                $scope.cancel = function () {
+                    $uibModalInstance.dismiss('cancel');
+                }
+            }
+        })
+
+        return modalInstance.result;
+    }
+
+    service.addressDialog = function (name, location, geocode, ring, yelp) {
         var modalInstance = $uibModal.open( {
             templateUrl: '/ui2app/app/services/ui/addresschange.dialog.html',
             controller: function ( $scope, $uibModalInstance, sailsVenues, toastr, geocode ) {
                 $scope.data = {
                     address: location.address || {},
                     geolocation: location.geolocation || {},
+                    name: name || "",
                     yelpId: "",
                     googlePlaceId: ""
                 };
@@ -203,6 +224,7 @@ app.factory( 'dialogService', function ( $uibModal, uibHelper, $log ) {
                 };
 
                 $scope.yelpCopy = function ($item, $model) {
+                    $scope.data.name = $model.name;
                     $scope.data.address = {
                         street: $model.location.address1,
                         street2: $model.location.address2,

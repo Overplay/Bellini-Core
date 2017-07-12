@@ -44,9 +44,10 @@ app.component( 'venueBasicInfo', {
         };
 
         this.changeAddress = function () {
-            dialogService.addressDialog({ address: ctrl.venue.address, geolocation: ctrl.venue.geolocation },
+            dialogService.addressDialog(ctrl.venue.name, {address: ctrl.venue.address, geolocation: ctrl.venue.geolocation} ,
                                         ctrl.geocode, ctrl.ring, ctrl.yelp)
                 .then( function (locData) {
+                    ctrl.venue.name = locData.name || ctrl.venue.name;
                     ctrl.venue.address = locData.address;
                     ctrl.venue.geolocation = locData.geolocation;
                     ctrl.venue.save()
@@ -72,47 +73,44 @@ app.component( 'venueBasicInfo', {
 
     },
 
-    template: `<table class="table table-striped table-bordered top15">
-                            <tbody>
-                            <tr>
-                                <td>Name</td>
-                                <td>{{ $ctrl.venue.name }}
-                                    <i class="fa fa-pencil-square-o ibut pull-right" aria-hidden="true"
-                                       ng-click="$ctrl.changeName()"></i>
-                                </td>
-                            </tr>
-                            <tr ng-show="$ctrl.venue.logo">
-                                <td>Logo</td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td>Address</td>
-                                <td>{{ $ctrl.venue.addressString() }}    
-                                    <i class="fa fa-pencil-square-o ibut pull-right" aria-hidden="true"
-                                       ng-click="$ctrl.changeAddress()"></i>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Show in Mobile App</td>
-                                <td>
-                                    <div class="checkbox" style="margin: 0;">
-                                        <label>
-                                            <input type="checkbox" ng-model="$ctrl.venue.showInMobileApp" ng-change="$ctrl.showInApp()">
-                                            {{ $ctrl.venue.showInMobileApp ? 'Will be shown' : 'Will not be shown'}}
-                                        </label>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Venue ID</td>
-                                <td>{{ $ctrl.venue.uuid }}</td>
-                            </tr>
-                            <tr>
-                                <td>Registered On</td>
-                                <td>{{ $ctrl.venue.createdAt | date : "MMMM d, yyyy" }}</td>
-                            </tr>
-                            </tbody>
-                        </table>
+    template: `
+        <table class="table table-striped table-bordered top15">
+            <tbody>
+            <tr>
+                <td>Name</td>
+                <td>{{ $ctrl.venue.name }}
+                    <i class="fa fa-pencil-square-o ibut pull-right" aria-hidden="true"
+                       ng-click="$ctrl.changeName()"></i>
+                </td>
+            </tr>
+            <tr ng-show="$ctrl.venue.logo">
+                <td>Logo</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Address</td>
+                <td>{{ $ctrl.venue.addressString() }}    
+                    <i class="fa fa-pencil-square-o ibut pull-right" aria-hidden="true"
+                       ng-click="$ctrl.changeAddress()"></i>
+                </td>
+            </tr>
+            <tr>
+                <td>Show in Mobile App</td>
+                <td>
+                    <div class="checkbox" style="margin: 0;">
+                        <label>
+                            <input type="checkbox" ng-model="$ctrl.venue.showInMobileApp" ng-change="$ctrl.showInApp()">
+                            {{ $ctrl.venue.showInMobileApp ? 'Will be shown' : 'Will not be shown'}}
+                        </label>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>Registered On</td>
+                <td>{{ $ctrl.venue.createdAt | date : "MMMM d, yyyy" }}</td>
+            </tr>
+            </tbody>
+        </table>
     `
 
 

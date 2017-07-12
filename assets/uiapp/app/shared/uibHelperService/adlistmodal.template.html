@@ -1,42 +1,10 @@
-<style>
-    .slm-pick-item {
-        color: teal;
-        padding: 10px 0 10px 5px;
-        margin-left: 0;
-        cursor: pointer;
-    }
-
-    .slm-picked {
-        background: #696969;
-        color: white;
-        transition: all 0.5s;
-    }
-
-    .slm-no-num {
-        list-style-type: none;
-        padding: 10px;
-    }
-</style>
-
 <div class="modal-header">
     <h3 class="modal-title">Choose sponsorship to add</h3>
 </div>
 <div class="modal-body">
-
-
-<!--<ol class="slm-no-num" style="margin: 10px; border: 1px solid #cacaca;">-->
-    <!--<li ng-repeat="choice in sponsorships" class="slm-pick-item"-->
-        <!--ng-class="{ 'slm-picked': modalUi.currentChoice==$index}"-->
-        <!--ng-click="modalUi.currentChoice = $index">{{ choice.name }} - {{ choice.description }}-->
-    <!--</li>-->
-<!--</ol>-->
-
 <uib-accordion ng-show="modalUi.sponsorships.length">
     <div uib-accordion-group class="panel-default" is-open="status.isOpen" ng-repeat="s in modalUi.sponsorships">
         <uib-accordion-heading>
-            <!--<label>-->
-                <!--<input type="checkbox">-->
-            <!--</label>-->
             {{ s.name }} - <span style="font-size:14px">{{ s.description }}</span>
             <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-up': status.isOpen, 'glyphicon-chevron-down': !status.isOpen }"></i>
         </uib-accordion-heading>

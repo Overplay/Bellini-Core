@@ -47,7 +47,7 @@ app.factory( "sailsVenues", function ( sailsApi, sailsCoreModel, sailsOGDeviceRe
         // TODO will need to determine how to handle the relation fields as we work on the UI
         this.getPostObj = function () {
             var fields = [ 'name', 'yelpId', 'address', 'geolocation', 'showInMobileApp',
-                'virtual', '@id:logo', 'googlePlaceId' ];
+                'virtual', '@id:logo', 'googlePlaceId', 'sponsorships'];
             return this.cloneUsingFields( fields );
 
         };

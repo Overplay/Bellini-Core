@@ -150,9 +150,40 @@ app.controller( 'adminVenueListController', function ( $scope, venues, $log, uib
     }
 } );
 
-app.controller( 'adminVenueEditController', function ( $scope, venue, $log, $state, toastr ) {
+app.controller( 'adminVenueEditController', function ( $scope, venue, $log, $state, toastr, dialogService, ads, users ) {
     $log.debug( "Loading adminVenueEditController" );
     $scope.venue = venue;
+    $scope.ads = ads;
+    $scope.users = users;
+
+    function createBrandNewVenue() {
+
+        dialogService.addressDialog("", {}, true, 1, true)
+            .then( function ( locData ) {
+                $scope.venue.name = locData.name;
+                $scope.venue.address = locData.address;
+                $scope.venue.geolocation = locData.geolocation;
+
+                $scope.venue.save()
+                    .then( function ( wha ) {
+                        // redirect-ish
+                        $state.go( 'admin.editvenue', { id: wha.id } );
+                    } )
+                    .catch( function ( err ) {
+                        toastr.error( "Hmm, weird error creating user." );
+                        $state.go( 'admin.venuelist' );
+                    } )
+
+            } )
+            .catch( function ( err ) {
+                $state.go( 'admin.venuelist' );
+            } );
+
+    }
+
+    if (!venue.id) {
+        createBrandNewVenue();
+    }
 } );
 
 app.controller( 'adminVenueAddController', function ( $scope, $log, venue, $state, toastr, geocode, ring, sailsVenues ) {
