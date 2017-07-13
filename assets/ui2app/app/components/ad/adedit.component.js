@@ -14,6 +14,17 @@ app.component( 'adEdit', {
 
         var ctrl = this;
 
+        function replicate( toRep, toRec) {
+            toRec.createdAt = toRep.createdAt;
+            toRec.creator = toRep.creator;
+            toRec.deleted = toRep.deleted;
+            toRec.id = toRep.id;
+            toRec.metaData = toRep.metaData;
+            toRec.paused = toRep.paused;
+            toRec.reviewState = toRep.reviewState;
+            toRec.updatedAt = toRep.updatedAt;
+        }
+
         // { object:, field:, heading:, subhead:, successMsg:, errMsg: }
         function editField( params ) {
             uibHelper.stringEditModal( params.heading, params.subhead, params.object[ params.field ] )
@@ -21,6 +32,7 @@ app.component( 'adEdit', {
                     params.object[ params.field ] = nval;
                     params.object.save()
                         .then( function ( d ) {
+                            replicate(d, ctrl.advert);
                             toastr.success( params.successMsg );
                         } )
                         .catch( function ( err ) {
@@ -73,7 +85,7 @@ app.component( 'adEdit', {
         }
 
         function fieldToggleFail() {
-            toastr.success( "Field coould not be changed" );
+            toastr.success( "Field could not be changed" );
         }
 
         this.toggleField = function ( booleanFieldName ) {
@@ -223,7 +235,7 @@ app.component( 'adEdit', {
         <tr>
             <td>Review State</td>
             <td>{{ $ctrl.advert.reviewState }}</td>
-            <td><button style="width:100%" class="btn btn-thin" ng-click="$ctrl.changeAdState()">Change State</button> </td>
+            <td><button style="width:100%" class="btn btn-thin btn-primary" ng-click="$ctrl.changeAdState()">Change State</button> </td>
         </tr>
         </tbody>
     </table>
