@@ -10,11 +10,12 @@ app.config( function ( toastrConfig ) {
     } );
 } );
 
- app.config( function ( uiGmapGoogleMapApiProvider) {
+app.config( function ( uiGmapGoogleMapApiProvider) {
      uiGmapGoogleMapApiProvider.configure({
          key: 'AIzaSyCrbE5uwJxaBdT7bXTGpes3F3VmQ5K9nXE'
      })
- })
+ });
+
 //
 // app.config(['ChartJsProvider', function (ChartJsProvider) {
 //     // Configure all charts

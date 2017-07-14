@@ -106,35 +106,32 @@ app.factory( 'navService', function ( $rootScope ) {
 } );
 
 
-app.controller( 'redirectController', [ 'userAuthService', '$state', function ( userAuthService, $state ) {
+app.controller( 'redirectController', [ '$state', 'user', function ( $state, user ) {
     // TODO think about removing the individual dashbaords and just add tiles to one unified dash
-    userAuthService.getCurrentUser()
-        .then( function ( user ) {
 
-            if ( user.isAdmin ) {
-                $state.go( 'admin.dashboard' );
-            }
 
-            else if ( user.isSponsor ) {
-                $state.go( 'sponsor.dashboard' );
-            }
+    if ( user.isAdmin ) {
+        $state.go( 'admin.dashboard' );
+    }
 
-            else if ( user.isOwner ) {
-                $state.go( 'owner.dashboard' );
-            }
+    else if ( user.isSponsor ) {
+        $state.go( 'sponsor.dashboard' );
+    }
 
-            else if ( user.isManager ) {
-                $state.go( 'manager.dashboard' );
-            }
+    else if ( user.isOwner ) {
+        $state.go( 'owner.dashboard' );
+    }
 
-            else {
-                $state.go( 'user.dashboard' );
-            }
+    else if ( user.isManager ) {
+        $state.go( 'manager.dashboard' );
+    }
 
-        } )
+    else {
+        $state.go( 'user.dashboard' );
+    }
+
 
 } ] );
-
 
 app.factory( 'dialogService', function ( $uibModal, uibHelper, $log ) {
 

@@ -21,6 +21,14 @@ app.directive( 'imgInput', function ( $log, $timeout, $rootScope ) {
             scope.ratio = attrs.ratio;
             scope.maxSize = attrs.maxSize !== undefined;
 
+            // This is ahack because this dirctive is broken and should be replaced
+            // this directive does not work with a bare media object (i.e. not run thru  media.service)
+            function attachMediaUrl(){
+                scope.srcField.url = '/media/download/' + scope.srcField.id;
+            }
+
+            attachMediaUrl();
+
             var ratio = w / h;
             var reset = function ( error ) {
                 showWarning( error );
