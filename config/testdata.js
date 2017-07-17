@@ -477,6 +477,14 @@ var self = module.exports.testdata = {
             reviewState:  'Accepted'
         },
         {
+            name:         "Aqui",
+            creatorEmail: "ad@test.com",
+            description:  "Aqui ads",
+            reviewState:  'Accepted',
+            images:       { widget: "aqui/aqui256.jpg", crawler: 'aqui/aqui440.jpg' },
+            messages:     [ 'Aqui! Aqui!', 'The best times happen with Aqui' ]
+        },
+        {
             name:         "Bear Republic",
             creatorEmail: "ad@test.com",
             description:  "Bear Republic beer",
@@ -497,7 +505,7 @@ var self = module.exports.testdata = {
             creatorEmail: "ad@test.com",
             description:  "Blatz beer",
             reviewState:  'Waiting for Review',
-            images:       { widget: 'blatz/blatz256.png', crawler: 'blatz/blatz440.png' },
+            images:       { widget: 'blatz/blatz256.png', crawler: 'blatz/blatz440.jpg' },
             messages:     [ 'Is it the worst beer ever? Yes, I think it is.', 'Blatz will make you phatz' ]
         },
         {
@@ -514,10 +522,18 @@ var self = module.exports.testdata = {
             description:  "Campbell Brewing ads",
             reviewState:  'Accepted',
             images:       {
-                widget:  'campbellbrewing/campbellbrew256.png',
-                crawler: 'campbellbrewing/campbellbrew440.png'
+                widget:  'campbellbrewing/campbellbrew256.jpg',
+                crawler: 'campbellbrewing/campbellbrew440.jpg'
             },
             messages:     [ 'Tasty beers on Hamilton Ave.', 'Try our amber ale, not too shabby!' ]
+        },
+        {
+            name:         "Crown",
+            creatorEmail: "ad@test.com",
+            description:  "Crown Royal ads",
+            reviewState:  'Accepted',
+            images:       { widget: "crown/cr256.png", crawler: "crown/cr440.png" },
+            messages:     [ 'For every king, a Crown', 'Reign on' ]
         },
         {
             name:         "El Guapo",
@@ -529,6 +545,60 @@ var self = module.exports.testdata = {
                 crawler: 'elguapo/elguapo440.jpg'
             },
             messages:     [ 'Tasty beers on Hamilton Ave.', 'Try our amber ale, not too shabby!' ]
+        },
+        {
+            name:         "Fat Tire",
+            creatorEmail: "ad@test.com",
+            description:  "Fat Tire ads",
+            reviewState:  'Accepted',
+            images:        { widget: "fattire/fattire256.png", crawler: "fattire/fattire440.png" },
+            messages:     [ 'Pairs well with people', 'Ride on to happiness' ]
+        },
+        {
+            name:         "Guinness",
+            creatorEmail: "ad@test.com",
+            description:  "Guinness ads",
+            reviewState:  'Accepted',
+            images:        { widget: "guinness/guinness256.png", crawler: "guinness/guinness440.png" },
+            messages:     [ 'There\'s nothing like a Guinness', 'Lovely day for a Guinness' ]
+        },
+        {
+            name:         "Landshark",
+            creatorEmail: "ad@test.com",
+            description:  "Landshark ads",
+            reviewState:  'Accepted',
+            images:        { widget: "landshark/ls256.png", crawler: "landshark/ls440.png" },
+            messages:     [ 'Let the fin begin', 'Fins Up!']
+        },
+        {
+            name:         "Lyft",
+            creatorEmail: "ad@test.com",
+            description:  "Lyft ads",
+            reviewState:  'Accepted',
+            images:        { widget: "lyft/lyft256.png", crawler: "lyft/lyft440.png" },
+            messages:     [ 'Get in a mustache state of mind', 'Driving you happy', 'Bust a commute' ]
+        },
+        {
+            name:         "Sushi Confidential",
+            creatorEmail: "ad@test.com",
+            description:  "Sushi Confidential ads",
+            reviewState:  'Accepted',
+            images:        {
+                widget:   "sushiconfidential/sushicon256.jpg",
+                crawler:  "sushiconfidential/sushicon440.jpg"
+            },
+            messages:     [ 'For all your sushi needs' ]
+        },
+        {
+            name:         "Voodoo Ranger",
+            creatorEmail: "ad@test.com",
+            description:  "Voodoo Ranger ads",
+            reviewState:  'Accepted',
+            images:        {
+                widget:   "vodooranger/vodoo256.png",
+                crawler:  "vodooranger/vodoo440.png"
+            },
+            messages:     [ 'Nice IPAs', 'Try our 8 Hop Pale Ale' ]
         }
     ]
 };

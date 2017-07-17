@@ -17,7 +17,7 @@ module.exports = {
     alldevices: function( req, res ){
 
         if (req.method != 'GET'){
-            return res.badReguest({error: 'bad verb'})
+            return res.badRequest({error: 'bad verb'})
         }
 
         ProxyService.get(mirrorDest+'/all', req.query )
