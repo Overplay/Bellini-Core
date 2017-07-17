@@ -1,4 +1,30 @@
-# ASAHI: A Basically Working Sails Web App Using Waterlock
+# BELLINI-CORE: 2nd Gen Cloud Service based on Original Asahi
+
+
+
+
+
+#Moving Bordeaux Enhancements Over
+1. Make sure the user-auth.service.js is moved from Bordeaux.
+2. In the routes file, make sure the `withUserResolve` function is available.
+3. For the initial `redirectController` make sure the above resolver is used to pass a resolved user to the redirectController:
+```$xslt
+.state( 'welcome', {
+            url:   '/',
+            views: buildCompleteView( {
+                template:   '<og-spinner></og-spinner>',
+                controller: 'redirectController'
+            } ),
+            resolve: withUserResolve()
+
+        } )
+```
+4. Make sure `redirectController` uses the resolved user instead of fetching, yet again from the service directly.
+5. Get rid of `user-auth.service.js` dependency in `user.service.js` as this is circular with the changes to Bourdeaux.
+The easiest thing to do is to just copy the user.service.js. It has everything needed and more.
+
+
+#OLD STUFF
 
 Waterlock is a nice start towards handing authentication for a Sails.js app, but it still requires the user do a lot
 of work such as: policies, login pages, password reset pages, etc.

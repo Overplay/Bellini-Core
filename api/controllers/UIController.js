@@ -13,7 +13,8 @@ module.exports = {
 
     uiApp: function ( req, res ) {
 
-        return res.view("ui/uiapp", {layout: 'ui/uilayout'});
+        res.notFound({error:"deprecated"});
+        //return res.view("ui/uiapp", {layout: 'ui/uilayout'});
     },
 
     ui2App: function ( req, res ) {

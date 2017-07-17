@@ -2,11 +2,13 @@
  * Created by mkahn on 4/21/17.
  */
 
-app.factory('userAuthService', function($http, $log){
+app.factory('userAuthService', function( $http, $log, sailsUsers ){
 
     $log.debug("Loading userAuthService");
 
-    var userPromise = $http.get( '/user/checksession' ).then( stripHttpData );
+    var userPromise = $http.get( '/user/checksession' )
+        .then( stripHttpData )
+        .then( sailsUsers.new );
 
     function stripData(data){ return data.data; }
 
@@ -18,9 +20,9 @@ app.factory('userAuthService', function($http, $log){
 
     service.getCurrentUserRing = function () {
         return userPromise
-            .then( function(user){
-                return user.auth && user.auth.ring;
-            });
+            .then( function ( user ) {
+                return user.ring;
+            } );
     };
 
 
@@ -66,7 +68,12 @@ app.factory('userAuthService', function($http, $log){
     {
         var words = [ 'bunny', 'fish', 'puppy', 'taco', 'bottle', 'tumbler', 'spoon' ];
         return _.sample( words ) + _.random( 100, 999 ) + _.sample( [ '!', '@', '#', '$', '^' ] );
-    }
+    };
+
+    service.getCurrentUserRing()
+        .then( function () {
+            $log.debug( 'ucached' );
+        } );
 
     return service;
 })

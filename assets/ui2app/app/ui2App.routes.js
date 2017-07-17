@@ -44,7 +44,8 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             views: buildCompleteView( {
                 template:   '<og-spinner></og-spinner>',
                 controller: 'redirectController'
-            } )
+            } ),
+            resolve: withUserResolve()
 
         } )
 
