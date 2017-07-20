@@ -2,7 +2,7 @@
  * Created by mkahn on 4/24/17.
  */
 
-// 1=admin, 2=divice, 3=user, 4=advertiser
+// 1=admin, 2=device, 3=user, 4=advertiser
 
 app.component( 'adEdit', {
 
@@ -145,22 +145,22 @@ app.component( 'adEdit', {
             crawler: null
         };
 
-        var dropper = $rootScope.$on( 'FILE_DROPPED', function ( ev, data ) {
-            var imgdest = data.tag;
-            $log.debug( "image dropped for: " + imgdest + ". " + data.file.name );
-            sailsMedia.newWithFile( data.file )
-                .then( function ( media ) {
-                    ctrl.advert.advert.media[ imgdest ] = media;
-                    return ctrl.advert.save()
-                } )
-                .then( function ( advert ) {
-                    toastr.success( "Image updated" );
-                } )
-                .catch( function ( err ) {
-                    toastr.error( "Image update failed Reason: ", err.message );
-                } );
-
-        } );
+//        var dropper = $rootScope.$on( 'FILE_DROPPED', function ( ev, data ) {
+//            var imgdest = data.tag;
+//            $log.debug( "image dropped for: " + imgdest + ". " + data.file.name );
+//            sailsMedia.newWithFile( data.file )
+//                .then( function ( media ) {
+//                    ctrl.advert.advert.media[ imgdest ] = media;
+//                    return ctrl.advert.save()
+//                } )
+//                .then( function ( advert ) {
+//                    toastr.success( "Image updated" );
+//                } )
+//                .catch( function ( err ) {
+//                    toastr.error( "Image update failed Reason: ", err.message );
+//                } );
+//
+//        } );
 
         this.$onDestroy = function(){
             dropper(); //unreg
@@ -215,6 +215,22 @@ app.component( 'adEdit', {
                 } )
         }
 
+        this.fileUpdate = function (file) {
+            var imgdest = file.tag;
+            $log.debug( "image dropped for: " + imgdest + ". " + file.name );
+            sailsMedia.newWithFile( file )
+                .then( function ( media ) {
+                    ctrl.advert.advert.media[ imgdest ] = media;
+                    return ctrl.advert.save()
+                } )
+                .then( function ( advert ) {
+                    replicate(advert, ctrl.advert);
+                    toastr.success( "Image updated" );
+                } )
+                .catch( function ( err ) {
+                    toastr.error( "Image update failed Reason: ", err.message );
+                } );
+        }
 
     },
 
@@ -265,12 +281,16 @@ app.component( 'adEdit', {
         </tbody>
         </table>
         
-         <div>
+        <div>
             <h4>Media</h4>
-                    <img-input prompt="Widget" width="256" height="256" dirty="$ctrl.mediaDirty.widget"
-                               src-field="$ctrl.advert.advert.media.widget" exact tag="widget"></img-input>
-                    <img-input prompt="Crawler" width="440" height="100" dirty="$ctrl.mediaDirty.crawler"
-                               src-field="$ctrl.advert.advert.media.crawler" exact tag="crawler"></img-input>
+                    <!--<img-input prompt="Widget" width="256" height="256" dirty="$ctrl.mediaDirty.widget"-->
+                               <!--src-field="$ctrl.advert.advert.media.widget" exact tag="widget"></img-input>-->
+                    <!--<img-input prompt="Crawler" width="440" height="100" dirty="$ctrl.mediaDirty.crawler"-->
+                               <!--src-field="$ctrl.advert.advert.media.crawler" exact tag="crawler"></img-input>-->
+                    <image-input width="256" height="256" heading="Widget" constraint="exact" tag="widget"
+                                 image-id="$ctrl.advert.advert.media.widget.id" on-update="$ctrl.fileUpdate(file)"></image-input>
+                    <image-input width="440" height="100" heading="Crawler" constraint="exact" tag="crawler"
+                                 image-id="$ctrl.advert.advert.media.crawler.id" on-update="$ctrl.fileUpdate(file)"></image-input>
         </div>    
         
         <button class="btn btn-danger" style="width: 100%" ng-click="$ctrl.deleteAd()">DELETE AD</button>
