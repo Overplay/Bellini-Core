@@ -162,9 +162,9 @@ app.component( 'adEdit', {
 //
 //        } );
 
-        this.$onDestroy = function(){
-            dropper(); //unreg
-        }
+//        this.$onDestroy = function(){
+//            dropper(); //unreg
+//        }
 
         this.changeAdState = function () {
 
