@@ -27,7 +27,7 @@
  * http://sailsjs.org/#!/documentation/anatomy/myApp/config/local.js.html
  */
 
-var URL = 'http://107.170.209.248';
+var URL = 'http://localhost:2000';
 
 module.exports = {
 

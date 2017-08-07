@@ -123,8 +123,6 @@ module.exports = {
     },
 
     yelpSearch: function ( req, res ) {
-        var params = req.allParams();
-
         client.search( req.allParams() )
             .then( function ( data ) {
                 res.ok( data.body );
@@ -199,10 +197,10 @@ module.exports = {
                     }
                     else {
                         //thought - own OR manage , not both
-                        if (user.auth.ring > 2) {
-                            user.auth.ring = 2;
-                            user.auth.save();
-                        }
+//                        if (user.auth.ring > 2) {
+//                            user.auth.ring = 2;
+//                            user.auth.save();
+//                        }
                         user.managedVenues.add( params.id )
                         user.save( function ( err ) {
                             if ( err ) {
@@ -251,10 +249,10 @@ module.exports = {
                     }
                     else {
                         //thought - own OR manage , not both
-                        if (user.auth.ring > 2) {
-                            user.auth.ring = 2;
-                            user.auth.save();
-                        }
+//                        if (user.auth.ring > 2) {
+//                            user.auth.ring = 2;
+//                            user.auth.save();
+//                        }
                         user.ownedVenues.add( params.id )
                         user.save( function ( err ) {
                             if ( err )
@@ -296,10 +294,10 @@ module.exports = {
                 if ( user ) {
 
                     //remove their role as a manager if they are no longer managing any venues
-                    if ( user.managedVenues.length < 2 ) {
-                        user.auth.ring = 3;
-                        user.auth.save();
-                    }
+//                    if ( user.managedVenues.length < 2 ) {
+//                        user.auth.ring = 3;
+//                        user.auth.save();
+//                    }
 
                     user.managedVenues.remove( params.id )
                     user.save( function ( err ) {
@@ -370,11 +368,11 @@ module.exports = {
                             if ( user ) {
 
                                 //remove their role as a manager if they are no longer managing any venues
-                                if ( user.ownedVenues.length < 2 ) {
-                                    user.auth.ring = 3;
-                                    user.auth.save();
-
-                                }
+//                                if ( user.ownedVenues.length < 2 ) {
+//                                    user.auth.ring = 3;
+//                                    user.auth.save();
+//
+//                                }
 
                                 user.ownedVenues.remove( params.id )
                                 user.save( function ( err ) {

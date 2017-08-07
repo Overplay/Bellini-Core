@@ -29,7 +29,7 @@ module.exports = {
 
         update: function( id, params ){
 
-            var fullUrl = makeFullUrl('/api/v1/ogdevice/'+id);
+            var fullUrl = makeFullUrl('/ogdevice/'+id);
             return ProxyService.post( fullUrl, params )
                 .then( function ( resp ) {
                     return resp.body;
