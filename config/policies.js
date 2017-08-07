@@ -73,7 +73,8 @@ module.exports.policies = {
         // anyone can go to the login page
         'loginPage': true,
         'login':     true,
-        'logout':    true // anyone can post to the login endpoint, though we may want to add an IP range restriction
+        'logout':    true, // anyone can post to the login endpoint, though we may want to add an IP range restriction
+        'signupPage':    true
     },
 
     DeviceController: {
