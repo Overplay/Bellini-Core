@@ -7,6 +7,15 @@
   min-height: 300px;
   padding: 0 30px 30px 30px; }
 
+.material-panel-md {
+  -webkit-box-shadow: 1px 1px 1px 0px #a8a8a8;
+  -moz-box-shadow: 1px 1px 1px 0px #a8a8a8;
+  box-shadow: 1px 1px 1px 0px #a8a8a8;
+  border: 1px solid #f0f0f0;
+  margin: 5px;
+  min-height: 150px;
+  padding: 20px 20px 20px 20px; }
+
 h4 {
   border-bottom: 1px solid #b7b7b7;
   padding-bottom: 5px; }
@@ -30,7 +39,7 @@ h4 {
   font-family: 'Poppins', sans-serif;
   font-weight: 900;
   color: white;
-  font-size: 20px;
+  font-size: 14px;
   line-height: 70px;
   cursor: pointer; }
 
@@ -62,14 +71,14 @@ h4 {
   height: 100%;
   /* Temp border for layout */
   border: 1px solid rgba(255, 255, 255, 0.15);
-  transition: all 350ms ease-in-out; }
+  transition: left 350ms ease-in-out; }
 
 .sidelinkholder {
   /*border: 1px solid coral;*/
   margin: 20px 10px 0 10px;
   /*border-top: 2px solid #348ad6;*/
   /*border-top: 1px solid #c1e9ff;*/
-  border-right: 1px solid #C1E9FF;
+  border-right: 1px solid #eeeeee;
   min-height: 500px; }
 
 .sidelink {
@@ -78,7 +87,6 @@ h4 {
   padding: 10px 0 10px 0;
   background-color: white;
   color: #707070;
-  transition: all 0.5s;
   position: relative;
   cursor: pointer; }
 
@@ -95,21 +103,6 @@ h4 {
 
 .hideMenu {
   left: -300px; }
-
-.sidelink.ng-enter {
-  opacity: 0;
-  top: -100px; }
-
-.sidelink.ng-enter.ng-enter-active {
-  opacity: 1;
-  top: 0; }
-
-.fade-in-out {
-  transition: 1s linear all;
-  opacity: 1; }
-
-.fade-in-out.ng-hide {
-  opacity: 0; }
 
 .ogcard {
   -webkit-box-shadow: 1px 1px 1px 0px #a8a8a8;

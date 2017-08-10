@@ -14,6 +14,7 @@ var Promises = require( 'bluebird' );
 
 module.exports.bootstrap = function ( cb ) {
 
+    const WACK_ADMINS_FIRST = false; // only use this if you've corrupted the ring for admin
 
     var coreAdmins = [
 
@@ -53,14 +54,32 @@ module.exports.bootstrap = function ( cb ) {
 
     ];
 
-    coreAdmins.forEach(function(admin){
-        AdminService.addUserAtRing( admin.auth.email, admin.auth.password, 1, admin.user, false )
-            .then( function () { sails.log.debug( "Admin user created." )} )
-            .catch( function ( err ) {
-                    sails.log.warn( "Admin user NOT created. Probably already existed." )
-                }
-            );
-    });
+    function makeCoreAdmins() {
+        coreAdmins.forEach( function ( admin ) {
+            AdminService.addUserAtRing( admin.auth.email, admin.auth.password, 1, admin.user, false )
+                .then( function () { sails.log.debug( "Admin user created." )} )
+                .catch( function ( err ) {
+                        sails.log.warn( "Admin user NOT created. Probably already existed." )
+                    }
+                );
+        } );
+    }
+
+
+    if (WACK_ADMINS_FIRST){
+        Auth.destroy( {} )
+            .then( function () {
+                return User.destroy( {} );
+            } )
+            .then( function () {
+                makeCoreAdmins();
+            } )
+    } else {
+        makeCoreAdmins();
+    }
+
+
+
 
 
     Venue.updateOrCreate( { name: 'Bullpen', uuid: 'bullpen-hey-battabatta', virtual: true },

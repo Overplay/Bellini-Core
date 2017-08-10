@@ -2,7 +2,7 @@
  * Created by mkahn on 4/6/16.
  */
 
-var app = angular.module( 'uiApp', [ 'ui.router', 'ui.bootstrap', 'toastr', 'ui.og', 'googlechart', 'ngAnimate', 'uiGmapgoogle-maps'  ] );
+var app = angular.module( 'uiApp', [ 'ui.router', 'ui.bootstrap', 'toastr', 'ui.og', 'googlechart', 'ngAnimate', 'uiGmapgoogle-maps' ] );
 
 app.config( function ( toastrConfig ) {
     angular.extend( toastrConfig, {
@@ -10,11 +10,31 @@ app.config( function ( toastrConfig ) {
     } );
 } );
 
-app.config( function ( uiGmapGoogleMapApiProvider) {
-     uiGmapGoogleMapApiProvider.configure({
-         key: 'AIzaSyCrbE5uwJxaBdT7bXTGpes3F3VmQ5K9nXE'
-     })
- });
+app.config( function ( uiGmapGoogleMapApiProvider ) {
+    uiGmapGoogleMapApiProvider.configure( {
+        key: 'AIzaSyCrbE5uwJxaBdT7bXTGpes3F3VmQ5K9nXE'
+    } )
+} );
+
+
+// This adds a current user resolve to every single state
+app.config( function ( $stateProvider ) {
+
+    // Parent is the ORIGINAL UNDECORATED builder that returns the `data` property on a state object
+    $stateProvider.decorator( 'data', function ( state, parent ) {
+        // We don't actually modify the data, just return it down below.
+        // This is hack just to tack on the user resolve
+        var stateData = parent( state );
+        // Add a resolve to the state
+        state.resolve = state.resolve || {};
+        state.resolve.user = [ 'userAuthService', function ( userAuthService ) {
+            return userAuthService.getCurrentUser();
+        } ];
+        return stateData;
+
+    } );
+
+} );
 
 //
 // app.config(['ChartJsProvider', function (ChartJsProvider) {
@@ -25,38 +45,79 @@ app.config( function ( uiGmapGoogleMapApiProvider) {
 // }])
 
 
-app.run( function ( $log, $rootScope, toastr, $state ) {
+app.run( function ( $log, $rootScope, toastr, $state, $trace, $transitions, userAuthService, navService, sideMenuService ) {
 
     $log.info( "Bellini is pouring!" );
 
-    $rootScope.$on( '$stateChangeError',
-        function ( event, toState, toParams, fromState, fromParams, error ) {
-            $log.error( "State change fail!" );
+    const SHOW_STATE_ERRORS = false;
 
-            if ( !fromState.name ) {
-                $log.debug( 'FromState is nil, prolly a reload, bailing out to root' );
-                window.location = '/';
-            } else
+    $trace.enable( 'TRANSITION' );
 
-            if ( error && error.status ) {
+    function authMsg( isAuthorized ) {
+        if ( isAuthorized ) {
+            return true;
+        } else {
+            toastr.error( "We're gonna need you to stop doing that.", "Not Authorized" );
+            return false;
+        }
+    }
 
-                switch ( error.status ) {
-                    case 401:
-                        $log.debug( 'not logged in' );
-                        window.location = '/';
-                        break;
+    // userAuthService.getCurrentUserRing()
+    //     .then( function ( r ) {
+    //         $rootScope.authring = r;
+    //         $log.debug( 'R: ' + r );
+    //     } );
 
-                    case 403:
-                        $log.debug( 'forbidden fruit' );
-                        toastr.error( "Yeah, we're gonna need you not to do that.", "Not Authorized" );
-                        event.preventDefault();
-                        $state.go('welcome');
-                        break;
-                }
+    $transitions.onStart( {}, function ( trans ) {
+        // var SpinnerService = trans.injector().get( 'SpinnerService' );
+        // SpinnerService.transitionStart();
+        // trans.promise.finally( SpinnerService.transitionEnd );
+        $log.debug( trans );
+    } );
 
-            }
 
-        } );
+    // Menu hook
+
+    $transitions.onSuccess( {}, function ( trans ) {
+        $log.debug( "Successfully transitioned to state: " + trans.to().name );
+        sideMenuService.setMenu(trans.to().sideMenu);
+        //navService.sideMenu.setSideMenuForState( trans.to().name );
+    } );
+
+
+    // Security hooks
+
+    $transitions.onBefore( { to: 'admin.**' }, function () {
+        $log.debug( 'Running hook for transition to admin state' );
+        return userAuthService.getCurrentUserRing()
+            .then( function ( ring ) {
+                return authMsg( ring === 1 );
+            } )
+    } );
+
+    $transitions.onBefore( { to: 'manager.**' }, function () {
+        $log.debug( 'Running hook for transition to manager state' );
+        return userAuthService.getCurrentUser()
+            .then( function ( user ) {
+                return authMsg( user.isAnyManager );
+            } )
+    } );
+
+    $transitions.onBefore( { to: 'owner.**' }, function () {
+        $log.debug( 'Running hook for transition to owner state' );
+        return userAuthService.getCurrentUser()
+            .then( function ( user ) {
+                return authMsg( user.isOwner );
+            } )
+    } );
+
+
+    $transitions.onError( {}, function ( transError ) {
+        $log.debug( transError );
+        if ( SHOW_STATE_ERRORS )
+            toastr.warning( "State Change Fail" );
+    } );
+
 
 } );
 

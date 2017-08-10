@@ -8,7 +8,7 @@
   height: 100%;
   /* Temp border for layout */
   border: 1px solid rgba(255, 255, 255, 0.15);
-  transition: all 350ms ease-in-out;
+  transition: left 350ms ease-in-out;
 }
 
 .sidelinkholder {
@@ -16,7 +16,7 @@
   margin: 20px 10px 0 10px;
   /*border-top: 2px solid #348ad6;*/
   /*border-top: 1px solid #c1e9ff;*/
-  border-right: 1px solid $faint-blue;
+  border-right: 1px solid #eeeeee;
   min-height: 500px;
 
 }
@@ -27,7 +27,7 @@
   padding: 10px 0 10px 0;
   background-color: white;
   color: $side-link-grey;
-  transition: all 0.5s;
+  //transition: all 0.5s;
   position: relative;
   cursor: pointer;
 }
@@ -52,27 +52,27 @@
 }
 
 
-.ng-animate {
-  //background-color: orange;
-}
-
-.sidelink.ng-enter {
-  opacity: 0;
-  top: -100px;
-  //background-color: teal;
-}
-
-
-.sidelink.ng-enter.ng-enter-active {
-  opacity: 1;
-  top: 0;
-}
-
-.fade-in-out {
-  transition: 1s linear all;
-  opacity: 1;
-}
-
-.fade-in-out.ng-hide {
-  opacity: 0;
-}
+//.ng-animate {
+//  //background-color: orange;
+//}
+//
+//.sidelink.ng-enter {
+//  opacity: 0;
+//  top: -100px;
+//  //background-color: teal;
+//}
+//
+//
+//.sidelink.ng-enter.ng-enter-active {
+//  opacity: 1;
+//  top: 0;
+//}
+//
+//.fade-in-out {
+//  transition: 1s linear all;
+//  opacity: 1;
+//}
+//
+//.fade-in-out.ng-hide {
+//  opacity: 0;
+//}

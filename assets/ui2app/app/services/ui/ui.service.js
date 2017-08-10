@@ -2,66 +2,55 @@
  * Created by mkahn on 4/22/17.
  */
 
+app.factory( 'sideMenuService', function($rootScope){
+
+    var _currentMenu = [];
+
+    var _defaultMenu = [ { label: 'Home', sref: "welcome", icon: "home" } ];
+
+    return {
+        setMenu: function(menu){
+            _currentMenu = menu || _defaultMenu;
+            $rootScope.$broadcast( "NEW_SIDEMENU", _currentMenu );
+
+        },
+
+        getMenu: function(){
+            return _currentMenu;
+        }
+
+    }
+
+});
+
 app.factory( 'navService', function ( $rootScope ) {
 
-    var currentSideKey = '';
     var currentTopKey = '';
-
-
-    var sideMenuGroups = {
-        adminMenu:   [
-            { label: "All Users", sref: "admin.userlist", icon: "users" },
-            { label: "Add User", sref: "admin.edituser({id: 'new'})", icon: "user" },
-            { label: "All Venues", sref: "admin.venuelist", icon: "globe" },
-            { label: "Add Venue", sref: "admin.editvenue({id: 'new'})", icon: "building-o" },
-            { label: "All Ads", sref: "admin.adlist", icon: "bullhorn"},
-            { label: "Create Ad", sref: "admin.editad({id: 'new'})", icon: "paint-brush" },
-            { label: "Devices", sref: "admin.devicelist", icon: "television" },
-            { label: "Maintenance", sref: "admin.maint", icon: "gears" }
-        ],
-        accountMenu: [
-            { label: "Invite Users", sref: "invite", icon: "users" }
-        ]
-    };
 
     var topMenuGroups = {
 
         managerMenu: [
-            { label: "venues", sref: "manager.venues", icon: "building" },
-            { label: "devices", sref: "manager.devices", icon: "television" }
+            //{ label: "venues", sref: "manager.venues", icon: "building" },
+            //{ label: "devices", sref: "manager.devices", icon: "television" }
         ],
 
         ownerMenu: [
-            { label: "venues", sref: "owner.venues", icon: "building" },
-            { label: "devices", sref: "owner.devices", icon: "television" },
-            { label: "patrons", sref: "owner.patrons", icon: "users" }
+            //{ label: "venues", sref: "owner.venues", icon: "building" },
+            //{ label: "devices", sref: "owner.devices", icon: "television" },
+            //{ label: "patrons", sref: "owner.patrons", icon: "users" }
         ],
 
         advertiserMenu: [
-            { label: "ads", sref: "sponsor.dashboard", icon: "bullhorn" }
+            //{ label: "ads", sref: "sponsor.dashboard", icon: "bullhorn" }
         ],
 
         adminMenu: [
-            { label: "admin dashboard", sref: "admin.dashboard", icon: "cube" }
+            //{ label: "admin dashboard", sref: "admin.dashboard", icon: "cube" }
         ]
 
     }
 
     return {
-
-        sideMenu: {
-
-            change: function ( group ) {
-                currentSideKey = group;
-            },
-
-            getMenu: function () {
-                if ( currentSideKey )
-                    return sideMenuGroups[ currentSideKey ];
-
-                return [];
-            }
-        },
 
         topMenu: {
 
@@ -118,16 +107,12 @@ app.controller( 'redirectController', [ '$state', 'user', function ( $state, use
         $state.go( 'sponsor.dashboard' );
     }
 
-    else if ( user.isOwner ) {
-        $state.go( 'owner.dashboard' );
-    }
-
-    else if ( user.isManager ) {
+    else if ( user.isAnyManager ) {
         $state.go( 'manager.dashboard' );
     }
 
     else {
-        $state.go( 'user.dashboard' );
+        $state.go( 'patron.dashboard' );
     }
 
 

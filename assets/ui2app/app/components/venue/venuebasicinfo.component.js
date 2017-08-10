@@ -8,7 +8,8 @@ app.component( 'venueBasicInfo', {
         venue: '=',
         ring: '<',
         geocode: '<',
-        yelp: '<'
+        yelp: '<',
+        user: '<'
     },
     controller: function ( uibHelper, toastr, $log, dialogService ) {
 

@@ -147,7 +147,7 @@ module.exports.policies = {
     },
 
     // Override this in local.js for testing
-    wideOpen: false,
+    //wideOpen: true,
 
     // HUGE security hole, close after test. Enables "God" JWT that always passes
     godToken: true
