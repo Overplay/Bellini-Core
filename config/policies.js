@@ -68,14 +68,13 @@ module.exports.policies = {
         'resetPwd':    [ 'passwordReset' ],
         'register':    false, //we use a differnet registration than waterlock
         //changePw own policy because it could be an authenticated user OR a reset token 
-        'changePwd':   [ 'passwordChange' ], //this is tricky becuase of pw reset...
+        'changePwd':   [ 'passwordChange' ], //this is tricky because of pw reset...
         // Checked by MAK April 2017
         // anyone can go to the login page
-        'loginPage':   true,
-        'login':       true,
-        'logout':      true, // anyone can post to the login endpoint, though we may want to add an IP range restriction
-        'signupPage':  true,
-        'validatedOk': true,
+        'loginPage': true,
+        'login':     true,
+        'logout':    true, // anyone can post to the login endpoint, though we may want to add an IP range restriction
+        'signupPage':    true
     },
 
     DeviceController: {
@@ -148,7 +147,7 @@ module.exports.policies = {
     },
 
     // Override this in local.js for testing
-    wideOpen: false,
+    //wideOpen: true,
 
     // HUGE security hole, close after test. Enables "God" JWT that always passes
     godToken: true

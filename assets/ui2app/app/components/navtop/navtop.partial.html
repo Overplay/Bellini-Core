@@ -5,11 +5,10 @@
     <div class="navlinkholder">
         <span ng-repeat="link in links" class="naventry" ui-sref="{{ link.sref }}">
             <i class="fa fa-{{ link.icon }}" aria-hidden="true"></i>&nbsp;{{ link.label }}</span>
-        <span class="naventry" ui-sref="myaccount"><i class="fa fa-id-card" aria-hidden="true" >
 
-        </i>&nbsp;account</span>
     </div>
     <div class="logout">
+        <span class="naventry" ui-sref="myaccount"><i class="fa fa-id-card" aria-hidden="true"></i>&nbsp;account</span>
         <span class="naventry" ng-click="logout()"><i class="fa fa-sign-out" aria-hidden="true"></i>&nbsp;logout</span>
     </div>
 </div>

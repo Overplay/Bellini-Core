@@ -31,11 +31,11 @@ app.controller( 'adminUserListController', function ( $scope, users, $log, uibHe
 
 // USER EDIT FOR ADMIN
 
-app.controller( 'adminUserEditController', function ( $scope, user, $log, uibHelper, toastr,
+app.controller( 'adminUserEditController', function ( $scope, user, user2edit, $log, uibHelper, toastr,
                                                       $state, userAuthService, allVenues ) {
 
     $log.debug( "Loading adminUserEditController" );
-    $scope.user = user;
+    $scope.user = user2edit;
     $scope.venues = allVenues; // gets passed to venue component
     var _newUser;
 
@@ -288,8 +288,8 @@ app.controller( 'adminDeviceDetailController', function ( $scope, device, $log, 
 } );
 
 
-app.controller( 'adminDashController', [ '$scope', '$log', 'userinfo', 'venueinfo', 'ads', 'toastr',
-    function ( $scope, $log, userinfo, venueinfo, ads, toastr ) {
+app.controller( 'adminDashController', [ '$scope', '$log', 'userinfo', 'venueinfo', 'ads', 'toastr', 'user',
+    function ( $scope, $log, userinfo, venueinfo, ads, toastr, user ) {
 
         $scope.userinfo = userinfo;
         $scope.venueinfo = venueinfo;

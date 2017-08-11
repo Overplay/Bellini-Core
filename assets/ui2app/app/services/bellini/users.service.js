@@ -41,6 +41,7 @@ app.factory( "sailsUsers", [ 'sailsApi', 'sailsCoreModel', 'sailsAuth', function
             this.isAdmin = this.ring === 1;
             this.isOwner = (this.ring === 3) && this.ownedVenues.length > 0;
             this.isManager = this.ring === 3 && this.managedVenues.length > 0;
+            this.isAnyManager = this.isManager || this.isOwner || this.isAdmin;
             this.isAdvertiser = this.ring === 4;
 
             this.parseCore( json );
