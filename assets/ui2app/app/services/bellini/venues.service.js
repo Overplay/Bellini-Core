@@ -3,7 +3,7 @@
  */
 
 
-app.factory( "sailsVenues", function ( sailsApi, sailsCoreModel, sailsOGDeviceRemote ) {
+app.factory( "sailsVenues", function ( sailsApi, sailsCoreModel, sailsOGDeviceRemote, sailsUserInteractions ) {
 
 
     var getAll = function ( queryString ) {
@@ -118,6 +118,10 @@ app.factory( "sailsVenues", function ( sailsApi, sailsCoreModel, sailsOGDeviceRe
                     _this.logo = mediaJson.id;
                     return _this;
                 } ); // TODO left off here with Ryan
+        }
+
+        this.getUniquePatrons = function(){
+            return sailsUserInteractions.getUniquePatronsForVenue(this.uuid);
         }
 
     }

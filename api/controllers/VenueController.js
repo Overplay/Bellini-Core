@@ -433,10 +433,54 @@ module.exports = {
                     return res.badRequest( { error: 'This one is weird. The user for this session does not exist. Database inconsistency?' } );
                 }
 
-                return res.ok( { owned: user.ownedVenues, managed: user.managedVenues } );
-            } );
+               return res.ok( { owned: user.ownedVenues, managed: user.managedVenues } );
+
+            } )
+            .catch( res.serverError );
 
     },
+
+    // myvenuesandpatrons: function(req, res){
+    //
+    //     var thisUser = PolicyService.getUserForReq( req );
+    //
+    //     if ( !thisUser )
+    //         return res.badRequest( { error: 'There is no user for the session' } );
+    //
+    //     User.findOne( thisUser.id )
+    //         .populate( [ 'managedVenues', 'ownedVenues' ] )
+    //         .then( function ( user ) {
+    //             if ( !user ) {
+    //                 var e = new Error( 'This one is weird. The user for this session does not exist. Database inconsistency?' );
+    //                 e.res = res.serverError;
+    //                 throw e;
+    //             }
+    //             // Yeah, this is some hairy promise shit right here, y'all
+    //             return Promise.props({
+    //                 owned: user.ownedVenues,
+    //                 managed: user.managedVenues,
+    //                 ownedPatrons: Promise.all(user.ownedVenues.map(function(v){ return UserInteraction.find( { venueUUID: v.uuid } )})),
+    //                 managedPatrons: Promise.all( user.managedVenues.map( function ( v ) { return UserInteraction.find( { venueUUID: v.uuid } )} ) )
+    //             });
+    //         } )
+    //         .then( function(props){
+    //             return res.ok(props);
+    //         })
+    //         .catch( cascadeError );
+    //
+    //
+    //     UserInteraction.find( { venueUUID: venueUUID } )
+    //         .then( function ( interactions ) {
+    //             if ( !interactions ) {
+    //                 return res.ok( [] );
+    //             }
+    //
+    //             var userIds = _( interactions ).uniqBy( 'userId' ).map( 'userId' ).value();
+    //             return User.find( { id: userIds } ).populate( [ 'auth' ] );
+    //
+    //         } )
+    //
+    // },
 
     // replaces blueprint, easier to secure
     all: function ( req, res ) {
