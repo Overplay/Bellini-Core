@@ -87,6 +87,14 @@ app.factory( "sailsAds", function ( sailsApi, sailsCoreModel, userAuthService ) 
 
         }
 
+        this.isComplete = function(){
+
+            var hasCrawlerImage = this.advert && this.advert.media && this.advert.media.crawler;
+            var hasWidgetImage = this.advert && this.advert.media && this.advert.media.widget;
+            return hasCrawlerImage && hasWidgetImage;
+
+        }
+
     }
 
     ModelAdObject.prototype = Object.create( CoreModel.prototype );

@@ -22,8 +22,8 @@ app.component( 'venueList', {
 
     <div class="container">
     <div class="row">
-        <div class="col-sm-10 col-lg-10 material-panel">
-            <h1><i class="fa fa-globe" aria-hidden="true" style="color: #999999"></i>&nbsp;&nbsp;{{ $ctrl.header }}</h1>
+        <div class="col-lg-10">
+            <h2><i class="fa fa-globe" aria-hidden="true" style="color: #999999"></i>&nbsp;&nbsp;{{ $ctrl.header }}</h2>
 
             <div ng-if="$ctrl.venues.length">
                 <input type="text" ng-model="$ctrl.searchTerm" class="form-control" placeholder="Search venues...">
@@ -43,8 +43,8 @@ app.component( 'venueList', {
                         </td>
                         <td>
                             <a ui-sref="admin.editvenue({ id: v.id })" style="margin-right: 10px;" ng-if="$ctrl.user.isAnyManager"
-                               class="btn btn-sm btn-primary"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>&nbsp;EDIT</a>
-                            <button class="btn btn-sm btn-danger" ng-click="delVenue(v)" ng-if="$ctrl.user.isAdmin"><i class="fa fa-times-circle"
+                               class="btn btn-thin btn-primary"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>&nbsp;EDIT</a>
+                            <button class="btn btn-thin btn-danger" ng-click="delVenue(v)" ng-if="$ctrl.user.isAdmin"><i class="fa fa-times-circle"
                                                                                             aria-hidden="true"></i>&nbsp;DELETE
                             </button>
                         </td>

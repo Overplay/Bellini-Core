@@ -99,6 +99,22 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
                 }
 
             }
+        })
+
+        .state( 'manager.patrons', {
+            url:       '/patrons',
+            component: 'managerPatrons',
+            sideMenu:  [
+                { label: "Home", sref: "manager.dashboard", icon: "home" },
+                { label: "My Devices", sref: "manager.devices", icon: "television" }
+            ],
+            resolve:   {
+                myVenues: function ( sailsVenues ) {
+                    return sailsVenues.getMyVenues();
+                },
+                header: function() { return "Patron List" }
+
+            }
         } )
 
         // Any state that starts with 'owner' is protected to be sure there is owner privilege
