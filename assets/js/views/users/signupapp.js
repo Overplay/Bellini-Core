@@ -11,11 +11,11 @@ app.controller('signupController', function ($scope, $log, nucleus, $timeout, $w
 
     $scope.form = {title: 'Create New Account', show: true};
     $scope.auth = {email: "", password: "", passwordConfirm: ""};
-    $scope.user = {firstName: '', lastName: '', roleNames: ['user'], address: {}};
+    $scope.user = {firstName: '', lastName: '', ring: 3, address: {}};
     $scope.ui = {errorMessage: "", error: false};
     $scope.phoneRegex = "^(?:(?:\\+?1\\s*(?:[.-]\\s*)?)?(?:\\(\\s*([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9])\\s*\\)|([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\\s*(?:[.-]\\s*)?)?([2-9]1[02-9]|[2-9][02-9]1|[2-9][02-9]{2})\\s*(?:[.-]\\s*)?([0-9]{4})(?:\\s*(?:#|x\\.?|ext\\.?|extension)\\s*(\\d+))?$";
     $scope.validate = true;
-    $log.log($scope.user)
+    $log.log($scope.user);
 
     $scope.getData = function (data) { //security hole, need to check something about data for validate 
         var data = JSON.parse(data);
@@ -24,7 +24,7 @@ app.controller('signupController', function ($scope, $log, nucleus, $timeout, $w
 
         var roles = ["user"];
         roles = _.union(roles, data.user.roleNames)
-        $scope.user.roleNames = roles; 
+        $scope.user.ring = data.user.ring > 3 ? data.user.ring : 3;
 
         $scope.signupType = data.type;
         $scope.validate = false; //already facebook validated 

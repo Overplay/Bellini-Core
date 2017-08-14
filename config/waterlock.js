@@ -7,7 +7,7 @@
  * http://waterlock.ninja/documentation
  */
 
-var URL = 'http://107.170.209.248';
+var URL = 'http://localhost:2000';
 module.exports.waterlock = {
 
     // Base URL
@@ -16,7 +16,7 @@ module.exports.waterlock = {
     // reset links.
     baseUrl: URL,
 
-    alwaysValidate: false, // force account validation always
+    alwaysValidate: true, // force account validation always
 
     // Auth Method(s)
     //
@@ -43,14 +43,14 @@ module.exports.waterlock = {
                     forwardUrl: URL + '/auth/resetPwd' 
                 },
                 template: {
-                    file: '/home/cgrigsby/Development/sails/asahi/views/emails/email.jade',
+                    file: '/views/emails/email.jade',
                     vars: {}
                 }
             },
             validateAccount:         {
 
                 template: {
-                    file: '../views/emails/validateemail.jade',
+                    file: '/views/emails/validateemail.jade',
                     vars: {}
                 },
                 redirectOnValidateUrl: '/validated'
@@ -85,6 +85,8 @@ module.exports.waterlock = {
             length: '365'
         },
         audience: 'Nucleus',
+
+
         subject:  'Proton',
 
         // tracks jwt usage if set to true

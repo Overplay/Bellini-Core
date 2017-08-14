@@ -67,17 +67,21 @@ app.component("venueAds", {
                     </div>
                     <div ng-if="s.advert.media.widget" class="col-sm-4" style="text-align: center">
                         <b>Widget</b><br>
-                        <a ng-href="{{s.advert.media.widget.url}}" target="_blank"><img
+                        <a target="_blank">
+                            <img
                                 style="width:100%"
                                 class="media-prev"
-                                ng-src="{{s.advert.media.widget.url}}"/></a>
+                                ng-src="{{s.advert.media.widget.url || '/media/download/' + s.advert.media.widget.id}}"/>
+                        </a>
                     </div>
                     <div ng-if="s.advert.media.crawler" class="col-sm-4" style="text-align: center">
                         <b>Crawler</b><br>
-                        <a ng-href="{{s.advert.media.crawler.url}}" target="_blank"><img
+                        <a target="_blank">
+                            <img
                                 style="width:100%"
                                 class="media-prev"
-                                ng-src="{{s.advert.media.crawler.url}}"/></a>
+                                ng-src="{{s.advert.media.crawler.url || '/media/download/' + s.advert.media.crawler.id}}"/>
+                        </a>
                     </div>
                     <div class="col-xs-12 top15">
                         <button class="btn btn-danger" ng-click="$ctrl.remove(s)">Remove from venue</button>

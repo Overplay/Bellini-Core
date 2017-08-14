@@ -19,7 +19,7 @@
                 </thead>
 
                 <tbody>
-                <tr ng-repeat="user in users | orderBy: 'user.lastName' | filter: searchTerm">
+                <tr ng-repeat="user in users | orderBy: 'lastName' | filter: searchTerm">
                     <td>
                         <i ng-if="user.blocked" class="fa fa-ban" aria-hidden="true"></i>
                         {{ user.firstName }} {{ user.lastName }}

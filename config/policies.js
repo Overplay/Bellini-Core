@@ -58,17 +58,17 @@ module.exports.policies = {
 
 
     AuthController: {
-        '*':         'isAdmin',
+        '*':           'isAdmin',
         // 'find':    [ 'sessionAuth', 'isAdmin' ],
         // 'findOne': ['sessionAuth', 'isVenueOwnerMeOrAdmin'], //tricky for manager list and whatnot
-        'update':    [ 'authProtection' ],
-        'destroy':   [ 'authProtection' ], //maybe me?
+        'update':      [ 'authProtection' ],
+        'destroy':     [ 'authProtection' ], //maybe me?
         //'register': ['sessionAuth', 'isAdmin'], //not even used anywhere
-        'addUser':   true, //used by mobile app
-        'resetPwd':  [ 'passwordReset' ],
-        'register':  false, //we use a differnet registration than waterlock
+        'addUser':     true, //used by mobile app
+        'resetPwd':    [ 'passwordReset' ],
+        'register':    false, //we use a differnet registration than waterlock
         //changePw own policy because it could be an authenticated user OR a reset token 
-        'changePwd': [ 'passwordChange' ], //this is tricky because of pw reset...
+        'changePwd':   [ 'passwordChange' ], //this is tricky because of pw reset...
         // Checked by MAK April 2017
         // anyone can go to the login page
         'loginPage': true,
