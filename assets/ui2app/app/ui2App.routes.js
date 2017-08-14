@@ -190,6 +190,7 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             component: 'venueList',
             sideMenu:  [
                 { label: 'Home', sref: "welcome", icon: "home" },
+                { label: 'Venue Map', sref: 'venue.map', icon: "globe"},
                 { label: "Add Venue", sref: "admin.editvenue({id: 'new'})", icon: "building-o" }
             ],
             resolve:   {
@@ -291,6 +292,19 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             resolve:     {
                 venue: function ( sailsVenues, $stateParams ) {
                     return sailsVenues.get( $stateParams.id );
+                }
+            }
+        } )
+
+        .state( 'venue.map', {
+            url:       '/map',
+            component: 'venueMap',
+            sideMenu:  [
+                { label: 'Home', sref: "welcome", icon: "home" },
+            ],
+            resolve:   {
+                venues: function ( sailsVenues ) {
+                    return sailsVenues.getAll();
                 }
             }
         } )
