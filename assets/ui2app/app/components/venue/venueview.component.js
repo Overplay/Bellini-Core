@@ -40,7 +40,7 @@ app.component( 'venueView', {
      </style>
      <div class="container">
             <div class="row">
-                <div class="col-sm-10 col-lg-10 material-panel" style="min-height: 0; padding: 10px 30px;">
+                <div class="col-xs-12 col-sm-10 material-panel" style="min-height: 0; padding: 10px 30px;">
                     <div class="col-xs-12 info-panel">
                         <h2>{{ $ctrl.venue.name }}</h2>
                         <span>{{ $ctrl.venue.addressString() }}</span>
@@ -63,7 +63,7 @@ app.component( 'venueView', {
                         <p>{{$ctrl.venue.sponsorships.length}}</p>
                     </div>
                 </div>
-                <div class="col-sm-10 col-lg-10 material-panel" style="padding: 0;">
+                <div class="col-xs-12 col-sm-10 material-panel" style="padding: 0;">
                     <!--<h2><i class="fa fa-building" aria-hidden="true" style="color: #999999"></i>&nbsp;&nbsp;{{ $ctrl.venue.name }}</h2>-->
                     <!--<p>This should be an attractive summary of the venue information. An edit button should appear only if the user-->
                     <!--has admin or owner rights for this particular venue.</p>-->
@@ -74,7 +74,7 @@ app.component( 'venueView', {
                     >
                     </google-map>                    
                 </div>
-                <div class="col-sm-10 col-lg-10 material-panel">
+                <div class="col-xs-12 col-sm-10 material-panel" style="min-height: 0px;">
                     <venue-users venue="$ctrl.venue" users="$ctrl.venue.users" control="false"></venue-users>
                 </div>  
             </div>
