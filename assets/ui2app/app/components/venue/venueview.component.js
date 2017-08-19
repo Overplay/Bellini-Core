@@ -33,7 +33,7 @@ app.component( 'venueView', {
         .info-panel {
             text-align: center;
         }
-        .info-panel p {
+        .info-panel span {
             font-size: 40px;
             font-weight: 100;
         }
@@ -43,24 +43,24 @@ app.component( 'venueView', {
                 <div class="col-xs-12 col-sm-10 material-panel" style="min-height: 0; padding: 10px 30px;">
                     <div class="col-xs-12 info-panel">
                         <h2>{{ $ctrl.venue.name }}</h2>
-                        <span>{{ $ctrl.venue.addressString() }}</span>
+                        <p>{{ $ctrl.venue.addressString() }}</p>
                         <hr>
                     </div>
                     <div class="col-md-3 col-xs-6 info-panel">
                         <h3>Owners</h3>
-                        <p>{{$ctrl.venue.venueOwners.length}}</p>
+                        <span>{{$ctrl.venue.venueOwners.length}}</span>
                     </div>
                     <div class="col-md-3 col-xs-6 info-panel">
                         <h3>Managers</h3>
-                        <p>{{$ctrl.venue.venueManagers.length}}</p>
+                        <span>{{$ctrl.venue.venueManagers.length}}</span>
                     </div>
                     <div class="col-md-3 col-xs-6 info-panel">
                         <h3>Devices</h3>
-                        <p>{{$ctrl.venue.devices.length}}</p>
+                        <span>{{$ctrl.venue.devices.length}}</span>
                     </div>
                     <div class="col-md-3 col-xs-6 info-panel">
                         <h3>Sponsorships</h3>
-                        <p>{{$ctrl.venue.sponsorships.length}}</p>
+                        <span>{{$ctrl.venue.sponsorships.length}}</span>
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-10 material-panel" style="padding: 0;">

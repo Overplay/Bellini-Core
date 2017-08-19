@@ -41,7 +41,7 @@ app.component( 'deviceList', {
                         <td width="30%">{{ d.deviceUDID }}</td>
                         <td width="30%"><a ui-sref="admin.editvenue({ id: d.atVenue.id })">{{ d.atVenue.name }}</a></td>
                         <td>
-                            <a ui-sref="admin.editdevice({ id: d.deviceUDID })" style="margin-right: 10px;" ng-if="$ctrl.user.isAnyManager"
+                            <a ui-sref="admin.deviceview({ id: d.deviceUDID })" style="margin-right: 10px;" ng-if="$ctrl.user.isAnyManager"
                                class="btn btn-sm btn-primary pull-right"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>&nbspDETAILS</a>
                         </td>
                     </tr>

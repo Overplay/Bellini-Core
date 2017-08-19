@@ -199,6 +199,21 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             }
         } )
 
+        .state( 'admin.deviceview', {
+            url:       '/deviceview/:id',
+            component: 'deviceView',
+            sideMenu:  [
+                { label: 'Home', sref: "welcome", icon: "home" },
+                { label: 'All Devices', sref: "admin.devicelist", icon: "television" }
+//                { label: "Register Device", sref: "admin.editvenue({id: 'new'})", icon: "television" }
+            ],
+            resolve:   {
+                device: function ( sailsOGDeviceRemote, $stateParams ) {
+                    return sailsOGDeviceRemote.get($stateParams.id);
+                }
+            }
+        } )
+
         // Left as non-component for now
         .state( 'admin.edituser', {
             url:         '/edituser/:id',
