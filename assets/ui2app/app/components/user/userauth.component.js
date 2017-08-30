@@ -68,6 +68,19 @@ app.component( 'userAuth', {
 
         }
 
+        ctrl.devChange = function() {
+
+            ctrl.user.save()
+                .then( function ( newUser ) {
+                    $log.debug(newUser.isDev ? "is dev":"is NOT dev");
+                    const msg = newUser.isDev ? "Developer mode on!" : "NOT a Developer!";
+                    toastr.success( msg );
+                } )
+                .catch( function ( err ) {
+                    toastr.error( err.message );
+                } )
+        }
+
 
     },
 
@@ -91,6 +104,12 @@ app.component( 'userAuth', {
                  <b>{{ $ctrl.user.blocked?"BLOCKED":"ENABLED" }}</b>
                  </span></p>
                  <input type="checkbox" ng-model="$ctrl.user.blocked" ng-click="$ctrl.blockedChange()"/>&nbsp;Block User
+                 <!-- Turn on developer -->
+                  <h5 class="subhead">Developer Permissions</h5>
+                <p>User is currently a developer: <span ng-class="$ctrl.user.isDev ? 'text-danger' : 'text-success'">
+                 <b>{{ $ctrl.user.isDev?"YES":"NO" }}</b>
+                 </span></p>
+                 <input type="checkbox" ng-model="$ctrl.user.isDev" ng-click="$ctrl.devChange()"/>&nbsp;User is developer
              </div>
     
     `

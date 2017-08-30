@@ -95,6 +95,12 @@ module.exports = {
         organization: { //only for proprietors 
             model: 'Organization'
         },
+
+        // Turns on dev menu in the iOS/Android apps
+        isDev: {
+            type: 'boolean',
+            defaultsTo: false
+        },
         
 
         toJSON: function() {

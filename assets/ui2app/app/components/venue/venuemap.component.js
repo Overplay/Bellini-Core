@@ -15,6 +15,8 @@ app.component( 'venueMap', {
 
         var ctrl = this;
 
+        ctrl.map = { center: { latitude: 45, longitude: -73 }, zoom: 8 };
+
         this.$onInit = function () {
             $log.debug('venueMap $onInit called');
         }
@@ -30,6 +32,7 @@ app.component( 'venueMap', {
             <p>{{ $ctrl.venues.length }} venues found, now map them!</p>
 
             <!-- Google Map goes here -->
+            <ui-gmap-google-map center='$ctrl.map.center' zoom='$ctrl.map.zoom'></ui-gmap-google-map>
             
         </div>
     </div>

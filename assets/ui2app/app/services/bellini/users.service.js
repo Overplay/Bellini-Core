@@ -36,6 +36,7 @@ app.factory( "sailsUsers", [ 'sailsApi', 'sailsCoreModel', 'sailsAuth', function
             this.email = json && json.auth && json.auth.email;
             this.auth = json && json.auth && sailsAuth.new( json.auth );
             this.blocked = this.auth && this.auth.blocked;
+            this.isDev = json && json.isDev;
             this.ring = this.auth && this.auth.ring || 10;
 
             this.isAdmin = this.ring === 1;
@@ -49,7 +50,7 @@ app.factory( "sailsUsers", [ 'sailsApi', 'sailsCoreModel', 'sailsAuth', function
 
         this.getPostObj = function () {
             var fields = [ 'firstName', 'lastName', 'metadata', 'mobilePhone', 'legal', 'address',
-                'demographics', 'roles' ];
+                'demographics', 'roles', 'isDev' ];
             return this.cloneUsingFields( fields );
         };
 

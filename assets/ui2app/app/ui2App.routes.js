@@ -275,6 +275,14 @@ app.config( function ( $stateProvider, $urlRouterProvider ) {
             }
         } )
 
+        .state( 'admin.maint', {
+            url:         '/maint',
+            component:  'adminMaint',
+            sideMenu:    [
+                { label: 'Home', sref: "welcome", icon: "home" }
+            ]
+        } )
+
         // VENUES
 
         .state( 'venue', {

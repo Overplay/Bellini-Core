@@ -158,7 +158,7 @@ app.controller( 'adminVenueEditController', function ( $scope, venue, $log, $sta
 
     function createBrandNewVenue() {
 
-        dialogService.addressDialog("", {}, true, 1, true)
+        dialogService.addressDialog( "", {}, true, 1, true )
             .then( function ( locData ) {
                 $scope.venue.name = locData.name;
                 $scope.venue.address = locData.address;
@@ -181,7 +181,7 @@ app.controller( 'adminVenueEditController', function ( $scope, venue, $log, $sta
 
     }
 
-    if (!venue.id) {
+    if ( !venue.id ) {
         createBrandNewVenue();
     }
 } );
@@ -377,3 +377,61 @@ app.controller( 'adminAdEditController', [ '$scope', '$log', 'ad', 'toastr',
 
     } ] );
 
+
+app.component( 'adminMaint', {
+    bindings:   {
+        user: '<'
+    },
+    controller: function ( uibHelper, toastr, $state, $log ) {
+        $log.debug( "loading venueMap component" );
+
+        var ctrl = this;
+
+        this.$onInit = function () {
+            $log.debug( 'adminMaint $onInit called' );
+        }
+
+        class BaseClass {
+
+            constructor( firstName ) {
+                this.firstName = firstName;
+            }
+
+            getFirstName() {
+                return this.firstName;
+            }
+        }
+
+        class ChildClass extends BaseClass {
+
+            constructor( firstName, lastName ) {
+                super( firstName );
+                this.lastName = lastName;
+            }
+
+            getFullName() {
+                return this.firstName + ' ' + this.lastName;
+            }
+
+        }
+
+        ctrl.child = new ChildClass("Fred", "Flintstone");
+
+    },
+    template:   `
+
+    <div class="container">
+    <div class="row">
+        <div class="col-lg-10">
+            <h2><i class="fa fa-gears" aria-hidden="true" style="color: #999999"></i>&nbsp;&nbsp;Admin Maintenance</h2>
+            <p>Stub</p>
+            <p>First name: {{ $ctrl.child.getFirstName() }}</p>
+            <p>Last name: {{ $ctrl.child.lastName }}</p>
+            <p>Full name: {{ $ctrl.child.getFullName() }}</p>
+
+        </div>
+    </div>
+    </div>
+
+    `
+} );
