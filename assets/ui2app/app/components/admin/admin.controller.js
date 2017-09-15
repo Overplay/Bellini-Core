@@ -150,11 +150,12 @@ app.controller( 'adminVenueListController', function ( $scope, venues, $log, uib
     }
 } );
 
-app.controller( 'adminVenueEditController', function ( $scope, venue, $log, $state, toastr, dialogService, ads, users ) {
+app.controller( 'adminVenueEditController', function ( $scope, venue, $log, $state, toastr, dialogService, ads, users, user ) {
     $log.debug( "Loading adminVenueEditController" );
     $scope.venue = venue;
     $scope.ads = ads;
     $scope.users = users;
+    $scope.user = user;
 
     function createBrandNewVenue() {
 

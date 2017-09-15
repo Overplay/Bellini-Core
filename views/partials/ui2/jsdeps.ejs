@@ -9,6 +9,7 @@
 <script src="/bower_components/angular-messages/angular-messages.min.js"></script>
 <script src="/bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
 <script src="/bower_components/angular-simple-logger/dist/angular-simple-logger.min.js"></script>
+<!-- comment out the below when working offline -->
 <script src="/bower_components/angular-google-maps/dist/angular-google-maps.min.js"></script>
 <script src="/bower_components/file-saver/FileSaver.min.js"></script>
 
@@ -31,10 +32,5 @@
 
 <script src="/js/dependencies/sails.io.js"></script>
 
-<% if ( typeof roles !== "undefined" && roles ) { %>
-<script>
-    var nucleus = {roles: <%- JSON.stringify(roles) %> };
-</script>
-<% } %>
 
 

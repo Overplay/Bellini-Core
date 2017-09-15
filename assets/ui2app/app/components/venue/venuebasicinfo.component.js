@@ -82,6 +82,11 @@ app.component( 'venueBasicInfo', {
                                        ng-click="$ctrl.changeName()"></i>
                                 </td>
                             </tr>
+                            <tr>
+                                <td>UUID</td>
+                                <td>{{ $ctrl.venue.uuid }}
+                                </td>
+                            </tr>
                             <tr ng-show="$ctrl.venue.logo">
                                 <td>Logo</td>
                                 <td></td>
