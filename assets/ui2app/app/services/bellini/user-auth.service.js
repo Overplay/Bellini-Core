@@ -2,19 +2,19 @@
  * Created by mkahn on 4/21/17.
  */
 
-app.factory('userAuthService', function( $http, $log, sailsUsers ){
+app.factory( 'userAuthService', function ( $http, $log, sailsUsers ) {
 
-    $log.debug("Loading userAuthService");
+    $log.debug( "Loading userAuthService" );
 
     var userPromise = $http.get( '/user/checksession' )
         .then( stripHttpData )
         .then( sailsUsers.new );
 
-    function stripData(data){ return data.data; }
+    function stripData( data ) { return data.data; }
 
     service = {};
 
-    service.getCurrentUser = function(){
+    service.getCurrentUser = function () {
         return userPromise;
     };
 
@@ -41,7 +41,7 @@ app.factory('userAuthService', function( $http, $log, sailsUsers ){
 
     };
 
-    service.logout = function(){
+    service.logout = function () {
 
         return $http.post( '/auth/logout', {} )
             .then( function ( resp ) {
@@ -64,8 +64,7 @@ app.factory('userAuthService', function( $http, $log, sailsUsers ){
     };
 
 
-    service.genRandomPassword = function()
-    {
+    service.genRandomPassword = function () {
         var words = [ 'bunny', 'fish', 'puppy', 'taco', 'bottle', 'tumbler', 'spoon' ];
         return _.sample( words ) + _.random( 100, 999 ) + _.sample( [ '!', '@', '#', '$', '^' ] );
     };
@@ -76,4 +75,4 @@ app.factory('userAuthService', function( $http, $log, sailsUsers ){
         } );
 
     return service;
-})
+} )

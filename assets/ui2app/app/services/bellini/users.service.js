@@ -124,7 +124,7 @@ app.factory( "sailsUsers", [ 'sailsApi', 'sailsCoreModel', 'sailsAuth', function
 
     var getUser = function ( id ) {
 
-        if ( id == 'new' ) {
+        if ( id === 'new' ) {
             return newUser( { firstName: 'New', lastName: 'User' } ); // empty user
         }
 

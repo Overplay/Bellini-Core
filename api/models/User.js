@@ -74,14 +74,6 @@ module.exports = {
         // User is blocked until they validate thru email or text
         // For now, not implemented
         
-
-        // Array of ids of roles. Not a collection because we don't want all the relation stuff slowing us 
-        // down.
-        // roles: {
-        //     type: 'array',
-        //     defaultsTo: []
-        // },
-        
         ownedVenues: {
             collection: 'Venue',
             via: 'venueOwners'
@@ -106,23 +98,6 @@ module.exports = {
         toJSON: function() {
 
             var obj = this.toObject();
-            // var roleArray = [];
-            //
-            // if (!obj.roles){
-            //
-            //     sails.log.debug('Dinglehead roles is missing on user')
-            //     obj.roles = "MIA";
-            //
-            // } else {
-            //
-            //     obj.roles.forEach( function ( roleId ) {
-            //         if ( roleId )
-            //             roleArray.push( RoleCacheService.roleStringForId( roleId ) );
-            //     } );
-            //     obj.roleTypes = roleArray;
-            //
-            // }
-
             return obj;
         }
 

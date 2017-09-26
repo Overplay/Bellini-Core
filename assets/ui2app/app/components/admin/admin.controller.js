@@ -115,7 +115,7 @@ app.controller( 'adminUserEditController', function ( $scope, user, user2edit, $
 
     }
 
-    if ( !user.email ) {
+    if ( !user2edit.email ) {
         createBrandNewUser();
     }
 

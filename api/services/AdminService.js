@@ -4,11 +4,13 @@
  *
  */
 
-var _ = require( 'lodash' );
+const _ = require( 'lodash' );
+const Promise = require('bluebird');
 
 
-module.exports = require( 'waterlock' ).waterlocked( {
+//module.exports = require( 'waterlock' ).waterlocked( {
 
+module.exports = {
 
     /**
      * Adds admin privilege to the account pointed to by emailAddr
@@ -54,7 +56,7 @@ module.exports = require( 'waterlock' ).waterlocked( {
 
     addUserAtRing: function ( emailAddr, password, ring, userObj, facebookId, requireValidation ) {
 
-        var authAttrib = {
+        const authAttrib = {
             email:    emailAddr,
             password: password,
             ring:     ring
@@ -65,16 +67,17 @@ module.exports = require( 'waterlock' ).waterlocked( {
 
         requireValidation = requireValidation || sails.config.waterlock.alwaysValidate;
 
-        // rewritten massively by MAK 4-2017
-        return Auth.findOne( { email: emailAddr } ) //TODO check on facebook id too?? I think that facebook auth with login if found
-        // automatically -CG
+        // TODO check on facebook id too?? I think that facebook auth with login if found automatically -CG
+        // rewritten massively by MAK 4-2017 and again 9-2017
+        return Auth.findOne( { email: emailAddr } )
             .then( function ( auth ) {
                 if ( auth ) {
-                    sails.log.debug( "Email is in system, rejecting create." )
+                    sails.log.debug( "Email " + emailAddr + " is in system, rejecting create." )
                     throw new Error( "Email already in system" );
                 }
 
-                sails.log.debug( "Email is not in system, adding account." )
+                sails.log.debug( "Adding user for: " + emailAddr );
+                // in the unlikely event this fails, it is caught by the caller
                 return User.create( userObj || {} );
             } )
             .then( function ( newUser ) {
@@ -94,25 +97,27 @@ module.exports = require( 'waterlock' ).waterlocked( {
             } )
             .then( function ( userWithAuth ) {
 
-                var finalIndignity;
+                var outroPromises = [ Promise.resolve( userWithAuth ) ];
 
+                // if validation is required, add this extra promise
                 if ( requireValidation ) {
                     sails.log.info( "AdminService.addUser: adding validation token" );
-                    finalIndignity = ValidateToken.create( { owner: userWithAuth.auth.id } )
+                    outroPromises.push( ValidateToken.create( { owner: userWithAuth.auth.id } )
                         .then( function ( tok ) {
                             return Auth.update( { id: tok.owner }, {
                                 validateToken: tok,
                                 blocked:       true
                             } );
-                        } );
-                } else {
-                    // no validation so just pass this shit through
-                    finalIndignity = Promise.resolve( userWithAuth );
+                        } ) );
+
                 }
 
-                return finalIndignity;
+                return Promise.all(outroPromises);
 
-            } );
+            } )
+            .then( (results) => {
+                return results[0]; // just the userWithAuth
+            });
 
 
     },
@@ -161,4 +166,5 @@ module.exports = require( 'waterlock' ).waterlocked( {
 
     }
 
-});
+    //});
+}
