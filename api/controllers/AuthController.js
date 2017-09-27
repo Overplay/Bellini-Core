@@ -16,7 +16,7 @@ var _ = require('lodash');
 
 function getZombieAuths(){
 
-    return Auth.findAll({})
+    return Auth.find()
         .then( function(auths) {
 
             return _.remove( auths, function( auth ) {
