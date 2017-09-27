@@ -199,10 +199,24 @@ module.exports = require( 'waterlock' ).waterlocked( {
     validatedOk: function ( req, res ) {
 
         return res.view( 'users/validationOk' + ThemeService.getTheme() );
-    }
+    },
+
+    zombies: function(req, res) {
+
+        if ( req.method === 'GET' ) {
+            Auth.find( { user: undefined } )
+                .then( res.ok )
+                .catch( res.serverError );
+        } else if ( req.method === 'DELETE'){
+            Auth.destroy( { user: undefined })
+                .then( res.ok )
+                .catch( res.serverError )
+        } else {
+            return res.badRequest({ error: 'bad verb, man. Just bad'});
+        }
 
 
-    ,
+    },
 
     testLogin: function ( req, res ) {
         sails.log.debug( waterlock.actions.waterlocked() )
