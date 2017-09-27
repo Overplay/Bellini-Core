@@ -11,7 +11,23 @@
 var wl = require( 'waterlock-local-auth' )
 var jwt = require( 'jwt-simple' )
 
-var waterlock = require( "waterlock" )
+var waterlock = require( "waterlock" );
+var _ = require('lodash');
+
+function getZombieAuths(){
+
+    return Auth.findAll({})
+        .then( function(auths) {
+
+            return _.remove( auths, function( auth ) {
+
+                return !auth.user || !auth.email;
+
+            } );
+
+        })
+
+}
 
 module.exports = require( 'waterlock' ).waterlocked( {
 
@@ -203,15 +219,16 @@ module.exports = require( 'waterlock' ).waterlocked( {
 
     zombies: function(req, res) {
 
-        const zombieQuery = { user: false, email: true };
-
         if ( req.method === 'GET' ) {
-            Auth.find( zombieQuery )
+           getZombieAuths()
                 .then( res.ok )
                 .catch( res.serverError );
         } else if ( req.method === 'DELETE'){
-            Auth.destroy( zombieQuery )
-                .then( res.ok )
+            getZombieAuths()
+                .then( function(auths){
+                    return Auth.destroy( auths.map((a)=>a.id));
+                } )
+                .then(res.ok)
                 .catch( res.serverError )
         } else {
             return res.badRequest({ error: 'bad verb, man. Just bad'});
