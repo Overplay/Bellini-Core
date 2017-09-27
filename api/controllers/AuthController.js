@@ -18,6 +18,7 @@ const util = require( 'util' );
 function getZombieAuths() {
 
     return Auth.find()
+        .populate(['user'])
         .then( function ( auths ) {
 
             return _.remove( auths, function ( auth ) {
