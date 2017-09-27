@@ -203,12 +203,14 @@ module.exports = require( 'waterlock' ).waterlocked( {
 
     zombies: function(req, res) {
 
+        const zombieQuery = { user: false, email: true };
+
         if ( req.method === 'GET' ) {
-            Auth.find( { user: undefined } )
+            Auth.find( zombieQuery )
                 .then( res.ok )
                 .catch( res.serverError );
         } else if ( req.method === 'DELETE'){
-            Auth.destroy( { user: undefined })
+            Auth.destroy( zombieQuery )
                 .then( res.ok )
                 .catch( res.serverError )
         } else {
