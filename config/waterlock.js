@@ -16,7 +16,7 @@ module.exports.waterlock = {
     // reset links.
     baseUrl: URL,
 
-    alwaysValidate: true, // force account validation always
+    alwaysValidate: false, // force account validation always
 
     // Auth Method(s)
     //
