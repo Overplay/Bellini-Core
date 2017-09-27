@@ -8,24 +8,26 @@
  * @docs        :: http://waterlock.ninja/documentation
  */
 
-var wl = require( 'waterlock-local-auth' )
-var jwt = require( 'jwt-simple' )
+const wl = require( 'waterlock-local-auth' )
+const jwt = require( 'jwt-simple' )
 
-var waterlock = require( "waterlock" );
-var _ = require('lodash');
+const waterlock = require( "waterlock" );
+const _ = require( 'lodash' );
+const util = require( 'util' );
 
-function getZombieAuths(){
+function getZombieAuths() {
 
     return Auth.find()
-        .then( function(auths) {
+        .then( function ( auths ) {
 
-            return _.remove( auths, function( auth ) {
-
+            return _.remove( auths, function ( auth ) {
+                sails.log.silly( "ZOMBIE CHECK. Email: " + auth.email || 'no email');
+                sails.log.silly( util.inspect( auth, { showHidden: true, depth: null } ) );
                 return !auth.user || !auth.email;
 
             } );
 
-        })
+        } )
 
 }
 
@@ -121,7 +123,7 @@ module.exports = require( 'waterlock' ).waterlocked( {
 
 
         AdminService.addUser( params.email, params.password, params.user, params.facebookId, params.validate ) //TRUE requires
-                                                                                                       // validation
+        // validation
             .then( function ( data ) {
                 //sails.log.debug(data)
                 return res.ok( data )
@@ -217,21 +219,21 @@ module.exports = require( 'waterlock' ).waterlocked( {
         return res.view( 'users/validationOk' + ThemeService.getTheme() );
     },
 
-    zombies: function(req, res) {
+    zombies: function ( req, res ) {
 
         if ( req.method === 'GET' ) {
-           getZombieAuths()
+            getZombieAuths()
                 .then( res.ok )
                 .catch( res.serverError );
-        } else if ( req.method === 'DELETE'){
+        } else if ( req.method === 'DELETE' ) {
             getZombieAuths()
-                .then( function(auths){
-                    return Auth.destroy( auths.map((a)=>a.id));
+                .then( function ( auths ) {
+                    return Auth.destroy( auths.map( ( a ) => a.id ) );
                 } )
-                .then(res.ok)
+                .then( res.ok )
                 .catch( res.serverError )
         } else {
-            return res.badRequest({ error: 'bad verb, man. Just bad'});
+            return res.badRequest( { error: 'bad verb, man. Just bad' } );
         }
 
 
