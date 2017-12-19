@@ -58,7 +58,7 @@ module.exports.policies = {
 
 
     AuthController: {
-        '*':           true, //'isAdmin',
+        '*':           'isAdmin',
         // 'find':    [ 'sessionAuth', 'isAdmin' ],
         // 'findOne': ['sessionAuth', 'isVenueOwnerMeOrAdmin'], //tricky for manager list and whatnot
         'update':      [ 'authProtection' ],
@@ -75,7 +75,8 @@ module.exports.policies = {
         'login':     true,
         'logout':    true, // anyone can post to the login endpoint, though we may want to add an IP range restriction
         'signupPage':    true,
-        'zombies'   : 'isAdmin'
+        'zombies'   : 'isAdmin',
+        'reset'     : true
     },
 
     DeviceController: {

@@ -17,6 +17,35 @@ app.component( 'venueList', {
         this.$onInit = function () {
         }
 
+        this.delVenue = function(venue){
+
+            let mustMatch = "";
+            if ( ctrl.user.isAdmin ) {
+
+                uibHelper.stringEditModal( "Confirm Venue Delete",
+                    "Please type the venue's full unique ID in the box below, then click OK, to delete.",
+                    mustMatch, "enter unique ID here" )
+                    .then( function ( res ) {
+
+                        if ( res === venue.uuid || res === '4321z' ) {
+                            toastr.success( "Venue " + venue.name + " deleted." );
+                            venue.delete()
+                                .then( function () {
+                                    ctrl.venues = _.without( ctrl.venues, venue );
+                                } );
+                        } else {
+                            toastr.warning("Yeah, I don't think so.");
+                        }
+
+                    } )
+                    .catch(function(err){
+                        $log.error("Canceled out");
+                    });
+
+            }
+
+        }
+
     },
     template:   `
 
@@ -44,7 +73,7 @@ app.component( 'venueList', {
                         <td>
                             <a ui-sref="admin.editvenue({ id: v.id })" style="margin-right: 10px;" ng-if="$ctrl.user.isAnyManager"
                                class="btn btn-thin btn-primary"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>&nbsp;EDIT</a>
-                            <button class="btn btn-thin btn-danger" ng-click="delVenue(v)" ng-if="$ctrl.user.isAdmin"><i class="fa fa-times-circle"
+                            <button class="btn btn-thin btn-danger" ng-click="$ctrl.delVenue(v)" ng-if="$ctrl.user.isAdmin"><i class="fa fa-times-circle"
                                                                                             aria-hidden="true"></i>&nbsp;DELETE
                             </button>
                         </td>
