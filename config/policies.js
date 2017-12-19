@@ -58,7 +58,7 @@ module.exports.policies = {
 
 
     AuthController: {
-        '*':           'isAdmin',
+        '*':           true, //'isAdmin',
         // 'find':    [ 'sessionAuth', 'isAdmin' ],
         // 'findOne': ['sessionAuth', 'isVenueOwnerMeOrAdmin'], //tricky for manager list and whatnot
         'update':      [ 'authProtection' ],
