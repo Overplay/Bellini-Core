@@ -45,16 +45,16 @@ module.exports.waterlock = {
                     forwardUrl: URL + '/auth/resetPwd' 
                 },
                 template: {
-                    // The `..` is critical here because of how shitty waterlock is. The whole server crashes without it
-                    file: '../views/emails/email.jade',
+                    // Our fork of Waterlock expects these in /views/...
+                    file: '/emails/email.jade',
                     vars: {}
                 }
             },
             validateAccount:         {
 
                 template: {
-                    // The `..` is critical here because of how shitty waterlock is. The whole server crashes without it
-                    file: '../views/emails/validateemail.jade',
+                    // Our fork of Waterlock expects these in /views/...
+                    file: '/emails/validateemail.jade',
                     vars: {}
                 },
                 redirectOnValidateUrl: '/validated'
