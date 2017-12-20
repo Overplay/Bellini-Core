@@ -92,9 +92,9 @@ module.exports = {
 
     waterlock: {
         emailConfig: {
-            service: 'SendGrid',
-            user: 'overplay-ocs',
-            pass: '@$ah10c5'
+            service: 'SendinBlue',
+            user: 'mitch@ourglass.tv',
+            pass: 'qYXaHghPIctz76Ej'
         }
     },
 
@@ -104,10 +104,10 @@ module.exports = {
         roleSub : "add role",
         inviteSub: "invite user",
         emailConfig: {
-            service: 'SendGrid',
+            service: 'SendinBlue',
             auth: {
-                user: 'overplay-ocs',
-                pass: '@$ah10c5'
+                user: 'mitch@ourglass.tv',
+                pass: 'qYXaHghPIctz76Ej'
             }
         },
         login: URL + "/auth/loginPage"

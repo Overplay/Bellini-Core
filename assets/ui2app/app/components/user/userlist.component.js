@@ -26,12 +26,16 @@ app.component( 'userList', {
                     mustMatch, "enter email here" )
                     .then( function ( res ) {
 
-                        if ( res == user.email || res == '4321' ) {
-                            toastr.success( "User " + user.email + " deleted." );
-                            user.delete()
+                        if ( res === user.email || res === '4321' ) {
+                            user.deleteAccount()
                                 .then( function () {
+                                    toastr.success( "User " + user.email + " deleted." );
                                     ctrl.users = _.without(ctrl.users, user);
-                                } );
+                                } )
+                                .catch( function(err){
+                                    toastr.error( "User " + user.email + " could not be deleted." );
+                                    $log.error(err.message);
+                                });
                         }
 
                     } );

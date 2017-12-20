@@ -113,6 +113,10 @@ app.factory( "sailsUsers", [ 'sailsApi', 'sailsCoreModel', 'sailsAuth', function
                 } );
         }
 
+        this.deleteAccount = function(){
+            return sailsApi.apiPost( '/user/deleteAccount/' + this.id );
+        }
+
     }
 
     ModelUserObject.prototype = Object.create( CoreModel.prototype );

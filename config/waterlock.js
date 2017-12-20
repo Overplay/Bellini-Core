@@ -32,7 +32,9 @@ module.exports.waterlock = {
                 mail:     {
                     protocol:   'SMTP',
                     options:    {
-                        service: 'SendGrid',
+                        service: 'SendinBlue',
+                        port: 587,
+                        host: 'smtp-relay.sendinblue.com',
                         auth:    {
                             user: 'USER', // These are set in local.js in our fork of waterlock-local-auth
                             pass: 'PASS'  //

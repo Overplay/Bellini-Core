@@ -8,13 +8,13 @@
  * @docs        :: http://waterlock.ninja/documentation
  */
 
-var Promise = require('bluebird');
-var _ = require("lodash")
-var jwt = require("jwt-simple")
-var waterlock = require('waterlock')
+var Promise = require( 'bluebird' );
+var _ = require( "lodash" )
+var jwt = require( "jwt-simple" )
+var waterlock = require( 'waterlock' )
 
 
-module.exports = require('waterlock').actions.user({
+module.exports = require( 'waterlock' ).actions.user( {
     /* e.g.
      action: function(req, res){
 
@@ -22,167 +22,167 @@ module.exports = require('waterlock').actions.user({
      */
 
     //searches if the email is in use
-    hasAccount: function (req, res) {
+    hasAccount: function ( req, res ) {
 
-        Auth.findOne({email: req.query.email})
-            .then(function (auth) {
-                if (auth)
+        Auth.findOne( { email: req.query.email } )
+            .then( function ( auth ) {
+                if ( auth )
                     return res.ok();
                 else
-                    return res.notFound({error: 'No such user'});
+                    return res.notFound( { error: 'No such user' } );
 
-            })
-            .catch(function (err) {
-                return res.error({error: err});
-            });
+            } )
+            .catch( function ( err ) {
+                return res.error( { error: err } );
+            } );
     },
 
 
     //ONLY DEVICES OF OWNED VENUES FOR THE PO
     //returns the devices a user has control over (exist in the users ownedVenues
-    getDevices: function (req, res) {
+    getDevices: function ( req, res ) {
 
         var id;
 
-        if (req.allParams() && req.allParams().id)
+        if ( req.allParams() && req.allParams().id )
             id = req.allParams().id; //given ID
-        else if (req.session && req.session.user && req.session.user.id)
+        else if ( req.session && req.session.user && req.session.user.id )
             id = req.session.user.id; //otherwise use current user
         else
-            return res.badRequest({error: 'Not logged in and no given id'});
+            return res.badRequest( { error: 'Not logged in and no given id' } );
 
-        User.findOne({id: id})
-            .populate("ownedVenues")
-            .then(function (user) {
-                if (user) {
+        User.findOne( { id: id } )
+            .populate( "ownedVenues" )
+            .then( function ( user ) {
+                if ( user ) {
                     //sails.log.debug(user)
                     var devices = [];
 
                     var chain = Promise.resolve()
 
-                    user.ownedVenues.forEach(function (venue) {
-                        chain = chain.then(function () {
-                            return Venue.findOne({id: venue.id})
-                                .populate("devices")
-                                .then(function (v) {
-                                    devices = _.union(devices, v.devices);
-                                })
-                        })
-                    })
+                    user.ownedVenues.forEach( function ( venue ) {
+                        chain = chain.then( function () {
+                            return Venue.findOne( { id: venue.id } )
+                                .populate( "devices" )
+                                .then( function ( v ) {
+                                    devices = _.union( devices, v.devices );
+                                } )
+                        } )
+                    } )
 
-                    chain.then(function () {
-                        return res.json(devices)
-                    })
+                    chain.then( function () {
+                        return res.json( devices )
+                    } )
 
                 }
                 else
-                    return res.badRequest({error: "bad ID "});
-            })
+                    return res.badRequest( { error: "bad ID " } );
+            } )
 
-            .catch(function (err) {
-                return res.serverError({error: err});
-            })
+            .catch( function ( err ) {
+                return res.serverError( { error: err } );
+            } )
 
     },
 
-    getManagedDevices: function (req, res) {
+    getManagedDevices: function ( req, res ) {
 
         var id;
 
-        if (req.allParams() && req.allParams().id)
+        if ( req.allParams() && req.allParams().id )
             id = req.allParams().id; //given ID
-        else if (req.session && req.session.user && req.session.user.id)
+        else if ( req.session && req.session.user && req.session.user.id )
             id = req.session.user.id; //otherwise use current user
         else
-            return res.badRequest({error: 'Not logged in and no given id'})
+            return res.badRequest( { error: 'Not logged in and no given id' } )
 
-        User.findOne({id: id})
-            .populate("managedVenues")
-            .then(function (user) {
-                if (user) {
+        User.findOne( { id: id } )
+            .populate( "managedVenues" )
+            .then( function ( user ) {
+                if ( user ) {
                     //sails.log.debug(user)
                     var devices = [];
 
                     var chain = Promise.resolve()
 
 
-                    user.managedVenues.forEach(function (venue) {
-                        chain = chain.then(function () {
-                            return Venue.findOne({id: venue.id})
-                                .populate("devices")
-                                .then(function (v) {
-                                    devices = _.union(devices, v.devices);
-                                })
-                        })
-                    })
+                    user.managedVenues.forEach( function ( venue ) {
+                        chain = chain.then( function () {
+                            return Venue.findOne( { id: venue.id } )
+                                .populate( "devices" )
+                                .then( function ( v ) {
+                                    devices = _.union( devices, v.devices );
+                                } )
+                        } )
+                    } )
 
-                    chain.then(function () {
-                        return res.json(devices)
-                    })
+                    chain.then( function () {
+                        return res.json( devices )
+                    } )
 
                     return chain;
 
                 }
                 else
-                    return res.badRequest({error: "bad ID"});
-            })
+                    return res.badRequest( { error: "bad ID" } );
+            } )
 
-            .catch(function (err) {
-                return res.serverError({error: err});
-            })
+            .catch( function ( err ) {
+                return res.serverError( { error: err } );
+            } )
 
     },
 
     //gets the owned Venues of the user
-    getVenues: function (req, res) {
+    getVenues: function ( req, res ) {
         var id;
 
-        if (req.allParams() && req.allParams().id)
+        if ( req.allParams() && req.allParams().id )
             id = req.allParams().id;
-        else if (req.session && req.session.user.id)
+        else if ( req.session && req.session.user.id )
             id = req.session.user.id;
         else
-            return res.badRequest({error: 'Not logged in and no given id'})
+            return res.badRequest( { error: 'Not logged in and no given id' } )
 
-        User.findOne({id: id})
-            .populate("ownedVenues")
-            .populate("managedVenues")
-            .then(function (user) {
-                if (user) {
-                    return res.json(user.ownedVenues);
+        User.findOne( { id: id } )
+            .populate( "ownedVenues" )
+            .populate( "managedVenues" )
+            .then( function ( user ) {
+                if ( user ) {
+                    return res.json( user.ownedVenues );
                 }
                 else
-                    return res.badRequest({error: "wrong id"});
-            })
-            .catch(function (err) {
-                return res.serverError({error: err});
-            })
+                    return res.badRequest( { error: "wrong id" } );
+            } )
+            .catch( function ( err ) {
+                return res.serverError( { error: err } );
+            } )
     },
 
     //gets the advertisements the user owns
-    getAlist: function (req, res) { //cant have ad or advertisement in name of endpoint due to adblock
+    getAlist: function ( req, res ) { //cant have ad or advertisement in name of endpoint due to adblock
         var id;
 
-        if (req.allParams() && req.allParams().id)
+        if ( req.allParams() && req.allParams().id )
             id = req.allParams().id;
-        else if (req.session && req.session.user.id)
+        else if ( req.session && req.session.user.id )
             id = req.session.user.id;
         else
-            return res.badRequest({error: 'Not logged in and no given id'})
+            return res.badRequest( { error: 'Not logged in and no given id' } )
 
-        Ad.find({creator: id})
-            .then(function (ads) {
-                if (ads) {
+        Ad.find( { creator: id } )
+            .then( function ( ads ) {
+                if ( ads ) {
 
-                    var adverts = _.filter(ads, {deleted: false})
-                    return res.json(adverts);
+                    var adverts = _.filter( ads, { deleted: false } )
+                    return res.json( adverts );
                 }
                 else
-                    return res.badRequest({error: "bad ID"});
-            })
-            .catch(function (err) {
-                return res.serverError({error: err});
-            })
+                    return res.badRequest( { error: "bad ID" } );
+            } )
+            .catch( function ( err ) {
+                return res.serverError( { error: err } );
+            } )
     },
 
     //endpoint that finds users with either firstname, lastname or email
@@ -244,36 +244,36 @@ module.exports = require('waterlock').actions.user({
      },*/
 
     //only returns user ID so info is kept secure 
-    findByEmail: function (req, res) {
+    findByEmail: function ( req, res ) {
         var params = req.allParams();
 
-        if (!params.email) {
-            res.badRequest({error: "No email provided"});
+        if ( !params.email ) {
+            res.badRequest( { error: "No email provided" } );
         } else {
-            Auth.findOne({email: params.email})
-                .populate("user")
-                .then(function (auth) {
-                    if (auth) {
+            Auth.findOne( { email: params.email } )
+                .populate( "user" )
+                .then( function ( auth ) {
+                    if ( auth ) {
                         //success
-                        return res.json({userId: auth.user.id})
+                        return res.json( { userId: auth.user.id } )
                     }
                     else {
                         //failure
-                        return res.json({"error": "a user does not exist with this email"})
+                        return res.json( { "error": "a user does not exist with this email" } )
                     }
-                })
+                } )
         }
     },
 
-    inviteUser: function (req, res) {
+    inviteUser: function ( req, res ) {
         var params = req.allParams()
 
         //check params
-        if (!params.email || !params.name || !params.venue || !params.role)
-            return res.badRequest({error: "invalid params"});
+        if ( !params.email || !params.name || !params.venue || !params.role )
+            return res.badRequest( { error: "invalid params" } );
         else {
             //assumes email sends without issues, might need to handle this at some point
-            MailingService.inviteEmail(params.email, params.name, params.venue, params.role)
+            MailingService.inviteEmail( params.email, params.name, params.venue, params.role )
             return res.ok()
         }
 
@@ -281,56 +281,56 @@ module.exports = require('waterlock').actions.user({
 
     //these two endpoints are super duper similar
 
-    inviteRole: function (req, res) {
+    inviteRole: function ( req, res ) {
         //todo check auth (policies.js)
 
         var params = req.allParams()
 
         //check params
-        if (!params.email || !params.name || !params.venue || !params.role)
-            return res.badRequest({error: "invalid params "});
+        if ( !params.email || !params.name || !params.venue || !params.role )
+            return res.badRequest( { error: "invalid params " } );
         else {
-            MailingService.inviteRole(params.email, params.name, params.venue, params.role)
+            MailingService.inviteRole( params.email, params.name, params.venue, params.role )
             return res.ok()
         }
     },
 
 
     //only handles manager and PO currently
-    acceptRole: function (req, res) {
-        if (req.allParams().token) {
+    acceptRole: function ( req, res ) {
+        if ( req.allParams().token ) {
 
             try {
-                var decoded = jwt.decode(req.allParams().token, sails.config.jwt.secret)
+                var decoded = jwt.decode( req.allParams().token, sails.config.jwt.secret )
                 var _reqTime = Date.now();
                 // If token is expired
-                if (decoded.exp <= _reqTime)
-                    return res.forbidden({error: 'Your token is expired.'});
+                if ( decoded.exp <= _reqTime )
+                    return res.forbidden( { error: 'Your token is expired.' } );
                 // If token is early
-                if (_reqTime <= decoded.nbf)
-                    return res.forbidden({error: 'This token is early.'});
+                if ( _reqTime <= decoded.nbf )
+                    return res.forbidden( { error: 'This token is early.' } );
                 // If the subject doesn't match
-                if (sails.config.mailing.roleSub !== decoded.sub)
-                    return res.forbidden({error: 'This token cannot be used for this request.'});
+                if ( sails.config.mailing.roleSub !== decoded.sub )
+                    return res.forbidden( { error: 'This token cannot be used for this request.' } );
 
                 //token passes 
-                Auth.findOne({email: decoded.email})
-                    .populate("user")
-                    .then(function (auth) {
-                        if (auth) {
+                Auth.findOne( { email: decoded.email } )
+                    .populate( "user" )
+                    .then( function ( auth ) {
+                        if ( auth ) {
                             var user = auth.user;
                             //add role and add venue 
                             var role = decoded.role == "Manager" ? "proprietor.manager" : "proprietor.owner"
-                            user.roles = _.union(user.roles, [RoleCacheService.roleByName(role)])
-                            if (decoded.role == "Manager")
-                                user.managedVenues.add(decoded.venue)
-                            else if (decoded.role == "Owner")
-                                user.ownedVenues.add(decoded.venue)
+                            user.roles = _.union( user.roles, [ RoleCacheService.roleByName( role ) ] )
+                            if ( decoded.role == "Manager" )
+                                user.managedVenues.add( decoded.venue )
+                            else if ( decoded.role == "Owner" )
+                                user.ownedVenues.add( decoded.venue )
                             else
-                                return res.badRequest({error: "bad request"})
-                            user.save(function (err) {
-                                if (err)
-                                    return res.serverError({error: err})
+                                return res.badRequest( { error: "bad request" } )
+                            user.save( function ( err ) {
+                                if ( err )
+                                    return res.serverError( { error: err } )
                                 else {
                                     //TODO user feedback
 
@@ -340,103 +340,103 @@ module.exports = require('waterlock').actions.user({
                                     user.auth = a;
 
                                     //is this dangerous since the token isn't kept track of?
-                                    waterlock.cycle.loginSuccess(req, res, user, '/ui')
+                                    waterlock.cycle.loginSuccess( req, res, user, '/ui' )
                                 }
 
-                            })
+                            } )
                         }
                         else //user not found hahaha fuckkkk bad token probably 
-                            return res.badRequest({ error : "No user found with that email" })
+                            return res.badRequest( { error: "No user found with that email" } )
 
-                    })
+                    } )
             }
-            catch (err) {
-                sails.log.debug("CAUGHT: bad token req", err)
+            catch ( err ) {
+                sails.log.debug( "CAUGHT: bad token req", err )
 
-                return res.badRequest({error: err} );
+                return res.badRequest( { error: err } );
             }
         }
         else
-            res.badRequest({error: "Missing token"});
+            res.badRequest( { error: "Missing token" } );
 
     },
 
-    becomeAdvertiser: function (req, res) {
+    becomeAdvertiser: function ( req, res ) {
 
-        if (!req.session.user)
-            return res.badRequest({error: "No session"})
+        if ( !req.session.user )
+            return res.badRequest( { error: "No session" } )
 
-        User.findOne(req.session.user.id)
-            .then(function (u) {
-                u.roles = _.union(u.roles, [RoleCacheService.roleByName('sponsor')])
-                u.save(function (err) {
-                    if (err)
-                        return res.serverError({error: "Add role error "})
+        User.findOne( req.session.user.id )
+            .then( function ( u ) {
+                u.roles = _.union( u.roles, [ RoleCacheService.roleByName( 'sponsor' ) ] )
+                u.save( function ( err ) {
+                    if ( err )
+                        return res.serverError( { error: "Add role error " } )
                     else {
                         req.session.user = u
-                        return res.json(u)
+                        return res.json( u )
                     }
-                })
-            })
-            .catch(function(err){
-                return res.serverError({error: err})
-            })
+                } )
+            } )
+            .catch( function ( err ) {
+                return res.serverError( { error: err } )
+            } )
     },
 
-    getRoles: function (req, res){
+    getRoles: function ( req, res ) {
         //policies will prevent calls other than GET and with valid JWT /auth to use this
 
         //ask how to get user id, in jwt im assuming
 
-        User.find(id)
-            .then(function(user){
-                if (!user){
-                    return res.notFound({error: "User not found"})
+        User.find( id )
+            .then( function ( user ) {
+                if ( !user ) {
+                    return res.notFound( { error: "User not found" } )
                 }
                 else {
-                    var roles = RoleCacheService.getAllRolesAsStringArray(user.roles)
-                    return res.ok({roles: roles})
+                    var roles = RoleCacheService.getAllRolesAsStringArray( user.roles )
+                    return res.ok( { roles: roles } )
                 }
-            })
+            } )
     },
 
-    inviteNewUser: function(req, res) {
+    inviteNewUser: function ( req, res ) {
         var params = req.allParams();
-        if (!params.email){
-            return res.badRequest({error: "No Email specified"})
+        if ( !params.email ) {
+            return res.badRequest( { error: "No Email specified" } )
         }
         else {
-            MailingService.inviteNewUser(params.email);
+            MailingService.inviteNewUser( params.email );
             return res.ok();
         }
     },
 
-    checkjwt: function(req, res){
+    checkjwt: function ( req, res ) {
 
-        if( req.headers.authorization && req.headers.authorization == "Bearer OriginalOG" ){
-            return res.ok({
-                email: "superduper@superduper.com",
+        if ( req.headers.authorization && req.headers.authorization == "Bearer OriginalOG" ) {
+            return res.ok( {
+                email:     "superduper@superduper.com",
                 firstName: "Clark",
-                lastName: "Kent"
-            });
+                lastName:  "Kent"
+            } );
         }
 
         //var user = req.session.user;
 
-        User.findOne(req.session.user.id)
-            .populate(["ownedVenues", "managedVenues", "auth"])
-            .then(function(u){
-                if (!u){
+        User.findOne( req.session.user.id )
+            .populate( [ "ownedVenues", "managedVenues", "auth" ] )
+            .then( function ( u ) {
+                if ( !u ) {
                     return res.notAuthorized();
                 }
 
-                return res.ok(u);
-            })
-            .catch(res.serverError)
+                return res.ok( u );
+            } )
+            .catch( res.serverError )
 
     },
 
-    checkSession: function(req, res){
+    checkSession: function ( req, res ) {
 
         if ( req.session && req.session.user ) {
             var uid = req.session.user.id;
@@ -455,7 +455,7 @@ module.exports = require('waterlock').actions.user({
                     juser.email = user.auth && user.auth.email;
                     juser.isAdmin = !!(user.auth && (user.auth.ring == 1) )
                     juser.isManager = !!user.managedVenues.length;
-                    juser.isOwner =  !!user.ownedVenues.length;
+                    juser.isOwner = !!user.ownedVenues.length;
                     juser.isSponsor = !!(user.auth && (user.auth.ring == 4) )
                     // delete user.auth;
                     //delete juser.roles;
@@ -497,7 +497,7 @@ module.exports = require('waterlock').actions.user({
 
         // Prerequisites are a user and a venue, get both
         var prereqs = {
-            user: User.findOne( uid ).populate( [ "managedVenues", "ownedVenues" ] ),
+            user:  User.findOne( uid ).populate( [ "managedVenues", "ownedVenues" ] ),
             venue: Venue.findOne( params.venueId )
         };
 
@@ -529,9 +529,9 @@ module.exports = require('waterlock').actions.user({
 
                 // Reload the user because Waterline is fucking stupid and does not return the modded object on save
                 return User.findOne( uid ).populate( [ "managedVenues", "ownedVenues" ] )
-                    .then( function(user){
-                        return res.ok(user);
-                    });
+                    .then( function ( user ) {
+                        return res.ok( user );
+                    } );
 
             } )
             .catch( res.serverError );
@@ -568,7 +568,7 @@ module.exports = require('waterlock').actions.user({
             venue: Venue.findOne( params.venueId )
         };
 
-        Promise.props(prereqs)
+        Promise.props( prereqs )
             .then( function ( props ) {
 
                 if ( !props.user ) {
@@ -609,47 +609,82 @@ module.exports = require('waterlock').actions.user({
             return res.badRequest( { error: "Bad Verb" } );
 
         User.find( req.query )
-            .populate(['auth', 'managedVenues', 'ownedVenues'])
+            .populate( [ 'auth', 'managedVenues', 'ownedVenues' ] )
             .then( res.ok )
             .catch( res.serverError );
 
     },
 
-    analyze: function(req, res){
+    analyze: function ( req, res ) {
 
         if ( req.method != 'GET' )
             return res.badRequest( { error: "Bad Verb" } );
 
         var rval = { total: 0, admin: 0, po: 0, pm: 0, u: 0, sponsor: 0 };
-        User.find({})
-            .populate(['auth', 'managedVenues', 'ownedVenues'])
-            .then( function(users){
+        User.find( {} )
+            .populate( [ 'auth', 'managedVenues', 'ownedVenues' ] )
+            .then( function ( users ) {
 
                 rval.total = users.length;
 
                 users.forEach( function ( u ) {
-                    if ( u.auth.ring==1 ){
+                    if ( u.auth.ring == 1 ) {
                         rval.admin++;
-                    } else if ( u.auth.ring==4){
+                    } else if ( u.auth.ring == 4 ) {
                         rval.sponsor++;
-                    } else if ( u.auth.ring==3 && u.ownedVenues.length ) {
+                    } else if ( u.auth.ring == 3 && u.ownedVenues.length ) {
                         rval.po++;
                     } else if ( u.auth.ring == 3 && u.managedVenues.length ) {
                         rval.pm++;
                     } else {
                         rval.u++;
                     }
-                })
+                } )
 
-                return res.ok(rval);
-            })
-            .catch(res.serverError);
+                return res.ok( rval );
+            } )
+            .catch( res.serverError );
+
+
+    },
+
+    deleteAccount: function ( req, res ) {
+
+        const params = req.allParams();
+
+        const userId = params.id || params.userId;
+
+        if ( !userId ) {
+            return res.badRequest( { error: 'no user id' } );
+        }
+
+        User.findOne( userId )
+            .then( ( user ) => {
+
+                if ( !user ) {
+                    return res.notFound( { error: 'no such user ' } );
+                }
+
+                sails.log.silly( 'Deleting auth for user: ' + userId );
+                // delete the auth
+                return Auth.destroy( user.auth )
+                    .then( () => {
+                        sails.log.silly( 'Deleting user for user: ' + userId );
+                        return User.destroy( userId );
+                    } );
+
+
+            } )
+            .then( () => {
+                return res.ok();
+            } )
+            .catch( res.serverError );
 
 
     }
 
 
-});
+} );
 
 
 

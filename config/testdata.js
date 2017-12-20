@@ -28,7 +28,9 @@ function wipeAllData(shouldWipe){
             User.destroy( {} ),
             Venue.destroy( {} ),
             Media.destroy( {} ),
-            Ad.destroy( {} )
+            Ad.destroy( {} ),
+            Attempt.destroy({}),
+            Jwt.destroy({})
         ];
 
         return Promise.all(destruct);
@@ -42,7 +44,7 @@ function wipeAllData(shouldWipe){
 
 var self = module.exports.testdata = {
 
-    installTestData: true,
+    installTestData: false,
     eraseOldData:    false,
 
     install: function () {

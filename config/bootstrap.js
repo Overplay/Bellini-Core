@@ -78,11 +78,7 @@ module.exports.bootstrap = function ( cb ) {
         makeCoreAdmins();
     }
 
-
-
-
-
-    Venue.updateOrCreate( { name: 'Bullpen', uuid: 'bullpen-hey-battabatta', virtual: true },
+   Venue.updateOrCreate( { name: 'Bullpen', uuid: 'bullpen-hey-battabatta', virtual: true },
         {
             name:    'Bullpen', uuid: 'bullpen-hey-battabatta',
             virtual: true, showInMobileApp: false
