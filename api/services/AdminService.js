@@ -7,7 +7,9 @@
 const _ = require( 'lodash' );
 const Promise = require('bluebird');
 
-
+function random0to9(){
+    return _.sample(['0','1','2','3','4','5','6','7','8','9']);
+}
 //module.exports = require( 'waterlock' ).waterlocked( {
 
 module.exports = {
@@ -154,16 +156,36 @@ module.exports = {
             // Token is stored on the Auth resetToken.token
 
             // TODO I think this is broken, the param below does not match!
-            return Auth.findOne( { "resetToken.token": params.token } )
-                .then( function ( authObj ) {
-                    authObj.password = params.password;
-                    return authObj.save()
+            return Auth.find( { resetToken: { "!": null  } })
+                .then( function ( authObjs ) {
+
+                    if (!authObjs || !authObjs.length ){
+                        return Promise.reject( new Error( "Invalid token (1)" ) );
+                    }
+
+                    let authToReset = _.find(authObjs, function(auth){
+                        const token = auth.resetToken && auth.resetToken.token;
+                        if (!token) return false;
+                        return token === params.resetToken;
+                    });
+
+                    if (authToReset){
+                        authToReset.password = params.password;
+                        return authToReset.save()
+                    }
+
+                    return Promise.reject( new Error( "Invalid token (2)" ) );
+
                 } );
 
         }
 
         return Promise.reject( new Error( 'bad params' ) ); //fixes promise handler warning
 
+    },
+
+    sixRandomDigits: function(){
+        return random0to9()+random0to9()+random0to9()+random0to9()+random0to9()+random0to9();
     }
 
     //});

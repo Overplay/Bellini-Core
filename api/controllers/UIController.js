@@ -20,6 +20,10 @@ module.exports = {
     ui2App: function ( req, res ) {
 
         return res.view( "ui/ui2AppBody", { layout: 'ui/ui2template' } );
+    },
+
+    handleLogin: function(req, res){
+
     }
 
 };

@@ -71,12 +71,15 @@ module.exports.policies = {
         'changePwd':   [ 'passwordChange' ], //this is tricky because of pw reset...
         // Checked by MAK April 2017
         // anyone can go to the login page
-        'loginPage': true,
-        'login':     true,
-        'logout':    true, // anyone can post to the login endpoint, though we may want to add an IP range restriction
-        'signupPage':    true,
-        'zombies'   : 'isAdmin',
-        'reset'     : true
+        'loginPage':   true,
+        'login':       true,
+        'logout':      true, // anyone can post to the login endpoint, though we may want to add an IP range restriction
+        'signupPage':  true,
+        'zombies':     'isAdmin',
+        'reset':       true,
+        'validate':    true,
+        'validatedOk': [ 'sessionAuth' ]
+
     },
 
     DeviceController: {

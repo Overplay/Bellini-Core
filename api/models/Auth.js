@@ -17,6 +17,17 @@ module.exports = {
             defaultsTo: 3
         },
 
+        smsCode: {
+            type: 'string',
+            defaultsTo: ''
+
+        },
+
+        smsValidated: {
+            type: 'boolean',
+            defaultsTo: false
+        },
+
         toJSON: function () {
             var obj = this.toObject();
             delete obj.password;
@@ -27,5 +38,20 @@ module.exports = {
     } ),
 
     beforeCreate: require( 'waterlock' ).models.auth.beforeCreate,
-    beforeUpdate: require( 'waterlock' ).models.auth.beforeUpdate
+    beforeUpdate: require( 'waterlock' ).models.auth.beforeUpdate,
+
+    afterUpdate: function ( updatedRecord, cb ) {
+
+        // If the reg code is set, put a timeout to clear it in 5 minutes
+        if ( updatedRecord.smsCode ) {
+            setTimeout( function () {
+                Auth.update( { id: updatedRecord.id }, { smsCode: '' } )
+                    .then( function ( dev ) {
+                        sails.log.silly( "Cleared sms reg code" );
+                    } )
+            }, 1 * 60 * 1000 );
+        }
+
+        cb();
+    },
 };

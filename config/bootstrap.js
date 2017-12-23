@@ -14,6 +14,8 @@ var Promises = require( 'bluebird' );
 
 module.exports.bootstrap = function ( cb ) {
 
+    //TwilioService.sendText('4088383673','Yo Dawg!');
+
     const WACK_ADMINS_FIRST = false; // only use this if you've corrupted the ring for admin
 
     var coreAdmins = [

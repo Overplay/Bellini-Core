@@ -90,9 +90,9 @@ module.exports = require( 'waterlock' ).waterlocked( {
         } else if ( params.resetToken ) {
 
             // Attempt at token based reset. Let's make sure they are really cool
-            if ( params.resetToken != req.session.resetToken.token ) {
-                return res.forbidden( { error: "Reset token does not match" } );
-            }
+            // if ( params.resetToken != req.session.resetToken.token ) {
+            //     return res.forbidden( { error: "Reset token does not match" } );
+            // }
 
             AdminService.changePwd( { resetToken: params.resetToken, password: params.newpass } )
                 .then( function () {
@@ -137,7 +137,7 @@ module.exports = require( 'waterlock' ).waterlocked( {
                     _.forEach( err.invalidAttributes, function ( att ) {
                         att.forEach( function ( e ) {
                             messages[ e.rule ] = e.message;
-                            if ( e.rule == 'email' ) badEmail = true;
+                            if ( e.rule === 'email' ) badEmail = true;
                         } )
                     } )
                     return res.badRequest( { errors: messages, badEmail: badEmail } )//{'message': 'Adding user
@@ -245,6 +245,94 @@ module.exports = require( 'waterlock' ).waterlocked( {
         waterlock.actions.waterlocked().login( req, res )
 
         //res.redirect('/ui')
+    },
+
+    smsverification: function(req, res) {
+
+        if ( req.method !== 'POST' )
+            return res.badRequest({ error: 'not that way'});
+
+        if (!req.allParams().smscode)
+            return res.badRequest( { error: 'missing SMS code' } );
+
+        const smsCode = req.allParams().smscode;
+
+        if ( !req.allParams().email )
+            return res.badRequest( { error: 'missing email' } );
+
+        Auth.findOne({ email: req.allParams().email })
+            .then( function(auth){
+
+                if (!auth){
+                    return res.badRequest({ error: 'no such user' });
+                }
+
+                if ( auth.smsValidated ) {
+                    return res.badRequest( { error: 'Already validated.' } )
+                }
+
+                if ( !auth.smsCode && auth.blocked ){
+                    return res.badRequest({ error: 'This code is expired.' })
+                }
+
+
+                if ( auth.smsCode !== smsCode ){
+                    return res.badRequest( { error: 'Wrong registration code.' } )
+                }
+
+                // if we get here, we're good
+                auth.smsValidated = true;
+                auth.blocked = false;
+                auth.smsCode = '';
+                auth.save();
+                return res.ok({ message: 'Accounted validated successfully.'});
+
+            })
+
+    },
+
+    requestsmsverify: function(req, res){
+
+        if ( req.method !== 'POST' )
+            return res.badRequest( { error: 'not that way' } );
+
+        if ( !req.allParams().email )
+            return res.badRequest( { error: 'missing email' } );
+
+        Auth.findOne( { email: req.allParams().email } )
+            .populate('user')
+            .then( function ( auth ) {
+
+                if ( !auth ) {
+                    return res.badRequest( { error: 'no such user' } );
+                }
+
+                if ( !auth.blocked || auth.smsValidated ) {
+                    return res.badRequest( { error: 'Not applicable.' } )
+                }
+
+                if ( !auth.user ) {
+                    return res.badRequest( { error: 'No associated user for that auth' } )
+                }
+
+                if ( !auth.user.mobilePhone ) {
+                    return res.badRequest( { error: 'No associated mobile phone for the user!' } )
+                }
+
+                const code = AdminService.sixRandomDigits();
+                auth.smsCode = code;
+                auth.save();
+
+                TwilioService.sendText(auth.user.mobilePhone, "Welcome to Ourglass! Here's your code: "+code)
+                    .then(()=>{
+                        return res.ok({message: 'Text sent'});
+                    })
+                    .catch(res.serverError);
+
+            } )
+
+
+
     }
 
 } );

@@ -628,6 +628,11 @@ module.exports = require( 'waterlock' ).actions.user( {
                 rval.total = users.length;
 
                 users.forEach( function ( u ) {
+                    if (!u.auth){
+                        sails.log.error("User missing an auth object! "+u.id);
+                        return;
+                    }
+
                     if ( u.auth.ring == 1 ) {
                         rval.admin++;
                     } else if ( u.auth.ring == 4 ) {

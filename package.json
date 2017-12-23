@@ -52,7 +52,7 @@
     "util": "^0.10.3",
     "uuid": "^3.1.0",
     "verror": "^1.10.0",
-    "waterlock": "github:colegrigsby/waterlock",
+    "waterlock": "github:overplay/waterlock",
     "waterlock-facebook-auth": "github:colegrigsby/waterlock-facebook-auth",
     "waterlock-local-auth": "github:overplay/waterlock-local-auth",
     "yelp-fusion": "^1.0.4"

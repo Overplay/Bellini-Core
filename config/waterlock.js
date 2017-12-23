@@ -184,6 +184,10 @@ module.exports.waterlock = {
             // string - 'custom json response string'
             // default - 'default'
             failure: '{"message": "failure"}'
+        },
+
+        validate: {
+            success: '/validated'
         }
     }
 };

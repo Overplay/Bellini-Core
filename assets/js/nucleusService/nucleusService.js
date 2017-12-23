@@ -109,8 +109,11 @@
             }
             
             service.reqNewPwd = function( email ){
-            
                 return $http.post( '/auth/reset', { email: email });
+            }
+
+            service.resetPwd = function ( password ) {
+                return $http.post( '/auth/reset', { password: password } );
             }
 
             // TODO this should be tested to see if deleting one, deletes the other (ripple)
@@ -186,9 +189,7 @@
              * @returns {HttpPromise}
              */
             service.changePassword = function ( params ) {
-
                 return $http.post( '/auth/changePwd', params );
-
             }
 
 
