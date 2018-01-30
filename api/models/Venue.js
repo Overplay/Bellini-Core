@@ -103,6 +103,12 @@ module.exports = {
             type:       'boolean',
             required:   true,
             defaultsTo: false
+        },
+
+        // Used to hide test locations like "Mitch's House"
+        visibleToPublic: {
+            type: 'boolean',
+            defaultsTo: true
         }
     },
 

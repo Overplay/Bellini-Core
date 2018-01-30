@@ -87,7 +87,7 @@ module.exports.bootstrap = function ( cb ) {
         } );
 
 
-    sails.config.testdata.install();
+    sails.config.testdata.install(false);
 
     sails.log.debug( "Bootstrapping SAILS done" );
 

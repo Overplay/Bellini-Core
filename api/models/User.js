@@ -7,6 +7,8 @@
  */
 
 var Promise = require( 'bluebird' );
+var uuid = require( 'uuid/v4' );
+
 
 module.exports = {
 
@@ -93,6 +95,16 @@ module.exports = {
             type: 'boolean',
             defaultsTo: false
         },
+
+        // Set for OG employees, turns on normally invisible venues, etc.
+        isOG: {
+            type:       'boolean',
+            defaultsTo: false
+        },
+
+        uuid: {
+            type: 'string'
+        },
         
 
         toJSON: function() {
@@ -105,7 +117,18 @@ module.exports = {
     } ),
 
 
-    beforeCreate: require( 'waterlock' ).models.user.beforeCreate,
-    beforeUpdate: require( 'waterlock' ).models.user.beforeUpdate
+    // these appear to be undefined in waterlock, another fine waterlocak bug
+    //beforeCreate: require( 'waterlock' ).models.user.beforeCreate,
 
+    beforeUpdate: require( 'waterlock' ).models.user.beforeUpdate,
+
+    beforeCreate: function ( values, cb ) {
+
+        if ( !values.uuid ) {
+            values.uuid = uuid();
+        }
+
+        cb();
+
+    }
 };

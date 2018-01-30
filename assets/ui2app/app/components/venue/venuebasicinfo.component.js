@@ -71,6 +71,16 @@ app.component( 'venueBasicInfo', {
                 })
         }
 
+        this.visibleToPublic = function(){
+            ctrl.venue.save()
+                .then( function () {
+                    toastr.success( "Will " + (ctrl.venue.visibleToPublic ? "" : "not ") + "be visible to public" );
+                } )
+                .catch( function () {
+                    toastr.error( "Error saving setting" );
+                } )
+        }
+
     },
 
     template: `<table class="table table-striped table-bordered top15">
@@ -105,6 +115,17 @@ app.component( 'venueBasicInfo', {
                                         <label>
                                             <input type="checkbox" ng-model="$ctrl.venue.showInMobileApp" ng-change="$ctrl.showInApp()">
                                             {{ $ctrl.venue.showInMobileApp ? 'Will be shown' : 'Will not be shown'}}
+                                        </label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Visible to Public</td>
+                                <td>
+                                    <div class="checkbox" style="margin: 0;">
+                                        <label>
+                                            <input type="checkbox" ng-model="$ctrl.venue.visibleToPublic" ng-change="$ctrl.visibleToPublic()">
+                                            {{ $ctrl.venue.visibleToPublic ? 'Will be shown' : 'Will not be shown'}}
                                         </label>
                                     </div>
                                 </td>

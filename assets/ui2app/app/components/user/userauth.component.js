@@ -81,6 +81,20 @@ app.component( 'userAuth', {
                 } )
         }
 
+        // TODO: Super repetitive from the above...
+        ctrl.ogChange = function () {
+
+            ctrl.user.save()
+                .then( function ( newUser ) {
+                    $log.debug( newUser.isOG ? "is OG" : "is NOT OG" );
+                    const msg = newUser.isOG ? "OG mode on!" : "OG mode off";
+                    toastr.success( msg );
+                } )
+                .catch( function ( err ) {
+                    toastr.error( err.message );
+                } )
+        }
+
 
     },
 
@@ -106,10 +120,16 @@ app.component( 'userAuth', {
                  <input type="checkbox" ng-model="$ctrl.user.blocked" ng-click="$ctrl.blockedChange()"/>&nbsp;Block User
                  <!-- Turn on developer -->
                   <h5 class="subhead">Developer Permissions</h5>
-                <p>User is currently a developer: <span ng-class="$ctrl.user.isDev ? 'text-danger' : 'text-success'">
-                 <b>{{ $ctrl.user.isDev?"YES":"NO" }}</b>
-                 </span></p>
+                <!--<p>User is currently a developer: <span ng-class="$ctrl.user.isDev ? 'text-danger' : 'text-success'">-->
+                 <!--<b>{{ $ctrl.user.isDev?"YES":"NO" }}</b>-->
+                 <!--</span></p>-->
                  <input type="checkbox" ng-model="$ctrl.user.isDev" ng-click="$ctrl.devChange()"/>&nbsp;User is developer
+                 <!-- Turn on OG mode for employees -->
+                  <h5 class="subhead">OG Permissions</h5>
+                <!--<p>User is currently an OG: <span ng-class="$ctrl.user.isOG ? 'text-danger' : 'text-success'">-->
+                 <!--<b>{{ $ctrl.user.isOG?"YES":"NO" }}</b>-->
+                 <!--</span></p>-->
+                 <input type="checkbox" ng-model="$ctrl.user.isOG" ng-click="$ctrl.ogChange()"/>&nbsp;User is OG
              </div>
     
     `

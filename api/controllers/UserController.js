@@ -436,6 +436,24 @@ module.exports = require( 'waterlock' ).actions.user( {
 
     },
 
+    findbyuuid: function ( req, res ) {
+
+        const uuid = req.allParams().uuid;
+
+        if (!uuid) return res.badRequest({ error: 'missing param' });
+
+        User.findOne( { uuid: uuid } )
+            .populate( [ "ownedVenues", "managedVenues", "auth" ] )
+            .then( function ( u ) {
+                if ( !u ) {
+                    return res.notFound( { error: 'no such uuid'});
+                }
+                return res.ok( u );
+            } )
+            .catch( res.serverError )
+
+    },
+
     checkSession: function ( req, res ) {
 
         if ( req.session && req.session.user ) {
