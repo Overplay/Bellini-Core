@@ -59,6 +59,7 @@ app.component( 'venueList', {
                 <table class="table table-striped" ng-if="$ctrl.venues.length">
                     <thead>
                     <tr>
+                        <th>Hidden?</th>
                         <th>Name</th>
                         <th>Address</th>
                         <th></th>
@@ -66,8 +67,9 @@ app.component( 'venueList', {
                     </thead>
                     <tbody>
                     <tr ng-repeat="v in $ctrl.venues | orderBy: 'name' | filter:searchTerm">
-                        <td width="40%">{{v.name}}</td>
-                        <td width="40%">{{ v.address.street + " " + (v.address.street2 || "")}}<br/>{{ v.address.city + ", " +
+                        <td>{{v.hiddenFromPublic?'YES':''}}</td>
+                        <td width="30%">{{v.name}}</td>
+                        <td width="30%">{{ v.address.street + " " + (v.address.street2 || "")}}<br/>{{ v.address.city + ", " +
                             v.address.state }}
                         </td>
                         <td>

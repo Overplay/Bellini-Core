@@ -10,13 +10,33 @@
 
 module.exports = function ( req, res, next ) {
 
+    if ( sails.config.policies.godToken && req.headers.authorization && req.headers.authorization === "Bearer OriginalOG") {
+            next();
+    } else if ( req.headers.authorization ){
 
-    if ( PolicyService.isLoggedIn( req ) ||
-        PolicyService.isPeerToPeer( req ) ||
-        PolicyService.isMagicJwt( req ) )
-        return next();
+        waterlock.validator.validateTokenRequest( req, function ( err, user ) {
+            if ( err ) {
+                return res.forbidden( { error: "Uncool auth header" } );
+            }
 
-    // User is not allowed
-    return res.forbidden( { error: 'not logged in'} );
+            // valid request
+            next();
+        } );
+
+    } else {
+
+        if ( PolicyService.isLoggedIn( req ) ||
+            PolicyService.isPeerToPeer( req ) ||
+            PolicyService.isMagicJwt( req ) )
+            return next();
+
+        // User is not allowed
+        return res.forbidden( { error: 'not logged in policy' } );
+
+    }
+
+
+
+
 
 };

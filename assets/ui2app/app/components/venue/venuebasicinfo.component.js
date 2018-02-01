@@ -71,10 +71,10 @@ app.component( 'venueBasicInfo', {
                 })
         }
 
-        this.visibleToPublic = function(){
+        this.hiddenFromPublic = function(){
             ctrl.venue.save()
                 .then( function () {
-                    toastr.success( "Will " + (ctrl.venue.visibleToPublic ? "" : "not ") + "be visible to public" );
+                    toastr.success( "Will " + (ctrl.venue.hiddenFromPublic ? "not" : " ") + "be visible to public" );
                 } )
                 .catch( function () {
                     toastr.error( "Error saving setting" );
@@ -120,12 +120,12 @@ app.component( 'venueBasicInfo', {
                                 </td>
                             </tr>
                             <tr>
-                                <td>Visible to Public</td>
+                                <td>Hidden from Public</td>
                                 <td>
                                     <div class="checkbox" style="margin: 0;">
                                         <label>
-                                            <input type="checkbox" ng-model="$ctrl.venue.visibleToPublic" ng-change="$ctrl.visibleToPublic()">
-                                            {{ $ctrl.venue.visibleToPublic ? 'Will be shown' : 'Will not be shown'}}
+                                            <input type="checkbox" ng-model="$ctrl.venue.hiddenFromPublic" ng-change="$ctrl.hiddenFromPublic()">
+                                            Hide
                                         </label>
                                     </div>
                                 </td>
