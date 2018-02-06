@@ -8,10 +8,11 @@
  * @docs        :: http://waterlock.ninja/documentation
  */
 
-var Promise = require( 'bluebird' );
-var _ = require( "lodash" )
-var jwt = require( "jwt-simple" )
-var waterlock = require( 'waterlock' )
+const Promise = require( 'bluebird' );
+const _ = require( "lodash" )
+const jwt = require( "jwt-simple" )
+const waterlock = require( 'waterlock' )
+const uuid = require( 'uuid/v4' );
 
 
 module.exports = require( 'waterlock' ).actions.user( {
@@ -703,6 +704,32 @@ module.exports = require( 'waterlock' ).actions.user( {
             } )
             .catch( res.serverError );
 
+
+    },
+
+    repairUuids: function ( req, res ) {
+
+        if ( req.method !== 'POST' ) {
+            return res.badRequest( { error: 'bad verb' } );
+        }
+
+        User.find( {} )
+            .then( ( users ) => {
+
+                let withoutUuid = _.remove( users, function ( u ) { return !u.uuid } );
+                let promises = [];
+                withoutUuid.forEach( ( user ) => {
+                    user.uuid = uuid();
+                    promises.push(user.save());
+                } );
+
+                return Promise.all(promises);
+
+            } )
+            .then((promises)=>{
+                return res.ok({ message: promises.length + " entries fixed"});
+            })
+            .catch(res.serverError);
 
     }
 

@@ -9,8 +9,8 @@
  * http://sailsjs.org/#!/documentation/reference/sails.config/sails.config.bootstrap.html
  */
 
-var Promises = require( 'bluebird' );
 
+const INSTALL_TEST_DATA = false;
 
 module.exports.bootstrap = function ( cb ) {
 
@@ -18,17 +18,17 @@ module.exports.bootstrap = function ( cb ) {
 
     const WACK_ADMINS_FIRST = false; // only use this if you've corrupted the ring for admin
 
-    var coreAdmins = [
+    const coreAdmins = [
 
         {
             user: {
-                firstName: 'Admin',
-                lastName:  'Pukeface',
+                firstName: 'Ourglass',
+                lastName:  'Admin',
                 metadata:  { preinstall: true }
             },
             auth: {
-                email:    'admin@test.com',
-                password: 'beerchugs'
+                email:    'ogadmin@ourglass.tv',
+                password: '_D@rkB0ck2018!'
             }
         },
         {
@@ -39,7 +39,7 @@ module.exports.bootstrap = function ( cb ) {
             },
             auth: {
                 email:    'mitcha@ourglass.tv',
-                password: 'D@rkB0ck!'
+                password: '_D@rkB0ck2018!'
             }
         },
         {
@@ -50,7 +50,7 @@ module.exports.bootstrap = function ( cb ) {
             },
             auth: {
                 email:    'treba@ourglass.tv',
-                password: 'D@rkB0ck!'
+                password: '_D@rkB0ck2018!'
             }
         }
 
@@ -80,14 +80,14 @@ module.exports.bootstrap = function ( cb ) {
         makeCoreAdmins();
     }
 
-   Venue.updateOrCreate( { name: 'Bullpen', uuid: 'bullpen-hey-battabatta', virtual: true },
-        {
-            name:    'Bullpen', uuid: 'bullpen-hey-battabatta',
-            virtual: true, showInMobileApp: false
-        } );
+   // Venue.updateOrCreate( { name: 'Bullpen', uuid: 'bullpen-hey-battabatta', virtual: true },
+   //      {
+   //          name:    'Bullpen', uuid: 'bullpen-hey-battabatta',
+   //          virtual: true, showInMobileApp: false
+   //      } );
 
 
-    sails.config.testdata.install(false);
+    if (INSTALL_TEST_DATA) sails.config.testdata.install(false);
 
     sails.log.debug( "Bootstrapping SAILS done" );
 

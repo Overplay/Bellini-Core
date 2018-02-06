@@ -38,6 +38,7 @@ app.factory( "sailsUsers", [ 'sailsApi', 'sailsCoreModel', 'sailsAuth', function
             this.blocked = this.auth && this.auth.blocked;
             this.isDev = json && json.isDev;
             this.isOG = json && json.isOG;
+            this.uuid = json && json.uuid;
             this.ring = this.auth && this.auth.ring || 10;
 
             this.isAdmin = this.ring === 1;

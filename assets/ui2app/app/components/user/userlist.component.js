@@ -59,6 +59,7 @@ app.component( 'userList', {
                             <tr>
                                 <th>Name</th>
                                 <th>Email</th>
+                                <th>UUID</th>
                                 <th uib-tooltip="1=Admin, 2=Device, 3=User, 4=Sponsor">Ring</th>
                                 <th>Venues</th>
                                 <th></th>
@@ -72,6 +73,7 @@ app.component( 'userList', {
                                     {{ u.firstName }} {{ u.lastName }}
                             </td>
                             <td>{{ u.email }}</td>
+                            <td>{{ u.uuid }}</td>
                                 <!--<td ng-if="admin">{{ user.createdAt | date }}</td>-->
                             <td>
                                 <ring-badge ring="u.ring"></ring-badge>
