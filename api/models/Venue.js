@@ -109,7 +109,13 @@ module.exports = {
         hiddenFromPublic: {
             type: 'boolean',
             defaultsTo: false
-        }
+        },
+
+        // Array of app ids that are "venue wide" for this venue. Used when displaying things like waitlist, etc.
+        venuewideapps: {
+            type:       'array',
+            defaultsTo: []
+        },
     },
 
 

@@ -598,6 +598,54 @@ module.exports = {
             .then( function (ads) {
                 res.ok(ads);
             })
+    },
+
+    venuewideapp: function(req, res){
+
+        let params = req.allParams();
+        const uuid = params.venueUUID;
+
+        if (!uuid) {
+            return res.badRequest({error: 'missing uuid'});
+        }
+
+        if (req.method === 'GET'){
+
+            Venue.findOne({ uuid: uuid })
+                .then((venue)=>{
+                    if (!venue) return res.notFound({error: 'no such venue'});
+                    return res.ok(venue.venuewideapps || []);
+                })
+                .catch(res.serverError);
+
+
+        } else if (req.method === 'PUT' || req.method === 'DELETE' ){
+
+            const appid = params.appid;
+            if (!appid) { return res.badRequest({error: 'no appid'}) };
+
+            Venue.findOne({ uuid: uuid })
+                .then( ( venue ) => {
+                    if ( !venue ) return res.notFound( { error: 'no such venue' } );
+                    if (req.method === 'PUT'){
+                        if (!venue.venuewideapps) venue.venuewideapps = [];
+                        venue.venuewideapps.push(appid);
+                    } else {
+                        _.pull(venue.venuewideapps, appid);
+                    }
+
+                    venue.venuewideapps = _.uniq( venue.venuewideapps ); // no dupes
+                    return Promise.props( { save: venue.save(), vwa: venue.venuewideapps } );
+
+                } )
+                .then((props)=>{
+                    return res.ok(props.vwa);
+                })
+                .catch( res.serverError );
+        } else {
+            return res.badRequest( { error: 'wrong verb' } );
+        }
+
     }
 };
 
