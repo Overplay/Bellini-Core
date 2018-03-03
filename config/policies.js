@@ -68,7 +68,7 @@ module.exports.policies = {
         'resetPwd':    [ 'passwordReset' ],
         'register':    false, //we use a differnet registration than waterlock
         //changePw own policy because it could be an authenticated user OR a reset token 
-        'changePwd':   [ 'passwordChange' ], //this is tricky because of pw reset...
+        'changePwd':   [ 'sessionAuth', 'passwordChange' ], //this is tricky because of pw reset...
         // Checked by MAK April 2017
         // anyone can go to the login page
         'loginPage':   true,

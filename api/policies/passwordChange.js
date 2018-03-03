@@ -10,7 +10,7 @@
 module.exports = function (req, res, next) {
 
     // ring 1 is cool
-    if ( req.session.authenticated && !req.session.user.auth.blocked && req.session.user.auth.ring == 1 ) {
+    if ( req.session.authenticated && !req.session.user.auth.blocked && req.session.user.auth.ring === 1 ) {
         return next();
     }
 

@@ -10,6 +10,7 @@
 
 module.exports = function ( req, res, next ) {
 
+    // Passes thru nginx
     if (req.headers['x-og-authorization']){
         sails.log.silly('Using x-og-authorization');
         req.headers.authorization = req.headers[ 'x-og-authorization' ];
