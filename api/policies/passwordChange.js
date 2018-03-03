@@ -7,6 +7,9 @@
  * @docs        :: http://sailsjs.org/#!/documentation/concepts/Policies
  *
  */
+
+const util = require('util');
+
 module.exports = function (req, res, next) {
 
     // ring 1 is cool
@@ -25,7 +28,7 @@ module.exports = function (req, res, next) {
         return next();
     }
 
-    sails.log.silly('Falling out of passwordChange policy! User: ' + req.session.user );
+    sails.log.silly('Falling out of passwordChange policy! User: ' + util.inspect(req.session) );
     // User is not allowed
     // (default res.forbidden() behavior can be overridden in `config/403.js`)
     return res.forbidden({ error: 'You are not permitted to perform this action.'});
