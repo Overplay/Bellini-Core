@@ -115,7 +115,7 @@ module.exports = {
 
     jwt: {
         secret: 'TODO_changethissecretbutfornowitscoolprobably', //TODO seriously 
-        expDays: 2
+        expDays: 2000
     },
     twilio: {
         startupDelay: 10000

@@ -38,7 +38,7 @@ module.exports.bootstrap = function ( cb ) {
                 metadata:  { preinstall: true }
             },
             auth: {
-                email:    'mitcha@ourglass.tv',
+                email:    'mitch+a@ourglass.tv',
                 password: '_D@rkB0ck2018!'
             }
         },
@@ -49,7 +49,7 @@ module.exports.bootstrap = function ( cb ) {
                 metadata:  { preinstall: true },
             },
             auth: {
-                email:    'treba@ourglass.tv',
+                email:    'treb+a@ourglass.tv',
                 password: '_D@rkB0ck2018!'
             }
         }
