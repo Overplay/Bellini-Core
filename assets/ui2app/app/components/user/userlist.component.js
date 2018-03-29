@@ -93,11 +93,10 @@ app.component( 'userList', {
                             </td>
                             <td>
 
-                                <a ui-sref="admin.edituser({ id: u.id })"
-                                        class="btn btn-sm btn-primary"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>&nbsp;EDIT</a>
-                                <button class="btn btn-sm btn-danger" ng-click="$ctrl.delUser(u)"><i class="fa fa-times-circle"
-                                                                                          aria-hidden="true"></i>&nbsp;DELETE
-                            </button>
+                                <a ui-sref="admin.edituser({ id: u.id })" style="padding: 10px; font-size: 1.5rem;"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                <a style="padding: 10px; color: red; font-size: 1.5rem;" ng-click="$ctrl.delUser(u)"><i class="fa fa-times-circle-o"
+                                                                                          aria-hidden="true"></i>
+                            </a>
                     </td>
                 </tr>
                 </tbody>
