@@ -141,9 +141,18 @@ app.factory( "sailsCoreModel", function ( sailsApi ) {
         return sailsApi.updateModel( this.modelType, this.id, params || this.getPostObj() );
     }
 
-    CoreModel.prototype.create = function () {
+    CoreModel.prototype.createold = function () {
         var _this = this;
         return sailsApi.createModel( this.modelType, this.getPostObj() );
+    }
+
+    CoreModel.prototype.create = function () {
+        var _this = this;
+        return sailsApi.createModel( this.modelType, this.getPostObj() )
+            .then( function ( savedModel ) {
+                _this = _.defaultsDeep( _this, savedModel ); // merge in new props, usually just id, uuid.
+                return _this;
+            } );
     }
 
     CoreModel.prototype.delete = function () {

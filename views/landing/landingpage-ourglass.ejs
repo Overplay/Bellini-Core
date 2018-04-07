@@ -87,7 +87,9 @@
 </div>
 <footer class="footer navbar-fixed-bottom">
     <div class="container">
-        <%- partial( '../partials/branchinfo' ) %>
+       <% if (production) {%> <!-- <%}%>
+       <%- partial( '../partials/branchinfo' ) %>
+       <% if (production) { %> --> <% } %>
     </div>
 </footer>
 </body>

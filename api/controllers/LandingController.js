@@ -6,16 +6,20 @@
  */
 
 
-// MAK: For now, this is here just to test authorization
+const fs = require('fs');
+
+
 
 module.exports = {
 
     
     landing: function ( req, res ) {
 
-        var landingPage = "landing/landingpage" + ThemeService.getTheme();
+        const landingPage = "landing/landingpage" + ThemeService.getTheme();
+        const debugFlagPath = __dirname + '/../../debug.txt';
+        const productionSite = !fs.existsSync( debugFlagPath );
 
-        return res.view( landingPage, { layout: false, someinfo: "This is passed to locals too!" } );
+        return res.view( landingPage, { layout: false, production: productionSite, someinfo: "This is passed to locals too!" } );
     }
 
 };
